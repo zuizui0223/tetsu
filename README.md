@@ -56,6 +56,18 @@ python scripts/summarize_photo_phenology.py --visits your_complete_visits.csv --
 
 These modules are input-driven methods **without real railway photo-treatment observations or any ecological effect estimates**. Within-individual repeated measures give more compelling evidence of a plastic *response* to environmental change; heritable adaptation requires additional common-garden/genetic evidence, and photo records alone cannot measure wind load.
 
+## First real rail-proximity phenology and ROI photo audit (v0.4, 2026-11-07)
+
+**[See the real-data report and exclusions](docs/real_photo_feasibility_2026-11-07.md)**, [fixed API/GIS protocol](docs/inat_rail_phenophase_pilot.md), and [licensed photograph review](docs/real_photo_roi_review_2026-11-07.md).
+
+- [iNaturalist annotation × 2025 passenger railway GIS audit](https://github.com/zuizui0223/tetsu/actions/runs/42373021202) completed. Tokyo/Osaka/Sendai, 8 taxa, 2018–2025: **185 photo observations annotated Flowers, only 4 annotated No Flowers or Fruits** (possible overlap), 132 geo-quality passing, 37 within 250m of mapped rail. **Do not infer a railway flowering shift**, since nonflowering labels are far too sparse and are visibility statements, not repeated phenology visits.
+- [Independently sampled CC0/CC-BY photograph review](https://github.com/zuizui0223/tetsu/actions/runs/42373519458) downloaded **13** licensed images of *Trifolium repens* and *Solidago altissima* from Tokyo/Osaka, across rail-near/rail-far strata. Photos and credits are retained as CI artifacts, not committed to the repo. Initial 280-px visual review: **0 clearly isolatable entire individuals; 1 ambiguous candidate; 7 multi-individual patches**. This is method feasibility, not trait selection.
+- [Provisional photo-by-photo review](docs/photo_2026-11-07_provisional_review.csv) explicitly separates photographed patches/flower closeups from whole individuals.
+- [ROI manifest extractor](scripts/extract_photo_roi.py) now requires `target_scope` and `mask_reviewed`: **patches and unreviewed masks cannot be reported as valid individual size/shape traits**, even if pixel area is computed.
+- Rail GIS proximity **does not establish a railway-side microhabitat**, mowing history or slipstream load. None of the 13 reviewed image frames visibly confirmed track/trackbed.
+
+**Next warranted dataset:** geographically replicated, same-species, independently site-verified photos at fixed plant/patch scale; repeated known flowering and nonflowering visits around documented mowing events. Actual railway effects, plasticity and adaptation **remain untested**.
+
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
 - [Open data and important limitations](docs/sources.md)
