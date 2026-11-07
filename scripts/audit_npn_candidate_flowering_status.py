@@ -15,6 +15,7 @@ import collections
 import datetime as dt
 import json
 import math
+import statistics
 from pathlib import Path
 
 import requests
@@ -136,6 +137,20 @@ def species_name(taxon):
         return {"id":taxon,"name":None,"status":f"error:{type(ex).__name__}"}
 
 
+def midpoint_doy_of_observed_onset_bracket(individual_summary):
+    """Interval midpoint in day-of-year, NOT known true flowering onset."""
+    earlier=individual_summary.get("first_yes_prior_no_date")
+    later=individual_summary.get("first_yes_observed_date")
+    if not earlier or not later:
+        return None
+    a=dt.date.fromisoformat(earlier)
+    b=dt.date.fromisoformat(later)
+    if not a<b or a.year!=b.year or (b-a).days>21:
+        return None
+    return ((a-dt.date(a.year,1,1)).days+1 +
+            (b-dt.date(b.year,1,1)).days+1)/2.0
+
+
 def status_for_station(site,year,taxon):
     form={
         "request_src":"tetsu_rail_phenology_candidate_verification",
@@ -161,12 +176,20 @@ def status_for_station(site,year,taxon):
     clean,excluded=normalize_open_flowers(rows)
     individuals=summarize_individuals(clean)
     eligible=[x for x in individuals if x["n_dates"]>=4 and x["n_yes"]>0 and x["n_no"]>0]
+    midpoints=[
+        midpoint_doy_of_observed_onset_bracket(x) for x in eligible
+    ]
+    midpoints=[x for x in midpoints if x is not None]
+    widths=[x["first_yes_bracket_days"] for x in eligible
+            if midpoint_doy_of_observed_onset_bracket(x) is not None]
     return {
         "n_raw":len(rows),"n_verified_visit_dates":len(clean),
         "n_monitored_individuals":len(individuals),
         "n_eligible_individual_years":len(eligible),
-        "n_interval_bracketed_onsets_leq21d":sum(x["first_yes_prior_no_date"] is not None for x in eligible),
+        "n_interval_bracketed_onsets_leq21d":len(midpoints),
         "n_monitored_reflower_candidates":sum(x["has_two_no_interrupted_flowering"] for x in eligible),
+        "site_median_bracket_midpoint_doy":statistics.median(midpoints) if midpoints else None,
+        "site_median_bracket_width_days":statistics.median(widths) if widths else None,
     }
 
 
@@ -224,6 +247,16 @@ def run():
                     except Exception as ex:
                         errors.append(f"{type(ex).__name__}: {str(ex)[:155]}")
             def reduce_group(values):
+                # Site is the independent unit. Do NOT pool individual-day
+                # observations to create artificial treatment replication.
+                site_doys=[
+                    v["site_median_bracket_midpoint_doy"] for v in values
+                    if v["site_median_bracket_midpoint_doy"] is not None
+                ]
+                site_widths=[
+                    v["site_median_bracket_width_days"] for v in values
+                    if v["site_median_bracket_width_days"] is not None
+                ]
                 return {
                     "queried_successful_sites":len(values),
                     "n_sites_with_eligible_individual_yes_no":sum(x["n_eligible_individual_years"]>0 for x in values),
@@ -231,7 +264,19 @@ def run():
                     "n_bracketed_first_yes":sum(x["n_interval_bracketed_onsets_leq21d"] for x in values),
                     "n_reflower_candidates":sum(x["n_monitored_reflower_candidates"] for x in values),
                     "n_raw_records":sum(x["n_raw"] for x in values),
+                    "n_sites_with_onset_brackets":len(site_doys),
+                    "site_equal_weight_median_bracket_midpoint_doy":round(statistics.median(site_doys),2) if site_doys else None,
+                    "site_equal_weight_median_bracket_width_days":round(statistics.median(site_widths),2) if site_widths else None,
                 }
+            near_summary=reduce_group(response_groups["near"])
+            far_summary=reduce_group(response_groups["far"])
+            raw_shift=None
+            if (near_summary["site_equal_weight_median_bracket_midpoint_doy"] is not None and
+                far_summary["site_equal_weight_median_bracket_midpoint_doy"] is not None):
+                raw_shift=round(
+                    near_summary["site_equal_weight_median_bracket_midpoint_doy"] -
+                    far_summary["site_equal_weight_median_bracket_midpoint_doy"],2
+                )
             item={
                 "year":year, "state":state,
                 "selected_taxon":species_name(taxon),
@@ -240,8 +285,10 @@ def run():
                 "far_sites_within_75km_geographically_matched":len(selected_far),
                 "n_unique_75km_near_far_geographic_links":len(matches),
                 "minimum_matched_site_separation_km":round(min((x[2] for x in matches),default=0),1) if matches else None,
-                "near_raw_status_eligibility":reduce_group(response_groups["near"]),
-                "matched_far_raw_status_eligibility":reduce_group(response_groups["far"]),
+                "near_raw_status_eligibility":near_summary,
+                "matched_far_raw_status_eligibility":far_summary,
+                "exploratory_near_minus_far_median_interval_midpoint_days":raw_shift,
+                "raw_shift_caveat":"Conditioned on sites with positive flowers; only 2 near sites; no controls for site climate/urban/roads/observer frequency; NOT a railway effect.",
                 "n_status_query_errors":len(errors),
                 "status_query_error_examples":errors[:3],
                 "national_site_phenometric_sha256":digest,
