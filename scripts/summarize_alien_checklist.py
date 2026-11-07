@@ -59,6 +59,7 @@ def parse_checklist(raw: bytes) -> dict:
     by_pathway = Counter()
     seen = set()
     missing_name_rows = 0
+    skipped_samples = []
     examples = {"accidental_only": [], "ornamental_only": []}
     for record in rows:
         row = dict(zip(keys, record))
@@ -99,7 +100,7 @@ def parse_checklist(raw: bytes) -> dict:
     wb.close()
     return {
         "source": ZENODO, "md5": md5,
-        "n_canonical_names": len(seen), "non_taxon_or_blank_rows_skipped": missing_name_rows,
+        "n_canonical_names": len(seen), "non_taxon_or_blank_rows_skipped": missing_name_rows, "skipped_examples": skipped_samples,
         "summary": dict(counts), "pathway_flag_positive": dict(by_pathway),
         "examples_not_an_effect_estimate": examples,
         "notes": [
