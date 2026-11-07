@@ -79,6 +79,17 @@ These modules are input-driven methods **without real railway photo-treatment ob
 - [Patch ROI new valid analysis mode](docs/mowing_roi_event_study.md): fixed camera, independently reviewed **conspecific plant patch mask + flower mask**, repeated plot ID and documented mowing dates. Can calculate projected vegetation occupancy and flowering fraction changes without inventing physical height; `patch_pass` cannot be mistaken for valid whole-individual shape.
 - [Paired-photo mowing CLI](scripts/summarize_mowing_photo_roi.py): requires ≥2 pre-cut fixed photos in days −28:−1 and ≥2 recovery photos in +7:+42 days; overlapping cuts and unknown photo quality are rejected. **Code has synthetic tests, not real documented cut measurements.**
 
+## v0.6 — actual repeated flowering records and rail-site eligibility (2026-11-07)
+
+[Real-data results, methods and caveats](docs/usa_npn_real_phenology_rail_v06.md)
+
+- **USA-NPN** (actual monitored individual flowers present/absent): 2024, MD tuliptree 3,229 multi-phenophase records from 11 plants/3 sites, AZ saguaro 12,957 records from 51 plants/23 sites. These include many observed **no** entries, unlike the iNaturalist photo-annotation pilot.
+- [Individual year status audit](https://github.com/zuizui0223/tetsu/actions/runs/42379297172): MD tuliptree Open flowers 36 yes/457 no, 10 plants with observed first-yes bracketed by previous no ≤21 d; AZ saguaro 174 yes/2,451 no, 26 bracketed first-yes and **9 potential yes → 2 no visits → yes observed sequences**. No data establishes that railway mowing or wind caused these natural flower patterns.
+- [US FRA railway overlay](https://github.com/zuizui0223/tetsu/actions/runs/42379467494): **all 26** monitored sites in these two 2024 taxon samples were **>1 km from mapped rails**. They cannot identify a rail effect; do not mistake a large phenology dataset for a spatially balanced railway experiment.
+- [Independent registered station proximity census](https://github.com/zuizui0223/tetsu/actions/runs/42379733758): of **1,041** MD and **2,918** AZ NPN registered sites, **105 MD + 65 AZ = 170** lie within 250 m of FRA rail. **Registered is NOT verified active with flowering data in 2024**. This provides a pre-exposure sampling frame for finding actual repeated-observation sites by species before effect testing.
+- Reproducible Python source clients, strict yes/no/conflict rules, interval-censoring, future railway proximity eligibility and tests are under `scripts/audit_usa_npn_*.py`, `scripts/run_npn_individual_phase.py` and `src/tetsu/npn_individuals.py`. No private site/individual coordinates released in CI artifacts.
+- The Japan freight/alien-network hypothesis and independent fixed-photo mowing/flower-ROI workflow remain separate and **unresolved**, not rejected by the USA-NPN source-feasibility diagnostics.
+
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
 - [Open data and important limitations](docs/sources.md)
