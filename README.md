@@ -17,6 +17,27 @@
 
 An association does not prove that a seed travelled by train.
 
+## Real-data audit (2026-11-07)
+
+[Inspect the measured data feasibility and caveats](docs/empirical_feasibility_2026-11-07.md).
+
+The first GitHub Actions runs successfully retrieved the Japanese railway GIS, the **full 1,753-taxon** national alien plant checklist, official JR Freight container-handling site candidates, and GBIF occurrence counts. These are **data availability results, not positive rail-mediated dispersal results**.
+
+- N02: 21,933 rail-section features and 10,234 station line features; freight-only lines/terminals omitted.
+- 139 Japanese alien taxa have accidental-only introduction pathway flags; 351 have ornamental-escape flags without accidental ones.
+- JR Freight web listing: 120 candidate sites, including 19 ORS (off-rail service), which could serve as road-logistics contrasts after validation.
+- GBIF recently georeferenced Japanese plants: 249,745 records across **Plantae**, including nonvascular plants; name/effort screening is required before biological inference.
+- Small pathway-stratified GBIF audit: only 4/12 accidental-group and 3/12 ornamental-group sampled taxa have >=20 qualifying recent records, showing that complete floristic incidence cannot be assumed.
+
+Run the live source audit in GitHub Actions workflow `.github/workflows/public-data-audit.yml` or manually:
+```bash
+pip install requests openpyxl pyshp beautifulsoup4
+python scripts/audit_public_data.py --strict
+python scripts/summarize_alien_checklist.py
+python scripts/audit_freight_stations.py
+python scripts/audit_gbif_taxa.py --names-per-group 12
+```
+
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
 - [Open data and important limitations](docs/sources.md)
