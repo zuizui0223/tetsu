@@ -146,16 +146,19 @@ def monthly_control_sample(client):
             if len({r["id"] for r in chosen}) != len(chosen):
                 raise ValueError("duplicate control IDs within page")
             n = len(chosen)
-            # For a randomly sampled page, Horvitz–Thompson weights would
-            # require each page to have known inclusion prob. Here IDs are
-            # sorted and page is selected via fixed hash; use approximation.
-            approx_w = total / n if n else 1.0
+            # We choose exactly ONE ID page uniformly via a fixed-hash
+            # page index among n_pages. Every record in a given page has
+            # page-inclusion probability 1/n_pages; therefore its inverse
+            # cluster-sampling weight is n_pages, NOT total / page_length.
+            # This matters especially if the final page is short.
+            # Design variance remains high: selected IDs are clustered.
+            approx_w = float(n_pages) if n else 1.0
             metadata.append({
                 "year": year, "month": month,
                 "total_inat_photo_plant_records": total,
                 "sampled_page": selected_page, "available_pages": n_pages,
                 "page_records_returned": n,
-                "approx_inverse_page_sample_weight": round(approx_w, 4)
+                "inverse_page_inclusion_weight": round(approx_w, 4)
             })
             for ob in chosen:
                 taxon = (ob.get("taxon") or {}).get("name") or ""
@@ -243,8 +246,15 @@ def aggregate():
             blockdata[r["grid2km"]][r["label"]].add("near")
         elif state.endswith("_far"):
             blockdata[r["grid2km"]][r["label"]].add("far")
-    both_rail_groups = sum(
+    blocks_both_labels = sum(
         len(v["target"])>0 and len(v["reference"])>0 for v in blockdata.values()
+    )
+    blocks_both_rail_exposures = sum(
+        len(v["target"] | v["reference"]) == 2 for v in blockdata.values()
+    )
+    blocks_all_four_cells = sum(
+        v["target"] == {"near","far"} and v["reference"] == {"near","far"}
+        for v in blockdata.values()
     )
     return {
         "run_utc": datetime.now(timezone.utc).isoformat(),
@@ -259,11 +269,13 @@ def aggregate():
         "n_eligible_target":len(target), "n_eligible_reference":len(reference),
         "geo_quality_rejection":{k:dict(v) for k,v in quality.items()},
         "distinct_observers":{k:len(v) for k,v in observers.items()},
-        "n_2km_blocks_with_both_labels_under_road_matching":both_rail_groups,
+        "n_2km_blocks_with_both_labels_under_road_matching":blocks_both_labels,
+        "n_2km_blocks_with_both_rail_exposures_under_road_matching":blocks_both_rail_exposures,
+        "n_2km_blocks_with_all_four_table_cells":blocks_all_four_cells,
         "tables":tables,
         "limitations":[
             "Observations are observer-selected photographed plants; neither background nor non-observations is a plant absence.",
-            "Plant reference is one hash-chosen ID-sorted iNaturalist page/month, not a probability sample. Month-specific size weights are exploratory only.",
+            "Plant reference is one hash-chosen ID-sorted page/month; selected page clustered by observation ID. Inverse inclusion weights are the number of available pages. This design has high sampling variance and possible residual observer bias.",
             "Official 2024 road and 2025 passenger rail centrelines are geometry, NOT freight usage, train wind speeds or vegetation cutting exposure.",
             "Rail <=250m may be station gardens, parks, roadsides, or other non-trackside habitat; coordinate uncertainty up to 100m.",
             "Only a single Tokyo metro bbox and four focal herbs were inspected, no independent external-region holdout.",
@@ -287,6 +299,8 @@ def main():
         "source_road_lines":report["road"]["n_indexed_line_parts"],
         "n_observer":report["distinct_observers"],
         "n_2km_blocks_with_rail_road_focal_reference":report["n_2km_blocks_with_both_labels_under_road_matching"],
+        "n_2km_blocks_with_both_near_far":report["n_2km_blocks_with_both_rail_exposures_under_road_matching"],
+        "n_2km_blocks_with_all_four_cells":report["n_2km_blocks_with_all_four_table_cells"],
         "comparisons":report["tables"],
     },ensure_ascii=False,indent=2), flush=True)
 
