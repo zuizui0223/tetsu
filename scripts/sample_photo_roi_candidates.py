@@ -22,6 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
 
+import requests
 from PIL import Image, ImageDraw, ImageOps
 from audit_inat_rail_phenophases import (AREAS, URL, N02, RateLimitedClient,
                                           acceptable_observation, rail_index_for_bbox)
