@@ -50,6 +50,10 @@ def main():
             raise SystemExit(f"manifest missing: {sorted(missing)}")
         for row in reader:
             meta = {k: (row[k] or "").strip() for k in REQ}
+            # Optional additional fixed-quadrat metadata for patch-only floral
+            # displays. Never infer these flags from GPS/photo composition.
+            for key in ("plot_id", "same_taxon_patch", "fixed_plot_view"):
+                meta[key] = (row.get(key) or "").strip()
             record = dict(meta)
             record["quality_status"] = "rejected"
             record["quality_error"] = ""
@@ -113,7 +117,39 @@ def main():
                     reasons.append("mask_not_independently_reviewed")
                 record["valid_for_cross_image_shape_comparison"] = valid
                 record["quality_reasons"] = ";".join(reasons) if reasons else "pass"
-                record["quality_status"] = "pass" if valid else "restricted"
+                fixed_view = (
+                    convert_bool(meta["fixed_plot_view"]) if meta["fixed_plot_view"]
+                    else False
+                )
+                same_taxon = (
+                    convert_bool(meta["same_taxon_patch"]) if meta["same_taxon_patch"]
+                    else False
+                )
+                patch_reasons = []
+                if meta["target_scope"] != "patch":
+                    patch_reasons.append("not_patch_scope")
+                if not reviewed:
+                    patch_reasons.append("mask_not_independently_reviewed")
+                if not fixed_view or not convert_bool(meta["standardized_view"]):
+                    patch_reasons.append("not_fixed_standardized_plot_view")
+                if not same_taxon:
+                    patch_reasons.append("target_patch_not_verified_conspecific")
+                if not meta["plot_id"]:
+                    patch_reasons.append("missing_plot_id")
+                if not features["flower_mask_annotated"]:
+                    patch_reasons.append("flower_mask_unannotated")
+                if features["plant_frame_fraction"] < 0.01:
+                    patch_reasons.append("plant_roi_too_small")
+                # A patch can legitimately touch the image boundary if the
+                # quadrat camera frame is fixed; this is NOT individual size.
+                valid_patch = not patch_reasons
+                record["valid_for_fixed_plot_flower_fraction"] = valid_patch
+                record["patch_quality_reasons"] = (
+                    ";".join(patch_reasons) if patch_reasons else "pass"
+                )
+                record["quality_status"] = (
+                    "pass" if valid else ("patch_pass" if valid_patch else "restricted")
+                )
             except (ValueError, OSError) as exc:
                 record["quality_error"] = f"{type(exc).__name__}: {exc}"
             rows.append(record)
@@ -131,6 +167,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
     print(f"images={len(rows)} pass={sum(x['quality_status']=='pass' for x in rows)} "
+          f"patch_pass={sum(x['quality_status']=='patch_pass' for x in rows)} "
           f"restricted={sum(x['quality_status']=='restricted' for x in rows)} "
           f"rejected={sum(x['quality_status']=='rejected' for x in rows)}")
 
