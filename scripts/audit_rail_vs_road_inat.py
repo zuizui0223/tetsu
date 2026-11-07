@@ -32,7 +32,7 @@ from shapely.strtree import STRtree
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from tetsu.transport_overlap import (road_rail_status, weighted_case_control_table,
-                                    monthly_mh_ratio)
+                                    monthly_mh_ratio, page_cluster_inclusion_weight)
 
 METRO = "tokyo_bbox"
 BBOX = AREAS[METRO]  # predeclared in v0.4, not shifted after seeing records
@@ -152,7 +152,7 @@ def monthly_control_sample(client):
             # cluster-sampling weight is n_pages, NOT total / page_length.
             # This matters especially if the final page is short.
             # Design variance remains high: selected IDs are clustered.
-            approx_w = float(n_pages) if n else 1.0
+            approx_w = page_cluster_inclusion_weight(total, n, per_page=200)
             metadata.append({
                 "year": year, "month": month,
                 "total_inat_photo_plant_records": total,
