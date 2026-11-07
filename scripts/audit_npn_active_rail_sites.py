@@ -204,6 +204,11 @@ def reduce_station(rows):
             "has_valid_no": bool(observed_no),
             "site_taxon_eligible": bool(eligible_site_species),
         }
+    if open_rows and missing_species == len(open_rows):
+        raise ValueError(
+            "All Open flowers records lack a valid NPN species_id: "
+            "do not falsely conclude that no eligible taxa exist"
+        )
     return {
         "n_records": len(rows),
         "n_openflower_raw": len(open_rows),
