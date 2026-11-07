@@ -7,7 +7,7 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
 from tetsu.transport_overlap import (road_rail_status,
                                      weighted_case_control_table,
-                                     monthly_mh_ratio)
+                                     monthly_mh_ratio, page_cluster_inclusion_weight)
 
 
 def obs(label,rail,road,w=1,month=6,block="a"):
@@ -48,6 +48,15 @@ class TransportOverlapTests(unittest.TestCase):
         m=weighted_case_control_table(rows)
         self.assertEqual(m["reference_weighted_rail_near"],10)
         self.assertEqual(m["reference_weighted_rail_far"],5)
+
+    def test_short_final_page_weight_is_number_of_pages(self):
+        # 1421 records / 200 -> 8 pages, last page just 21 records.
+        # Old total / selected page count incorrectly returned 67.66.
+        self.assertEqual(page_cluster_inclusion_weight(1421, 21, 200), 8.0)
+        self.assertEqual(page_cluster_inclusion_weight(1421, 200, 200), 8.0)
+        self.assertEqual(page_cluster_inclusion_weight(100, 100, 200), 1.0)
+        with self.assertRaises(ValueError):
+            page_cluster_inclusion_weight(1421, 0, 200)
 
     def test_monthwise_mh_ratio(self):
         rows=[obs("target",10,10,month=5),obs("target",1400,10,month=5),
