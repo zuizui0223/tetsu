@@ -29,6 +29,8 @@ from audit_npn_rail_proximity import (
     get_rail_features, UTM_EPSG, SESSION
 )
 from audit_usa_npn_status import ENDPOINT, parse_stream
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from tetsu.npn_individuals import normalize_open_flowers, summarize_individuals
 
 
