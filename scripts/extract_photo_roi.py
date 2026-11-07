@@ -16,13 +16,14 @@ from tetsu.photo_traits import summarize_masks
 REQ = {
     "image_id", "site_id", "taxon", "photo_date", "photographer_id",
     "site_class", "whole_plant", "standardized_view", "phenophase",
-    "plant_mask", "flower_mask",
+    "plant_mask", "flower_mask", "target_scope", "mask_reviewed",
 }
 ALLOWED_PHASES = {
     "unknown", "vegetative", "bud", "flowering", "fruiting",
     "flowering_fruiting",
 }
 ALLOWED_SITES = {"rail", "road", "background", "unknown"}
+ALLOWED_SCOPES = {"individual", "patch", "closeup", "unknown"}
 BOOLEANS = {"true": True, "false": False, "1": True, "0": False}
 
 
@@ -59,6 +60,9 @@ def main():
                     raise ValueError("invalid site_class")
                 if meta["phenophase"] not in ALLOWED_PHASES:
                     raise ValueError("invalid phenophase")
+                if meta["target_scope"] not in ALLOWED_SCOPES:
+                    raise ValueError("target_scope must be individual/patch/closeup/unknown")
+                reviewed = convert_bool(meta["mask_reviewed"])
                 if not meta["plant_mask"]:
                     raise ValueError("missing plant mask")
                 def resolve_mask(path):
@@ -90,9 +94,26 @@ def main():
                 record.update(features)
                 if (features["flower_area_px"] or 0) > 0 and meta["phenophase"] in ("vegetative", "bud", "fruiting"):
                     raise ValueError("visible flower pixels contradict recorded phenophase")
-                record["quality_status"] = (
-                    "pass" if features["valid_for_cross_image_shape_comparison"] else "restricted"
+                # A photograph of a patch or a close-up MUST NOT be treated as
+                # an individual plant silhouette, even with a filled ROI.
+                individual_and_reviewed = (
+                    meta["target_scope"] == "individual" and reviewed
                 )
+                valid = (
+                    features["valid_for_cross_image_shape_comparison"]
+                    and individual_and_reviewed
+                )
+                reasons = (
+                    [] if features["quality_reasons"] == "pass"
+                    else features["quality_reasons"].split(";")
+                )
+                if meta["target_scope"] != "individual":
+                    reasons.append("not_individual_target_scope")
+                if not reviewed:
+                    reasons.append("mask_not_independently_reviewed")
+                record["valid_for_cross_image_shape_comparison"] = valid
+                record["quality_reasons"] = ";".join(reasons) if reasons else "pass"
+                record["quality_status"] = "pass" if valid else "restricted"
             except (ValueError, OSError) as exc:
                 record["quality_error"] = f"{type(exc).__name__}: {exc}"
             rows.append(record)
