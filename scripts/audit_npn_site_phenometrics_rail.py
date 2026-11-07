@@ -165,6 +165,7 @@ def main():
     audit={
         "run_utc":dt.datetime.now(dt.timezone.utc).isoformat(),
         "api":NPN_SITE_API,"years":YEARS,"states":{},
+        "source_geography":"Nationwide yearly source, local MD/AZ state registered-site join",
         "phase_filter":"phenophase_id[1]=501 (Open flowers)",
         "errors":{},
         "notes":[
@@ -175,35 +176,48 @@ def main():
             "No study site IDs, individual IDs or coordinates are released."
         ]
     }
+    # The site-phenometric API returned identical national content even
+    # when queried with different state[1] values. Query each year just once,
+    # then join to independently validated state registered-site IDs.
+    frames = {}
     for state in STATES:
         try:
-            rail,source=build_registered_rail_frame(state)
-            cases=[]
-            for year in YEARS:
-                try:
-                    rows,digest,nbytes=get_site_phenometrics(state,year)
-                    result=summarize_state_year(rows,rail,state,year)
-                    result["source_sha256"]=digest
-                    result["source_bytes"]=nbytes
-                    cases.append(result)
-                    print(json.dumps({
-                        "state":state,"year":year,
-                        "source_rows":len(rows),
-                        "sites_near":result["n_registered_sites_with_positive_Open_flowers_near"],
-                        "sites_far":result["n_registered_sites_with_positive_Open_flowers_far"],
-                        "shared_species":result["n_species_with_positive_phenometric_both_near_far"],
-                        "species_top3":result["species_eligible_for_later_individual_status_lookups"][:3],
-                    }),flush=True)
-                except Exception as ex:
-                    audit["errors"][f"{state}-{year}"]=f"{type(ex).__name__}: {str(ex)[:400]}"
-            audit["states"][state]={"source_registered":source,"year_results":cases}
+            rail, source = build_registered_rail_frame(state)
+            frames[state] = rail
+            audit["states"][state] = {
+                "source_registered": source, "year_results": []
+            }
         except Exception as ex:
-            audit["errors"][state]=f"{type(ex).__name__}: {str(ex)[:400]}"
+            audit["errors"][state] = f"{type(ex).__name__}: {str(ex)[:400]}"
+    audit["national_source_by_year"] = {}
+    for year in YEARS:
+        try:
+            rows, digest, nbytes = get_site_phenometrics(year)
+            audit["national_source_by_year"][str(year)] = {
+                "national_rows": len(rows),
+                "source_sha256": digest,
+                "downloaded_bytes": nbytes,
+                "server_state_filter": "NOT USED — observed to be ignored"
+            }
+            for state, rail in frames.items():
+                result = summarize_state_year(rows, rail, state, year)
+                audit["states"][state]["year_results"].append(result)
+                print(json.dumps({
+                    "state": state, "year": year,
+                    "national_source_rows": len(rows),
+                    "state_matched_site_taxa": result["n_unique_site_taxon_rows_matching_this_state"],
+                    "sites_near": result["n_registered_sites_with_positive_Open_flowers_near"],
+                    "sites_far": result["n_registered_sites_with_positive_Open_flowers_far"],
+                    "shared_species": result["n_species_with_positive_phenometric_both_near_far"],
+                    "species_top3": result["species_eligible_for_later_individual_status_lookups"][:3]
+                }), flush=True)
+        except Exception as ex:
+            audit["errors"][str(year)] = f"{type(ex).__name__}: {str(ex)[:400]}"
     out=Path(a.output)
     out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(audit,ensure_ascii=False,indent=2),encoding="utf-8")
     n=sum(len(v["year_results"]) for v in audit["states"].values())
-    print(json.dumps({"successful_state_year_queries":n,"errors":audit["errors"]}),flush=True)
+    print(json.dumps({"successful_state_year_joins":n,"errors":audit["errors"]}),flush=True)
     if n==0: raise SystemExit("No valid site phenometric API result, no inference")
 
 
