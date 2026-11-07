@@ -80,7 +80,7 @@ def weighted_case_control_table(rows, *, rail_near=250., road_limit=100.):
         "approx_target_to_reference_ratio_of_ratios":round(ratio,4),
         "n_grid2km_with_valid_comparison_rows":len(regions),
         "n_target_total_valid":int(a+b),
-        "caution":"target=full source query, reference=single selected API page per month, weighted only by count; not a representative random survey"
+        "caution":"target=full taxon query; reference=one hash-selected ID-page/month weighted by inverse page inclusion probability; observations within a page are NOT independent random draws"
     }
 
 
