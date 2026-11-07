@@ -8,6 +8,28 @@ from __future__ import annotations
 import math
 from collections import Counter, defaultdict
 
+def page_cluster_inclusion_weight(total: int, chosen_count: int, per_page: int = 200) -> float:
+    """Inverse inclusion probability for ONE uniformly drawn whole ID page.
+
+    Every observation in a page is selected with probability 1/n_pages;
+    a short final page does not give each observation a larger probability.
+    Chosen ID page is a correlated cluster, not n independent samples.
+    """
+    if not isinstance(total, int) or total < 0:
+        raise ValueError("total must be a nonnegative integer")
+    if not isinstance(chosen_count, int) or chosen_count < 0 or chosen_count > per_page:
+        raise ValueError("invalid chosen page size")
+    if not isinstance(per_page, int) or per_page <= 0:
+        raise ValueError("per_page must be positive integer")
+    if total == 0:
+        if chosen_count:
+            raise ValueError("nonempty selected page when total=0")
+        return 1.0
+    if chosen_count == 0:
+        raise ValueError("nonempty population cannot select an empty page")
+    return float(math.ceil(total / per_page))
+
+
 def road_rail_status(rail_m:float, road_m:float, road_limit=100.0,
                      rail_near=250.0, rail_far=1000.0)->str:
     for val in (rail_m,road_m):
