@@ -115,15 +115,25 @@ def summarize_individuals(clean,prior_no_max_days=21,followup_max_days=21):
         # Distinct recurrent blooming is a strong pattern with 2 observed
         # NOs between two YES observations; gaps still need surveillance.
         seen_yes=False
+        last_yes=None
         gap_nos=[]
         resumed=False
         for row in rows:
             if row["status"]==1:
                 if seen_yes and len(gap_nos)>=2:
-                    if gap_nos[-1]-gap_nos[0]>=__import__("datetime").timedelta(days=1) and (
-                        row["date"]-gap_nos[-1]).days<=followup_max_days:
-                        resumed=True
-                seen_yes=True;gap_nos=[]
+                    first_no=gap_nos[0]
+                    last_gap_no=gap_nos[-1]
+                    valid_chain=(
+                        first_no>last_yes and
+                        0 < (first_no-last_yes).days <= followup_max_days and
+                        (last_gap_no-first_no).days>=1 and
+                        (row["date"]-last_gap_no).days<=followup_max_days and
+                        all((b-a).days <= followup_max_days for a,b in zip(gap_nos,gap_nos[1:]))
+                    )
+                    resumed = resumed or valid_chain
+                seen_yes=True
+                last_yes=row["date"]
+                gap_nos=[]
             elif seen_yes:
                 gap_nos.append(row["date"])
         summaries.append({
