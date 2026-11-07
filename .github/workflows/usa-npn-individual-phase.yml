@@ -1,0 +1,35 @@
+name: USA-NPN real individual flowering yes/no quality audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/npn_individuals.py'
+      - 'scripts/run_npn_individual_phase.py'
+      - '.github/workflows/usa-npn-individual-phase.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-usa-npn-individual-phenology
+  cancel-in-progress: true
+jobs:
+  individual-phenology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source client
+        run: pip install 'requests>=2.31,<3'
+      - name: Reproducibly compute real monitored Open-flowers state transitions
+        run: python scripts/run_npn_individual_phase.py --output results/audit/usa_npn_individual_flowering.json
+      - name: Retain grouped counts only, never site/plant IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usa-npn-individual-flowering-2024-audit
+          path: results/audit/usa_npn_individual_flowering.json
+          if-no-files-found: warn
