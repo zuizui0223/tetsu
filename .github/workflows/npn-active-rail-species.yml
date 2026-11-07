@@ -25,7 +25,7 @@ jobs:
       - name: Install trusted NPN/GIS dependencies
         run: pip install 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
       - name: Run actual station×same species×2024 repeat-phenology census on frozen matching frame
-        run: python scripts/audit_npn_active_rail_sites.py --pairs-per-state 12 --output results/audit/npn_rail_active_sites_2024.json
+        run: python scripts/audit_npn_active_rail_sites.py --pairs-per-state 120 --output results/audit/npn_rail_active_sites_2024.json
       - name: Save only aggregate eligibility numbers and real source/failure flags
         if: always()
         uses: actions/upload-artifact@v4
