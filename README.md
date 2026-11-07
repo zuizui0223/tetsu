@@ -38,6 +38,24 @@ python scripts/audit_freight_stations.py
 python scripts/audit_gbif_taxa.py --names-per-group 12
 ```
 
+## Additional railway environmental filtering and plant phenology workstream (v0.3)
+
+**New question:** Do railway mowing, train slipstreams, and hot/dry ballast conditions shift plant architecture, regrowth and flowering schedules, separately from trains moving seeds?
+
+- [Mowing × slipstream × life-history hypotheses and interpretation limits](docs/rail_environment_traits_protocol.md)
+- [Photo ROI and fixed-plot phenology input contracts](docs/photo_and_phenology_inputs.md)
+- [Silhouette and floral ROI extraction from verified PNG masks](scripts/extract_photo_roi.py): width/height aspect ratio, pixel-corner silhouette solidity, visible flower fraction, position of flowers *within* plant silhouette, and explicit photo-framing QC. **Absolute plant size or biomass cannot be recovered from uncontrolled snapshots.**
+- [Weekly observed flowering from complete repeated visits](scripts/summarize_photo_phenology.py): blooming vs nonblooming structured observations, observer/site effort, confirmed last cutting dates, and warning gates. **First flowering photo is not true flowering onset.**
+
+```bash
+pip install Pillow
+python -m unittest discover -s tests -v
+python scripts/extract_photo_roi.py --manifest your_manifest.csv --root path/to/PNG_masks --output results/photo_roi.csv
+python scripts/summarize_photo_phenology.py --visits your_complete_visits.csv --events verified_cut_events.csv --output-dir results/phenology
+```
+
+These modules are input-driven methods **without real railway photo-treatment observations or any ecological effect estimates**. Within-individual repeated measures give more compelling evidence of a plastic *response* to environmental change; heritable adaptation requires additional common-garden/genetic evidence, and photo records alone cannot measure wind load.
+
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
 - [Open data and important limitations](docs/sources.md)
