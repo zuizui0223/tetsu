@@ -89,11 +89,12 @@ def freeze_sites(state: str, n_pairs: int):
     near.sort(key=lambda x: (hashlib.sha256(
         f"tetsu-v0.7-registered-site-sampling-{state}-{YEAR}-{x}".encode()
     ).hexdigest(), x))
+    # The precommitted near-rail census includes sites even if no far-rail
+    # geographical match exists. Inference needs controls; coverage does not.
+    selected_near = near[:n_pairs]
     used_far = set()
     pairs = []
-    for sid in near:
-        if len(pairs) >= n_pairs:
-            break
+    for sid in selected_near:
         a = valid[sid][1]
         candidate_far = [
             (math.hypot(a[0] - valid[j][1][0], a[1] - valid[j][1][1]), j)
@@ -114,7 +115,9 @@ def freeze_sites(state: str, n_pairs: int):
         "n_registered_within_250m": len(near),
         "n_registered_beyond_1000m": len(far),
         "n_pairs_selected_without_outcomes": len(pairs),
-        "n_near_sites_selected": len({x[0] for x in pairs}),
+        "n_near_sites_selected_for_outcome_blind_census": len(selected_near),
+        "n_near_sites_with_geo_matched_far": len({x[0] for x in pairs}),
+        "n_near_sites_without_geo_matched_far": len(selected_near) - len(pairs),
         "n_far_sites_selected": len({x[1] for x in pairs}),
         "pair_distance_range_km": (
             [round(min(x[2] for x in pairs)/1000, 2),
@@ -124,7 +127,7 @@ def freeze_sites(state: str, n_pairs: int):
         "rail_source_vintage": "FRA 2026",
         "rail_source_feature_count": fra_info["n_fra_features"],
     }
-    return pairs, summary
+    return pairs, selected_near, summary
 
 
 def download_station_records(site_id, state, year=YEAR):
@@ -280,8 +283,8 @@ def main():
     p.add_argument("--pairs-per-state", type=int, default=12)
     p.add_argument("--output", default="results/audit/npn_rail_active_sites_2024.json")
     args = p.parse_args()
-    if not (1 <= args.pairs_per_state <= 50):
-        p.error("pairs-per-state must be 1..50")
+    if not (1 <= args.pairs_per_state <= 120):
+        p.error("pairs-per-state must be 1..120")
     result = {
         "run_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
         "design": "outcome-blind site-first geographic matching, then USA-NPN single-site 2024 records",
@@ -294,19 +297,48 @@ def main():
     }
     for state in STATES:
         try:
-            pairs, source = freeze_sites(state, args.pairs_per_state)
+            pairs, selected_near, source = freeze_sites(
+                state, args.pairs_per_state
+            )
             site_results = {}
             errors = []
-            for pair in pairs:
-                for site_id in pair[:2]:
-                    if site_id in site_results:
-                        continue
-                    try:
-                        rec, _digest, _bytes = download_station_records(site_id, state)
-                        site_results[site_id] = reduce_station(rec)
-                    except Exception as exc:
-                        errors.append(f"{type(exc).__name__}: {str(exc)[:155]}")
+            # Query ALL near candidates in the frozen geographic sample,
+            # including ones without a feasible geographically matched far
+            # comparator. Query eligible far controls after near IDs.
+            queried_near = set(selected_near)
+            queried_far = {far for _, far, _ in pairs}
+            for site_id in sorted(queried_near | queried_far):
+                try:
+                    rec, _digest, _bytes = download_station_records(site_id, state)
+                    site_results[site_id] = reduce_station(rec)
+                except Exception as exc:
+                    errors.append(f"{type(exc).__name__}: {str(exc)[:155]}")
             report = summarize_cohort(site_results, pairs, state)
+            near_succeeded = [
+                site_results[x] for x in selected_near if x in site_results
+            ]
+            near_census = {
+                "n_near_2024_registered_sites_queried": len(selected_near),
+                "n_near_2024_responses_successful": len(near_succeeded),
+                "n_near_2024_responses_failed": len(selected_near)-len(near_succeeded),
+                "n_near_with_any_2024_NPN_status_records": sum(
+                    x["n_records"] > 0 for x in near_succeeded
+                ),
+                "n_near_with_any_2024_Open_flowers_record": sum(
+                    x["n_openflower_raw"] > 0 for x in near_succeeded
+                ),
+                "n_near_with_eligible_repeated_yes_no_species": sum(
+                    any(z["site_taxon_eligible"] for z in x["species"].values())
+                    for x in near_succeeded
+                ),
+                "n_near_2024_status_rows": sum(
+                    x["n_records"] for x in near_succeeded
+                ),
+                "n_near_2024_Open_flowers_rows": sum(
+                    x["n_openflower_raw"] for x in near_succeeded
+                ),
+            }
+            report["independent_near_census"] = near_census
             report["site_frame"] = source
             report["n_station_requests_failed"] = len(errors)
             report["first_three_station_request_errors"] = errors[:3]
@@ -316,7 +348,8 @@ def main():
                 "selected_pairs": len(pairs),
                 "station_responses": len(site_results),
                 "failed_requests": len(errors),
-                "active_near": report["n_near_sites_with_any_openflower_phenophase"],
+                "active_near_in_pairs": report["n_near_sites_with_any_openflower_phenophase"],
+                "near_census": report["independent_near_census"],
                 "active_far": report["n_far_sites_with_any_openflower_phenophase"],
                 "shared_eligible_species": report["n_shared_eligible_species_near_far"],
                 "top_species": report["shared_eligible_species_without_outcome_direction"][:6],
@@ -324,7 +357,7 @@ def main():
         except Exception as exc:
             result["errors"][state] = f"{type(exc).__name__}: {str(exc)[:320]}"
     result["limitations"] = [
-        "Small predetermined station sample, not a census of all 170 registered rail-near sites.",
+        "A 120/site state cap permits a 2024 near-rail census of all 105 MD + 65 AZ registered sites (if registration API unchanged); geographically matched far sites are selected without outcomes.",
         "FRA 2026 railway geometry is not confirmed active line service in observation year 2024.",
         "Station registered proximity does not mean monitored individuals grow on railway land, experience train gusts or cutting.",
         "All flowering effects, absolute phenology shifts and causal inferences are deliberately omitted.",
