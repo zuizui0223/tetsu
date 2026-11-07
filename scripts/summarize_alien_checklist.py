@@ -65,8 +65,11 @@ def parse_checklist(raw: bytes) -> dict:
         row = dict(zip(keys, record))
         name = str(row.get("ScientificName_w.oAuthor") or "").strip()
         # The dataset has non-taxon explanatory rows; don't silently count them.
-        if not re.match(r"^[A-Z][A-Za-z-]+\s+[a-z][a-z.-]+", name):
+        family = str(row.get("Family") or "").strip()
+        if not family or not name:
             missing_name_rows += 1
+            if len(skipped_samples) < 25:
+                skipped_samples.append({"family": family, "canonical": name})
             continue
         counts["n_valid_taxon_rows"] += 1
         if name in seen:
