@@ -90,6 +90,16 @@ These modules are input-driven methods **without real railway photo-treatment ob
 - Reproducible Python source clients, strict yes/no/conflict rules, interval-censoring, future railway proximity eligibility and tests are under `scripts/audit_usa_npn_*.py`, `scripts/run_npn_individual_phase.py` and `src/tetsu/npn_individuals.py`. No private site/individual coordinates released in CI artifacts.
 - The Japan freight/alien-network hypothesis and independent fixed-photo mowing/flower-ROI workflow remain separate and **unresolved**, not rejected by the USA-NPN source-feasibility diagnostics.
 
+## v0.7–0.8 — Actual near-rail 2024 NPN census and multi-year matched flowering records
+
+**This is evidence of DATA FEASIBILITY, not evidence of railway-related flowering, seed dispersal, mowing plasticity or wind adaptation.**
+
+- [Full 2024 registered-site census](docs/npn_active_rail_2024_results_v07.md): all **170** NPN sites registered within 250 m of FRA rail in MD/AZ queried for actual 2024 status. Only **7** had any NPN records (3 MD + 4 AZ); only **6** any Open flowers record; only **2 AZ** near sites had at least one same-taxon individual with >=4 observed dates and both YES and NO. All 170 queries successful, zero network/API errors. Prior registered-site counts are NOT verified active monitor counts.
+- [Multi-year site-phenometrics source audit](docs/npn_site_pheno_2023_25_v08.md): official USA-NPN national Open flowers first-YES site summary, 2023–2025. **Corrected a silent API state-filter failure**: one nationwide source per year, then independent MD/AZ registered-site-ID join (do not describe 3,770/3,670/3,561 nationwide rows as state totals).
+- [Same-taxon/source + geographic controls](docs/npn_candidate_status_verification_v08.md): matching first by phenology data availability and <=75km geographical proximity, and THEN refetching independent NPN individual YES/NO time series, identified *Cercis canadensis* (MD) and *Prosopis velutina* (AZ). Each has only **2 rail-near independent active sites** in its best year(s). These are **woody trees**, not herbaceous plants for railway grass-cutting adaptation.
+- [Official individual source run](https://github.com/zuizui0223/tetsu/actions/runs/42390743089) verified actual same-species monitored YES/NO at some matched far controls in five state/year cases; no statistical railway-effect estimators are reported. The later tentative interval midpoint summaries, if any, remain **site-level exploratory descriptors**, not biological onset or selection effects.
+- The **Japan freight/port/alien dispersal** main study and **fixed photo patch flowering ROI / actual mowing event** implementation remain valid independent research tracks. Do not substitute NPN trees or railway station distances for independently verified railway verge plants.
+
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
 - [Open data and important limitations](docs/sources.md)
