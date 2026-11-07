@@ -59,9 +59,20 @@ def parse_stream(response)->tuple[list[dict],str,int]:
             raise ValueError("NPN download exceeds safety cap")
         hasher.update(line+b"\n")
         obj=json.loads(line)
-        if not isinstance(obj,dict):
-            raise ValueError("NPN NDJSON line is not an observation object")
-        records.append(obj)
+        # Some versions of the service return a complete JSON array even
+        # from the .ndjson endpoint. Accept either one-object-per-line
+        # NDJSON or an array-of-objects, but never silently count an
+        # application-level message as a real observation.
+        if isinstance(obj,dict):
+            batch=[obj]
+        elif isinstance(obj,list):
+            batch=obj
+        else:
+            raise ValueError(f"Unexpected NPN line JSON type: {type(obj).__name__}")
+        if not all(isinstance(item,dict) for item in batch):
+            types=sorted({type(item).__name__ for item in batch})
+            raise ValueError(f"NPN returned non-object list elements: {types}")
+        records.extend(batch)
         if len(records)>MAX_RECORDS:
             raise ValueError("NPN observation count exceeds pilot cap")
     return records,hasher.hexdigest(),size
@@ -77,6 +88,8 @@ def value_counts(records,columns):
 
 def summarize(records,case,digest,size):
     all_keys=sorted({k for r in records for k in r})
+    if not any("status" in k.lower() or "phenophase" in k.lower() for k in all_keys):
+        raise ValueError(f"NPN response lacks phenophase/status keys (keys={all_keys[:18]})")
     status_cols=[c for c in all_keys if "status" in c.lower() or "phenophase" in c.lower()]
     site_cols=[c for c in all_keys if "station" in c.lower() or "site" in c.lower()]
     indiv_cols=[c for c in all_keys if "individual" in c.lower() or "plant_id" in c.lower()]
