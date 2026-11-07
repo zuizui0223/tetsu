@@ -8,6 +8,9 @@ on:
       - 'src/tetsu/transport_overlap.py'
       - '.github/workflows/tokyo-rail-road-pilot.yml'
   workflow_dispatch:
+concurrency:
+  group: tetsu-tokyo-rail-road
+  cancel-in-progress: true
 jobs:
   rail-road:
     runs-on: ubuntu-latest
