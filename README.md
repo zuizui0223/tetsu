@@ -68,6 +68,17 @@ These modules are input-driven methods **without real railway photo-treatment ob
 
 **Next warranted dataset:** geographically replicated, same-species, independently site-verified photos at fixed plant/patch scale; repeated known flowering and nonflowering visits around documented mowing events. Actual railway effects, plasticity and adaptation **remain untested**.
 
+## v0.5 verified Tokyo official-road control and mowing patch ROI (2026-11-07)
+
+[Tokyo road-vs-rail empirical audit and corrected analysis](docs/real_rail_vs_road_tokyo_2026-11-07.md) · [Fixed analysis design](docs/rail_road_control_pilot.md)
+
+- **Official N13 road GIS added** (2024 data): 1,943,251 features in the first Tokyo map mesh, 711,724 local road line parts indexed against N02 passenger rail.
+- Real iNaturalist research-photo occurrences 2023–2025: 411 high-quality focal species records, 3,315 sampled other-plant reference records; 246 and 882 distinct observers respectively.
+- Road proximity ≤100 m; rail-near ≤250 m vs rail-far ≥1 km: **124/134** focal photos near/far. Exploratory source-weighted composition ratio **0.1333**, month-stratified 0.1586; this is photographic recording composition and **not** a biological negative railway effect.
+- **Spatial matching gate failed:** of 44 2-km cells with focal and reference photos, only 2 have both focus/reference across BOTH rail-near and rail-far. **Do not claim railway dispersal, adaptation or flowering shift based on this source alone.** Original incorrect short-page weight reported 0.1159 and was repaired; all figures above use corrected probability weight.
+- [Patch ROI new valid analysis mode](docs/mowing_roi_event_study.md): fixed camera, independently reviewed **conspecific plant patch mask + flower mask**, repeated plot ID and documented mowing dates. Can calculate projected vegetation occupancy and flowering fraction changes without inventing physical height; `patch_pass` cannot be mistaken for valid whole-individual shape.
+- [Paired-photo mowing CLI](scripts/summarize_mowing_photo_roi.py): requires ≥2 pre-cut fixed photos in days −28:−1 and ≥2 recovery photos in +7:+42 days; overlapping cuts and unknown photo quality are rejected. **Code has synthetic tests, not real documented cut measurements.**
+
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
 - [Open data and important limitations](docs/sources.md)
