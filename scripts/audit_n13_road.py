@@ -56,7 +56,7 @@ def audit(mesh="5339"):
             "sha256":hashlib.sha256(raw).hexdigest(),
             "downloaded_bytes":len(raw),
             "n_road_shapes":len(reader),
-            "bbox":reader.bbox,
+            "bbox":list(reader.bbox),
             "shp_member":preferred,
             "attribute_fields":names,
             "all_members":files,
