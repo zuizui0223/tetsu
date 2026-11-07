@@ -4,11 +4,29 @@ import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from audit_npn_candidate_flowering_status import (
-    select_candidate, match_far, site_phenometric_species
+    select_candidate, match_far, site_phenometric_species,
+    midpoint_doy_of_observed_onset_bracket
 )
 
 
 class CandidateSeriesTests(unittest.TestCase):
+    def test_observed_no_yes_bracket_midpoint_not_onset(self):
+        summary={
+            "first_yes_prior_no_date":"2024-04-10",
+            "first_yes_observed_date":"2024-04-20"
+        }
+        self.assertAlmostEqual(
+            midpoint_doy_of_observed_onset_bracket(summary),106.0
+        )
+        self.assertIsNone(midpoint_doy_of_observed_onset_bracket({
+            "first_yes_prior_no_date":None,
+            "first_yes_observed_date":"2024-04-20"
+        }))
+        self.assertIsNone(midpoint_doy_of_observed_onset_bracket({
+            "first_yes_prior_no_date":"2024-01-01",
+            "first_yes_observed_date":"2024-04-20"
+        }))
+
     def test_candidate_selected_by_replication_only(self):
         classes={
             7:{"near":{1,2},"far":{3,4,5,6}},
