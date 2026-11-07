@@ -28,13 +28,15 @@ PHASE_ID=501
 YEARS=(2023,2024,2025)
 
 
-def get_site_phenometrics(state,year):
-    if state not in STATES or year not in YEARS:
-        raise ValueError("state/year not in predeclared screen")
+def get_site_phenometrics(year):
+    # v0.8 initial API calls returned byte-identical checksums across
+    # MD and AZ: server-side state[1] filter is ignored by this endpoint.
+    # Download the national annual source ONCE and join registered site IDs.
+    if year not in YEARS:
+        raise ValueError("year not in predeclared screen")
     form={
         "request_src":"tetsu_rail_repeated_phenology_feasibility",
         "climate_data":"0",
-        "state[1]":state,
         "phenophase_id[1]":str(PHASE_ID),
         "start_date":f"{year}-01-01",
         "end_date":f"{year}-12-31",
@@ -48,7 +50,7 @@ def get_site_phenometrics(state,year):
         rows, sha, nbytes = parse_stream(r)
     if rows and not any("site_id" in r or "station_id" in r for r in rows[:3]):
         raise ValueError(f"NPN site-level source omitted ID: {sorted(rows[0])}")
-    # A year / state / phenophase filter silently ignored is worse than an error.
+    # State filtering occurs by validated registered site ID locally.
     unexpected_phase=[
         r.get("phenophase_description") for r in rows
         if r.get("phenophase_description") not in (None,"Open flowers")
@@ -98,7 +100,6 @@ def summarize_state_year(rows,rail_bins,state,year):
     sites=collections.defaultdict(set)
     species=collections.defaultdict(lambda:collections.defaultdict(set))
     site_rows=set()
-    first_fields=set()
     for row in rows:
         try:
             site_value=row.get("site_id",row.get("station_id"))
@@ -109,6 +110,9 @@ def summarize_state_year(rows,rail_bins,state,year):
             quality["invalid_site_or_species_id"]+=1
             continue
         b=rail_bins.get(site_id)
+        if b is not None and str(row.get("state") or "").strip() not in ("",state):
+            quality["registry_state_mismatch"] += 1
+            continue
         if b is None:
             quality["site_not_in_registered_state_frame"]+=1
             continue
@@ -142,7 +146,8 @@ def summarize_state_year(rows,rail_bins,state,year):
         r["npn_species_id"]))
     return {
         "state":state,"year":year,
-        "raw_source_site_phenometric_rows":len(rows),
+        "n_national_source_phenometric_rows":len(rows),
+        "n_unique_site_taxon_rows_matching_this_state":len(site_rows),
         "n_registered_sites_with_positive_Open_flowers_near":len(sites["near"]),
         "n_registered_sites_with_positive_Open_flowers_far":len(sites["far"]),
         "n_species_with_any_positive_site_phenometric":len(species),
