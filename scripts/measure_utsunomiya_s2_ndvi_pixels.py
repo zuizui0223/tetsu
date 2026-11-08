@@ -174,10 +174,23 @@ def pixel_samples(asset,coordinates):
         if src.count!=1 or src.crs is None or src.width<1000:
             raise ValueError("Unexpected imagery band raster header")
         src_epsg=src.crs.to_epsg()
-        if src_epsg not in (32654,):
-            raise ValueError(f"Unexpected Sentinel tile CRS {src_epsg}")
-        # Exact same projected N05 transect coordinates across all years.
-        coords=[coordinates[key] for key in coordinates]
+        # N02 line sampling uses WGS84 UTM zone 54 (EPSG:32654).
+        # A legitimate Sentinel MGRS tile over western Nagano may use
+        # neighboring UTM zone 53 (EPSG:32653) instead. Refusing or
+        # sampling without transforming would create *false missingness*.
+        if src_epsg not in (32653,32654,32655):
+            raise ValueError(f"Unexpected Japan Sentinel tile CRS {src_epsg}")
+        coord_transform=(
+            Transformer.from_crs(32654,src.crs,always_xy=True)
+            if src_epsg!=32654 else None
+        )
+        coords=[
+            coord_transform.transform(*coordinates[key])
+            if coord_transform is not None else coordinates[key]
+            for key in coordinates
+        ]
+        # Each point remains the SAME physical N05-sourced location,
+        # transformed only into the raster's native projected CRS.
         vals={}
         for key,pixel in zip(coordinates,src.sample(coords,indexes=1,masked=True)):
             sample=pixel[0]
