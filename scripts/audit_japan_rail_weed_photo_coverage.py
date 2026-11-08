@@ -62,6 +62,7 @@ CURATED_ALIASES = {
         "Pueraria lobata",
         "Pueraria montana var. lobata",
         "Pueraria montana var lobata",
+        "Pueraria montana lobata",  # actual iNaturalist canonical variant format
     }
 }
 
