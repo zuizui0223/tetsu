@@ -53,6 +53,15 @@ class RoadAndBaselineGates(unittest.TestCase):
             count_balance({("n","f"):f})["n_pairs_by_gate"]["road50_sameclass_preNDVI_similar"],1
         )
 
+    def test_vegetation_only_strict_gate_excludes_same_class_bare(self):
+        both_bare=pair_balance_flags(10.,15.,5,5,.11,.12)
+        self.assertTrue(both_bare["road50_sameclass_preNDVI_similar"])
+        self.assertFalse(both_bare["road50_both2017veg_preNDVI_similar"])
+        vegetation=pair_balance_flags(10.,15.,4,4,.33,.35)
+        self.assertTrue(vegetation["road50_both2017veg_preNDVI_similar"])
+        mismatch=pair_balance_flags(10.,15.,4,4,.33,.7)
+        self.assertFalse(mismatch["road50_both2017veg_preNDVI_similar"])
+
     def test_2017_veg_vs_bare_cannot_be_landmatched(self):
         f=pair_balance_flags(35.,40.,4,5,.2,.2)
         self.assertTrue(f["road_abs_diff_le50_both_le100"])
