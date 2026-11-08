@@ -80,6 +80,25 @@ class S2ActualPixelSafetyTests(unittest.TestCase):
             result["paired_near_minus_control_delta_NDVI"]["mean"],.20
         )
 
+    def test_provider_branch_survives_when_stale_raster_offset_invalid(self):
+        coords={"p1":(10.,20.)}
+        fake={
+            "red":{"p1":600},
+            "nir":{"p1":2000},
+            "scl":{"p1":4}
+        }
+        with patch(
+            "measure_utsunomiya_s2_ndvi_pixels.read_scene_pixels",
+            return_value=fake
+        ):
+            x,quality=choose_year_pixel_items(2024,coords,[item()])
+        self.assertEqual(len(x),1)
+        self.assertIsNotNone(x["p1"]["provider_flag_branch"])
+        self.assertIsNone(x["p1"]["raster_offset_branch"])
+        self.assertEqual(x["p1"]["scl_class"],4)
+        self.assertEqual(quality["provider_calibration_usable"],1)
+        self.assertNotIn("raster_offset_calibration_usable",quality)
+
     def test_scl_clouds_are_not_clear_even_with_high_ndvi(self):
         coords={"p1":(10.,20.),"p2":(11.,21.)}
         fake={
