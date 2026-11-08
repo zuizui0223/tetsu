@@ -27,7 +27,7 @@ def calendar_distance(when: str) -> int:
     return abs((d-dt.date(d.year,1,1)).days+1 - TARGET_DOY)
 
 
-def pick_candidates(features, *, top=4):
+def pick_candidates(features, *, top=100):
     """Rank by seasonal distance first, then cloud, then stable ID.
 
     Do not select on NDVI or observed greenness.
