@@ -34,6 +34,7 @@ from tetsu.rail_verge_pixel_eligibility import near_points_from_140m
 
 TEMPLATE="https://cyberjapandata.gsi.go.jp/xyz/nendophoto{year}/{z}/{x}/{y}.png"
 GSI_PAGE="https://maps.gsi.go.jp/development/ichiran.html"
+SEAMLESS="https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg"
 YEARS=(2016,2017,2018,2024)
 ZOOM=17
 MAX_SAMPLE_POINTS=36
@@ -51,12 +52,12 @@ def world_tile(lon,lat,zoom=ZOOM):
     return zoom,xtile,ytile
 
 
-def image_is_nonblank(raw):
+def image_is_nonblank(raw,expected_format='PNG'):
     """Do not interpret pure transparent/solid tiles as valid aerial photos."""
     if len(raw)>2_000_000:
         raise ValueError("oversized GSI individual tile")
     with Image.open(io.BytesIO(raw)) as im:
-        if im.format!="PNG" or im.size not in ((256,256),(512,512)):
+        if im.format!=expected_format or im.size not in ((256,256),(512,512)):
             raise ValueError("unexpected GSI tile format/size")
         im=im.convert("RGBA")
         # Inspect a deterministic grid rather than cherry-pick vegetation
@@ -119,6 +120,31 @@ def run():
         "interpretation":"An extant year-named orthophoto tile is a candidate for manually reviewing 2017 road/track land cover, not proof that the photo was actually taken in that year at every underlying pixel.",
         "license":"GSI survey mapping images must be attributed under official GSI terms; no raw images redistributed."
     }
+    # Source-control: if identical coordinates have a valid modern GSI
+    # seamlessphoto JPEG, the all-404 year-photo result reflects absent
+    # YEAR-LABELED tiles, not bad longitude/latitude XYZ or internet access.
+    modern=Counter()
+    for z,x,y in sorted(tiles):
+        try:
+            response=client.get(
+                SEAMLESS.format(z=z,x=x,y=y),timeout=(12,30)
+            )
+            if response.status_code==404:
+                label="http404_no_modern_photo"
+            else:
+                response.raise_for_status()
+                label=image_is_nonblank(response.content,expected_format="JPEG")
+            modern[label]+=1
+        except (requests.RequestException,ValueError,OSError):
+            modern["modern_source_error"]+=1
+    report["modern_GSI_seamlessphoto_positive_control"]={
+        "source":SEAMLESS,
+        "tile_status_counts":dict(modern),
+        "n_nonblank_modern_tiles":modern["photo_pixels_present"],
+        "not_historical_cannot_establish_2017_road":True
+    }
+    print(json.dumps({"modern_photo_source_control":dict(modern)}),flush=True)
+
     for year in YEARS:
         counts=Counter()
         by_group=defaultdict(set)
