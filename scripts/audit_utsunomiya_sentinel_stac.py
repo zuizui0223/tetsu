@@ -73,14 +73,14 @@ def summarize_items(year, response):
         if not isinstance(cloud,(int,float)) or not 0<=cloud<SCENE_CLOUD_PCT_LT:
             raise ValueError(f"Unverified STAC cloud fraction {cloud}")
         assets=row.get("assets") or {}
-        source_keys.update(assets)
+        source_keys.update(assets.keys())
         dates.add(when[:10])
         # We do not download COGs; verify required spectral and cloud assets.
         keys=set(assets)
         compatible=(
             ({"red","nir"}<=keys or {"red","nir08"}<=keys or
              {"B04","B08"}<=keys) and
-            (bool(keys&{"scl","SCL","cloud-mask","visual"}))
+            (bool(keys&{"scl","SCL","cloud-mask"}))
         )
         scenes.append({"scene_id":identity,"date":when[:10],
                        "cloud_fraction":cloud,"available_for_ndvi":compatible})
