@@ -75,6 +75,10 @@ def summarize_row(row:dict,root:Path)->dict:
                 with Image.open(cone_path) as cones:
                     measures=summarize_masks(plant,cones,whole_plant=whole,
                                               standardized_view=standardized)
+        if row["spore_phenophase"] in (
+            "fertile_cone_visible", "fertile_cone_absent_visible"
+        ) and not measures["flower_mask_annotated"]:
+            raise ValueError("visible/absent cone phase requires independently annotated cone mask")
         if row["spore_phenophase"]=="fertile_cone_visible" and measures["flower_area_px"]==0:
             raise ValueError("cone-present label contradicts reviewed zero-pixel cone mask")
         if row["spore_phenophase"] in (
