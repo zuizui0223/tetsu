@@ -12,7 +12,8 @@ SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "extract_photo_roi.py
 
 
 class RoiManifestSafety(unittest.TestCase):
-    def make_run(self, scope, reviewed, *, fixed=False, same_taxon=False, plot_id=""):
+    def make_run(self, scope, reviewed, *, fixed=False, same_taxon=False,
+                 plot_id="", taxon="Fictitia exemplaris", phase="flowering"):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             plant = Image.new("L", (100, 100), 0)
@@ -32,10 +33,10 @@ class RoiManifestSafety(unittest.TestCase):
                 writer = csv.DictWriter(f, fieldnames=fields)
                 writer.writeheader()
                 writer.writerow({
-                    "image_id": "synth01", "site_id": "safe01", "taxon": "Fictitia exemplaris",
+                    "image_id": "synth01", "site_id": "safe01", "taxon": taxon,
                     "photo_date": "2026-06-01", "photographer_id": "researcher",
                     "site_class": "unknown", "whole_plant": "true",
-                    "standardized_view": "true", "phenophase": "flowering",
+                    "standardized_view": "true", "phenophase": phase,
                     "plant_mask": "plant.png", "flower_mask": "flower.png",
                     "target_scope": scope, "mask_reviewed": str(reviewed).lower(),
                     "fixed_plot_view": str(fixed).lower(),
@@ -83,6 +84,16 @@ class RoiManifestSafety(unittest.TestCase):
         row = self.make_run("patch", True, fixed=True, same_taxon=True)
         self.assertEqual(row["quality_status"], "restricted")
         self.assertIn("missing_plot_id", row["patch_quality_reasons"])
+
+    def test_fern_ally_horsetail_cannot_be_labeled_flowering(self):
+        row = self.make_run(
+            "individual", True,
+            taxon="Equisetum arvense", phase="flowering"
+        )
+        self.assertEqual(row["quality_status"], "rejected")
+        self.assertIn(
+            "Equisetum has no flowers", row["quality_error"]
+        )
 
     def test_unreviewed_individual_restricted(self):
         row = self.make_run("individual", False)
