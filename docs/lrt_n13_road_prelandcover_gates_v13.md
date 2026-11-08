@@ -68,3 +68,22 @@ Only **two out of four** longitudinal road sections/blocks have eligible strict 
 The descriptive signs remain negative after these **posthoc comparability restrictions**, but there is **no causal railway effect identified**. In the strict eight pairs, the 2024 NDVI block medians were **−0.046250** (block with five pairs) and **−0.151576** (block with three); corresponding 2025 medians **−0.085644** and **−0.139232**. Two correlated along-track blocks in one city are insufficient to infer an LRT-wide rail operation response. Moreover the “same class” restriction also allows bare/bare 2017 pixels; a **separately labeled additional posthoc gate requiring both sides vegetated in 2017** has been implemented before paper-oriented biological interpretation. Never quietly treat bare/bare spectral differences as vegetation loss.
 
 **Most important source-quality finding:** Road distance is not the principal immediate overlap obstacle (58/68 near/far pairs had similar 2024 road distance), whereas historical cloud/land-class/vegetation balance restricts the usable remote-sensing sample severely (16 valid baseline spectral pairs and 8 fully matched class/road/spectral pairs). Road geometry is **2024**, not an independent pre-2017 road control. The negative observation-time contrast, however repeated, could result from asphalt, housing, paving or LRT construction and **cannot be assigned to railway weed survival, flowering, propagule transport, wind, cutting or evolution**.
+
+
+## Final stricter vegetation-only source validation (posthoc rule)
+
+The first v1.3 comparison required the **same** 2017 SCL class, which allowed **both bare / nonvegetated** 2017 pixels. That is adequate for a spectral land-cover audit but not for a study claiming biological vegetation decline. We therefore independently added a stricter **posthoc** biological interpretability gate that requires BOTH near/far ground pixels **2017 SCL class 4 = vegetation**, and (a) 2024 N13 road distance at both points ≤100m, (b) near-vs-far road-distance difference ≤50m, (c) absolute 2017 paired baseline NDVI difference ≤0.15. This eligibility was motivated by review of the earlier output; it must **never** be misrepresented as an externally prespecified effect test.
+
+[Successful new real-source audit #42444523777](https://github.com/zuizui0223/tetsu/actions/runs/42444523777), eight targeted regression/source tests passed, source input files were downloaded and no origin/error checks failed.
+
+| Subset | Number of fixed spatial pairs | 2017→2024 near−control NDVI change (median) | 2017→2025 change (median) |
+|---|---:|---:|---:|
+| All 2017/post cloud-clear spectral pairs | 16 (2024), 15 (2025) | **−0.073941** | **−0.116642** |
+| 2024 road comparable + 2017 same vegetation or bare class | **9** | **−0.046250** | **−0.085644** |
+| Above, also 2017 spectral gap ≤0.15 (both bare *allowed*) | **8** | **−0.058956** | **−0.112438** |
+| 2024 road comparable + 2017 **both vegetated**, regardless gap | **7** | **−0.008730** | **−0.030378** |
+| 2024 road comparable + 2017 **both vegetated** + gap ≤0.15 | **6** | **−0.027490** | **−0.058011** |
+
+**Crucial geographic heterogeneity:** In the 6-pair strict vegetated subset, one along-line 12-anchor block contains **5 correlated pairs** and has 2024 NDVI median **−0.046250** and 2025 **−0.085644**. The other block has only **one** pair, with a **positive** 2024 value **+0.208187** and 2025 **+0.095657**. Thus the available two blocks do **not** show a consistent directional change, even ignoring the postconstruction road-network and mixed-road urban surface limitations. The 2024 strict-subset mean is only **−0.004432**, unlike the **−0.027490** median, illustrating leverage from that single positive source pair. The 2025 strict-subset mean **−0.215557** differs sharply from median **−0.058011** because a few local pixel pairs dominate the mean.
+
+**Scientific assessment: insufficient to attribute a green-cover change to rail operation.** Observable spectral contrasts at six fixed points can be measured and have heterogeneous signs, but most are drawn from one along-corridor section and 2024 roads may themselves have resulted from LRT construction. This result argues for **site-specific existing-vegetation masks and independent road-only control corridors**, plus climate/land-cover/maintenance histories, before considering a biological establishment/selection model. No train seed transport, plant height, spore production, flowering, mowing response or genetic local adaptation was measured.
