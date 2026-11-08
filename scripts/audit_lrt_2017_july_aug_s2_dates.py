@@ -16,6 +16,7 @@ from datetime import date
 import json
 from pathlib import Path
 import requests
+from urllib.parse import urlparse
 
 from audit_utsunomiya_sentinel_stac import BBOX,STAC
 
@@ -81,6 +82,47 @@ def summary_source(data):
     }
 
 
+def collect_pages(client,initial_data,max_pages=20):
+    """Follow exact STAC pagination links, respecting GET or POST method."""
+    items=[]
+    page=initial_data
+    page_count=0
+    visited=set()
+    while True:
+        if page.get("type")!="FeatureCollection":
+            raise ValueError("invalid STAC pagination result")
+        page_count+=1
+        if page_count>max_pages:
+            raise ValueError("More than 20 STAC source pages; incomplete inventory")
+        for item in page.get("features") or []:
+            sid=item.get("id")
+            if sid in visited:
+                raise ValueError("repeated STAC ID across page boundary")
+            visited.add(sid)
+            items.append(item)
+        nxt=next((x for x in page.get("links") or []
+                  if x.get("rel")=="next"),None)
+        if nxt is None:
+            break
+        href=nxt.get("href") or STAC
+        url=urlparse(href)
+        if url.scheme!="https" or url.netloc!="earth-search.aws.element84.com":
+            raise ValueError("untrusted STAC pagination link host")
+        method=str(nxt.get("method") or "GET").upper()
+        if method=="POST":
+            body=nxt.get("body")
+            if not isinstance(body,dict):
+                raise ValueError("POST STAC pagination without body")
+            response=client.post(href,json=body,timeout=(20,90))
+        elif method=="GET":
+            response=client.get(href,timeout=(20,90))
+        else:
+            raise ValueError("unsupported STAC pagination method")
+        response.raise_for_status()
+        page=response.json()
+    return {"type":"FeatureCollection","features":items,"links":[]},page_count
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--output",default="results/audit/lrt_2017_july_aug_sentinel_scl_candidate_dates.json")
@@ -95,7 +137,9 @@ def main():
     }
     r=client.post(STAC,json=payload,timeout=(20,90))
     r.raise_for_status()
-    results=summary_source(r.json())
+    complete,n_pages=collect_pages(client,r.json())
+    results=summary_source(complete)
+    results["n_source_pages_fetched"]=n_pages
     results["source"]=STAC
     results["window"]=[FIRST,LAST]
     results["cloud_cover_lt_pct"]=SCENE_CLOUD_LT
@@ -105,6 +149,7 @@ def main():
         "returned":results["n_returned_source_items"],
         "n_dates":results["n_source_acquisition_dates"],
         "top_dates":results["scene_dates_in_outcome_independent_order"][:12],
+        "source_pages":n_pages,
         "paging":results["pagination_uncertain"],
     },ensure_ascii=False),flush=True)
     if results["n_source_acquisition_dates"]==0:
