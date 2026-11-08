@@ -35,3 +35,34 @@ The first 2025 source audit [#42448091802](https://github.com/zuizui0223/tetsu/a
 - Safe field research must not involve entering operating railway land without permission. Do not publish precise high-risk access points as a general field guide.
 
 Next: use high-resolution local aerial/ground-source images to exclude tunnels/viaducts and identify genuinely track-owned herbaceous vegetation, then match vegetated **road verge** locations, control for land cover/temperature/observer, and use verified maintenance history or standardized fixed-plot photo ROI. The original Japanese freight-rail/port-alien plant assembly hypothesis remains independently testable via network data; N02 passenger railway lines alone cannot prove train-carried seed dispersal.
+
+
+## Actual 2025 near versus road-only vegetation NDVI (source-calibrated)
+
+[Follow-up actual 2025 pixel source run #42448654924](https://github.com/zuizui0223/tetsu/actions/runs/42448654924) re-ran all three N02/N13 GIS source regions and physically read four independent source-selected summer C1 acquisition dates, now with directly validated UTM53/54 reprojection and source fail-closed. **6 targeted S2 selection/NDVI tests + 3 raster-projection tests passed.** No source query failure in any of the three regions. Pixel medians below are *observations conditioned on each pair being SCL4 vegetation on the same selected date*; they are NOT ecological effect sizes, and dates must not be mixed within pairs. The sample is extremely small (one railway corridor may supply 2–4 pairs).
+
+The first date in outcome-blind STAC ranking where both near and road-only far samples were SCL4 was chosen; no date selected for a positive/negative NDVI contrast. The physically calibrated Collection1 L2A band scale and -0.1 offset were checked against actual 2024/25 legacy scenes in v1.2.
+
+| Fixed study region / route(s) | n SCL4/SCL4 same-day near/road pairs | Near NDVI median across paired pixels | Road-control NDVI median | Median same-pair near−road NDVI | Pairs near > road | Pairs near < road |
+|---|---:|---:|---:|---:|---:|---:|
+| 仙山線 / Sendai | **2** | 0.895126 | 0.730244 | **+0.164881** | 1 | 1 |
+| 磐越西線 / Niigata | **4** | 0.873179 | 0.913056 | **−0.024184** | 2 | 2 |
+| 吾妻線 + しなの鉄道線 + 篠ノ井線 / Nagano rectangle | **4** | 0.863542 | 0.850190 | **+0.031872** | 2 | 2 |
+| **TOTAL** | **10** | *not pooled across geography as independent treatments* | *not pooled* | *not a universal rail contrast* | **5** | **5** |
+
+Route-level descriptive medians within the Nagano frame were:
+- 吾妻線, n=2: near−road **−0.026128**, both site pairs negative;
+- しなの鉄道線, n=1: near−road **+0.333324**, one positive source pair;
+- 篠ノ井線, n=1: near−road **+0.069575**, one positive source pair.
+
+The region-level *median of paired differences* need not equal the difference of independently computed near and road-control medians, especially with only 2–4 spatial pairs. The above values are descriptive **2025 spectral context conditioned on simultaneous vegetation SCL4**, not baseline/post NDVI change or population plant species evidence.
+
+### What is a positive source finding here?
+
+The **GIS road-separated + current measurable vegetation gate was satisfied by 10/10 preselected comparisons across three separate regions and five ordinary route groups**. This fixes the **road-colocation failure** of the earlier urban Utsunomiya tram pilot and creates an empirically supported shortlist for independent right-of-way/ground-vegetation verification. Two-date near-rail SCL4 was available in 1/2 Sendai samples and all 4 Nagano samples, but 0/4 Niigata due to CLOUD/SOURCE observation availability. A zero repeat count is not a seasonally ephemeral biological presence.
+
+The 2025 NDVI paired differences are **split 5 positive versus 5 negative** overall and are not consistent across route/region or grouped sites. That does not prove a rail effect is zero, because sample size, land-cover type, near-ground vegetation cover, grade (tunnel/bridge) and observer/source eligibility remain unresolved. More importantly, **the 20m SCL4 classification may be dense forest canopy**, especially where remote rails pass under wooded hills. This source presence gate cannot identify trackside plant communities, railway herbicide/mowing, wind responses, propagule transport or adaptation.
+
+### Operational next quality decision
+
+Before choosing a primary ecology plot, independently verify whether every 35m near-track sample is at-grade exposed rail with *ground-layer vegetation* rather than a tunnel/bridge or overhanging tree canopy; obtain high-resolution aerial or authorized non-track field view and date of photograph. Retain any rejected sample in an auditable rejection ledger; do not select candidate rails because 2025 NDVI was high. Then build herbaceous fixed-view rail/road/control plot sampling with actual management regimes and independently dated treatment logs. Without this grade/vegetation evidence there is no ecological rail effect estimate.
