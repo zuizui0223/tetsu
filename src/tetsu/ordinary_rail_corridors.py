@@ -7,6 +7,7 @@ freight-only rail lines and N13 does not date road opening.
 """
 from __future__ import annotations
 import math
+import statistics
 from collections import Counter
 from shapely.geometry import LineString, Point, box
 from shapely.ops import unary_union
@@ -172,4 +173,55 @@ def corridor_aggregate(rows):
         "road_distance_far_bins":dict(far_road_bins),
         "each_side_is_correlated_with_rail_segment":True,
         "none_of_source_geometries_establishes_vegetation_or_management":True,
+    }
+
+
+
+def current_vegetation_pair_ndvi(pairs, by_date):
+    """Actual SAME-DATE SCL4 near and road-control NDVI comparison.
+
+    Select the *first* eligible source day in pre-fixed acquisition date
+    order, based solely on SCL vegetation/clear-pixel availability.
+    Site selection must already have been fixed using official GIS road
+    and rail distances, not spectral NDVI. Neither a 2025 rail effect
+    nor a difference-in-differences estimate is implied by these values.
+    """
+    records=[]
+    for near,control in pairs:
+        chosen=None
+        for day,pixels in by_date.items():
+            a=pixels.get(near)
+            b=pixels.get(control)
+            if not a or not b:
+                continue
+            if a.get("scl_class")!=4 or b.get("scl_class")!=4:
+                continue
+            vnear=a.get("harmonized")
+            vfar=b.get("harmonized")
+            if not all(isinstance(x,(int,float)) and math.isfinite(x) and -1<=x<=1
+                       for x in (vnear,vfar)):
+                continue
+            chosen=(day,float(vnear),float(vfar))
+            break
+        if chosen:
+            day,vnear,vfar=chosen
+            records.append({
+                "day":day,
+                "near":vnear,
+                "road_control":vfar,
+                "near_minus_control":vnear-vfar
+            })
+    def med(k):
+        return round(statistics.median(x[k] for x in records),6) if records else None
+    return {
+        "n_road_separated_pairs_with_both_scl4_same_day":len(records),
+        "median_current_near_vegetation_NDVI":med("near"),
+        "median_current_road_control_vegetation_NDVI":med("road_control"),
+        "median_same_day_near_minus_road_control_NDVI":med("near_minus_control"),
+        "n_positive_pairs":sum(x["near_minus_control"]>0 for x in records),
+        "n_negative_pairs":sum(x["near_minus_control"]<0 for x in records),
+        "n_zero_pairs":sum(x["near_minus_control"]==0 for x in records),
+        "source_dates_used":dict(Counter(x["day"] for x in records)),
+        "ecological_effect_unidentified":True,
+        "selection_requires_both_2025_scl4_and_is_not_a_population_estimator":True
     }
