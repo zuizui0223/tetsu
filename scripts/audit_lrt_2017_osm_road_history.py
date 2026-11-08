@@ -204,12 +204,13 @@ def run():
     with tempfile.TemporaryDirectory() as root:
         nearest_n13,n13_src=build_n13_road_index(download_dir=Path(root))
         result["N13_2024_matched_reference"]=n13_src
+        source_blocked_403=False
         for sample in samples:
             aid=sample["anchor_index"]
             pointset=sample["points"]
             contemporary={key:nearest_n13(coord) for key,coord in pointset.items()}
             successful={}
-            for year in DATES:
+            for year in (() if source_blocked_403 else DATES):
                 try:
                     features,sha,nbytes=year_source_geojson(client,sample["bbox"],year)
                     lines,counts=lines_from_osm(features,utm)
@@ -222,6 +223,17 @@ def run():
                         "quality":counts,
                         "nonzero_ways_in_query":bool(lines),
                     }
+                except requests.HTTPError as exc:
+                    response=getattr(exc,"response",None)
+                    if response is not None and response.status_code==403:
+                        source_blocked_403=True
+                        result["failures"][f"anchor{aid:02d}_{year}"]=(
+                            "403 source extraction unavailable or API-key required"
+                        )
+                        break  # Do not issue 11 more known-blocked requests.
+                    result["failures"][f"anchor{aid:02d}_{year}"]=(
+                        f"{type(exc).__name__}: {str(exc)[:200]}"
+                    )
                 except Exception as exc:
                     result["failures"][f"anchor{aid:02d}_{year}"]=(
                         f"{type(exc).__name__}: {str(exc)[:200]}"
@@ -252,8 +264,16 @@ def run():
     for group,entries in result.pop("compare_snapshots_and_current_N13").items():
         group_audit[group]={
             "n_sample_sites":len(entries),
-            "2017_road_way_mapped_within25m":sum(x["ohsome_2017_road_le25m"] for x in entries),
-            "2024_road_way_mapped_within25m":sum(x["ohsome_2024_road_le25m"] for x in entries),
+            "2017_road_way_mapped_within25m":(
+                sum(x["ohsome_2017_road_le25m"] for x in entries)
+                if any(x["ohsome_2017_response_success"] for x in entries)
+                else None
+            ),
+            "2024_road_way_mapped_within25m":(
+                sum(x["ohsome_2024_road_le25m"] for x in entries)
+                if any(x["ohsome_2024_response_success"] for x in entries)
+                else None
+            ),
             "2024_N13_road_within25m":sum(x["n13_2024_road_le25m"] for x in entries),
             "2017_OSM_queries_success":sum(x["ohsome_2017_response_success"] for x in entries),
             "2024_OSM_queries_success":sum(x["ohsome_2024_response_success"] for x in entries),
@@ -262,6 +282,17 @@ def run():
             "missing_from_OSM_not_physical_absence":True,
         }
     result["grouped_road_history_comparison"]=group_audit
+    result["historical_OSM_source_status"]=(
+        "blocked_403_no_2017_road_evidence" if source_blocked_403
+        else "some_historical_query_responses" if
+        result["OSM_road_snapshot_audits"] else
+        "no_historical_query_responses"
+    )
+    result["403_known_provider_context"]=(
+        "HeiGIT has restricted legacy ohsome v1 /elements/geometry; "
+        "new v2 extraction requires authenticated API key. Do not retry "
+        "anonymous extraction or treat unavailable data as mapped-road absence."
+    )
     print(json.dumps({"history_summary":group_audit,"errors":result["failures"]},
                      ensure_ascii=False),flush=True)
     return result
@@ -274,6 +305,9 @@ def main():
     report=run()
     output=Path(a.output);output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
+    if report["historical_OSM_source_status"]=="blocked_403_no_2017_road_evidence":
+        print("Historical OSM extraction BLOCKED by provider 403; 2017 road exposure is UNKNOWN, not zero.")
+        return
     if not any(v.get("nonzero_ways_in_query")
                for v in report["OSM_road_snapshot_audits"].values()):
         raise SystemExit("No historical OSM road data confirmed; no 2017 road absence claim")
