@@ -64,6 +64,17 @@ def main():
                     raise ValueError("invalid site_class")
                 if meta["phenophase"] not in ALLOWED_PHASES:
                     raise ValueError("invalid phenophase")
+                if meta["taxon"].startswith("Equisetum "):
+                    # Horsetails make spores in fertile strobili, not
+                    # flowers/fruits. Never allow the flower ROI output or
+                    # flowering phenophase to silently mislabel horsetail.
+                    if meta["flower_mask"] or meta["phenophase"] in (
+                        "flowering", "flowering_fruiting", "bud", "fruiting"
+                    ):
+                        raise ValueError(
+                            "Equisetum has no flowers: use "
+                            "extract_horsetail_spore_roi.py for fertile cones"
+                        )
                 if meta["target_scope"] not in ALLOWED_SCOPES:
                     raise ValueError("target_scope must be individual/patch/closeup/unknown")
                 reviewed = convert_bool(meta["mask_reviewed"])
