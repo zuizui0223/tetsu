@@ -73,10 +73,10 @@ def baseline_pair_first_clear(pairs,pixel_by_date):
     return source,dict(selections),pair_dates
 
 
-def run():
+def run(n_anchors=9):
     source=bounded_zip_download()
     lines,_=get_lrt_lines(source)
-    points,pairs,selection=build_fixed_pairs(lines)
+    points,pairs,selection=build_fixed_pairs(lines,n_anchors=n_anchors)
     client=requests.Session()
     client.headers.update({"User-Agent":"tetsu-C1-S2-true-same-date-preconstruction-LRT-pixel/1.3"})
     output={
@@ -84,6 +84,7 @@ def run():
         "MLIT_N05_sha256":hashlib.sha256(source).hexdigest(),
         "MLIT_N05_not_redistributed":True,
         "sampling_frame":selection,
+        "posthoc_coverage_density_sensitivity_not_preregistered":n_anchors!=9,
         "source_2017_scenes":[{"date":d,"scene_ids":list(ids)}
                                for d,ids in BASELINE_DATES],
         "source_2017_scene_sort":"closest Julian day to Aug 1 first, then fixed July 7 fallback; never NDVI-selected",
@@ -184,9 +185,12 @@ def run():
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--output",default="results/satellite/utsunomiya_2017_clear_composite_C1_NDVI.json")
+    p.add_argument("--anchors",type=int,default=9)
     a=p.parse_args()
+    if not (8<=a.anchors<=80):
+        p.error("--anchors must be between 8 and 80")
     output=Path(a.output);output.parent.mkdir(parents=True,exist_ok=True)
-    result=run()
+    result=run(n_anchors=a.anchors)
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
     print(json.dumps({
         "status":result["status"],"baseline":result["baseline_2017_selected_same_date_pairs"],
