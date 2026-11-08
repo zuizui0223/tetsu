@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install GSI PNG reader and N05 GIS source dependencies
-        run: pip install 'requests>=2.31,<3' 'Pillow>=10,<13' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+        run: pip install 'requests>=2.31,<3' 'Pillow>=10,<13' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
       - name: Test actual tile semantics, 404 and transparent/blank source rejection
         run: python -m unittest discover -s tests -p 'test_lrt_gsi_2017_tiles.py' -v
       - name: Audit 2016/17/18/24 YEAR-LABELED source images at fixed LRT 20m/35m/1.6km points
