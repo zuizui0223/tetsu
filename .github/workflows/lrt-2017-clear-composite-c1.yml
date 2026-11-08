@@ -1,0 +1,36 @@
+name: Real LRT preconstruction 2017 same-date pixel-clear baseline vs C1 2024/25 NDVI
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/measure_lrt_2017_pixel_clear_composite.py'
+      - '.github/workflows/lrt-2017-clear-composite-c1.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-2017-SCL-clear-LRT-v12
+  cancel-in-progress: true
+jobs:
+  valid-pixel-years:
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install GIS and COG range-read libraries
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Run synthetic same-date pair and no-cherry-picking tests
+        run: python -m unittest discover -s tests -p 'test_lrt_2017_pixel_clear_composite.py' -v
+      - name: Measure actual July 2017 SCL-clear near/far paired pixels against 2024-25 reprocessed C1 COGs
+        run: python -u scripts/measure_lrt_2017_pixel_clear_composite.py --output results/satellite/utsunomiya_2017_clear_composite_C1_NDVI.json
+      - name: Upload aggregate NDVI and exclusion diagnostics, no N05 shapes or raw pixel coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: utsunomiya-2017-clear-day-baseline-vs-2024-25-C1-NDVI
+          path: results/satellite/utsunomiya_2017_clear_composite_C1_NDVI.json
+          if-no-files-found: warn
