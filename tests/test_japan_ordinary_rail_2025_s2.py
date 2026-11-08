@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"scripts"))
+sys.path.insert(0,str(ROOT/"src"))
 from tetsu.ordinary_rail_corridors import current_vegetation_pair_ndvi
 from audit_japan_ordinary_rail_2025_s2_vegetation import (
     validate_stac_tile,choose_source_dates,N_ACQUISITION_DATES
