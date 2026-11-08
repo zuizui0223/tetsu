@@ -133,6 +133,56 @@ def habitat_enrichment(records, taxon: str, region: str | None = None,
     }
 
 
+def conservative_named_taxon_trackbed_bounds(records):
+    """Bound each taxon's pooled trackbed mentions under worst-case 'other'.
+
+    Table 4 published a different top-10 taxon list in each region.
+    A named taxon missing from a region may be hidden in that region's
+    'other' residual; never impute its count to zero. As an upper bound,
+    assign ALL that region's OTHER trackbed reports to the single taxon.
+    This is conservative for one competitor at a time, not a joint
+    biologically feasible allocation.
+    """
+    regions=("warm","cold")
+    taxa=sorted({r["taxon_group"] for r in records
+                 if r["taxon_group"]!="OTHER_TOP10_RESIDUAL"})
+    other={region:row_by(records,region,"OTHER_TOP10_RESIDUAL")["trackbed"]
+           for region in regions}
+    entries=[]
+    for taxon in taxa:
+        named={r["region"]:r["trackbed"] for r in records
+               if r["taxon_group"]==taxon}
+        low=sum(named.values())
+        upper=low+sum(other[r] for r in regions if r not in named)
+        entries.append({
+            "taxon":taxon,
+            "trackbed_reports_definitely_named":low,
+            "trackbed_reports_max_if_all_missing_region_other_is_this_taxon":upper,
+            "named_in_both_source_regions":len(named)==2
+        })
+    entries.sort(key=lambda x:(-x["trackbed_reports_max_if_all_missing_region_other_is_this_taxon"],x["taxon"]))
+    unlisted_bound=sum(other.values())
+    horsetail=next(x for x in entries if x["taxon"]=="Equisetum arvense")
+    maximum_competitor=max(
+        [unlisted_bound]+[
+            x["trackbed_reports_max_if_all_missing_region_other_is_this_taxon"]
+            for x in entries if x["taxon"]!="Equisetum arvense"
+        ]
+    )
+    return {
+        "observed_equisetum_trackbed_reports":horsetail["trackbed_reports_definitely_named"],
+        "largest_upper_bound_for_any_single_non_equisetum_taxon":maximum_competitor,
+        "unlisted_species_possible_max_trackbed_reports":unlisted_bound,
+        "equisetum_must_be_largest_single_taxon_trackbed_report_category":
+            horsetail["trackbed_reports_definitely_named"]>maximum_competitor,
+        "worst_case_rank_margin_reports":
+            horsetail["trackbed_reports_definitely_named"]-maximum_competitor,
+        "taxon_level_bounds":entries,
+        "reason":"Even if every residual trackbed occurrence in a missing-region top-10 list belonged to one competitor, it would not exceed the named Equisetum count.",
+        "not_a_significance_test":True,
+    }
+
+
 def summarize(records):
     taxa = sorted({x["taxon_group"] for x in records
                    if x["taxon_group"] != "OTHER_TOP10_RESIDUAL"})
@@ -191,6 +241,7 @@ def summarize(records):
         "formation_base_reports": 391,
         "focus": focus,
         "horsetail_trackbed_vs_slope_ratio_of_report_shares": condition_ratios,
+        "top10_residual_robust_rank_bounds":conservative_named_taxon_trackbed_bounds(records),
         "audits": {
             "row_marginals_matched": True,
             "warm_region_table_subtotals_matched": True,
