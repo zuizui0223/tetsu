@@ -19,6 +19,8 @@ import json
 from pathlib import Path
 import math
 import requests
+import zipfile
+from urllib.parse import urlparse
 
 import rasterio
 
@@ -53,6 +55,12 @@ def validate_stac_tile(item, year):
     assets=item.get("assets") or {}
     if not {"red","nir","scl"}.issubset(assets):
         return False
+    for band in ("red","nir","scl"):
+        uri=urlparse(str(assets[band].get("href") or ""))
+        if (uri.scheme!="https" or not uri.hostname or
+            not uri.hostname.endswith(".amazonaws.com") or
+            not uri.path.lower().endswith(".tif")):
+            raise ValueError("Unexpected remote Sentinel COG asset host/path")
     for band in ("red","nir"):
         entries=assets[band].get("raster:bands") or []
         if len(entries)<1:
@@ -229,7 +237,6 @@ def main():
             "No wind, mowing, herbicide, blooming, propagule arrival, mortality, genetic selection or NDVI changes estimated."
         ]
     }
-    import zipfile
     for region in REGIONS:
         try:
             summary,sites=analyze_region(
