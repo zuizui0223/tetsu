@@ -1,0 +1,23 @@
+region,source_name_ja,taxon_group,life_history,embankment_slope,formation_base,trackbed,off_track,boundary,other,total_reported
+warm,クズ,Pueraria lobata,perennial,26,17,2,3,2,7,57
+warm,セイタカアワダチソウ,Solidago altissima,perennial,21,25,0,1,0,3,50
+warm,ススキ,Miscanthus sinensis,perennial,24,22,0,1,0,3,50
+warm,センダングサ類,Bidens spp.,annual,18,17,0,3,0,4,42
+warm,イタドリ類,Reynoutria spp.,perennial,19,18,3,1,0,8,49
+warm,スギナ,Equisetum arvense,perennial,8,12,7,2,0,12,41
+warm,ヒメムカシヨモギ,Conyza canadensis,annual,13,15,2,1,0,3,34
+warm,ヤブガラシ,Cayratia japonica,perennial,11,11,1,3,4,2,32
+warm,ヨモギ,Artemisia princeps,perennial,15,11,1,1,0,2,30
+warm,エノコログサ類,Setaria spp.,annual,10,10,0,3,0,1,24
+warm,その他,OTHER_TOP10_RESIDUAL,mixed_unknown,82,71,0,11,4,15,183
+cold,ススキ,Miscanthus sinensis,perennial,50,28,5,1,1,11,96
+cold,クズ,Pueraria lobata,perennial,42,23,4,0,1,9,79
+cold,イタドリ類,Reynoutria spp.,perennial,38,12,1,1,0,6,58
+cold,スギナ,Equisetum arvense,perennial,14,18,17,0,0,8,57
+cold,セイタカアワダチソウ,Solidago altissima,perennial,25,11,0,1,0,3,40
+cold,エノコログサ類,Setaria spp.,annual,18,10,3,2,0,5,38
+cold,ヨモギ,Artemisia princeps,perennial,23,7,3,1,0,5,39
+cold,ヒメムカシヨモギ,Conyza canadensis,annual,19,2,1,1,1,11,35
+cold,メヒシバ,Digitaria ciliaris,annual,16,0,2,2,0,7,27
+cold,チガヤ,Imperata cylindrica,perennial,13,13,0,1,0,2,29
+cold,その他,OTHER_TOP10_RESIDUAL,mixed_unknown,137,38,18,6,2,43,244
