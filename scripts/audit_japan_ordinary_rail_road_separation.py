@@ -227,7 +227,7 @@ def n13_region_index(region,workdir):
                   "n_local_projected_road_line_parts":len(lines)}
 
 
-def analyze_region(region,rail_archive):
+def analyze_region(region,rail_archive,*,private_site_positions=False):
     groups,rail_all,stations,bbox_m,rail_info=read_n02_region(
         rail_archive,region
     )
@@ -238,6 +238,7 @@ def analyze_region(region,rail_archive):
         rail_tree=STRtree(rail_all)
         total=Counter()
         routes=[]
+        private_candidates=[]  # in-memory only, NEVER publish coordinates
         for (name,company),segments in sorted(groups.items()):
             length_km=round(sum(x.length for x in segments)/1000.,3)
             if length_km*1000<MIN_ROUTE_WITHIN_BBOX_M:
@@ -264,6 +265,14 @@ def analyze_region(region,rail_archive):
                     "near_station_m":nearest_station,
                     "eligibility":flags
                 })
+                if (private_site_positions and flags[
+                    "strict_near_road75_far_road50_far_rail1000_station300"
+                ]):
+                    private_candidates.append({
+                        "route_name":name,"operator_name":company,
+                        "near_xy":(near.x,near.y),
+                        "road_only_xy":(far.x,far.y)
+                    })
             summary=corridor_aggregate(measurements)
             summary["rail_length_clipped_km"]=length_km
             summary["n_anchors_preselected_without_outcomes"]=n_anchors
@@ -287,7 +296,7 @@ def analyze_region(region,rail_archive):
         -x["rail_length_clipped_km"],
         x["route_name"],x["operator_name"]
     ))
-    return {
+    summary={
         "region":region,
         "source_rail":rail_info,
         "source_roads":road_info,
@@ -303,6 +312,9 @@ def analyze_region(region,rail_archive):
         "ranked_route_candidates_without_plant_outcomes":routes[:30],
         "rank_rule":"number of fixed geographically eligible rail-versus-road control samples, NOT plant cover, NDVI, species frequency or inferred biological effect",
     }
+    # When requested by another authorized source audit, coordinates stay
+    # in its transient runtime; public JSON must contain only 'summary'.
+    return (summary,private_candidates) if private_site_positions else summary
 
 
 def main():
