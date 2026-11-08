@@ -54,15 +54,15 @@ class ModernRailWeedsTests(unittest.TestCase):
     def test_wrong_taxon_is_rejected_not_relabelled(self):
         self.assertFalse(matches_focal_name(ob("Solidago gigantea"),"Solidago altissima"))
 
-    def test_nonflower_annotation_is_not_missing(self):
+    def test_nonflower_annotation_is_not_missing_for_flowering_species(self):
         data=[
-            ob("Equisetum arvense",phase=13),
-            ob("Equisetum arvense",phase=21),
-            ob("Equisetum arvense"),
             ob("Solidago altissima",phase=13),
-            ob("Equisetum arvense",accuracy=None)
+            ob("Solidago altissima",phase=21),
+            ob("Solidago altissima"),
+            ob("Equisetum arvense",phase=13),
+            ob("Solidago altissima",accuracy=None)
         ]
-        summary=summarize_taxon_observations(data,"Equisetum arvense",lambda lng,lat:150)
+        summary=summarize_taxon_observations(data,"Solidago altissima",lambda lng,lat:150)
         self.assertEqual(summary["n_valid_geo"],3)
         self.assertEqual(summary["rail_bins"]["100-250m"],3)
         self.assertEqual(summary["flower_visibility_annotation_counts"]["visible_open_flower_annotation"],1)
@@ -71,6 +71,25 @@ class ModernRailWeedsTests(unittest.TestCase):
         self.assertEqual(summary["distinct_observers_per_rail_bin"]["100-250m"],1)
         self.assertEqual(summary["quality_gate"]["returned_taxon_does_not_match_exact_group"],1)
         self.assertEqual(summary["quality_gate"]["accuracy_not_within_100m"],1)
+
+    def test_horsetail_strobilus_never_equated_to_flowering(self):
+        data=[ob("Equisetum arvense",phase=13),
+              ob("Equisetum arvense",phase=21),
+              ob("Equisetum arvense")]
+        result=summarize_taxon_observations(
+            data,"Equisetum arvense",lambda lng,lat:80
+        )
+        self.assertEqual(result["n_valid_geo"],3)
+        self.assertEqual(
+            result["flower_visibility_annotation_counts"]["not_applicable_spore_plant"],3
+        )
+        self.assertEqual(
+            result["reproductive_scoring_mode"],"spore_cone_separate_review_required"
+        )
+        self.assertNotIn(
+            "visible_open_flower_annotation",
+            result["flower_visibility_annotation_counts"]
+        )
 
     def test_obscured_cultivated_unconfirmed_excluded(self):
         item=ob("Setaria viridis",obscured=True)
