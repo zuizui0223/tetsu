@@ -69,3 +69,12 @@ Curated numerical rows are a **factual, attributed reconstruction** of published
 - `results/literature_rail_microhabitat/species_habitat_composition.csv` — per taxon/region and habitat descriptive shares, with repeated-measure caveat.
 
 The output files are CI artifacts, not ecological effect-size or selection tests. Use provenance and the source DOI for publication, and obtain raw independent sampling units before any significance testing. **No newly observed railway treatment response has yet been established by tetsu.**
+
+
+## New worst-case residual test (v1.1)
+
+The original 2011 JR East report gives only each warm/cold region's *top ten* taxa; the remaining reports are grouped as `OTHER_TOP10_RESIDUAL`. The trackbed has **0 warm-region** and **18 cold-region** such unresolved mentions. Rather than impute missing top-ten taxa as biological zeros, the new code deliberately gives **every unresolved cold trackbed report to whichever single rival species could most threaten the horsetail ranking**.
+
+Result: horsetail (*Equisetum arvense*) has **24 trackbed occurrence mentions** in the named source categories. The **worst-case maximum of any one other taxon is 19**, including one named warm-region taxon receiving all 18 cold residual reports; a completely unlisted taxon could reach at most 18. Thus **horsetail remains the largest single source trackbed taxon category even under the most favorable possible allocation of the unidentified residual**, with a margin of at least **5 source reports**.
+
+This is a strict *partial-identification/ranking robustness* result from the published table: it makes the claim "most represented reported trackbed taxon" more secure despite top-ten truncation. It **does not** make the reports independent, establish railway selection, prove stress tolerance or permit a causal significance test. New scripted result: `top10_residual_robust_rank_bounds` in `results/literature_rail_microhabitat/summary.json`, including upper/lower bounds per taxon.
