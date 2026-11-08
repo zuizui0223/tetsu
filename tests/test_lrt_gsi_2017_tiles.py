@@ -38,6 +38,20 @@ class GsiAerialPhotoSourceTests(unittest.TestCase):
             image_is_nonblank(raw.getvalue()),"mostly_transparent_or_missing"
         )
 
+    def test_modern_seamless_JPEG_positive_control_is_not_historical_photo(self):
+        im=Image.new("RGB",(256,256))
+        for y in range(256):
+            for x in range(256):
+                im.putpixel((x,y),((2*x)%256,(3*y)%256,(x+y)%256))
+        raw=io.BytesIO()
+        im.save(raw,format="JPEG",quality=88)
+        self.assertEqual(
+            image_is_nonblank(raw.getvalue(),expected_format="JPEG"),
+            "photo_pixels_present"
+        )
+        with self.assertRaises(ValueError):
+            image_is_nonblank(raw.getvalue()) # annual photos must be PNG
+
     def test_variable_tile_pixels_pass_source_photo_gate(self):
         im=Image.new("RGB",(256,256))
         for y in range(256):
