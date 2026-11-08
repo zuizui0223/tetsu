@@ -36,7 +36,11 @@ def is_ordinary_rail(record):
         return False
     # High-speed rail has separate operator category 1. Ordinary subway
     # lines may be category '12' so exclude independently by labels.
-    if operator_type=="1" or any(
+    # Public-municipal operator class 3 includes municipal subways,
+    # e.g. Sendai Tozai Line (東西線) whose route label omits "地下鉄".
+    # Fail closed for this source screen rather than wrongly claiming
+    # a subway tunnel is a potentially vegetated surface railway.
+    if operator_type in ("1","3") or any(
         token in route or token in company for token in EXCLUDE_ROUTE_TOKENS
     ):
         return False
