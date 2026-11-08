@@ -53,12 +53,27 @@ def classify_rail_distance(distance_m: float) -> str:
     return "gt_1000m"
 
 
+# Published 2012 name Pueraria lobata is an accepted infraspecific taxon
+# under Pueraria montana var. lobata according to Kew POWO (2026).
+# Never automatically accept undifferentiated Pueraria montana species: it
+# includes multiple varieties and would mix distinct source taxon concepts.
+CURATED_ALIASES = {
+    "Pueraria lobata": {
+        "Pueraria lobata",
+        "Pueraria montana var. lobata",
+        "Pueraria montana var lobata",
+    }
+}
+
+
 def matches_focal_name(ob, requested: str):
     raw=(ob.get("taxon") or {}).get("name") or ""
     if not raw:
         return False
     if requested == "Setaria":
         return raw == "Setaria" or raw.startswith("Setaria ")
+    if requested in CURATED_ALIASES:
+        return raw in CURATED_ALIASES[requested]
     return raw == requested or raw.startswith(requested + " ")
 
 
@@ -84,12 +99,14 @@ def queried_observations(client, area, taxon):
 
 def summarize_taxon_observations(all_records, requested, dist_func):
     quality=collections.Counter()
+    returned_unmatched_taxa=collections.Counter()
     rail_bins=collections.Counter()
     observers=collections.defaultdict(set)
     phases=collections.Counter()
     for ob in all_records:
         if not matches_focal_name(ob,requested):
             quality["returned_taxon_does_not_match_exact_group"]+=1
+            returned_unmatched_taxa[str((ob.get("taxon") or {}).get("name") or "missing_name")]+=1
             continue
         valid,reason=acceptable_observation(ob)
         quality[reason]+=1
@@ -115,6 +132,7 @@ def summarize_taxon_observations(all_records, requested, dist_func):
             phases["phase_not_annotated"]+=1
     return {
         "quality_gate":dict(quality),
+        "unmatched_api_accepted_taxa":dict(returned_unmatched_taxa.most_common(15)),
         "n_valid_geo":sum(rail_bins.values()),
         "rail_bins":dict(rail_bins),
         "distinct_observers_per_rail_bin":{
@@ -173,6 +191,8 @@ def run():
             "Photographic rail proximity ≤250m does NOT establish growth on rail right-of-way, herbicide/spraying/cutting exposure or train-induced gust.",
             "Flower annotation absence is unknown, not biological absence. No flowering-onset dates or ROI measurements here.",
             "Genus Setaria observations cannot be interpreted as one biological species; accepted taxon names can change.",
+            "Pueraria lobata source taxon aliases are restricted to the accepted Pueraria montana var. lobata; Pueraria montana species without variety is not automatically accepted.",
+            "Taxon aliases are documented by Kew POWO: https://powo.science.kew.org/taxon/214449-2",
             "Source includes no real management records; environmental filtering is a hypothesis and historical descriptive comparison only.",
             "No third-party images, occurrence IDs, or precise observation coordinates are exported."
         ]
