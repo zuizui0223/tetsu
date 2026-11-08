@@ -227,7 +227,16 @@ def n13_region_index(region,workdir):
                   "n_local_projected_road_line_parts":len(lines)}
 
 
-def analyze_region(region,rail_archive,*,private_site_positions=False):
+def private_scope_includes(flags, scope):
+    if scope=="strict":
+        return flags["strict_near_road75_far_road50_far_rail1000_station300"]
+    if scope=="all_fixed_geo":
+        return True
+    raise ValueError("Unexpected private candidate scope")
+
+
+def analyze_region(region,rail_archive,*,private_site_positions=False,
+                   private_candidate_scope="strict"):
     groups,rail_all,stations,bbox_m,rail_info=read_n02_region(
         rail_archive,region
     )
@@ -265,13 +274,20 @@ def analyze_region(region,rail_archive,*,private_site_positions=False):
                     "near_station_m":nearest_station,
                     "eligibility":flags
                 })
-                if (private_site_positions and flags[
-                    "strict_near_road75_far_road50_far_rail1000_station300"
-                ]):
+                if private_site_positions and private_scope_includes(
+                    flags, private_candidate_scope
+                ):
+                    # Only for transient source-matching inside an
+                    # authorized source audit: never serialize coordinates.
                     private_candidates.append({
                         "route_name":name,"operator_name":company,
                         "near_xy":(near.x,near.y),
-                        "road_only_xy":(far.x,far.y)
+                        "road_only_xy":(far.x,far.y),
+                        "near_road_m":road_near,
+                        "far_road_m":road_far,
+                        "far_rail_m":far_rail,
+                        "near_station_m":nearest_station,
+                        "source_gates":flags
                     })
             summary=corridor_aggregate(measurements)
             summary["rail_length_clipped_km"]=length_km
