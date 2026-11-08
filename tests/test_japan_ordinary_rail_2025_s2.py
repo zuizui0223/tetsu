@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"scripts"))
+from tetsu.ordinary_rail_corridors import current_vegetation_pair_ndvi
 from audit_japan_ordinary_rail_2025_s2_vegetation import (
     validate_stac_tile,choose_source_dates,N_ACQUISITION_DATES
 )
@@ -58,6 +59,39 @@ class OrdinaryRailCurrentS2Tests(unittest.TestCase):
         d,skip=choose_source_dates(items)
         self.assertEqual(len(d["2025-08-03"]),2)
         self.assertEqual(skip["not_all_red_nir_scl_assets"],1)
+
+    def test_same_day_pair_vegetation_not_cross_date_or_cherry_picked(self):
+        pairs=[("n1","c1"),("n2","c2")]
+        observations={
+            # First source day has both sides SCL4 for pair1. Use this
+            # even if a second day would reverse the measured difference.
+            "2025-07-31":{
+                "n1":{"scl_class":4,"harmonized":.32},
+                "c1":{"scl_class":4,"harmonized":.42},
+                "n2":{"scl_class":4,"harmonized":.47},
+            },
+            "2025-08-02":{
+                "n1":{"scl_class":4,"harmonized":.85},
+                "c1":{"scl_class":4,"harmonized":.11},
+                # Same site2: far SCL5 bare => not a vegetation pair.
+                "c2":{"scl_class":5,"harmonized":.08},
+            }
+        }
+        r=current_vegetation_pair_ndvi(pairs,observations)
+        self.assertEqual(r["n_road_separated_pairs_with_both_scl4_same_day"],1)
+        self.assertAlmostEqual(
+            r["median_same_day_near_minus_road_control_NDVI"],-.10
+        )
+        self.assertEqual(r["source_dates_used"],{"2025-07-31":1})
+
+    def test_lack_of_actual_both_vegetation_is_missing_not_zero_NDVI(self):
+        r=current_vegetation_pair_ndvi(
+            [("n","c")],{"2025-08-01":{"n":{
+                "harmonized":.70,"scl_class":4
+            }}}
+        )
+        self.assertEqual(r["n_road_separated_pairs_with_both_scl4_same_day"],0)
+        self.assertIsNone(r["median_same_day_near_minus_road_control_NDVI"])
 
     def test_unexpected_external_cog_host_rejected(self):
         f=fixture("2025-08-01")
