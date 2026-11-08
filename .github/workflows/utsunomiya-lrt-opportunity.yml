@@ -1,0 +1,36 @@
+name: Utsunomiya LRT real railway-opening pre/post botanical PHOTO availability
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_utsunomiya_lrt_photo_opportunity.py'
+      - '.github/workflows/utsunomiya-lrt-opportunity.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-utsunomiya-2023-lrt-plant-opportunity
+  cancel-in-progress: true
+jobs:
+  source-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Japanese GIS, projected distance and source API libraries
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Query true 2023 new surface-rail corridor annual photo coverage without assumptions of adaptation
+        run: python scripts/audit_utsunomiya_lrt_photo_opportunity.py --output results/audit/utsunomiya_lrt_railway_opening_photo_opportunity.json
+      - name: Validate source photo QC and exposed/roadside spatial contrasts
+        run: python -m unittest discover -s tests -p 'test_utsunomiya_lrt_opportunity.py' -v
+      - name: Retain aggregate plant photographic opportunities only, no source restricted geometry or raw coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: utsunomiya-lrt-preoperation-vs-postoperation-plant-photo-opportunity
+          path: results/audit/utsunomiya_lrt_railway_opening_photo_opportunity.json
+          if-no-files-found: warn
