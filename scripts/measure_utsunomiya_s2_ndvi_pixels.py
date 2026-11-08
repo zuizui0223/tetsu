@@ -223,14 +223,24 @@ def choose_year_pixel_items(year,points,items):
                 quality[f"scl_rejected_{scl_int}"]+=1
                 continue
             vals=ndvi_branch_values(red,nir,item)
-            if vals["provider_flag_branch"] is None or vals["raster_offset_branch"] is None:
-                quality["radiometry_values_invalid_or_missing"]+=1
+            # Do not demand validity in BOTH conflicting calibrations.
+            # That can selectively discard dark pixels from the provider
+            # calibration and bias its NDVI distribution.
+            if all(vals[key] is None for key in (
+                "provider_flag_branch","raster_offset_branch"
+            )):
+                quality["both_radiometry_branches_invalid"]+=1
                 continue
             results[point_id]={
                 "provider_flag_branch":vals["provider_flag_branch"],
-                "raster_offset_branch":vals["raster_offset_branch"]
+                "raster_offset_branch":vals["raster_offset_branch"],
+                "scl_class":scl_int
             }
-            quality["success_paired_pixel_source"]+=1
+            if vals["provider_flag_branch"] is not None:
+                quality["provider_calibration_usable"]+=1
+            if vals["raster_offset_branch"] is not None:
+                quality["raster_offset_calibration_usable"]+=1
+            quality["success_any_radiometry_branch"]+=1
     return results,dict(quality)
 
 
@@ -315,7 +325,9 @@ def run():
     # have SCL-accepted source red/NIR values for all years.
     for label in ("provider_flag_branch","raster_offset_branch"):
         all_valid=set.intersection(*[
-            set(yearly.get(y,{})) for y in SCENES
+            {key for key,value in yearly.get(y,{}).items()
+             if value.get(label) is not None}
+            for y in SCENES
         ]) if all(y in yearly for y in SCENES) else set()
         output[f"n_fixed_pixels_valid_all_three_years_{label}"]=len(all_valid)
     output["status"]=(
