@@ -1,0 +1,32 @@
+name: Historical JR East weed microhabitat reanalysis (published 2011 data)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/literature/abe_2012_railway_microhabitat_occurrences.csv'
+      - 'scripts/reanalyze_abe_2012_rail_microhabitat.py'
+      - '.github/workflows/historical-rail-microhabitat.yml'
+  workflow_dispatch:
+jobs:
+  quantitative-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate 2011 regional × microhabitat × taxon margins and produce derived results
+        run: python scripts/reanalyze_abe_2012_rail_microhabitat.py --output-dir results/literature_rail_microhabitat
+      - name: Verify source transcription against independent precommitted unit tests
+        run: python -m unittest discover -s tests -p 'test_abe_2012_microhabitat.py' -v
+      - name: Save new derived ratios, provenance and honest ecological limitations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jr-east-2011-microhabitat-descriptive-reanalysis
+          path: results/literature_rail_microhabitat/
+          if-no-files-found: warn
