@@ -1,0 +1,41 @@
+name: Real 2025 Sentinel C1 vegetation at road-separated JR and ordinary railway candidates
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_japan_ordinary_rail_2025_s2_vegetation.py'
+      - 'tests/test_japan_ordinary_rail_2025_s2.py'
+      - '.github/workflows/ordinary-rail-2025-sentinel-vegetation.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-three-ordinary-rail-regions-2025-scl-vegetation
+  cancel-in-progress: true
+jobs:
+  source-vegetation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install N02 N13 and remote C1 S2 COG-source clients
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Validate real C1 source radiometry and pre-NDVI image selection
+        run: python -m unittest discover -s tests -p 'test_japan_ordinary_rail_2025_s2.py' -v
+      - name: Verify actual 2025 S2 SCL vegetation and cloud-clear pixels on source-selected ordinary rail versus road-only sites
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          GDAL_HTTP_MAX_RETRY: '3'
+          GDAL_HTTP_RETRY_DELAY: '2'
+        run: python -u scripts/audit_japan_ordinary_rail_2025_s2_vegetation.py --output results/audit/japan_ordinary_rail_current_s2_vegetation_v15.json
+      - name: Upload source-checked only aggregate road-separated rail vegetation opportunity counts, not GIS coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ordinary-rail-S2C1-2025-actual-vegetation-three-regions
+          path: results/audit/japan_ordinary_rail_current_s2_vegetation_v15.json
+          if-no-files-found: warn
