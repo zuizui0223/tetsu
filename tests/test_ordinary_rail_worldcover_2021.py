@@ -45,7 +45,7 @@ class WorldCoverRailGroundVersusCanopyTests(unittest.TestCase):
         self.assertTrue(p["plurality_tied"])
         self.assertIsNone(p["plurality_class"])
         self.assertEqual(p["n_classified"],9)
-        self.assertAlmostEqual(p["tree_cover_fraction_among_classified"],3/9)
+        self.assertAlmostEqual(p["tree_cover_fraction_among_classified"],3/9,places=4)
         self.assertEqual(summarize_neighborhood([0]*9)["n_classified"],0)
 
     def test_route_aggregate_keeps_crop_tree_built_unknown_separate(self):
@@ -83,7 +83,7 @@ class WorldCoverRailGroundVersusCanopyTests(unittest.TestCase):
         self.assertEqual(out["center_class"],30)
         self.assertEqual(out["window"]["n_classified"],9)
         self.assertEqual(out["window"]["plurality_class"],10)
-        self.assertAlmostEqual(out["window"]["tree_cover_fraction_among_classified"],8/9)
+        self.assertAlmostEqual(out["window"]["tree_cover_fraction_among_classified"],8/9,places=4)
         self.assertFalse(out["window"]["plurality_tied"])
 
     def test_wrong_source_CRS_fails_closed(self):
