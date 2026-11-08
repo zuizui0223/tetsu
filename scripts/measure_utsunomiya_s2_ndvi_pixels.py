@@ -317,6 +317,25 @@ def run():
             except Exception as exc:
                 output["errors"][str(year)]=f"{type(exc).__name__}: {str(exc)[:320]}"
                 print(json.dumps({"year":year,"failure":output["errors"][str(year)]}),flush=True)
+    # SCL is categorical vegetation versus bare/urban cover. It does
+    # not identify grass/flowers or a railway-specific microhabitat.
+    for year, values in yearly.items():
+        cohorts={"near":[], "control":[]}
+        for point_id, value in values.items():
+            group=("near" if point_id.endswith("_near") else
+                   "control" if point_id.endswith("_control") else None)
+            if group is not None:
+                cohorts[group].append(value["scl_class"])
+        output["calendar"][str(year)]["scl_vegetation_class"]={
+            group:{
+                "n_valid_scl4_or5_pixels":len(classes),
+                "n_vegetation_class4":sum(x==4 for x in classes),
+                "fraction_vegetation_class4":(
+                    round(sum(x==4 for x in classes)/len(classes),5)
+                    if classes else None
+                ),
+            } for group, classes in cohorts.items()
+        }
     for year in (2024,2025):
         for label in ("provider_flag_branch","raster_offset_branch"):
             entry=prepost_paired_change(pairs,yearly,year,label,2017)
