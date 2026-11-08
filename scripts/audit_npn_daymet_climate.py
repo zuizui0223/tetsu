@@ -37,8 +37,17 @@ DAYMET = "https://daymet.ornl.gov/single-pixel/api/data"
 VERSION = "tetsu-daymet-v0.9"
 REQ = requests.Session()
 REQ.headers.update({"User-Agent": "tetsu-rail-phenology-climate-audit/0.9 (https://github.com/zuizui0223/tetsu)"})
-COLUMNS = ("gdd5_to_doy90", "gdd5_to_doy120",
-           "mean_air_c_to_doy120", "precip_mm_to_doy120")
+# Days 60 (MD Cercis before observed spring flowering) and 90 (AZ
+# Prosopis before observed first flowers) were already fixed as climate
+# cutoffs; expose them, rather than relying only on DOY120 which can
+# occur AFTER first flowering for both species.
+COLUMNS = (
+    "gdd5_to_doy60", "gdd5_to_doy90", "gdd5_to_doy120",
+    "mean_air_c_to_doy60", "mean_air_c_to_doy90",
+    "mean_air_c_to_doy120",
+    "precip_mm_to_doy60", "precip_mm_to_doy90",
+    "precip_mm_to_doy120"
+)
 
 
 def collect_frames_and_cases():
@@ -168,6 +177,8 @@ def run():
         print(json.dumps({
             "case":f"{state}_{year}_spp{case['species_id']}",
             "source_eligible_near":len(near_ok),"source_eligible_far":len(far_ok),
+            "GDD5_D60_near_minus_far":entry["variables"]["gdd5_to_doy60"]["near_minus_far"],
+            "GDD5_D90_near_minus_far":entry["variables"]["gdd5_to_doy90"]["near_minus_far"],
             "GDD5_D120_near_minus_far":entry["variables"]["gdd5_to_doy120"]["near_minus_far"],
             "mean_air_D120_near_minus_far":entry["variables"]["mean_air_c_to_doy120"]["near_minus_far"]
         },ensure_ascii=False),flush=True)
