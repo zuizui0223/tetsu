@@ -246,7 +246,7 @@ def run():
                 "2017_osm_road_features":result["OSM_road_snapshot_audits"].get(f"anchor{aid:02d}_2017",{}).get("n_source_features"),
                 "2024_osm_road_features":result["OSM_road_snapshot_audits"].get(f"anchor{aid:02d}_2024",{}).get("n_source_features"),
                 "failed_queries":sum(key.startswith(f"anchor{aid:02d}") for key in result["failures"])
-            }),ensure_ascii=False),flush=True)
+            },ensure_ascii=False),flush=True)
     # Remove individual location-level classification; only counts.
     group_audit={}
     for group,entries in result.pop("compare_snapshots_and_current_N13").items():
