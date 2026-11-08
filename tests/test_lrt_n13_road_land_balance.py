@@ -9,6 +9,7 @@ import shapefile
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
+sys.path.insert(0,str(ROOT/"scripts"))
 from audit_lrt_n13_road_land_balance import only_aggregates
 from tetsu.rail_road_landbalance import (
     projected_road_segments_from_zip,pair_balance_flags,count_balance,
