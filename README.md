@@ -2,7 +2,7 @@
 
 **Research question:** Do railway networks connect distant plant communities through propagule transport, beyond railway-side habitat, roads, urbanization, ports and recorder bias?
 
-**Status: 2026-11-07. Research design + exploratory code only. No empirical ecological results.**
+**Status: 2026-11-08, research v1.5. Official GIS source-backed rail/road habitat sampling candidates and reproducible secondary historical microhabitat findings; NO confirmed railway-driven dispersal, management, flowering or adaptive biological effect.**
 
 ## Mechanisms to distinguish
 - **Transport:** seeds on freight/rolling stock, cargo contaminants/spillage, people and maintenance equipment.
@@ -167,6 +167,16 @@ These modules are input-driven methods **without real railway photo-treatment ob
 - **[Historic GSI source availability](https://github.com/zuizui0223/tetsu/actions/runs/42445789140):** year-labelled air-photo GSI Z17 tiles **0/20 available** in each of 2016, 2017, 2018 and 2024, versus **20/20 real nonblank tiles from modern seamlessphoto** at the exact same XYZ tile coordinates. Year-specific imagery coverage, not coordinate transformation, is absent in this official tile service; mosaic images cannot date a 2017 physical road reliably.
 - **Historical OpenStreetMap source restriction:** HeiGIT's legacy ohsome v1 geometry extraction returns 403 (provider restriction, not empty road records). The successor API requires a user API key. [Fail-closed real source run](https://github.com/zuizui0223/tetsu/actions/runs/42446226849) stopped after the first provider 403 rather than inventing OSM zero roads; the six fixed 20m and 35m rail-offset sites were all within 25m of a real official 2024 N13 road (6/6 per offset). Therefore **2017 road network presence/absence is UNKNOWN**, not zero; archived OSM mapping omissions would not prove historical physical road absence even if extraction were available. The script [`audit_lrt_2017_osm_road_history.py`](scripts/audit_lrt_2017_osm_road_history.py) fails closed and reports unavailable historical data, while retaining independently measured 2024 N13 context.
 - **Scientific selection:** This urban street-running LRT is poor for an independent *railway-verge versus road-verge vegetation* treatment. Prioritize a **non-road-adjacent railway corridor**, actual rail right-of-way and matched road-only plots, repeated fixed-view photos with documented management, and separate propagule transport histories. The previous Japanese horsetail trackbed-versus-embankment observation remains a stronger **ecological source pattern**, not refuted by this tram's source limitations. No biological causal effect has been established in v1.4.
+
+## v1.5 — real non-road ordinary rail corridors in three Japan regions
+
+[Full official N02 conventional railway versus N13 road-source audit](docs/japan_ordinary_rail_road_separation_v15.md) · [successful real source run](https://github.com/zuizui0223/tetsu/actions/runs/42447780719)
+
+- **Corrected the urban tram road co-location failure from v1.4.** Three pre-fixed geographically independent Japanese study regions (Sendai/Miyagi, Niigata, Nagano) were analyzed from actual MLIT N02 2025 **ordinary passenger railway** lines, N13 September 2024 road centrelines and official N02 station lines. Subway, public municipal urban railway (operator category 3), new high-speed rail, monorails and trams explicitly excluded. A first pilot incorrectly included Sendai Tozai subway because its route name lacked "地下鉄"; the code/test now exclude it by operator category.
+- N13 real source roads: **183,706** locally indexed parts in Sendai, **192,241** in Niigata, and **232,428** in Nagano. Across **370** fixed 35m-near-rail/1600m-road-control source transect sides, **10** satisfied strict GIS-only road separation: near ≥75m from a modern road and ≥300m from a railway station, far ≤50m from an N13 road and ≥1000m from any passenger railway.
+- **Positive, source-backed geographic eligibility:** **仙山線 2** (Miyagi), **磐越西線 4** (Niigata), **吾妻線 2**, **しなの鉄道線 1**, **篠ノ井線 1** (Nagano study rectangle). This is a shortlist of **five ordinary rail route groups across three separated geographies**. It is NOT evidence of five independent treatments, confirmed at-grade trackside vegetation, trains transporting seeds, cutting adaptation or biological changes.
+- A separate post-selection **actual summer 2025 Sentinel-2 Collection1 SCL** source audit is implemented to determine which of these GIS samples have measurable vegetation-pixel opportunity before any biological study. Near 35m may still be forest, rail tunnel or under viaduct, nonrail garden or tree canopy; road lines have width and provenance limits. Candidate points stay private to the source job; no exact coordinate or source image deposited.
+- Main railway **seed and spore dispersal** hypothesis continues to require active rail/freight movement data and actual propagules/complete plant surveys; habitat filtering/mowing/wind/reproductive ROI remain independent threads, not confirmed by proximity to a mapped rail line.
 
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
