@@ -143,7 +143,7 @@ def sample_region_2025(region,private_sites,client):
                     v.get("scl_class")==4 for k,v in observations.items()
                     if k.endswith("c")
                 ),
-            }),ensure_ascii=False),flush=True)
+            },ensure_ascii=False),flush=True)
         except Exception as exc:
             failures[ds]=f"{type(exc).__name__}: {str(exc)[:250]}"
     # For source eligibility, a pixel is observed *vegetation* if SCL=4
