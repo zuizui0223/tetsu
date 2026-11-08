@@ -146,8 +146,16 @@ def sample_region_2025(region,private_sites,client):
             },ensure_ascii=False),flush=True)
         except Exception as exc:
             failures[ds]=f"{type(exc).__name__}: {str(exc)[:250]}"
+    # Fail closed: if ALL acquisition dates fail at I/O/CRS, an
+    # empty list of observations is UNKNOWN, NOT proof of no vegetation.
+    if not per_day:
+        raise ValueError(
+            f"No successful 2025 Sentinel C1 dates in {region}; "
+            f"source failures={failures}"
+        )
     # For source eligibility, a pixel is observed *vegetation* if SCL=4
-    # on ANY of the 4 predetermined dates. No pseudo population trend.
+    # on ANY of the four independently selected source dates; '0' is
+    # conditional on actual 2025 source coverage, not biological absence.
     outputs=defaultdict(lambda:{
         "n_geo_candidates":0,
         "near_scl4_on_at_least_1_preselected_date":0,
