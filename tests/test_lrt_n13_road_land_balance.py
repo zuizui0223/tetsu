@@ -9,6 +9,7 @@ import shapefile
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"src"))
+from audit_lrt_n13_road_land_balance import only_aggregates
 from tetsu.rail_road_landbalance import (
     projected_road_segments_from_zip,pair_balance_flags,count_balance,
     blocked_summary,verify_url
@@ -61,6 +62,29 @@ class RoadAndBaselineGates(unittest.TestCase):
         f=pair_balance_flags(15.,250.,4,4,.2,.2)
         self.assertFalse(f["near_road_le100_and_far_road_le100"])
         self.assertFalse(f["road_abs_diff_le50_both_le100"])
+
+    def test_real_source_baseline_is_flat_scalar_ndvi_not_nested_dict(self):
+        pairs=[("T00_L_near","T00_L_control")]
+        pts={"T00_L_near":(0,0),"T00_L_control":(200,300)}
+        road={"T00_L_near":14.0,"T00_L_control":30.0}
+        pre={"T00_L_near":.3,"T00_L_control":.38}
+        source_day={
+            "2017-07-22":{
+                "T00_L_near":{
+                    "provider_flag_branch":.3,"scl_class":4
+                },
+                "T00_L_control":{
+                    "provider_flag_branch":.38,"scl_class":4
+                }
+            }
+        }
+        summary,flags=only_aggregates(pts,pairs,road,pre,source_day)
+        self.assertEqual(
+            summary["2017_abs_ndvi_between_exposed_and_far_pairs_n"],1
+        )
+        self.assertTrue(
+            flags[pairs[0]]["road50_sameclass_preNDVI_similar"]
+        )
 
     def test_diff_in_diff_skips_missing_and_splits_fixed_blocks(self):
         pairs=[("T00_L_near","T00_L_control"),("T20_R_near","T20_R_control")]
