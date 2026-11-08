@@ -22,7 +22,7 @@ Report whether M2/M3 improve **spatial-blocked out-of-sample prediction**, and w
 
 **C — cargo and port discrimination:** independently verify port-connected freight routes, passenger-only lines, roads and closed lines. Predict stronger signal for unintentional introductions (e.g. contaminants) than ornamental planting. If there is no reliable freight information, report a yard/port *proxy*, not freight volume.
 
-**D — chronology (conditional):** where actual opening dates and reliable time-structured floras exist, use not-yet-opened/never-opened localities as controls with pretrend and effort diagnostics. N02 snapshots from 2005 are not a historical railway-buildout dataset; first observation is not arrival.
+**D — chronology (conditional):** where actual opening dates and reliable time-structured floras exist, use not-yet-opened/never-opened localities as controls with pretrend and effort diagnostics. N02 snapshots from 2005 are not a historical railway-buildout dataset; **the separately licensed, noncommercial MLIT N05-2025 railway time-series does contain 1950–2025 passenger route opening and version ending histories** ([source audit](railway_history_n05_v11.md)). However, N05 excludes freight-only links; `N05_005e` can mark administrative change rather than service cessation, and N05 relation group IDs sometimes combine inconsistent historic route labels. Require independently verified actual opening or last service dates and above-ground construction/operation before a difference-in-differences design. First species photo is NOT biological arrival.
 
 ## Interpretation gates
 1. Scientific names unified; known alien/native status validated in region. Unknown status excluded, never treated automatically as native.
