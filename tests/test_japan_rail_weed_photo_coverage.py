@@ -37,6 +37,20 @@ class ModernRailWeedsTests(unittest.TestCase):
         self.assertTrue(matches_focal_name(ob("Setaria faberi"),"Setaria"))
         self.assertFalse(matches_focal_name(ob("Solidago altissima"),"Setaria"))
 
+    def test_accepted_kudzu_variety_alias_not_broad_species(self):
+        self.assertTrue(matches_focal_name(
+            ob("Pueraria montana var. lobata"),"Pueraria lobata"
+        ))
+        self.assertTrue(matches_focal_name(
+            ob("Pueraria lobata"),"Pueraria lobata"
+        ))
+        self.assertFalse(matches_focal_name(
+            ob("Pueraria montana"),"Pueraria lobata"
+        ))
+        self.assertFalse(matches_focal_name(
+            ob("Pueraria montana var. thomsonii"),"Pueraria lobata"
+        ))
+
     def test_wrong_taxon_is_rejected_not_relabelled(self):
         self.assertFalse(matches_focal_name(ob("Solidago gigantea"),"Solidago altissima"))
 
