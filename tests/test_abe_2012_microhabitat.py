@@ -12,7 +12,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from reanalyze_abe_2012_rail_microhabitat import (
-    FIELDS, REGION_TOTALS, read_and_validate, summarize, habitat_enrichment
+    FIELDS, REGION_TOTALS, read_and_validate, summarize, habitat_enrichment,
+    conservative_named_taxon_trackbed_bounds
 )
 
 INPUT = ROOT / "data/literature/abe_2012_railway_microhabitat_occurrences.csv"
@@ -76,6 +77,19 @@ class HistoricalRailMicrohabitatTests(unittest.TestCase):
         self.assertEqual(track["taxon_occurrence_reports_in_habitat"], 0)
         self.assertEqual(slope["taxon_occurrence_reports_in_habitat"], 46)
         self.assertEqual(track["taxon_occurrence_reports_all_habitats"], 90)
+
+    def test_horsetail_remains_top_trackbed_taxon_even_in_worst_other_allocation(self):
+        bounds=conservative_named_taxon_trackbed_bounds(self.records)
+        self.assertEqual(bounds["observed_equisetum_trackbed_reports"],24)
+        self.assertEqual(bounds["unlisted_species_possible_max_trackbed_reports"],18)
+        # Cayratia is named in warm and hidden in cold 'other': at most 1+18.
+        self.assertEqual(
+            bounds["largest_upper_bound_for_any_single_non_equisetum_taxon"],19
+        )
+        self.assertEqual(bounds["worst_case_rank_margin_reports"],5)
+        self.assertTrue(
+            bounds["equisetum_must_be_largest_single_taxon_trackbed_report_category"]
+        )
 
     def test_marginal_corruption_fails_closed(self):
         with tempfile.TemporaryDirectory() as td:
