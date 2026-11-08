@@ -1,0 +1,41 @@
+name: REAL cloud-mask COG pixel NDVI, Utsunomiya LRT 2017 vs 2024/2025
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/sentinel_ndvi.py'
+      - 'scripts/measure_utsunomiya_s2_ndvi_pixels.py'
+      - '.github/workflows/utsunomiya-actual-s2-ndvi.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-utsunomiya-actual-s2-ndvi-v12
+  cancel-in-progress: true
+jobs:
+  real-pixel-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install small source/GIS and COG range-read clients
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Check pixel NDVI arithmetic, ambiguity, cloud and fixed sampling gates
+        run: python -m unittest discover -s tests -p 'test_s2_real_ndvi.py' -v
+      - name: Actually read L2A red/NIR/SCL pixels through limited public COG HTTP ranges
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          GDAL_HTTP_MAX_RETRY: '3'
+          GDAL_HTTP_RETRY_DELAY: '2'
+        run: python -u scripts/measure_utsunomiya_s2_ndvi_pixels.py --output results/satellite/utsunomiya_lrt_s2_real_pixel_ndvi.json
+      - name: Save only aggregate measurements/source QA, no restricted geometry or raw coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: utsunomiya-actual-cog-ndvi-2017-2024-2025-two-offset-branches
+          path: results/satellite/utsunomiya_lrt_s2_real_pixel_ndvi.json
+          if-no-files-found: warn
