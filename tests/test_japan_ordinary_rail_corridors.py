@@ -15,7 +15,7 @@ from tetsu.ordinary_rail_corridors import (
     is_ordinary_rail,route_normal_pairs,classify_candidate,
     corridor_aggregate,bin_distance_m
 )
-from audit_japan_ordinary_rail_road_separation import REGIONS
+from audit_japan_ordinary_rail_road_separation import REGIONS,private_scope_includes
 
 
 class OrdinaryRailCorridorScreens(unittest.TestCase):
@@ -96,6 +96,22 @@ class OrdinaryRailCorridorScreens(unittest.TestCase):
             classify_candidate(None,None,near_road=float("nan"),
                                far_road=20.,nearest_any_rail_far=1300.,
                                near_station=420.)
+
+    def test_all_fixed_geo_scope_is_posthoc_only_not_main10_screen(self):
+        strict=classify_candidate(
+            None,None,near_road=125.,far_road=20.,
+            nearest_any_rail_far=1700.,near_station=430.
+        )
+        urban=classify_candidate(
+            None,None,near_road=10.,far_road=20.,
+            nearest_any_rail_far=1700.,near_station=430.
+        )
+        self.assertTrue(private_scope_includes(strict,"strict"))
+        self.assertFalse(private_scope_includes(urban,"strict"))
+        self.assertTrue(private_scope_includes(strict,"all_fixed_geo"))
+        self.assertTrue(private_scope_includes(urban,"all_fixed_geo"))
+        with self.assertRaises(ValueError):
+            private_scope_includes(strict,"cherry_pick_by_NDVI")
 
     def test_regions_separate_geographies_and_within_first_level_mesh(self):
         self.assertEqual(set(REGIONS),{
