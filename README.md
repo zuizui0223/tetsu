@@ -101,6 +101,16 @@ These modules are input-driven methods **without real railway photo-treatment ob
 - [Observed onset-interval midpoint screening](docs/npn_observed_onset_midpoint_v08.md) on these outcome-independent selected woody NPN cohorts gave unadjusted near-minus-far days: *Cercis canadensis* **-4.75 (2023), -7.0 (2025)**; *Prosopis velutina* **+4.0 (2023), +0.75 (2024), +7.75 (2025)**. **Only 2 rail-near independent stations per year** and 1–4 valid far sites; date-interval width often 5–15 days, and climate/urban/observer variables and trackside plant exposure unverified. These are not demonstrated biological onset shifts or railway effects. No p-values.
 - The **Japan freight/port/alien dispersal** main study and **fixed photo patch flowering ROI / actual mowing event** implementation remain valid independent research tracks. Do not substitute NPN trees or railway station distances for independently verified railway verge plants.
 
+## v0.9 — independent Daymet GDD and Japanese maintenance contrasts (2026-11-08)
+
+**[Real site-level thermal-time/source audit](docs/npn_daymet_thermal_control_v09.md)** · [GitHub Actions source result](https://github.com/zuizui0223/tetsu/actions/runs/42430207432)
+
+- Independently sourced ~1km Daymet daily air temperature and precipitation joined to the **same preselected, outcome-blind NPN rail-near/far species×year cohorts**. All **16/16 unique site climate API requests succeeded**, with source errors = 0. Source variable schema, 365-day completeness, GDD calculations and fixed cutoff-day tests in `src/tetsu/daymet.py`.
+- **Prebloom GDD5 contrasts (rail-near minus geographically matched rail-far sites):** *Cercis canadensis* Maryland DOY60: **−10.165 °C days** in 2023 and **+15.400** in 2025; *Prosopis velutina* Arizona DOY90: **−31.310** in 2023, **−7.885** in 2024 and **+20.310** in 2025. Each has only **2 independent near-rail sites** per year and 2–4 far controls. A 2026 FRA rail line near an NPN station **does not establish railway habitat or train-wind exposure**. GDD to day 120 can occur after first observed flowering and cannot be treated as a first-onset causal covariate.
+- The previously observed first YES interval-midpoint timing differences and this source-backed temperature variation do **not** form a consistent railway-specific response or adaptation signal. Sites are too few, far comparators differ across some years, phenological onset is interval-censored, and climate/road/land cover are not balanced.
+- **[Japan railway weed management historical baseline](docs/japan_rail_mowing_historical_baseline.md):** Ito et al. (1982) observed different distributions under repeated herbicide versus cutting, plus urbanization and embankment context; this is published observational evidence **not our own new cutting experiment**.
+- Original freight/port seed transport, mowing-induced plasticity, train wind, flowering ROI and site-level adaptation remain separate scientific hypotheses, not confirmed or disproved by these environmental source audits.
+
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
 - [Open data and important limitations](docs/sources.md)
