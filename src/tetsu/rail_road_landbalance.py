@@ -169,6 +169,11 @@ def pair_balance_flags(road_near:float,road_far:float,
         "road50_and_2017_same_class":road50 and same_scl,
         "road50_sameclass_preNDVI_similar":
             road50 and same_scl and pre_similar,
+        # Additional conservative posthoc ecological screening: 2017
+        # vegetation must be TRUE on BOTH sides, not merely both bare.
+        "road50_both_2017_vegetation":road50 and both_2017veg,
+        "road50_both2017veg_preNDVI_similar":
+            road50 and both_2017veg and pre_similar,
     }
 
 
