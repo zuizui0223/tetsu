@@ -37,6 +37,12 @@ class OrdinaryRailCorridorScreens(unittest.TestCase):
         self.assertFalse(is_ordinary_rail({
             **record,"N02_003":"仙台市地下鉄南北線"
         }))
+        # Original v1.5 source audit admitted public-operated "東西線":
+        # that is Sendai subway, not an exposed railway grass corridor.
+        self.assertFalse(is_ordinary_rail({
+            **record,"N02_001":"12","N02_002":"3",
+            "N02_003":"東西線","N02_004":"仙台市"
+        }))
 
     def test_rail_anchor_geography_from_fixed_lengths_not_plant_phenology(self):
         rail=[LineString([(2000.,10000.),(18000.,10000.)])]
