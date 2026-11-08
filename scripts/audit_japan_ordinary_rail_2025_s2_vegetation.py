@@ -31,6 +31,9 @@ from audit_lrt_2017_july_aug_s2_dates import collect_pages
 from verify_utsunomiya_s2_c1_pixels import (
     collection1_calibrated_pixels
 )
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
+from tetsu.ordinary_rail_corridors import current_vegetation_pair_ndvi
 
 STAC="https://earth-search.aws.element84.com/v1/search"
 COLLECTION="sentinel-2-c1-l2a"
@@ -192,6 +195,15 @@ def sample_region_2025(region,private_sites,client):
             kv[0]
         ))
     ]
+    route_pairs=defaultdict(list)
+    for near,far in pairs:
+        route_pairs[names[near]].append((near,far))
+    for row in summaries:
+        key=(row["route_name"],row["operator_name"])
+        row["2025_same_day_vegetated_spectral_comparison"] = (
+            current_vegetation_pair_ndvi(route_pairs[key],per_day)
+        )
+    regional_descriptive=current_vegetation_pair_ndvi(pairs,per_day)
     return {
         "region":region,
         "n_road_geo_candidate_pairs":len(private_sites),
@@ -214,6 +226,8 @@ def sample_region_2025(region,private_sites,client):
         "sum_both_near_and_control_vegetated_same_date":sum(
             x["near_and_control_scl4_on_same_day"] for x in summaries
         ),
+        "2025_conditional_same_day_near_vs_road_vegetated_NDVI":
+            regional_descriptive,
         "data_quality":"One-point Sentinel SCL20m and NDVI10m are mixed pixels; vegetation class != verified railway grass plots."
     }
 
@@ -242,6 +256,7 @@ def main():
             "2024 road map and 2025 Sentinel imagery do not verify vegetation or road locations historically.",
             "Multiple normal transects along one railway are not independent railway replication; current positive SCL status is not an ecological effect estimate.",
             "Conventional passenger N02 has no freight-only tracks, operational volume, train type or actual seed-spore transportation.",
+            "Current same-day near-minus-road-control NDVI is conditional on 2025 SCL4 vegetation and does NOT establish source vegetation habitat, repeated change or railway treatment effects.",
             "No wind, mowing, herbicide, blooming, propagule arrival, mortality, genetic selection or NDVI changes estimated."
         ]
     }
@@ -265,6 +280,8 @@ def main():
                 "near_SCL4_2025_on_2_dates":source["sum_near_scl4_two_dates"],
                 "near_and_road_control_both_SCL4_same_date":
                     source["sum_both_near_and_control_vegetated_same_date"],
+                "conditional_vegetated_same_date_NDVI_comparison":
+                    source["2025_conditional_same_day_near_vs_road_vegetated_NDVI"],
             },ensure_ascii=False),flush=True)
         except Exception as exc:
             result["errors"][region]=f"{type(exc).__name__}: {str(exc)[:350]}"
