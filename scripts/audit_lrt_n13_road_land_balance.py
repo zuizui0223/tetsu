@@ -58,8 +58,11 @@ def only_aggregates(points, pairs,road_at_point,pre_data,per_date):
     flags={}
     gaps=[]
     for near_id,far_id in pairs:
-        one=pre_data.get(near_id,{}).get("harmonized")
-        two=pre_data.get(far_id,{}).get("harmonized")
+        # Baseline values have already been normalized to a mapping of
+        # physical point ID -> scalar harmonized NDVI (or absent/None).
+        # Do not access them as if they were nested dicts.
+        one=pre_data.get(near_id)
+        two=pre_data.get(far_id)
         scl_first=None;scl_second=None
         # Only one original acquisition date per pair. The source
         # selection is SCL-only, NOT picked to improve any contrast sign.
