@@ -44,6 +44,9 @@ class ModernRailWeedsTests(unittest.TestCase):
         self.assertTrue(matches_focal_name(
             ob("Pueraria lobata"),"Pueraria lobata"
         ))
+        self.assertTrue(matches_focal_name(
+            ob("Pueraria montana lobata"),"Pueraria lobata"
+        ))
         self.assertFalse(matches_focal_name(
             ob("Pueraria montana"),"Pueraria lobata"
         ))
