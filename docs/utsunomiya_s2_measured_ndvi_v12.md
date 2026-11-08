@@ -80,3 +80,22 @@ A second, independently screen-selected 2017 baseline acquisition **2017-07-22**
 **A single added baseline pair flipped the apparent direction.** Consequently **even after physically validating C1 radiometry, these historical NDVI contrasts are NOT identified as LRT-caused greenness changes**. The problem is the severe 2017 cloud-clear selection, tiny/spatially dependent sample, different seasonal acquisitions and unmeasured local road redevelopment. Do not select whichever sign looks more attractive. An explicit **posthoc 48-anchor sampling-density check** is recorded separately as sensitivity and is not a preregistered test or a new independent railway.
 
 **Current justified scientific statement:** fixed surface reflectance and cloud-mask measurements are technically reproducible; the attempted vegetation-change estimate is **highly sensitive to which preconstruction pixels had usable acquisitions**. No evidence yet that trains carry seeds, suppress/raise green cover or select for plant wind/mowing traits.
+
+
+## Pixel-density sensitivity after the initial result — **posthoc, not preregistered**
+
+[Source run #42442481994](https://github.com/zuizui0223/tetsu/actions/runs/42442481994), fixed **48 along-corridor transect anchors** instead of 9, retains exact same satellite scenes, 140m/1600m near/far offsets, strict SCL 4/5 classes, near/far **same-day** 2017 clear baseline selection, and 2024/2025 reprocessed Collection 1 physical BOA calibration.
+
+- 2017-07-22: **26** source pixels with strict SCL-clear NDVI, **7 same-day near/far pairs**.
+- 2017-07-07: **49** SCL-clear NDVI pixels, **9 same-day near/far pairs**.
+- Selected date-matched baseline pairs: **16** in total (7 Jul22 + 9 Jul7), all along *one* railway corridor; 2017 pixels are sampled on two dates with different cloud fractions and up to 25-day mismatch from the target August 1.
+- Post source C1: **134** valid point pixels (2024) and **133** (2025); **16** 2017→2024 pairs and **15** 2017→2025 pairs have all necessary valid near and far pixel observations. These are correlated within the same railway and adjacent urban footprint, **not 15–16 independent railway treatments**.
+- Descriptive difference in change, `(NDVI_near,post − NDVI_near,2017) − (NDVI_far,post − NDVI_far,2017)`, had **median −0.073941 (2024, 16 pairs)** and **−0.116642 (2025, 15 pairs)**. For context, initial 9-anchor/two-date baseline was **+0.082148 / +0.081358** on only 3 pairs. A 9-anchor/one-date baseline was **−0.090955 / −0.070353** on 2 pairs. **The sign demonstrably depends on sampled spatial footprint and cloud-clear eligibility**.
+- No regional development/land-use controls, matched road-only corridor, railway-side plot boundary or independent active rail replicates. Even an apparently stable negative delta in 48 dense transects is **not a measured railway environmental filtering, management, suppression or dispersal effect**. Tracts 140m from tram lines may be ordinary roads and buildings; any landscape-cover change can reflect construction, paving, urban development or tree management.
+- The 48-anchor sensitivity was added **after** the original 9-anchor sign instability was observed. The analysis explicitly sets `posthoc_coverage_density_sensitivity_not_preregistered=true`; it must not be presented as an independent confirmatory test or selected for a preferred effect direction.
+
+**Conclusion for this phase:** Satellite spectral data collection and calibration are independently verifiable; however, the candidate vegetation-change parameter remains **non-identifiable as a railway-caused biological response** from a single urban tram corridor, with source-date and mixed-land-cover confounding. The robust positive outcome is a transparent measurement and quality-check pipeline, not a positive ecological train-vegetation treatment result.
+
+### Before any paper-scale LRT vegetation claim
+
+Verify actual **track-adjacent vegetation pixels and genuine nonrail urban/road controls** with stable spatial masks, compare preconstruction land-cover/vegetation values in both groups, add cloud-corrected repeated same-season (matched DOY) acquisitions and assess spatial blocks/corridors as units. At ≤10m pixels, the railway verge may be narrower than a single Sentinel pixel, so aerial or ground-fixed quadrat surveys are needed for real weed species, spore heads, flowering, mowing or wind adaptation. A causal design must isolate **rail construction starting 2018** from **passenger service starting 2023** and unrelated road works.
