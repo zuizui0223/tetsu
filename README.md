@@ -2,7 +2,7 @@
 
 **Research question:** Do railway networks connect distant plant communities through propagule transport, beyond railway-side habitat, roads, urbanization, ports and recorder bias?
 
-**Status: 2026-11-08, research v1.5. Official GIS source-backed rail/road habitat sampling candidates and reproducible secondary historical microhabitat findings; NO confirmed railway-driven dispersal, management, flowering or adaptive biological effect.**
+**Status: 2026-11-08, research v1.6. Independently verified ESA 2021 landcover at the original 10 candidates and all 370 pre-fixed sampling normals; identified severe forest/road-isolation selection bias and two posthoc mapped-grass reconnaissance leads. NO confirmed train-mediated seed/spore transport, mowing, wind, flowering or evolutionary effect.**
 
 ## Mechanisms to distinguish
 - **Transport:** seeds on freight/rolling stock, cargo contaminants/spillage, people and maintenance equipment.
