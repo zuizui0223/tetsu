@@ -118,6 +118,13 @@ def summarize_taxon_observations(all_records, requested, dist_func):
         who=(ob.get("user") or {}).get("id")
         if who is not None:
             observers[category].add(str(who))
+        if requested == "Equisetum arvense":
+            # Horsetail is a spore-bearing fern ally. iNaturalist's
+            # Flowers and Fruits term does not identify fertile spore
+            # cones (tsukushi), and must NEVER generate a flower/no-flower
+            # status for this taxon.
+            phases["not_applicable_spore_plant"] += 1
+            continue
         seen={
             x.get("controlled_value_id") for x in (ob.get("annotations") or [])
             if x.get("controlled_attribute_id")==12
@@ -139,6 +146,10 @@ def summarize_taxon_observations(all_records, requested, dist_func):
             k:len(v) for k,v in observers.items()
         },
         "flower_visibility_annotation_counts":dict(phases),
+        "reproductive_scoring_mode":(
+            "spore_cone_separate_review_required" if requested=="Equisetum arvense"
+            else "flowers_optional_photo_annotation"
+        ),
     }
 
 
@@ -190,6 +201,7 @@ def run():
             "iNaturalist reported plants are opportunistically photographed and do not represent abundance, verified local absence, independent complete surveys, or chance of seed transport.",
             "Photographic rail proximity ≤250m does NOT establish growth on rail right-of-way, herbicide/spraying/cutting exposure or train-induced gust.",
             "Flower annotation absence is unknown, not biological absence. No flowering-onset dates or ROI measurements here.",
+            "Equisetum arvense never has flowers; its fertile strobili/tsukushi and sterile shoots must be scored separately, not mapped to iNaturalist Flowers and Fruits.",
             "Genus Setaria observations cannot be interpreted as one biological species; accepted taxon names can change.",
             "Pueraria lobata source taxon aliases are restricted to the accepted Pueraria montana var. lobata; Pueraria montana species without variety is not automatically accepted.",
             "Taxon aliases are documented by Kew POWO: https://powo.science.kew.org/taxon/214449-2",
