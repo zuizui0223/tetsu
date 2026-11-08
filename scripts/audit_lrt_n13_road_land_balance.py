@@ -173,6 +173,8 @@ def run(n_anchors=48):
                 "2017_abs_NDVI_gap_le015",
                 "road50_and_2017_same_class",
                 "road50_sameclass_preNDVI_similar",
+                "road50_both_2017_vegetation",
+                "road50_both2017veg_preNDVI_similar",
             )
         }
         print(json.dumps({
@@ -198,6 +200,7 @@ def run(n_anchors=48):
             "sensitivity_road_absolute_difference":100
         },
         "fixed_2017_spectral_QC_max_abs_ndvi_difference":PRE_NDVI_MAX_DIFF,
+        "2017_vegetation_only_gate_posthoc_added_for_biological_interpretability":True,
         "2017_preconstruction_baseline_source_dates":[x[0] for x in BASELINE_DATES],
         "2024_2025_imagery":"reprocessed C1 2017 baseline legacy zero-offset, actual same fixed ground coordinates",
         "source_QA":source_checks,
@@ -237,7 +240,9 @@ def main():
                 "all":v["all"]["paired_complete"],
                 "road_SCL":v["road50_and_2017_same_class"]["paired_complete"],
                 "road_SCL_preNDVI":
-                    v["road50_sameclass_preNDVI_similar"]["paired_complete"]
+                    v["road50_sameclass_preNDVI_similar"]["paired_complete"],
+                "road_2017_vegetation_preNDVI":
+                    v["road50_both2017veg_preNDVI_similar"]["paired_complete"]
             }
             for y,v in result["observed_results_NOT_causal"].items()
         },
