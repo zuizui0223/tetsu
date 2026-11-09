@@ -2,7 +2,7 @@
 
 **Research question:** Do railway networks connect distant plant communities through propagule transport, beyond railway-side habitat, roads, urbanization, ports and recorder bias?
 
-**Status: 2026-11-09, research v1.7. Original 3-region 370-point discovery plus successfully completed 8-new-region 2,169-point geographic holdout shows forest-heavy selection by rail-road separation (3/3 sufficiently supported new regions). This is a SOURCE-SAMPLING confound, not a biological railway effect. NO confirmed train-mediated seeds/spores, mowing, wind, flowering or adaptation.**
+**Status: 2026-11-09, research v1.8. v1.7 11-region 2,539 railway-normal source sites show a replicated geography/forest sampling confound; v1.8 GBIF live count audit covers 119,333,936 indexed Plantae occurrence records across 10 countries × 2 periods (counts ONLY, not downloaded species incidence). No confirmed train-mediated seed/spore transport, railway plant adaptation, mowing, wind or flowering effect.**
 
 ## Mechanisms to distinguish
 - **Transport:** seeds on freight/rolling stock, cargo contaminants/spillage, people and maintenance equipment.
@@ -197,6 +197,14 @@ These modules are input-driven methods **without real railway photo-treatment ob
 - Under the fixed minimum support gate of ≥20 normals and ≥3 strict-eligible normals per new region, **3/3 independently distinct geographic regions** (Sapporo/Akita/Tokyo-west) replicate the direction; median region-level tree-fraction increase **+0.235844**. The other five regions have 0–2 strict positions and are **not** confirmatory replication regions. Never use 28 site pixels as 28 independent railway treatments or a transect-level p-value.
 - **Combined sourcing scale now 11 Japanese geographical regions / 2,539 GIS normal points**, with the original 3 as discovery and 8 as outcome-unseen regional holdout. This is a geographical *source-bias* study, not yet global ecological inference. The main future macroecological biological question is **whether active railway-network connectivity predicts regional alien-plant assemblage similarity beyond road connectivity and spatial/environmental/social recording confounds**.
 - Executable reproducible [macro holdout script](scripts/audit_japan_rail_macro_holdout_worldcover_v17.py), [6 targeted tests](tests/test_japan_rail_macro_holdout_worldcover_v17.py), [live-source workflow](.github/workflows/japan-rail-macro-holdout-v17.yml), documented quality gates. No real seed transport, mowing, train wind, genetic adaptation or flowering shift was measured.
+
+## v1.8 — real 10-country macro GBIF source availability (2026-11-09)
+
+**[Actual-source report and all 20 country-period count rows](docs/gbif_10country_source_v18.md)** · [successful API run #42609761043](https://github.com/zuizui0223/tetsu/actions/runs/42609761043).
+
+- Actual GBIF occurrence index counts across **10 fixed countries × 2 non-overlapping periods 2010–2017/2018–2025**: **119,333,936 species-rank Plantae occurrence-record search matches**, in total; **48,447,097** early and **70,886,839** late. All 20 data cells source-audited, 0 missing; 6 synthetic tests passed. **Not a downloaded 119M occurrence dataset, not 119M unique species or genetically verified alien flora.**
+- Actual country-level source-record count ratios differ dramatically: **JP 0.47×, TW 8.31×, US 6.86×, CA 15.42×** late vs early; not evidence of population changes, railway dispersal or climate responses, and not independent observer/site effort measurements. Strictly qualify coordinate uncertainty, country-specific alien status, species keys and target-group/source effort before any rail/ecology model.
+- [Executable GBIF source auditor](scripts/audit_gbif_macro_country_coverage_v18.py), [unit tests](tests/test_gbif_macro_country_coverage_v18.py) and [GitHub Actions workflow](.github/workflows/gbif-macro-country-coverage-v18.yml). **Primary macro biological question remains unresolved** until actual species × grid incidence and verified active rail/road topology are joined.
 
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
