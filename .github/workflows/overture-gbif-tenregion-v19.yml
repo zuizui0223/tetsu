@@ -1,0 +1,38 @@
+name: Overture rail-road and GBIF plant facets 10-country macro joint-source census
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - '.github/workflows/overture-gbif-tenregion-v19.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-overture-gbif-ten-country-v19
+  cancel-in-progress: true
+jobs:
+  ten-country-geographic-macro-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Overture cloud geospatial Parquet reader and GBIF API client
+        run: pip install 'duckdb>=1.3,<2' 'requests>=2.31,<3'
+      - name: Verify frozen 10-country windows and species facets
+        run: python -m unittest discover -s tests -p 'test_overture_gbif_overlap_v19.py' -v
+      - name: Source-check Overture mapped rails and roads alongside GBIF species records in 10 countries
+        run: |
+          python -u scripts/audit_overture_gbif_overlap_v19.py \
+            --regions jp_sendai de_leipzig kr_daejeon tw_hsinchu us_madison ca_ottawa gb_york fr_dijon au_canberra nz_hamilton \
+            --output results/audit/overture_gbif_10country_source_v19.json
+      - name: Preserve only summary counts and top50 source facet categories
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 10country-overture-rail-road-gbif-plant-source-v19
+          path: results/audit/overture_gbif_10country_source_v19.json
+          if-no-files-found: warn
