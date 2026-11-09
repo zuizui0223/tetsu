@@ -2,7 +2,7 @@
 
 **Research question:** Do railway networks connect distant plant communities through propagule transport, beyond railway-side habitat, roads, urbanization, ports and recorder bias?
 
-**Status: 2026-11-09, research v1.8. v1.7 11-region 2,539 railway-normal source sites show a replicated geography/forest sampling confound; v1.8 GBIF live count audit covers 119,333,936 indexed Plantae occurrence records across 10 countries × 2 periods (counts ONLY, not downloaded species incidence). No confirmed train-mediated seed/spore transport, railway plant adaptation, mowing, wind or flowering effect.**
+**Status: 2026-11-09, research v1.9. v1.7 11-region 2,539 geometry/landcover sites document source forest-selection confound; v1.8 count-only 119,333,936 indexed Plantae occurrences across 10 countries; v1.9 measured independent JP/DE Overture railway/road segment sources, built connector graph methods and initiated 10-country GBIF spatial-source joins. NO established train-mediated botanical dispersal, mowing, wind, flowering or evolutionary effect.**
 
 ## Mechanisms to distinguish
 - **Transport:** seeds on freight/rolling stock, cargo contaminants/spillage, people and maintenance equipment.
@@ -205,6 +205,15 @@ These modules are input-driven methods **without real railway photo-treatment ob
 - Actual GBIF occurrence index counts across **10 fixed countries × 2 non-overlapping periods 2010–2017/2018–2025**: **119,333,936 species-rank Plantae occurrence-record search matches**, in total; **48,447,097** early and **70,886,839** late. All 20 data cells source-audited, 0 missing; 6 synthetic tests passed. **Not a downloaded 119M occurrence dataset, not 119M unique species or genetically verified alien flora.**
 - Actual country-level source-record count ratios differ dramatically: **JP 0.47×, TW 8.31×, US 6.86×, CA 15.42×** late vs early; not evidence of population changes, railway dispersal or climate responses, and not independent observer/site effort measurements. Strictly qualify coordinate uncertainty, country-specific alien status, species keys and target-group/source effort before any rail/ecology model.
 - [Executable GBIF source auditor](scripts/audit_gbif_macro_country_coverage_v18.py), [unit tests](tests/test_gbif_macro_country_coverage_v18.py) and [GitHub Actions workflow](.github/workflows/gbif-macro-country-coverage-v18.yml). **Primary macro biological question remains unresolved** until actual species × grid incidence and verified active rail/road topology are joined.
+
+## v1.9 — first international rail+road geometry and botanical source-join workstream (2026-11-09)
+
+[Full methods, source results and strict biological-inference firewall](docs/overture_gbif_10country_macro_v19.md).
+
+- Actual Overture Maps October 2026 global transportation source audit measured **429 potentially eligible rail segments / 64,100 major-road segments intersecting a fixed Sendai catchment** and **1,176 / 15,174 in Leipzig**, respectively. These are **mapped source segments, not rail length, rail service, freight flows, or plant habitat**. [Actual first run #42611543610](https://github.com/zuizui0223/tetsu/actions/runs/42611543610) failed overall because the GBIF species facet field was uppercase; NO ecological species-by-rail result was produced in that run.
+- [v1.9 cross-source Overture × GBIF spatial auditor](scripts/audit_overture_gbif_overlap_v19.py) fixes GBIF uppercase SPECIES_KEY facet field handling and excludes explicitly absent events; [two-country source workflow](.github/workflows/overture-gbif-overlap-v19.yml), [independently triggered ten-country source workflow](.github/workflows/overture-gbif-tenregion-v19.yml), [six synthetic schema/source tests](tests/test_overture_gbif_overlap_v19.py). The ten fixed countries span East Asia, North America, Europe and Oceania. Source count facets do **not** provide complete species assemblages.
+- **New real network method code** [src/tetsu/rail_graph.py](src/tetsu/rail_graph.py) and [seven synthetic topology tests](tests/test_rail_graph_macro.py): use Overture explicit connector IDs and linear references to infer graph reachability/distance, not line crossings or simple distance-to-rail. No freight tonnage, active operation or rail-seed dispersal can yet be identified.
+- Follow-on real biological macro dataset still requires DOI-backed original GBIF occurrence rows, country alien status, observer effort and qualified geographical cells before any association coefficient or p-value; source-only results **must never** be presented as train-mediated plant dispersal or adaptation.
 
 ## Documentation
 - [Study plan and falsifiers](docs/protocol.md)
