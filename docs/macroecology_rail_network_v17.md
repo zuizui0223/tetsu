@@ -63,7 +63,24 @@ For phenology, complete repeated non-flowering AND flowering observations, fixed
 
 ## Current evidence gate
 
-As of writing, v1.7 scripts/workflows are added to the existing Draft PR, but the real eight-region data outcome is NOT yet reported until GitHub Actions completes successfully. Network/ecological coefficients also remain unmeasured.
+**Real-source holdout completed on 2026-11-09**: GitHub Actions [#42608370719](https://github.com/zuizui0223/tetsu/actions/runs/42608370719), all 6 targeted tests PASS, full 8/8 source regions, zero source errors, aggregated downloadable workflow artifact. Across **2,169 new original rail-normal GIS positions** (not plant sampling plots), ESA 2021 tree cover is **453/2,169 = 20.9%**, mapped grass **63/2,169 = 2.9%**, built-up **1,374/2,169 = 63.3%**. Within the original strict road75 GIS condition, **28** source positions remain, **22/28 = 78.6%** tree-cover class and **1/28** grassland. These are **sampling selection proportions**, not comparable railway-vs-road ecological effects.
+
+Original 8-new-region data:
+| Holdout region | All GIS normals | ESA tree cover all | Strict road75 eligible | Strict tree class | Strict minus all tree fraction |
+|---|---:|---:|---:|---:|---:|
+| Sapporo | 116 | 40 | 4 | 2 | +0.1552 |
+| Akita | 175 | 86 | 11 | 8 | +0.2358 |
+| Tokyo-west | 682 | 100 | 5 | 5 | +0.8534 |
+| Nagoya | 257 | 26 | 0 | 0 | undefined, not zero |
+| Osaka | 358 | 58 | 2 | 2 | +0.8380 (below prespecified >=3 replication gate) |
+| Hiroshima | 193 | 52 | 2 | 2 | +0.7306 (below gate) |
+| Fukuoka | 301 | 68 | 2 | 1 | +0.2741 (below gate) |
+| Kumamoto | 87 | 23 | 2 | 2 | +0.7356 (below gate) |
+| **8-region source census** | **2,169** | **453** | **28** | **22** | not a pooled within-region causal estimate |
+
+Under the **pre-outcome region support gate** (>=20 all / >=3 eligible strict), only **3 regions** are informative and **all 3/3 show enrichment**, with median region-level tree-fraction change **+0.235844**. Including two-eligible regions would give 7/7 directionally consistent, but that relaxes a fixed minimum-replicate gate and is **exploratory only**. Cannot claim statistical proof of universal forest enrichment, nor any botanical selection or railway adaptation. The new sites are 8 additional source regions (not random biomes), and the 370 v1.6 normals are a **discovery cohort**; together 11 regional boxes and 2,539 GIS site positions, never equate to 2,539 independent rail ecological experiments.
+
+**Core network/plant macro analysis still awaits actual GBIF DOI-backed plant-by-cell data and independent rail/road topology, so no railway-dispersal effect size or p-value exists.**
 
 Source/license reference:
 - GBIF: https://techdocs.gbif.org/en/openapi/v1/occurrence and https://techdocs.gbif.org/en/data-use/api-downloads
