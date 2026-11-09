@@ -1,5 +1,8 @@
 """Unit-only railway graph topology tests: no biological outcomes or real routes."""
 import unittest
+from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
 from tetsu.rail_graph import (
     validate_segment,build_rail_connector_graph,
     shortest_connector_path_m,graph_components,
