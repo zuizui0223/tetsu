@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v1.8 reproducible GBIF macro-country x period vascular-plant coverage audit.
+"""v1.8 reproducible GBIF macro-country x period Plantae-record coverage audit.
 
 This uses GBIF SEARCH counts only, not downloaded occurrences. Count
 queries do not hit the 100k records-retrieval ceiling, but no species,
@@ -26,7 +26,7 @@ HARD_MAX_RETRIES=5
 def validate_frame(countries=COUNTRIES,periods=PERIODS):
     if len(countries)!=len(set(countries)) or len(countries)<5:
         raise ValueError("Bad country study frame")
-    if any(len(x)!=2 or len(x[0])!=2 or not x.isalpha() for x in countries):
+    if any(len(x)!=2 or not x.isalpha() or not x.isupper() for x in countries):
         raise ValueError("ISO alpha-2 country frame required")
     if len(periods)!=2 or periods[0][1]+1!=periods[1][0]:
         raise ValueError("Time windows must be disjoint and contiguous")
