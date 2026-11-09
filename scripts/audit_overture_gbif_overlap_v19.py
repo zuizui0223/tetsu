@@ -81,7 +81,8 @@ def gbif_query_params(frame,period=(2018,2025)):
 
 
 def parse_gbif_facet(payload):
-    if not isinstance(payload,dict) or not isinstance(payload.get("count"),int):
+    if (not isinstance(payload,dict) or isinstance(payload.get("count"),bool)
+            or not isinstance(payload.get("count"),int)):
         raise ValueError("Missing GBIF actual indexed occurrence count")
     if payload["count"]<0:
         raise ValueError("Negative source count")
