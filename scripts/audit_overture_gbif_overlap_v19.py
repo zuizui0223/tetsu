@@ -148,7 +148,14 @@ def get_gbif(session,params):
         try:
             r=session.get(GBIF,params=params,timeout=(20,80))
             r.raise_for_status()
-            return parse_gbif_facet(r.json())
+            payload=r.json()
+            try:
+                return parse_gbif_facet(payload)
+            except ValueError as exc:
+                meta=[{"field":v.get("field"),"count_type":type(v.get("counts")).__name__,
+                       "keys":sorted(v.keys())}
+                      for v in payload.get("facets",[]) if isinstance(v,dict)]
+                raise ValueError(f"{exc}; source_facet_schema={meta}") from exc
         except (requests.RequestException,ValueError):
             if attempt==3:
                 raise
