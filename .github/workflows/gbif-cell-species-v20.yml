@@ -1,0 +1,40 @@
+name: GBIF complete indexed speciesKey x 3x3 cell x two periods (JP and DE)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/harvest_gbif_cell_species_facets_v20.py'
+      - 'tests/test_gbif_cell_facets_v20.py'
+      - '.github/workflows/gbif-cell-species-v20.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-gbif-jp-de-cell-species-v20
+  cancel-in-progress: true
+jobs:
+  observed-assemblage-facet-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public source client
+        run: pip install 'requests>=2.31,<3'
+      - name: Test GBIF facet pagination fails closed and no absence interpretation
+        run: python -m unittest discover -s tests -p 'test_gbif_cell_facets_v20.py' -v
+      - name: Real GBIF full species-key facet pages for 18 geographic cells across 2 periods
+        run: |
+          python -u scripts/harvest_gbif_cell_species_facets_v20.py \
+            --regions jp_sendai de_leipzig \
+            --output results/audit/gbif_species_3x3_jp_de_v20.json
+      - name: Save region-level source-identified species-key-by-cell matrix for inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbif-spatial-species-complete-facets-jp-de-v20
+          path: results/audit/gbif_species_3x3_jp_de_v20.json
+          if-no-files-found: warn
