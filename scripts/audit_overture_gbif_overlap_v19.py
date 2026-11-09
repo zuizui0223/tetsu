@@ -75,8 +75,8 @@ def gbif_query_params(frame,period=(2018,2025)):
         "country":c,"geometry":poly,"kingdomKey":6,
         "taxonRank":"SPECIES","year":f"{period[0]},{period[1]}",
         "hasCoordinate":"true","hasGeospatialIssue":"false",
-        "facet":"speciesKey","speciesKey_facetLimit":50,
-        "speciesKey_facetOffset":0,"limit":0
+        "facet":"speciesKey","speciesKey.facetLimit":50,
+        "speciesKey.facetOffset":0,"limit":0
     }
 
 
