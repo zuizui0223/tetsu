@@ -10,7 +10,25 @@ Overture Maps transport segments from **2026-10-21.0**, Amazon S3 global geospat
 - JP Sendai: **429** eligible mapped rail segments, **64,100** mapped major-road segments.
 - DE Leipzig: **1,176** eligible mapped rail segments, **15,174** mapped major-road segments.
 - Initial GBIF species facet parsing failed, causing the overall joint-source run to be marked FAILURE. No joint ecological relationship was computed.
-- GBIF facet source reports upper-case SPECIES_KEY, rather than always camel-case speciesKey; corrected source parser normalizes underscores/case. Source now requests observed PRESENT taxa explicitly. Corrected real-source run is pending independent confirmation.
+- GBIF facet source reports upper-case SPECIES_KEY, rather than always camel-case speciesKey; corrected source parser normalizes underscores/case. Source now requests observed PRESENT taxa explicitly. Corrected ten-country real-source run succeeded, with source details below.
+
+**Correction and complete 10-country source result:** [actual successful Actions run #42612721887](https://github.com/zuizui0223/tetsu/actions/runs/42612721887), 2026-11-09. Six targeted unit tests passed, **10/10 source windows succeeded, 0 GBIF / Overture errors**, and geography-matched indexed source RECORD counts + source segment classes were returned:
+
+| Source urban window | GBIF georeferenced 2018–25 Plantae species-rank PRESENT occurrence-record search count | Overture eligible-class rail segments | Overture selected major-road segments |
+|---|---:|---:|---:|
+| JP Sendai | 1,475 | 429 | 64,100 |
+| DE Leipzig | 39,406 | 1,176 | 15,174 |
+| KR Daejeon | 5,982 | 350 | 24,843 |
+| TW Hsinchu | 40,780 | 333 | 16,646 |
+| US Madison | 82,299 | 111 | 23,408 |
+| CA Ottawa | 82,746 | 291 | 29,432 |
+| GB York | 39,030 | 220 | 10,042 |
+| FR Dijon | 37,233 | 745 | 15,509 |
+| AU Canberra | 169,109 | 31 | 38,097 |
+| NZ Hamilton | 12,757 | 111 | 8,629 |
+| **Ten source windows total** | **510,817** | **3,797** | **245,880** |
+
+The 510,817 items are raw matched **GBIF record counts**, not downloaded rows or distinct species/observed individuals. Only top 50 GBIF speciesKey facet categories were requested per region; **this top50 subset cannot serve as complete plant assemblage or a verified alien plant status dataset**. Different urban windows have different land areas, efforts and segment splitting. Do **not** interpret record or segment sums as species richness or infrastructure density, and do not claim an ecological association from a joined source availability table.
 
 Original fixed geographic study windows before seeing taxon outcomes: Sendai JP, Leipzig DE, Daejeon KR, Hsinchu TW, Madison US, Ottawa CA, York GB, Dijon FR, Canberra AU, Hamilton NZ. These 10 urban samples are feasibility frames, not national ecological replication samples.
 
