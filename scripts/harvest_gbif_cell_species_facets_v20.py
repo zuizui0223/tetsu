@@ -234,6 +234,7 @@ def run(names):
                 "period_species_key_counts":{
                     k:v.get("n_species_key_categories") for k,v in row["by_period"].items()},
                 "eligible_both":bool(row["observation_jaccard"] and row["observation_jaccard"]["eligible"]),
+                "source_species_key_jaccard":(row["observation_jaccard"].get("indexed_taxon_jaccard") if row["observation_jaccard"] else None),
                 "n_errors":len(out["errors"])
             },ensure_ascii=False),flush=True)
         out["regions"][name]={
