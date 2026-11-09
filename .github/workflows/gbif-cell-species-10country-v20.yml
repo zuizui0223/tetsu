@@ -1,0 +1,38 @@
+name: GBIF species-key complete geographic cell macro source census (10 countries)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - '.github/workflows/gbif-cell-species-10country-v20.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-gbif-10country-cell-species-v20
+  cancel-in-progress: true
+jobs:
+  ten-country-spatial-plant-assemblage-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install GBIF public facet client
+        run: pip install 'requests>=2.31,<3'
+      - name: Validate fixed source frames, GBIF facet complete paging and missing-data logic
+        run: python -m unittest discover -s tests -p 'test_gbif_cell_facets_v20.py' -v
+      - name: Census two period observed plant species-key matrices for all ninety 3x3 geo cells
+        run: |
+          python -u scripts/harvest_gbif_cell_species_facets_v20.py \
+            --regions jp_sendai de_leipzig kr_daejeon tw_hsinchu us_madison ca_ottawa gb_york fr_dijon au_canberra nz_hamilton \
+            --output results/audit/gbif_specieskey_10country_90cells_2periods_v20.json
+      - name: Archive source taxa x cell x period matrix and recording-opportunity flags
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbif-10country-90cells-two-period-full-facet-matrix-v20
+          path: results/audit/gbif_specieskey_10country_90cells_2periods_v20.json
+          if-no-files-found: warn
