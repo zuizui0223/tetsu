@@ -61,6 +61,14 @@ Stratify verified at-grade ground vegetation plots across ecoregions, rail traff
 
 For phenology, complete repeated non-flowering AND flowering observations, fixed species, thermal time, year and observer effort are required; first flowering photograph is not first flowering.
 
+
+
+## v1.8 real macro-source scale, distinct from railway biological effect
+
+[Real GBIF 10-country × two-period source audit](gbif_10country_source_v18.md) · [successful real API source run #42609761043](https://github.com/zuizui0223/tetsu/actions/runs/42609761043): **20/20 country/period bins**, **0 missing API sources**, **6/6 tests**, total **119,333,936 matched GBIF species-rank Plantae occurrence-record SEARCH COUNTS** (2010–17: 48,447,097; 2018–25: 70,886,839). These are **only count responses**; there is NO 119M record-row download, no vascular-only/alien-only taxon qualification, no railway-connected plant community estimated. Later/earlier index-source count ratio by country ranges **0.47 JP to 15.42 CA**, proving the importance of source effort controls as a methodological need, not a biological population trend.
+
+NEXT ECOLOGICAL DATA GATE: issue DOI-backed authenticated downloads of actual country-specific plants, harmonize taxon status and independent 25km cell × species × time incidence; verify sufficient independent cells, taxa and matched rail-vs-road graph contrasts BEFORE estimating alien community rail-connectivity effects.
+
 ## Current evidence gate
 
 **Real-source holdout completed on 2026-11-09**: GitHub Actions [#42608370719](https://github.com/zuizui0223/tetsu/actions/runs/42608370719), all 6 targeted tests PASS, full 8/8 source regions, zero source errors, aggregated downloadable workflow artifact. Across **2,169 new original rail-normal GIS positions** (not plant sampling plots), ESA 2021 tree cover is **453/2,169 = 20.9%**, mapped grass **63/2,169 = 2.9%**, built-up **1,374/2,169 = 63.3%**. Within the original strict road75 GIS condition, **28** source positions remain, **22/28 = 78.6%** tree-cover class and **1/28** grassland. These are **sampling selection proportions**, not comparable railway-vs-road ecological effects.
