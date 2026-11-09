@@ -42,9 +42,10 @@ class OvertureGBIFSourceTest(unittest.TestCase):
         self.assertEqual(p["speciesKey.facetLimit"],50)
         self.assertEqual(p["hasCoordinate"],"true")
         self.assertEqual(p["hasGeospatialIssue"],"false")
+        self.assertEqual(p["occurrenceStatus"],"PRESENT")
 
     def test_facets_never_counted_as_complete_species_list(self):
-        s={"count":5634,"facets":[{"field":"speciesKey","counts":[
+        s={"count":5634,"facets":[{"field":"SPECIES_KEY","counts":[
             {"name":"1345","count":120},{"name":"999","count":12}]}]}
         parsed=parse_gbif_facet(s)
         self.assertEqual(parsed["source_record_count"],5634)
