@@ -75,6 +75,7 @@ def gbif_query_params(frame,period=(2018,2025)):
         "country":c,"geometry":poly,"kingdomKey":6,
         "taxonRank":"SPECIES","year":f"{period[0]},{period[1]}",
         "hasCoordinate":"true","hasGeospatialIssue":"false",
+        "occurrenceStatus":"PRESENT",
         "facet":"speciesKey","speciesKey.facetLimit":50,
         "speciesKey.facetOffset":0,"limit":0
     }
@@ -89,7 +90,8 @@ def parse_gbif_facet(payload):
     facets=payload.get("facets")
     if not isinstance(facets,list):
         raise ValueError("Missing GBIF speciesKey facet list; no source incidence possible")
-    fs=[f for f in facets if f.get("field")=="speciesKey"]
+    fs=[f for f in facets if isinstance(f,dict) and
+        "".join(ch for ch in str(f.get("field","")).lower() if ch.isalnum())=="specieskey"]
     if len(fs)!=1 or not isinstance(fs[0].get("counts"),list):
         raise ValueError("Malformed GBIF speciesKey facet")
     rows=fs[0]["counts"]
