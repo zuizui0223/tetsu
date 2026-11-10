@@ -227,7 +227,7 @@ def network_for_city(name,rows):
         for cj in labels[i+1:]:
             sj=snap[cj]
             box_b=next(c["bbox"] for c in grid if c["cell_id"]==cj)
-            v=(box_b[0]+box_b[2])/2,w=(box_b[1]+box_b[3])/2
+            v,w=(box_b[0]+box_b[2])/2,(box_b[1]+box_b[3])/2
             straight=haversine_m((x,y),(v,w))
             same=si["component_id"]==sj["component_id"]
             eligible=si["nearest_connector_within_5km"] and sj["nearest_connector_within_5km"]
