@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install original EPSG6933 macro source registry dependencies
-        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'requests>=2.31,<3'
       - name: Test no-outcome-driven region K20 to K320 indexed source opportunity gates
         run: python -m unittest discover -s tests -p 'test_all_frozen_macro_K80_support_v54.py' -v
       - name: Retrieve frozen 10-block original historical country-GRIIS introduced-plant speciesKey indexed source
