@@ -1,0 +1,48 @@
+name: "v6.2 Fix GBIF legacy GRIIS keys versus COL XR public original event taxonomy, official crosswalk"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/verify_GRIIS_GBIF_to_COL_crosswalk_v62.py'
+      - 'tests/test_GRIIS_GBIF_COL_crosswalk_v62.py'
+      - '.github/workflows/GBIF-oldbackbone-COL-crosswalk-v62.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-GRIIS-legacy-to-COL-taxonomy-source-v62
+  cancel-in-progress: true
+jobs:
+  verify-real-old-country-GRIIS-taxa-against-authentic-August-COL-original-plant-events:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install streamed official mapping and public original event source DuckDB dependencies
+        run: pip install 'duckdb>=1.4,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify strict accepted COL XR species, synonym and duplicate source taxon mapping semantics
+        run: python -m unittest discover -s tests -p 'test_GRIIS_GBIF_COL_crosswalk_v62.py' -v
+      - name: Get original nine-country GRIIS accepted GBIF integer species keys (legacy backbone)
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Stream OFFICIAL GBIF legacy backbone to COL26.5 XR public crosswalk and re-audit exact frozen US Midwest original event source
+        run: |
+          python -u scripts/verify_GRIIS_GBIF_to_COL_crosswalk_v62.py \
+            --griis-keys source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/GBIF_public_original_GRIIS_COL_crosswalk_US_v62.json
+      - name: Preserve strict country GRIIS taxonomic transition support and actual source events without individual private record IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-GBIF-GRIIS-2023-backbone-COL26XR-original-public-events-v62
+          path: results/audit/GBIF_public_original_GRIIS_COL_crosswalk_US_v62.json
+          if-no-files-found: warn
