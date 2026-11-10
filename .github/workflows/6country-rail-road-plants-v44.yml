@@ -1,0 +1,82 @@
+name: "v4.4 Real 6-country 50km GRIIS introduced flora against actual RAIL/ROAD route networks"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_6country_50km_network_plants_v44.py'
+      - 'tests/test_6country_50km_network_plants_v44.py'
+      - '.github/workflows/6country-rail-road-plants-v44.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-six-country-source-macro-v44
+  cancel-in-progress: true
+jobs:
+  six-independent-country-ecological-source-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source analysis and geographic reference packages
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Test independent country frames source integrity and leave-one-country-out ranks
+        run: python -m unittest discover -s tests -p 'test_6country_50km_network_plants_v44.py' -v
+      - name: Original GRIIS country-specific 50km botanical speciesKey x two periods source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Existing successfully measured US France 50km railway physical paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_old
+      - name: Existing successfully measured US France 50km road physical paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_old
+      - name: NEW outcome-unseen four-country actual railway 50km network paths
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-rail-physical-paths-*-v43'
+          run-id: 42780398147
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_new
+          merge-multiple: false
+      - name: NEW four-country actual road 50km physical paths after incomplete-endpoint audit
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-road-physical-paths-*-v43'
+          run-id: 42781107642
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_new
+          merge-multiple: false
+      - name: Validate all 6 independent country sources actually present and execute country-equal-weight macro observation diagnostic
+        run: |
+          test "$(find source/rail_new -name '*.json' | wc -l)" -eq 4
+          test "$(find source/road_new -name '*.json' | wc -l)" -eq 4
+          python -u scripts/analyze_6country_50km_network_plants_v44.py \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --rail-sources source/rail_old/overture_50km_continuous_rail_routes_v32.json source/rail_new/*/*.json \
+            --road-sources source/road_old/overture_50km_macro_road_paths_v33.json source/road_new/*/*.json \
+            --output results/audit/6country_50km_rail_vs_road_plant_v44.json
+      - name: Preserve every country-block signed coefficient and missingness; no pairwise p-values
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 6country-50km-observed-GRIIS-flora-vs-rail-road-sources-v44
+          path: results/audit/6country_50km_rail_vs_road_plant_v44.json
+          if-no-files-found: warn
