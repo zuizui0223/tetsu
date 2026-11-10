@@ -38,7 +38,7 @@ def case():
             road_len=geographic*(1.15+.04*(i%10))
             rail_len=geographic*(1.45+.02*(i%11))
             rr.append({"a":a,"b":b,
-                       "centroid_snap_augmented_rail_path_km":rail_len,
+                       "cell_centroid_snap_augmented_rail_path_km":rail_len,
                        "source_cell_centroid_geodesic_km":geographic})
             rs.append({"a":a,"b":b,"centroid_snap_augmented_road_path_km":road_len})
             cr.append({"a":a,"b":b,
