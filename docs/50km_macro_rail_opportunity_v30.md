@@ -56,6 +56,20 @@ This is deliberately **outcome-unseen network opportunity testing**: for each 16
 
 Do not present v3.0 macro railway ecological coefficients until that real source workflow succeeds and the *same 50km* cells have a country-introduced plant species-key matrix, road-network counterpart, and qualified source coverage.
 
+## 3b. REAL source result: 50km physical rail connectivity is saturated
+
+**Successful source-backed three-macro-block run:** [GitHub Actions #42739564813](https://github.com/zuizui0223/tetsu/actions/runs/42739564813), 2026-11-10, six unit tests, zero source errors. These macro rail blocks were geographically fixed **before seeing their train-plant outcomes**; 2026 source network topology only was queried.
+
+| Actual predeclared 200km macro block | Overture rail segments in block+75km halo | 50km cells actually crossed by mapped rail | Both-rail cell pairs physically connected | Both-rail pairs disconnected in halo | Binary rail exposure positivity? |
+|---|---:|---:|---:|---:|---|
+| JP Tohoku | 3,252 | 16/16 | 120 | **0** | **No** |
+| US Midwest | 13,697 | 15/16 | 105 | **0** | **No** |
+| FR Burgundy | 18,253 | 16/16 | 120 | **0** | **No** |
+
+**Major macroscopic structural conclusion:** Increasing city-scale source windows to **50km equal-area cells** does NOT rescue binary railway connectivity. Among rail-present cells, there are **zero** within-window mapped rail disconnected contrasts in all three independent broad geographic blocks. This is a positivity failure before plant composition is considered, NOT evidence that connected rail causes plant homogenization, and NOT proof every real train/freight network in each country is operationally connected.
+
+**Consequent analysis reformulation:** Abandon binary connected/unconnected as the primary broad-region exposure in these blocks. Model *continuous railway-network accessibility/shortest-path excess or circuity*, ideally as a contrast against real ROAD-network accessibility, with active freight topology and country/ecoregion/climate/observer adjustment. Require source-based variability/positivity and external graph-halo sensitivity before a biological coefficient is estimated. A single connected component is still capable of varied shortest-path distances. Do not search only for less connected regions posthoc to manufacture a positive contrast.
+
 ## 4. Macro analysis requirements, not completed results
 
 - Keep eight-country geographically varied frozen blocks and later verify actual independent **ecoregion IDs**, land fraction, study-country overlap, ports, elevation/climate and land cover. Equal-area grid does not mean representative biogeographic sampling.
