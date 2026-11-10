@@ -5,6 +5,8 @@ on:
       - research/railway-seed-dispersal-v01
     paths:
       - '.github/workflows/gbif-cell-species-10country-v20.yml'
+      - 'scripts/harvest_gbif_cell_species_facets_v20.py'
+      - 'tests/test_gbif_cell_facets_v20.py'
   workflow_dispatch:
 concurrency:
   group: tetsu-gbif-10country-cell-species-v20
