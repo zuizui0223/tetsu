@@ -42,7 +42,7 @@ from tetsu.circuit_graph import add_conductance,pairwise_effective_resistance
 
 MAJOR_ROAD_CLASSES=("motorway","trunk","primary","secondary")
 STRATEGIES=("nearest_in_cell","nearest_largest_component_in_cell")
-MAX_SEGMENTS_PER_BLOCK=180000
+MAX_SEGMENTS_PER_BLOCK=200000
 MAX_REDUCED_SOLVER_NODES=35000
 ROAD_RESISTANCE_MIN_KM=1e-6
 
@@ -90,7 +90,7 @@ def major_road_circuit_graph(rows):
     return graph,stats
 
 
-def analyze_block(block,rows,max_nodes=MAX_REDUCED_SOLVER_NODES):
+def analyze_block(block,rows,max_nodes=MAX_REDUCED_SOLVER_NODES,solver="direct"):
     if block not in BLOCKS:
         raise ValueError("Region is not fixed in macro source frame")
     shortest,anchors,short_summary=road_network_source(block,rows)
@@ -101,12 +101,13 @@ def analyze_block(block,rows,max_nodes=MAX_REDUCED_SOLVER_NODES):
     if len(terminals)<2:
         raise ValueError("Too few source road cell anchors")
     resistance,solver=pairwise_effective_resistance(
-        circuit,terminals,max_reduced_nodes=max_nodes
+        circuit,terminals,max_reduced_nodes=max_nodes,solver=solver
     )
     out={
         "country":BLOCKS[block][0],
         "source_classes":list(MAJOR_ROAD_CLASSES),
         "road_backbone_not_full_network":True,
+        "numerical_solver":solver,
         "source_graph":source,"anchor_source":short_summary,"sparse_solver":solver,
         "strategies":{}
     }
@@ -166,7 +167,7 @@ def analyze_block(block,rows,max_nodes=MAX_REDUCED_SOLVER_NODES):
     return out
 
 
-def run(blocks):
+def run(blocks,solver="direct"):
     if not blocks or len(blocks)!=len(set(blocks)) or any(b not in BLOCKS for b in blocks):
         raise ValueError("Invalid outcome-independent country macro block list")
     report={
@@ -189,7 +190,10 @@ def run(blocks):
                 data=db.execute(filtered_query(b)).fetchall()
                 if len(data)!=n:
                     raise ValueError("Preflight major-road count disagrees with downloaded rows")
-                source=analyze_block(b,data)
+                # Direct sparse LU is validated below 35k reduced nodes.
+                # AMG+CG with residual checks supports larger source graphs.
+                permitted=MAX_REDUCED_SOLVER_NODES if solver=="direct" else 65000
+                source=analyze_block(b,data,max_nodes=permitted,solver=solver)
                 report["regions"][b]=source
                 part=source["strategies"]["nearest_in_cell"]
                 print(json.dumps({
@@ -198,6 +202,7 @@ def run(blocks):
                     "source_circuit_pair_count":part["n_connected_source_pairs"],
                     "median_backbone_Q":part["median_source_Q_redundancy"],
                     "solver_max_reduced_nodes":source["sparse_solver"]["n_reduced_nodes_max"],
+                    "numerical_solver":solver,
                 },ensure_ascii=False),flush=True)
             except Exception as exc:
                 report["errors"][b]=f"{type(exc).__name__}: {str(exc)[:240]}"
@@ -219,9 +224,10 @@ def run(blocks):
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--blocks",nargs="+",choices=list(BLOCKS),default=["us_midwest"])
+    p.add_argument("--solver",choices=("direct","amg"),default="direct")
     p.add_argument("--output",default="results/audit/road_backbone_circuit_v40.json")
     a=p.parse_args()
-    r=run(a.blocks)
+    r=run(a.blocks,solver=a.solver)
     target=Path(a.output);target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(r,indent=2,ensure_ascii=False),encoding="utf-8")
     print(json.dumps({"complete":r["complete"],"n_blocks":len(r["regions"]),"errors":r["errors"]},ensure_ascii=False),flush=True)
