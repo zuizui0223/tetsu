@@ -53,6 +53,14 @@ class SixCountryMacroTests(unittest.TestCase):
         self.assertEqual(road["n_true_source_region_chunks"],6)
         self.assertEqual(set(rail["regions"]),set(study.BLOCKS_SIX))
 
+    def test_previously_queried_jp_tohoku_is_known_extra_source_not_sixth_replicate(self):
+        chunks=network_chunks()
+        chunks[0]["regions"]["jp_tohoku"]={"country":"JP","routes":{}}
+        merged=study.combine_source_regions(chunks)
+        self.assertEqual(len(merged["regions"]),6)
+        self.assertEqual(merged["predeclared_upstream_regions_excluded_for_fixed_6country_frame"],["jp_tohoku"])
+        self.assertNotIn("jp_tohoku",merged["regions"])
+
     def test_missing_or_duplicate_survey_source_fails_closed(self):
         chunks=network_chunks()
         with self.assertRaisesRegex(ValueError,"incomplete"):
