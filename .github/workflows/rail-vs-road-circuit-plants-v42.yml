@@ -1,0 +1,81 @@
+name: "v4.2 GRIIS alien plant pair similarity vs RAIL and MAJOR ROAD physical circuit Q"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_rail_vs_major_road_circuit_plants_v42.py'
+      - 'tests/test_rail_vs_major_road_circuit_plants_v42.py'
+      - '.github/workflows/rail-vs-road-circuit-plants-v42.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-road-rail-network-circuit-plant-v42
+  cancel-in-progress: true
+jobs:
+  two-independent-countries-exploratory-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source harmonization and numerical packages
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Validate identical cell pair geography and no false native species/independent p-values
+        run: python -m unittest discover -s tests -p 'test_rail_vs_major_road_circuit_plants_v42.py' -v
+      - name: Retrieve eight-country country-masked GRIIS introduced speciesKey source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/plants
+      - name: Retrieve real 50km rail shortest paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Retrieve real same-cell road shortest paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road
+      - name: Retrieve verified real physical rail circuit effective resistance
+        uses: actions/download-artifact@v4
+        with:
+          name: 50km-rail-physical-circuit-effective-resistance-v37
+          run-id: 42766118921
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/railcircuit
+      - name: Retrieve independently complete US major-road backbone circuit source
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-road-backbone-physical-circuit-US-midwest-v40
+          run-id: 42775739386
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/roadus
+      - name: Retrieve independently complete France major-road backbone AMG circuit source
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-major-road-backbone-circuit-france-v40
+          run-id: 42776680197
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/roadfr
+      - name: Explore partial RANK association of rail circuit redundancy conditional on road circuit redundancy
+        run: |
+          python scripts/analyze_rail_vs_major_road_circuit_plants_v42.py             --plants source/plants/griis_50km_10blocks_country_mask_v36.json             --rail source/rail/overture_50km_continuous_rail_routes_v32.json             --road source/road/overture_50km_macro_road_paths_v33.json             --rail-circuit source/railcircuit/50km_rail_circuit_resistance_v37.json             --road-circuit-us source/roadus/road_backbone_circuit_v40.json             --road-circuit-fr source/roadfr/road_backbone_france_circuit_v40.json             --output results/audit/rail_circuit_vs_major_road_circuit_plant_v42.json
+      - name: Archive explicitly noncausal two-block same-cell circuit ecological diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: griis-rail-vs-major-road-circuit-observational-two-block-v42
+          path: results/audit/rail_circuit_vs_major_road_circuit_plant_v42.json
+          if-no-files-found: warn
