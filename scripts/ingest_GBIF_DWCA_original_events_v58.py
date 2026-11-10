@@ -146,13 +146,71 @@ def _one_event_bin():
     }
 
 
-def analyze_archive(path,block,checklists,metadata,source_metadata_verified_by_API=False):
+def resolve_country_species_key_set(checklists,block,col_taxonomy_bridge=None,
+                                    include_synonym_resolution=False):
+    """Explicitly declare taxonomy key namespace before source-row inference.
+
+    An old GRIIS country list has numeric GBIF Backbone accepted IDs.
+    The August 2026 public original DWCA often uses alpha-numeric COL
+    XR species IDs. Never treat old IDs as valid new keys by string
+    comparison, or derive zero species to mean botanical absence.
+    """
+    if block not in PILOT:
+        raise ValueError("Unregistered 50km country source block")
+    country=BLOCKS[block][0]
+    original=valid_griis(checklists).get(country)
+    if not original:
+        raise ValueError("Missing original GRIIS accepted country plant species keys")
+    if col_taxonomy_bridge is None:
+        if include_synonym_resolution:
+            raise ValueError("Synonym resolution requires verified COL crosswalk")
+        return original,{
+            "species_key_namespace":"legacy_GBIF_Backbone_numeric",
+            "n_original_country_GRIIS_specieskeys":len(original),
+            "COL_XR_mapping_used":False,
+        }
+    if not isinstance(col_taxonomy_bridge,dict) or col_taxonomy_bridge.get(
+            "official_mapping_url")!="https://download.checklistbank.org/col/gbif/gbif-col265.tsv.gz":
+        raise ValueError("COL XR source bridge provenance missing or unverified")
+    row=col_taxonomy_bridge.get("countries",{}).get(country)
+    if not isinstance(row,dict) or row.get("country")!=country:
+        raise ValueError("Country-specific GRIIS -> COL source bridge absent")
+    direct=row.get("old_GRIIS_to_COL_strict_accepted_map")
+    syn=row.get("old_GRIIS_to_COL_synonym_acceptedID_map")
+    if not isinstance(direct,dict) or not isinstance(syn,dict):
+        raise ValueError("COL source taxon mapping lacks accepted/synonym ID groups")
+    if not set(direct).issubset(original) or not set(syn).issubset(original):
+        raise ValueError("COL source taxonomic mapping does not originate in this country's GRIIS checklist")
+    if set(direct)&set(syn):
+        raise ValueError("Old country GRIIS taxon cannot be both accepted and synonym")
+    if any(not isinstance(x,str) or not x for x in (*direct.values(),*syn.values())):
+        raise ValueError("Empty/invalid current COL XR accepted species ID")
+    values=set(direct.values())
+    if include_synonym_resolution:
+        values.update(syn.values())
+    if not values:
+        raise ValueError("No current COL XR accepted plant keys for this country")
+    return values,{
+        "species_key_namespace":"COL26.5_XR_accepted_taxon_ID",
+        "source_version":col_taxonomy_bridge.get("source_taxonomy_version"),
+        "source_official_mapping_url":col_taxonomy_bridge["official_mapping_url"],
+        "include_synonym_resolution":bool(include_synonym_resolution),
+        "n_original_country_GRIIS_specieskeys":len(original),
+        "n_resolved_country_COL_species_IDs":len(values),
+        "n_original_GRIIS_keys_unmapped_or_rejected":row.get("n_old_keys_unmapped_or_no_usable_COL"),
+        "COL_XR_mapping_used":True,
+        "COL_source_bridge_is_May2026_not_exact_original_snapshot_version":True,
+    }
+
+
+def analyze_archive(path,block,checklists,metadata,source_metadata_verified_by_API=False,
+                    col_taxonomy_bridge=None,include_synonym_resolution=False):
     if block not in PILOT:
         raise ValueError("Original source country-block frame invalid")
     identity=metadata_contract(metadata)
-    keys=valid_griis(checklists).get(BLOCKS[block][0])
-    if not keys:
-        raise ValueError("Original accepted country GRIIS plants unavailable")
+    keys,taxonomy=resolve_country_species_key_set(
+        checklists,block,col_taxonomy_bridge,include_synonym_resolution
+    )
     frame=source_cell_frame(block)
     to_eq=Transformer.from_crs(4326,GRID_CRS,always_xy=True)
     f=Path(path)
@@ -162,6 +220,7 @@ def analyze_archive(path,block,checklists,metadata,source_metadata_verified_by_A
         "created_utc":datetime.now(timezone.utc).isoformat(),
         "country":frame["country"],
         "frozen_region":block,
+        "country_GRIIS_specieskey_taxonomy_namespace":taxonomy,
         "GBIF_original_download_identity":identity,
         "actual_original_archive_file_read":True,
         "source_metadata_matches_live_GBIF_API":bool(source_metadata_verified_by_API),
@@ -261,6 +320,11 @@ def analyze_archive(path,block,checklists,metadata,source_metadata_verified_by_A
                             result["source_quality_counters"]["n_not_species_taxon_rank"]+=1
                             continue
                         species=str(row.get("speciesKey") or "").strip()
+                        # A non-numeric source species ID in a legacy
+                        # numeric GRIIS query indicates taxonomy-version
+                        # incompatibility, not verified plant absence.
+                        if species and not species.isdecimal():
+                            result["source_quality_counters"]["n_original_positive_source_rows_with_alphanumeric_COL_like_speciesKey"]+=1
                         if species not in keys:
                             result["source_quality_counters"]["n_country_GRIIS_nonmember_unknown_status"]+=1
                             continue
@@ -306,6 +370,10 @@ def analyze_archive(path,block,checklists,metadata,source_metadata_verified_by_A
                     result["periods"][period][cid]["n_distinct_dataset_keys"]=len(dset)
             finally:
                 conn.close()
+    if (not taxonomy["COL_XR_mapping_used"] and
+        result["source_quality_counters"].get(
+            "n_original_positive_source_rows_with_alphanumeric_COL_like_speciesKey",0)>0):
+        raise ValueError("COL XR alpha-numeric speciesKey found in original GBIF source, but only old numeric GRIIS keys were supplied. Provide the verified country COL-XR bridge; zero matches is NOT ecological absence.")
     result["source_quality_counters"]=dict(result["source_quality_counters"])
     result["n_50km_region_source_cells"]=16
     result["n_year_periods"]=2
@@ -327,11 +395,20 @@ def main():
     p.add_argument("--dwca-zip",required=True)
     p.add_argument("--gbif-download-metadata",required=True)
     p.add_argument("--griis-accepted-keys",required=True)
+    p.add_argument("--COL-XR-bridge",default=None,
+        help="Verified v6.3 official six-country accepted/synonym COL XR mapping JSON. Required when source speciesKey is alphanumeric.")
+    p.add_argument("--include-COL-synonyms",action="store_true",
+        help="Secondary sensitivity: include accepted IDs from old GRIIS synonym matches, not primary strict mapping.")
     p.add_argument("--output",default="results/audit/source_DWCA_event_quality_v58.json")
     args=p.parse_args()
     metadata=json.loads(Path(args.gbif_download_metadata).read_text(encoding="utf-8"))
     checklists=json.loads(Path(args.griis_accepted_keys).read_text(encoding="utf-8"))
-    result=analyze_archive(args.dwca_zip,args.block,checklists,metadata)
+    bridge=json.loads(Path(args.COL_XR_bridge).read_text(encoding="utf-8")) if args.COL_XR_bridge else None
+    result=analyze_archive(
+        args.dwca_zip,args.block,checklists,metadata,
+        col_taxonomy_bridge=bridge,
+        include_synonym_resolution=args.include_COL_synonyms
+    )
     dst=Path(args.output);dst.parent.mkdir(parents=True,exist_ok=True)
     dst.write_text(json.dumps(result,indent=2,ensure_ascii=False),encoding="utf-8")
     print(json.dumps({
