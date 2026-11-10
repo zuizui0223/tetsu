@@ -70,6 +70,23 @@ Do not present v3.0 macro railway ecological coefficients until that real source
 
 **Consequent analysis reformulation:** Abandon binary connected/unconnected as the primary broad-region exposure in these blocks. Model *continuous railway-network accessibility/shortest-path excess or circuity*, ideally as a contrast against real ROAD-network accessibility, with active freight topology and country/ecoregion/climate/observer adjustment. Require source-based variability/positivity and external graph-halo sensitivity before a biological coefficient is estimated. A single connected component is still capable of varied shortest-path distances. Do not search only for less connected regions posthoc to manufacture a positive contrast.
 
+## 3c. REAL macro botanical speciesKey coverage — GRIIS introduced-only (v3.1)
+
+[Actual equal-area source GRIIS plant taxon run #42740320597](https://github.com/zuizui0223/tetsu/actions/runs/42740320597), 2026-11-10, SUCCESS; **five offline QA tests**, all three fixed source regions, no live source errors. Analysis source [full-facet species-key harvest](../scripts/harvest_griis_macro_50km_facets_v31.py), [offline tests](../tests/test_griis_macro_50km_facets_v31.py), [actual workflow](../.github/workflows/griis-50km-macro-species-v31.yml).
+
+The original v2.9 pre-outcome source eligibility was used BEFORE fetching speciesKey facets. GBIF full speciesKey facets were paged to completeness and intersected with the independently sourced country GRIIS introduced plant key sets. A cell needs **>=5 GRIIS-observed introduced plant species keys and >=20 indexed introduced plant records in EACH period**, on top of the prior **>=100 all-Plantae records and >=3 source datasets per period**.
+
+| Actual 200km macro block | Total nominal 50km source cells | Prior all-Plantae both-period source-qualified | Both periods fully speciesKey-paginated | BOTH periods sufficient introduced flora |
+|---|---:|---:|---:|---:|
+| JP Tohoku | 16 | 12 | 12 | **1** |
+| US Midwest | 16 | 15 | 15 | **15** |
+| FR Burgundy | 16 | 16 | 16 | **16** |
+| **Pooled three fixed regions** | **48** | **43** | **43** | **32** |
+
+**Interpretation:** The US and French blocks are comparatively source-rich in GRIIS-listed introduced plant observations, but the Japanese block FAILS most introduced-species opportunity thresholds despite passing many general plant opportunity thresholds. These are indexed record reporting opportunities, NOT a demonstration that Japan has few introduced plants, nor of actual rail corridor effects. Increasing record abundance or adding new climates cannot by itself rescue a **saturated binary railway-connection exposure**: all 16/16 JP, 15/16 US and 16/16 FR *rail-passage* cells share one mapped railway component in the first source network test. Consequently, these broad regions need a **continuous rail-network shortest path / circuitousness exposure** and a comparable source ROAD network path, not more binary connectedness tests.
+
+There are **no rail–introduced plant biological effect sizes** for 50km equal-area cells yet. GBIF speciesKey records need actual DOI-cited occurrence files, duplicated-event QA, suitable coordinate uncertainty and country/ecoregion masks before high-confidence inference.
+
 ## 4. Macro analysis requirements, not completed results
 
 - Keep eight-country geographically varied frozen blocks and later verify actual independent **ecoregion IDs**, land fraction, study-country overlap, ports, elevation/climate and land cover. Equal-area grid does not mean representative biogeographic sampling.
