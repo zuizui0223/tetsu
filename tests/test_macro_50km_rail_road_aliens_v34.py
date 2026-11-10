@@ -4,6 +4,7 @@ from pathlib import Path
 from itertools import combinations
 import unittest
 import math
+import copy
 import numpy as np
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from analyze_macro_50km_rail_road_aliens_v34 import (
@@ -57,9 +58,9 @@ def inputs():
                 "road_to_geodesic_ratio":roadratio,
                 "centroid_snap_augmented_road_path_km":geod*roadratio
             })
-        rail["regions"][region]={"routes":{strategy:{"pair_routes":railpairs}
+        rail["regions"][region]={"routes":{strategy:{"pair_routes":copy.deepcopy(railpairs)}
             for strategy in STRATEGIES}}
-        road["regions"][region]={"routes":{strategy:{"pair_paths":roadpairs}
+        road["regions"][region]={"routes":{strategy:{"pair_paths":copy.deepcopy(roadpairs)}
             for strategy in STRATEGIES}}
     return alien,rail,road
 
