@@ -40,7 +40,7 @@ def prepare(root):
                   for (a,b),r in values.items()]
         manifest["cases"][name]={
             "config":str(Path(files["config"]).resolve()),
-            "output_matrix":str((root/name/(name+"_julia_matrix.tsv")).resolve()),
+            "output_matrix":str((root/name/"julia_matrix.tsv").resolve()),
             "expected":expected,
             "focals":[integer_id[k] for k in spec["focals"]],
         }
