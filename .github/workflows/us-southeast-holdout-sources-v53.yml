@@ -1,0 +1,95 @@
+name: "v5.3 Frozen US Southeast OUT-OF-ANALYSIS 50km RAIL/ROAD and GBIF dataset source checks"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'docs/holdout_us_southeast_v53_protocol.md'
+      - 'scripts/audit_gbif_dataset_composition_6country_v50.py'
+      - '.github/workflows/us-southeast-holdout-sources-v53.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-source-heldout-US-Southeast-v53
+  cancel-in-progress: true
+jobs:
+  heldout-physical-rail-network:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Verify pre-outcome physical railway anchor source method
+        run: python -m unittest discover -s tests -p 'test_overture_50km_rail_paths_v32.py' -v
+      - name: NEW frozen US Southeast 50km source RAIL paths without looking at plant outcome
+        run: |
+          python -u scripts/audit_overture_50km_rail_paths_v32.py \
+            --blocks us_southeast \
+            --output results/audit/holdout_US_Southeast_rail_source_v53.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: holdout-US-Southeast-50km-physical-rail-routes-v53
+          path: results/audit/holdout_US_Southeast_rail_source_v53.json
+          if-no-files-found: warn
+  heldout-physical-road-network:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Verify pre-outcome physical ROAD paths and missing junction source QA
+        run: python -m unittest discover -s tests -p 'test_overture_50km_road_paths_v33.py' -v
+      - name: NEW frozen US Southeast 50km source ROAD paths without looking at plant outcome
+        run: |
+          python -u scripts/audit_overture_50km_road_paths_v33.py \
+            --blocks us_southeast \
+            --output results/audit/holdout_US_Southeast_road_source_v53.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: holdout-US-Southeast-50km-physical-road-routes-v53
+          path: results/audit/holdout_US_Southeast_road_source_v53.json
+          if-no-files-found: warn
+  heldout-GBIF-recording-dataset-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install 'numpy>=1.26,<3' 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Validate full GBIF dataset/source DETECTED facets and no legacy status filter
+        run: python -m unittest discover -s tests -p 'test_gbif_dataset_composition_v50.py' -v
+      - name: Retrieve frozen original 8-country GRIIS source coverage for holdout without reselecting region
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: NEW frozen US Southeast 50km complete GBIF datasetKey source concentration and DETECTED facets
+        run: |
+          python -u scripts/audit_gbif_dataset_composition_6country_v50.py \
+            --block us_southeast \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --output results/audit/holdout_US_Southeast_dataset_source_v53.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: holdout-US-Southeast-50km-full-GBIF-dataset-source-v53
+          path: results/audit/holdout_US_Southeast_dataset_source_v53.json
+          if-no-files-found: warn
