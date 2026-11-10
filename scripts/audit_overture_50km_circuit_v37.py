@@ -43,8 +43,15 @@ MIN_REDUNDANCY_MEANINGFUL=0.05
 MIN_REDUNDANCY_TINY=0.01
 
 
-def load_physical_multigraph_conductance(rows):
-    """Return source network with true parallel tracks retained as conductance."""
+def load_physical_multigraph_conductance(rows,parallel_policy="sum"):
+    """Network conductance plus source parallel-edge duplication sensitivity.
+
+    sum: every source segment with the same connector pair contributes.
+    shortest_only: only one shortest edge per identical connector pair.
+    Both preserve alternative junction routes and never join crossing lines.
+    """
+    if parallel_policy not in ("sum","shortest_only"):
+        raise ValueError("Invalid predeclared parallel-link sensitivity")
     graph={}
     seen_ids=set()
     stats={"n_source_segments":0,"n_source_links":0,
@@ -72,7 +79,15 @@ def load_physical_multigraph_conductance(rows):
                 stats["n_parallel_connector_links"]+=1
             if a==b:stats["n_same_at_connector_links"]+=1
             resistance_km=max(MIN_RESISTANCE_KM,(b-a)*length_m/1000)
-            add_conductance(graph,u,v,1./resistance_km)
+            c=1./resistance_km
+            if parallel_policy=="sum":
+                add_conductance(graph,u,v,c)
+            elif u in graph and v in graph[u]:
+                if c>graph[u][v]:
+                    graph[u][v]=c
+                    graph[v][u]=c
+            else:
+                add_conductance(graph,u,v,c)
             stats["n_source_links"]+=1
         stats["n_source_segments"]+=1
     if not graph:raise ValueError("Zero true physical source rail connector links")
@@ -84,7 +99,8 @@ def load_physical_multigraph_conductance(rows):
         "n_parallel_aggregated_undirected_connector_pairs":sum(len(a) for a in graph.values())//2,
         "n_components":len(comp),
         "multigraph_cycle_rank":E-n+len(comp),
-        "source_parallel_linkages_not_dropped_for_circuit":True,
+        "source_parallel_linkages_not_dropped_for_circuit":parallel_policy=="sum",
+        "parallel_connector_policy":parallel_policy,
         "not_observed_train_service_or_freight_flow":True,
     })
     if stats["multigraph_cycle_rank"]<0:
