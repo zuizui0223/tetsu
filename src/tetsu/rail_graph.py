@@ -43,8 +43,12 @@ def validate_segment(raw, allowed_classes):
         raise ValueError("Duplicate connector id within one segment; ambiguous linear reference")
     if parsed[0][0]!=0. or parsed[-1][0]!=1.:
         raise ValueError("Overture segments must have endpoint connectors at 0 and 1")
-    if any(b[0]<=a[0] for a,b in zip(parsed,parsed[1:])):
-        raise ValueError("Two connectors may not share an 'at' position")
+    # Official Overture can have two distinct connector IDs at exactly
+    # the same linear reference on a SINGLE rail segment. These are not
+    # arbitrary crossings, but source-specified within-segment nodes.
+    # Represent their passage by a tiny positive edge below.
+    if any(b[0]<a[0] for a,b in zip(parsed,parsed[1:])):
+        raise ValueError("Source connectors not ordered by linear reference")
     return {"id":uid,"length_m":float(length),"connectors":parsed}
 
 
@@ -61,7 +65,8 @@ def build_rail_connector_graph(segments,allowed_classes=("standard_gauge","narro
     adj=defaultdict(dict)
     seen=set()
     stats={"n_source_segments":0,"n_excluded_classes":0,"n_eligible_segments":0,
-           "n_connector_links":0,"source_rail_length_m":0.}
+           "n_connector_links":0,"source_rail_length_m":0.,
+           "n_same_at_source_links_epsilon":0}
     for raw in segments:
         stats["n_source_segments"]+=1
         item=validate_segment(raw,allowed_classes)
@@ -75,7 +80,9 @@ def build_rail_connector_graph(segments,allowed_classes=("standard_gauge","narro
         stats["n_eligible_segments"]+=1
         stats["source_rail_length_m"]+=item["length_m"]
         for (a,u),(b,v) in zip(item["connectors"],item["connectors"][1:]):
-            length=(b-a)*item["length_m"]
+            if a==b:
+                stats["n_same_at_source_links_epsilon"]+=1
+            length=max(0.001,(b-a)*item["length_m"])
             if length<=0:
                 raise ValueError("Zero-length connector edge")
             if v in adj[u]:
