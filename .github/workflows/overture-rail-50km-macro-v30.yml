@@ -5,6 +5,8 @@ on:
       - research/railway-seed-dispersal-v01
     paths:
       - 'scripts/audit_overture_50km_macro_rail_v30.py'
+      - 'src/tetsu/rail_graph.py'
+      - 'tests/test_rail_graph_macro.py'
       - 'tests/test_overture_50km_macro_rail_v30.py'
       - '.github/workflows/overture-rail-50km-macro-v30.yml'
   workflow_dispatch:
