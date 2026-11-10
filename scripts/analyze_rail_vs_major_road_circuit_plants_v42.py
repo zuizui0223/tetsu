@@ -61,6 +61,8 @@ def correlate_block(block,flora,rail_short,road_short,rail_circuit,road_circuits
             raise ValueError("Rail/road physical source cell pair frame differs")
         for period in PERIODS:
             rows=[]
+            omitted_missing_source=0
+            omitted_missing_response=0
             for a,b in combinations(sorted(elig),2):
                 k=(a,b);rr=rshort[k];dd=dshort[k];r=rcirc[k];d=dcirc[k]
                 qrail=r.get("independent_path_redundancy_1minusRoverD")
@@ -70,13 +72,16 @@ def correlate_block(block,flora,rail_short,road_short,rail_circuit,road_circuits
                 geo=rr.get("source_cell_centroid_geodesic_km")
                 if not all(isinstance(x,(int,float)) and not isinstance(x,bool)
                            and math.isfinite(x) for x in (qrail,qroad,roadkm,railkm,geo)):
+                    omitted_missing_source+=1
                     continue
                 if not (.0<=qrail<=1.000001 and .0<=qroad<=1.000001
                         and roadkm>0 and railkm>0 and geo>0):
                     raise ValueError("Unphysical resistor source or path distance")
                 f1=elig[a][period];f2=elig[b][period]
                 sim=expected_rarefied_overlap(f1["rarified_probs"],f2["rarified_probs"])
-                if sim is None:continue
+                if sim is None:
+                    omitted_missing_response+=1
+                    continue
                 n1,n2=(f1["all_plant_indexed_records"],f2["all_plant_indexed_records"])
                 if n1<=0 or n2<=0:
                     raise ValueError("Invalid GBIF source record denominators")
@@ -90,6 +95,8 @@ def correlate_block(block,flora,rail_short,road_short,rail_circuit,road_circuits
                 })
             result={
                 "n_dependent_source_pairs_with_both_circuits":len(rows),
+                "n_pairs_omitted_for_missing_network_source":omitted_missing_source,
+                "n_pairs_omitted_for_empty_positive_flora_response":omitted_missing_response,
                 "source_qualified_50km_cells":len(elig),
                 "Qrail_quartiles":_quartiles([x["Qrail"] for x in rows]),
                 "Qroad_major_backbone_quartiles":_quartiles([x["Qroad"] for x in rows]),
@@ -119,6 +126,7 @@ def correlate_block(block,flora,rail_short,road_short,rail_circuit,road_circuits
             print(json.dumps({
                 "block":block,"period":period,"anchor":strategy,
                 "source_pairs":len(rows),
+                "omitted_source":omitted_missing_source,"omitted_response":omitted_missing_response,
                 "rail_Q_median":result["Qrail_quartiles"][1] if result["Qrail_quartiles"] else None,
                 "road_major_Q_median":result["Qroad_major_backbone_quartiles"][1] if result["Qroad_major_backbone_quartiles"] else None,
                 "rho_rail_Q_given_road_Q":rho.get("rail_Q_given_road_backbone_Q_as_extra_covariate"),
