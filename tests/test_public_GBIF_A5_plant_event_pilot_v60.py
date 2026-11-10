@@ -21,7 +21,7 @@ class FakeS3:
                 {"Prefix":ROOT+"taxonpartition=Animalia/"},
                 {"Prefix":ROOT+"taxonpartition=Plantae_Tracheophyta/"},
             ],"IsTruncated":False}
-        if "a5_r2=" in prefix and prefix.endswith("/123/"):
+        if "a5_r2=" in prefix and prefix.endswith("a5_r2=123/"):
             return {"Contents":[{"Key":prefix+"actual.parquet","Size":12345678}],
                     "IsTruncated":False}
         return {"Contents":[],"IsTruncated":False}
