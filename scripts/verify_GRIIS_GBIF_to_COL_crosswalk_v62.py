@@ -34,7 +34,6 @@ from collections import Counter,defaultdict
 from datetime import datetime,timezone
 from pathlib import Path
 import requests
-import duckdb
 
 from analyze_griis_alien_rail_source_v25 import valid_griis
 from audit_public_GBIF_original_GRIIS_rows_v61 import (
@@ -152,6 +151,7 @@ def fetch_official_mapping(country_old):
 
 
 def compare_original_public_event_rows(old_source,translated):
+    import duckdb
     db=duckdb.connect(database=":memory:")
     db.execute("INSTALL httpfs; LOAD httpfs; SET s3_region='us-east-1';")
     db.execute("SET threads=2; SET memory_limit='3GB';")
