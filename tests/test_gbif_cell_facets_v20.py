@@ -24,14 +24,16 @@ class GBIFCompleteFacetTests(unittest.TestCase):
         q=query_params(c,PERIODS[1],"speciesKey",200)
         self.assertEqual(q["facet"],"speciesKey")
         self.assertEqual(q["facetOffset"],200)
-        self.assertEqual(q["facetLimit"],200)
+        self.assertEqual(q["facetLimit"],5000)
+        self.assertEqual(q["speciesKey.facetLimit"],5000)
+        self.assertEqual(q["speciesKey.facetOffset"],200)
         self.assertEqual(q["country"],"DE")
         self.assertEqual(q["year"],"2018,2025")
         self.assertEqual(q["limit"],0)
         self.assertEqual(q["occurrenceStatus"],"PRESENT")
         self.assertIn("POLYGON((",q["geometry"])
         with self.assertRaisesRegex(ValueError,"Unbounded"):
-            query_params(c,PERIODS[1],"speciesKey",0,1000)
+            query_params(c,PERIODS[1],"speciesKey",0,5001)
 
     def test_uppercase_gbif_facet_response(self):
         n,items=parse_page({"count":1000,"facets":[{
@@ -42,28 +44,28 @@ class GBIFCompleteFacetTests(unittest.TestCase):
         self.assertEqual(items,[("123",300),("456",100)])
         self.assertEqual(parse_page({"count":0,"facets":[]},"speciesKey"),(0,[]))
 
-    def test_page_audits_completeness_on_synthetic_201_categories(self):
+    def test_page_audits_completeness_on_synthetic_5001_categories(self):
         c=grid_cells("jp_sendai")[0]
-        allitems=[{"name":str(i+1000),"count":1} for i in range(201)]
+        allitems=[{"name":str(i+1000),"count":1} for i in range(5001)]
         queried=[]
         def fake_request(_client,params):
             self.assertEqual(params["facet"],"speciesKey")
             queried.append(params["facetOffset"])
             off=params["facetOffset"]
-            return {"count":320,"facets":[{"field":"SPECIES_KEY",
+            return {"count":6000,"facets":[{"field":"SPECIES_KEY",
                       "counts":allitems[off:off+FACET_PAGE]}]}
         x=full_species_facet(None,c,PERIODS[1],request=fake_request,sleep=lambda _:None)
-        self.assertEqual(queried,[0,200])
-        self.assertEqual(x["indexed_occurrence_count"],320)
-        self.assertEqual(x["n_species_key_categories"],201)
+        self.assertEqual(queried,[0,5000])
+        self.assertEqual(x["indexed_occurrence_count"],6000)
+        self.assertEqual(x["n_species_key_categories"],5001)
         self.assertTrue(x["full_facet_pagination_completed"])
         self.assertTrue(x["not_original_occurrence_rows"])
 
     def test_repeated_facet_page_fails_instead_of_truncating(self):
         c=grid_cells("jp_sendai")[0]
-        row=[{"name":str(i),"count":1} for i in range(200)]
+        row=[{"name":str(i),"count":1} for i in range(5000)]
         def bad(_client,params):
-            return {"count":1000,"facets":[{"field":"SPECIES_KEY","counts":row}]}
+            return {"count":12000,"facets":[{"field":"SPECIES_KEY","counts":row}]}
         with self.assertRaisesRegex(ValueError,"Repeated facet"):
             full_species_facet(None,c,PERIODS[0],request=bad,sleep=lambda _:None)
 
