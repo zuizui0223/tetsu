@@ -239,7 +239,7 @@ def analyze(plant,rail):
                 "unconnected":result["unadjusted"]["n_unconnected_pairs"],
                 "matched":result["unadjusted"]["n_distance_and_record_effort_matched_pairs"],
                 "delta_rarefied":result["unadjusted"]["median_matched_similarity_delta"],
-                "both_rail_delta":result["both_cells_mapped_rail"]["median_matched_similarity_delta"]},flush=True))
+                "both_rail_delta":result["both_cells_mapped_rail"]["median_matched_similarity_delta"]}),flush=True)
         out["regions"][name]=summary
     for period in PERIODS:
         valid=[(n,r["periods"][period]["unadjusted"]["median_matched_similarity_delta"]) for n,r in out["regions"].items()
