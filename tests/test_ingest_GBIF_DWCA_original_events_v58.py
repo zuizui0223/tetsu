@@ -75,6 +75,8 @@ class OriginalDWCAParserTests(unittest.TestCase):
             metadata_contract({**FAKE_META,"doi":""})
         with self.assertRaises(ValueError):
             metadata_contract({**FAKE_META,"downloadLink":"file:///tmp/fake.zip"})
+        with self.assertRaises(ValueError):
+            metadata_contract({**FAKE_META,"downloadLink":"https://evil.example/?tag=gbif.org"})
 
     def test_frozen_original_50km_cell_identity(self):
         block="us_midwest"
