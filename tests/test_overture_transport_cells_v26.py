@@ -35,7 +35,7 @@ class TransportCellSourceTests(unittest.TestCase):
     def test_clipped_rail_and_road_splits_actual_length(self):
         # One long source line intersects two cells; clipped lengths must not
         # be counted twice as full source segment length.
-        line=LineString([(140.8,38.19),(140.94,38.19)])
+        line=LineString([(140.8,38.19),(141.04,38.19)])
         rows=[
             ("road_1","road","primary",dumps(line)),
             ("rail_1","rail","standard_gauge",dumps(line)),
@@ -71,8 +71,8 @@ class TransportCellSourceTests(unittest.TestCase):
             def fetchall(self):return []
             def close(self):pass
         out=run(["jp_sendai"],db=FakeDB())
-        self.assertTrue(out["complete"])
-        self.assertEqual(out["regions"]["jp_sendai"]["all_road_length_km_within_target_cells"],0)
+        self.assertFalse(out["complete"])
+        self.assertIn("jp_sendai",out["errors"])
         # A null spatial return has no proof that the actual city has no
         # mapped roads: API sources need independent expected counts in real run.
 
