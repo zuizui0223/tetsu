@@ -47,7 +47,7 @@ class MultiCountryGBIFCOLMigrationTests(unittest.TestCase):
         missing=make_row(9999,"NoMatch")
         stream=["\t".join(header)+"\n"]
         for row in (one,two,missing):
-            stream.append("\t".join(row.get(h,"unrestricted \\" quoted string") for h in header)+"\n")
+            stream.append("\t".join(row.get(h,'unrestricted "quoted string"') for h in header)+"\n")
         rows,n=parsed_selected_official_tsv(iter(stream),{"100","101"})
         self.assertEqual(n,3)
         self.assertEqual([x["gbif:ID"] for x in rows],["100","101"])
