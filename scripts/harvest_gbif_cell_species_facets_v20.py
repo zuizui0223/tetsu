@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """v2.0 spatial GBIF COMPLETE species-key facet matrix (source-side census).
 
-Obtain *every* server-reported speciesKey facet, paging until exhaustion,
+Obtain *every* server-reported speciesKey facet using a 5000-category
+single-source page (and explicit per-field paging if needed),
 across fixed 3x3 geographical cells in ten preselected national windows
 and two fixed periods. This returns indexed taxon counts per cell, not
 a DOI-citable original GBIF occurrence-row download or ecological
@@ -21,8 +22,8 @@ from audit_overture_gbif_overlap_v19 import REGIONS,GBIF
 
 PERIODS=((2010,2017),(2018,2025))
 SPLIT_N=3
-FACET_PAGE=200
-MAX_FACET_PAGES=80
+FACET_PAGE=5000
+MAX_FACET_PAGES=8
 MIN_SOURCE_RECORDS_PER_CELL_PERIOD=100
 MIN_DATASET_CATEGORIES=3
 
@@ -68,7 +69,9 @@ def query_params(cell,period,facet_name,offset=0,limit=FACET_PAGE):
         "occurrenceStatus":"PRESENT",
         "hasCoordinate":"true","hasGeospatialIssue":"false",
         "limit":0,"facet":facet_name,
-        "facetLimit":limit,"facetOffset":offset
+        "facetLimit":limit,"facetOffset":offset,
+        f"{facet_name}.facetLimit":limit,
+        f"{facet_name}.facetOffset":offset
     }
 
 
