@@ -70,6 +70,34 @@ class RoadMacroPathTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             _dijkstra(g,"missing",[])
 
+    def test_incomplete_endpoint_source_rows_explicitly_skipped_only_under_two_percent(self):
+        block="gb_yorkshire"
+        a=f"{block}_x0_y0";b=f"{block}_x1_y0"
+        actual=[road(block,a,b,str(i)) for i in range(100)]
+        invalid=list(road(block,a,b,"incomplete"))
+        invalid[2]=[
+            {"connector_id":"internal_start","at":0.25},
+            {"connector_id":"internal_end","at":1.0}
+        ]
+        g,anchors,meta=network_source(block,actual+[tuple(invalid)])
+        self.assertEqual(meta["n_excluded_source_road_segments_missing_endpoints"],1)
+        self.assertEqual(meta["n_original_source_road_segments_returned"],101)
+        self.assertLess(meta["excluded_incomplete_road_fraction"],.02)
+        self.assertEqual(meta["n_source_road_segments_within_bbox_plus_halo"],100)
+        self.assertTrue(meta["incomplete_road_source_NOT_interpreted_as_biological_absence"])
+
+    def test_incomplete_source_fraction_over_two_percent_stops_without_fabricated_links(self):
+        block="au_southeast"
+        a=f"{block}_x0_y0";b=f"{block}_x1_y0"
+        valid=road(block,a,b,"valid")
+        bad=list(road(block,a,b,"bad"))
+        bad[2]=[
+            {"connector_id":"only_inside","at":.2},
+            {"connector_id":"real_end","at":1.}
+        ]
+        with self.assertRaisesRegex(ValueError,"exceeds fixed 2%"):
+            network_source(block,[valid,tuple(bad)])
+
     def test_missing_or_duplicate_source_never_claimed_road_free(self):
         block="us_midwest";a=f"{block}_x0_y0";b=f"{block}_x1_y0"
         one=road(block,a,b,"same")
