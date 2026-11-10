@@ -43,7 +43,7 @@ from tetsu.circuit_graph import add_conductance,pairwise_effective_resistance
 MAJOR_ROAD_CLASSES=("motorway","trunk","primary","secondary")
 STRATEGIES=("nearest_in_cell","nearest_largest_component_in_cell")
 MAX_SEGMENTS_PER_BLOCK=180000
-MAX_REDUCED_SOLVER_NODES=30000
+MAX_REDUCED_SOLVER_NODES=35000
 ROAD_RESISTANCE_MIN_KM=1e-6
 
 
