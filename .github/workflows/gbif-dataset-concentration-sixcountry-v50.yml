@@ -1,0 +1,60 @@
+name: "v5.0 Six-country 50km GBIF full datasetKey recording concentration and DETECTED facet sources"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_gbif_dataset_composition_6country_v50.py'
+      - 'tests/test_gbif_dataset_composition_v50.py'
+      - '.github/workflows/gbif-dataset-concentration-sixcountry-v50.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-dataset-concentration-sixcountry-v50
+  cancel-in-progress: true
+jobs:
+  actual-50km-GBIF-dataset-metadata:
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        block:
+          - us_midwest
+          - fr_burgundy
+          - ca_ontario
+          - gb_yorkshire
+          - de_saxony
+          - au_southeast
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install GBIF API and EPSG6933 equal-area geographic sources
+        run: pip install 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'numpy>=1.26,<3'
+      - name: Verify recorded dataset facet concentration and non-detection source QA
+        run: python -m unittest discover -s tests -p 'test_gbif_dataset_composition_v50.py' -v
+      - name: Retrieve frozen country-GRIIS source plant incidence and 50km cell eligibility
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Fetch real GBIF FULL datasetKey 50km source facets and DETECTED counts for country-period cells
+        run: |
+          python -u scripts/audit_gbif_dataset_composition_6country_v50.py \
+            --block ${{ matrix.block }} \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --output results/audit/dataset_source_${{ matrix.block }}_v50.json
+      - name: Retain only source dataset UUID aggregates, no recorder names, coordinates or occurrence IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-GBIF-50km-dataset-composition-${{ matrix.block }}-v50
+          path: results/audit/dataset_source_${{ matrix.block }}_v50.json
+          if-no-files-found: warn
