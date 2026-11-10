@@ -1,0 +1,46 @@
+name: "v4.8 Actual GBIF occurrence row metadata QA in 24 frozen six-country source bins"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_gbif_original_row_quality_v48.py'
+      - 'tests/test_gbif_original_row_quality_v48.py'
+      - '.github/workflows/gbif-original-row-quality-v48.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-gbif-original-row-quality-v48
+  cancel-in-progress: true
+jobs:
+  country-bounded-occurrence-metadata-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install GBIF API and exact geographic source QA dependencies
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify 24 fixed source bins and nonrandom bounded GBIF first-page metadata with synthetic records
+        run: python -m unittest discover -s tests -p 'test_gbif_original_row_quality_v48.py' -v
+      - name: Retrieve original country-GRIIS 50km flora source for preexisting eligibility provenance
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Query 24 true GBIF original occurrence-row first pages and audit sources in-place without exporting IDs or recorder names
+        run: |
+          python -u scripts/audit_gbif_original_row_quality_v48.py             --griis-flora-source source/flora/griis_50km_10blocks_country_mask_v36.json             --output results/audit/GBIF_original_firstpage_6country_metadata_v48.json
+      - name: Archive ONLY aggregate data-quality indicators, no original occurrence rows/coordinates/observer names
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-actual-original-occurrence-firstpage-sixcountry-source-QA-v48
+          path: results/audit/GBIF_original_firstpage_6country_metadata_v48.json
+          if-no-files-found: warn
