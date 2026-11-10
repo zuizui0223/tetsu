@@ -37,6 +37,7 @@ BLOCKS_SIX=EXISTING_BLOCKS+INDEPENDENT_ADDITION
 PERIODS=("2010_2017","2018_2025")
 RESPONSES=("source_expected_rarefied20_intersection_union_ratio",
            "source_observed_alien_jaccard")
+KNOWN_UPSTREAM_EXTRA_SOURCE_REGIONS=("jp_tohoku",)
 MIN_SOURCE_CELLS=8
 MIN_VALID_PAIRS=20
 REPLICATION_GATE=5
@@ -48,6 +49,7 @@ def combine_source_regions(sources,allowed=BLOCKS_SIX):
         raise ValueError("No original source chunks")
     result={}
     source_count=0
+    ignored_extra_source_regions=[]
     for chunk in sources:
         if chunk.get("complete") is not True or chunk.get("errors") or chunk.get("source_errors"):
             raise ValueError("Source region batch incomplete or errored; fail closed")
@@ -56,6 +58,14 @@ def combine_source_regions(sources,allowed=BLOCKS_SIX):
             raise ValueError("Missing source regions in chunk")
         for block,row in regions.items():
             if block not in allowed:
+                # v3.2 old RAIL artifact also has Tohoku JP (one GRIIS
+                # source-qualified cell). Its presence in upstream
+                # provenance is explicitly allowed, but it is NOT
+                # a biological comparison region and never silently
+                # counted as an independent replicate.
+                if block in KNOWN_UPSTREAM_EXTRA_SOURCE_REGIONS:
+                    ignored_extra_source_regions.append(block)
+                    continue
                 raise ValueError("Non-predeclared source region included")
             if block in result:
                 raise ValueError("Same country source region appeared twice")
@@ -71,7 +81,8 @@ def combine_source_regions(sources,allowed=BLOCKS_SIX):
         raise ValueError("Six-country network source incomplete: expected exact predeclared regions")
     return {"complete":True,"regions":result,
             "n_true_source_region_chunks":len(sources),
-            "n_geographically_independent_blocks":source_count}
+            "n_geographically_independent_blocks":source_count,
+            "predeclared_upstream_regions_excluded_for_fixed_6country_frame":ignored_extra_source_regions}
 
 
 def aggregate(blocks,period,strategy,response):
