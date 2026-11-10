@@ -89,6 +89,20 @@ class RoadNetworkTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             shortest_paths_to_targets(bad,"a",["b"])
 
+    def test_same_position_distinct_source_connectors_are_not_missing_data(self):
+        # Official Overture roads can carry two different connector IDs at
+        # equal 'at'. They share the same physical source segment; model
+        # passage with a tiny epsilon rather than dropping the whole region.
+        one=("s1","residential",[
+            {"connector_id":"a","at":0.0},
+            {"connector_id":"b","at":.5},
+            {"connector_id":"c","at":.5},
+            {"connector_id":"d","at":1.0}
+        ],dumps(LineString([(140.8,38.2),(140.9,38.2)])))
+        graph,_,meta=graph_from_source_rows([one])
+        self.assertEqual(meta["n_same_at_source_connector_links_epsilon_edge"],1)
+        self.assertLess(shortest_paths_to_targets(graph,"b",["c"])["c"],.01)
+
     def test_near_centers_and_source_country_not_final_botanical_effect(self):
         self.assertEqual(haversine_m((140.,38.),(140.,38.)),0.)
         self.assertGreater(haversine_m((140.,38.),(141.,38.)),80000.)
