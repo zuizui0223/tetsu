@@ -1,0 +1,48 @@
+name: "v6.1 REAL original GBIF public August2026 Parquet individual rows to original US Midwest 50km GRIIS plant cells"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_public_GBIF_original_GRIIS_rows_v61.py'
+      - 'tests/test_public_GBIF_original_GRIIS_rows_v61.py'
+      - '.github/workflows/public-GBIF-original-GRIIS-row-QA-v61.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-public-GBIF-original-50km-GRIIS-row-QA-v61
+  cancel-in-progress: true
+jobs:
+  one-prespecified-parquet-country-GRIIS-row-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install DuckDB remote Parquet, EPSG6933 and coordinate quality tools
+        run: pip install 'duckdb>=1.4,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Unit tests: exact original country cells, source-present rows, event/source duplicates and location precision
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_original_GRIIS_rows_v61.py' -v
+      - name: Retrieve versioned country GRIIS accepted species-key registry, not a reclassified native species list
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Actually query public GBIF individual DWCA-derived Parquet rows, exact 50km geographic cells and GRIIS introduced species keys
+        run: |
+          python -u scripts/audit_public_GBIF_original_GRIIS_rows_v61.py \
+            --griis-keys source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/GBIF_public_original_A5_GRIIS_US_row_QA_v61.json
+      - name: Archive source counts and trust gates only, never original occurrence IDs or observer locations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-real-public-original-2026August-A5-US-GRIIS-50km-source-event-QA-v61
+          path: results/audit/GBIF_public_original_A5_GRIIS_US_row_QA_v61.json
+          if-no-files-found: warn
