@@ -25,7 +25,7 @@ import sys
 
 from pyproj import Transformer,Geod
 from shapely import wkb
-from shapely.geometry import box
+from shapely.geometry import box, Point
 from shapely.ops import transform as shapely_transform
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
@@ -133,7 +133,7 @@ def source_rail_macro(block,rows):
             pt=geom.interpolate(float(at),normalized=True)
             projected=transform.transform(pt.x,pt.y)
             for cellid,poly in cell_geoms.items():
-                if poly.covers(box(projected[0],projected[1],projected[0],projected[1])):
+                if poly.covers(Point(projected[0],projected[1])):
                     cell_nodes[cellid].add(cid)
                     break
         source_segments.append({"id":sid,"class":cls,"subtype":"rail",
