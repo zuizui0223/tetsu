@@ -128,7 +128,7 @@ def process_rows(name,source_rows):
         m["rail_km"]=rail
         m["road_length_density_km_per_km2"]=round(road/m["area_km2"],8)
         m["rail_length_density_km_per_km2"]=round(rail/m["area_km2"],8)
-        m["area_degrees_not_equal_area"]:False
+        m["area_calculated_geodesically_not_from_degrees"]=True
     return {
         "country":REGIONS[name][0],"n_geographic_cells":9,
         "n_source_segment_ids":n_rows,
