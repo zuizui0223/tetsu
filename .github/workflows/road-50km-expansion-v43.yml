@@ -5,6 +5,8 @@ on:
       - research/railway-seed-dispersal-v01
     paths:
       - '.github/workflows/road-50km-expansion-v43.yml'
+      - 'scripts/audit_overture_50km_road_paths_v33.py'
+      - 'tests/test_overture_50km_road_paths_v33.py'
   workflow_dispatch:
 concurrency:
   group: tetsu-road-50km-four-new-blocks-v43
