@@ -111,9 +111,10 @@ def pairwise_effective_resistance(graph,terminals,max_reduced_nodes=35000):
     from scipy.sparse.linalg import splu
     import numpy as np
 
-    focal=sorted(set(terminals))
+    original_focals=list(terminals)
+    focal=sorted(set(original_focals))
     if len(focal)<2:raise ValueError("Need >=2 distinct physical focal nodes")
-    if len(focal)!=len(list(terminals)):
+    if len(focal)!=len(original_focals):
         raise ValueError("Duplicate physical focal connectors")
     if not set(focal).issubset(graph):raise ValueError("Missing source focal connector")
     allpairs={(a,b):None for i,a in enumerate(focal) for b in focal[i+1:]}
