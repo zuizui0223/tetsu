@@ -47,9 +47,9 @@ def circuit_pairs(circuit,block,strategy):
     return out
 
 
-def analyze_city(block,flora,rail,road,circuit):
+def analyze_city(block,flora,rail,road,circuit,allowed_blocks=MACRO_BLOCKS):
     eligible=_eligible_both_period_cells(block,flora)
-    if block not in MACRO_BLOCKS or len(eligible)<5:
+    if block not in allowed_blocks or len(eligible)<5:
         raise ValueError("Insufficient country-GRIIS prequalified source cells")
     result={
         "n_two_period_eligible_GRIIS_50km_cells":len(eligible),
