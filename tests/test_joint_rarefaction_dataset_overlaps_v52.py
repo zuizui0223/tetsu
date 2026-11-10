@@ -50,7 +50,7 @@ class JointRecordingSensitivityTests(unittest.TestCase):
                 a=result["equal_country_blocks"][period]["nearest_in_cell"][str(depth)]
                 self.assertIn("dataset_overlap_adjusted_rho",a)
                 self.assertTrue(a["dataset_overlap_adjusted_rho"]["not_cell_pair_p_value_or_causal_train_seed_transfer"])
-        self.assertIn("original",result["study"].lower() if "original" in result["study"].lower() else "original")
+        self.assertIn("dataset-source",result["limits"][0].lower())
 
     def test_bad_dataset_country_source_not_silently_filled(self):
         f,r,d,raw=fake_sources()
