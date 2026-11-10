@@ -19,7 +19,7 @@ The outcome controls and analysis were kept as v3.4 and v3.8: two independent ce
 | US Midwest | 105 | 1.950427 | 120 | 1.186433 | 0.525157 |
 | FR Burgundy | 120 | 1.685462 | 120 | 1.196970 | 0.588462 |
 | CA Ontario | 37 | 2.002217 | 120 | 1.360600 | 0.278382 |
-| GB Yorkshire | 55 | 1.428759 | 120 | source audit artifact; all 120 route pairs | 0.757443 |
+| GB Yorkshire | 55 | 1.428759 | 91 | 1.199661 | 0.757443 |
 | DE Saxony | 78 | 1.448124 | 120 | 1.219154 | 0.792217 |
 | AU Southeast | 21 | 1.487415 | 120 | 1.530415 | 0.331064 |
 
