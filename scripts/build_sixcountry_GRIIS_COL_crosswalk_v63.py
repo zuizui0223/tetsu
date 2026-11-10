@@ -104,8 +104,11 @@ def analyze(countries,selected_rows,n_scanned,provenance):
     for country,old in countries.items():
         rows=[r for r in selected_rows if r["gbif:ID"] in old]
         mapped=map_country_griis_old_keys(rows,old)
-        if mapped["n_old_keys_found_in_public_mapping"]!=len(old):
-            raise ValueError(f"Source taxonomic map missing GRIIS old species rows in {country}")
+        # A post-2023 old GBIF accepted key may be absent from the
+        # official 2023->2026 mapping. Count as UNMAPPED, not as a
+        # biological species absence or a failed taxonomic download.
+        if mapped["n_old_keys_found_in_public_mapping"]==0:
+            raise ValueError(f"No old country GRIIS keys mapped at all in {country}")
         result=sanitized_crosswalk_metadata(mapped)
         result["country"]=country
         result["n_source_country_GRIIS_accepted_old_specieskeys"]=len(old)
