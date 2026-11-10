@@ -24,7 +24,6 @@ import time
 from audit_gbif_equalarea_macroblocks_v29 import (
     BLOCKS, PILOT, PERIODS, make_grid
 )
-from audit_griis_country_backbone_keys_v24 import DATASETS
 from analyze_griis_alien_rail_source_v25 import valid_griis
 from harvest_gbif_cell_species_facets_v20 import (
     GBIF, parse_page, source_json, FACET_PAGE, MAX_FACET_PAGES
@@ -48,22 +47,6 @@ def species_params(cell,period,offset):
         "facetLimit":FACET_PAGE,"facetOffset":offset,
         "speciesKey.facetLimit":FACET_PAGE,"speciesKey.facetOffset":offset,
     }
-
-
-def full_macro_species(client,cell,period,alienkeys,request=source_json,sleep=time.sleep):
-    if not isinstance(alienkeys,set) or not alienkeys:
-        raise ValueError("Country GRIIS introduced species list is unavailable")
-    records=None
-    seen={}
-    pages=0
-    for page in range(MAX_FACET_PAGES):
-        _,items=parse_page(request(client,species_params(cell,period,page*FACET_PAGE)),"speciesKey")
-        payload=request  # intentionally never used as source data
-        # Fetch each actual page once. The source response count is
-        # returned by parse_page; do not run a second request here.
-        # A source count is instead computed from first parsed page below.
-        raise AssertionError("Internal caller expects full source count")
-    raise AssertionError("unreachable")
 
 
 def source_species_paginated(client,cell,period,alienkeys,request=source_json,sleep=time.sleep):
@@ -115,7 +98,6 @@ def run(blocks,source,checklists,client=None,request=source_json,sleep=time.slee
     if not blocks or any(b not in BLOCKS for b in blocks) or len(set(blocks))!=len(blocks):
         raise ValueError("Invalid frozen macro sampling blocks")
     allowed=valid_griis(checklists)
-    own=client is None
     if client is None:
         client=requests.Session()
         client.headers.update({"User-Agent":"tetsu-macro-50km-GRIIS-alien-species-facet-v3.1"})
@@ -176,7 +158,7 @@ def run(blocks,source,checklists,client=None,request=source_json,sleep=time.slee
             "n_preoutcome_both_period_source_eligible_cells":sum(x["source_pre_outcome_both_period_recording_eligible"] for x in new.values()),
             "n_complete_introduced_species_facets_two_period_cells":successful,
             "n_introduced_source_minimum_both_period_cells":usable_intro,
-            "n_country_GRIIIS_backbone_keys":len(keys),
+            "n_country_GRIIS_backbone_keys":len(keys),
             "cells":new
         }
         print(json.dumps({"block":block,"country":country,
