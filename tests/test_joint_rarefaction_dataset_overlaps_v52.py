@@ -56,7 +56,7 @@ class JointRecordingSensitivityTests(unittest.TestCase):
         f,r,d,raw=fake_sources()
         ds=merge_dataset_chunks(raw)
         ds["regions"].pop("de_saxony")
-        with self.assertRaisesRegex(ValueError,"six-country source geography changed"):
+        with self.assertRaisesRegex(ValueError,"Six-country source geography changed"):
             run(f,r,d,ds)
         ds=merge_dataset_chunks(raw)
         ds["complete"]=False
