@@ -1,0 +1,78 @@
+name: "v4.7 Six-country GRIIS source rarefaction curve K20-320 and fixed-K80 botanical cohort"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_rarefaction_depth_6country_v47.py'
+      - 'tests/test_rarefaction_depth_6country_v47.py'
+      - '.github/workflows/rarefaction-depth-6country-v47.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-macro-six-country-rarefaction-depth-v47
+  cancel-in-progress: true
+jobs:
+  six-independent-country-recording-coverage-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical plant source/geographic analysis dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify stable exact source hypergeometric probability and constant 80-record cohort
+        run: python -m unittest discover -s tests -p 'test_rarefaction_depth_6country_v47.py' -v
+      - name: Original 8-country country-masked GRIIS speciesKey per 50km cell two-period source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Original US France Overture physical RAIL shortest routes (plus known extra JP source)
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_old
+      - name: Original US France Overture physical ROAD shortest routes
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_old
+      - name: Four additional independent country RAIL source routes preselected by recording coverage
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-rail-physical-paths-*-v43'
+          run-id: 42780398147
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_new
+          merge-multiple: false
+      - name: Four additional ROAD source routes with explicit invalid-endpoint exclusion tracking
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-road-physical-paths-*-v43'
+          run-id: 42781107642
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_new
+          merge-multiple: false
+      - name: Require real 6-country sources before running strict rarefaction and fixed-cell cohort
+        run: |
+          test "$(find source/rail_new -name '*.json' | wc -l)" -eq 4
+          test "$(find source/road_new -name '*.json' | wc -l)" -eq 4
+          python -u scripts/analyze_rarefaction_depth_6country_v47.py             --flora source/flora/griis_50km_10blocks_country_mask_v36.json             --rail-sources source/rail_old/overture_50km_continuous_rail_routes_v32.json source/rail_new/*/*.json             --road-sources source/road_old/overture_50km_macro_road_paths_v33.json source/road_new/*/*.json             --output results/audit/6country_GRIIS_rarefaction_depth_v47.json
+      - name: Preserve ALL depths, both time periods, both source anchors and country leave-one-out source quality gates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: six-country-GRIIS-rarefaction-depth-recording-sensitivity-v47
+          path: results/audit/6country_GRIIS_rarefaction_depth_v47.json
+          if-no-files-found: warn
