@@ -2,7 +2,7 @@
 """v5.5 PREPARE-ONLY official GBIF DOI-bearing DWCA download predicates.
 
 Ten original OUTCOME-FROZEN geographic blocks across eight countries,
-each with EXACT 16 existing EPSG:6933 50km²? NO: 50x50km=2,500km2
+each with EXACTLY 16 existing EPSG:6933 squares of 50×50 km (2,500 km²)
 polygon filters. Use OR(within(original WGS84 WKT)) for all 16 source
 cells, plus country, Plantae kingdomKey 6, species rank, 2010–2025
 inclusive, coordinate=TRUE and no flagged geospatial issue.
