@@ -62,6 +62,14 @@ def source_countries(raw):
             for sr in rdr.iterShapeRecords():
                 props=dict(zip(columns,sr.record))
                 code=str(props.get("ISO_A2") or "").strip()
+                # Natural Earth sometimes marks France ISO_A2=-99 despite
+                # an explicit ADMIN=France / ADM0_A3=FRA. Match that
+                # documented sovereign-country identity narrowly; never
+                # classify an unknown country by proximity.
+                if (code not in codes and
+                    str(props.get("ADMIN") or "").strip()=="France" and
+                    str(props.get("ADM0_A3") or "").strip()=="FRA"):
+                    code="FR"
                 if code not in codes:continue
                 src=shape(sr.shape.__geo_interface__)
                 if src.is_empty:continue
