@@ -81,6 +81,20 @@ class RailGraphMacroTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_segment({"id":"road","subtype":"road"},("standard_gauge",))
 
+    def test_equal_at_distinct_connector_ids_are_on_same_explicit_segment(self):
+        one={"id":"same_at","subtype":"rail","class":"standard_gauge",
+             "length_m":100.,
+             "connectors":[
+                {"connector_id":"a","at":0.},
+                {"connector_id":"b","at":0.5},
+                {"connector_id":"c","at":0.5},
+                {"connector_id":"d","at":1.}
+             ]}
+        graph,stats=build_rail_connector_graph([one])
+        self.assertEqual(stats["n_same_at_source_links_epsilon"],1)
+        self.assertAlmostEqual(shortest_connector_path_m(graph,"b","c"),0.001)
+        self.assertEqual(len(graph),4)
+
     def test_zero_or_negative_distance_not_imputed(self):
         graph,_=build_rail_connector_graph([segment("r1","a","b",50)])
         self.assertIsNone(shortest_connector_path_m(graph,"unknown","b"))
