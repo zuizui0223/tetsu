@@ -3,7 +3,6 @@ from __future__ import annotations
 import unittest
 from datetime import datetime,timezone
 
-from botocore.exceptions import ClientError
 import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
@@ -35,9 +34,10 @@ class MockPublicGBIFS3:
     def head_object(self,**kwargs):
         self.calls.append(("head",kwargs))
         if kwargs["Key"].endswith("/000020") and self.missing_20:
-            raise ClientError(
-                {"Error":{"Code":"404","Message":"Not Found"},"ResponseMetadata":{"HTTPStatusCode":404}},
-                "HeadObject")
+            class FakeS3Missing(Exception):
+                response={"Error":{"Code":"404","Message":"Not Found"},
+                          "ResponseMetadata":{"HTTPStatusCode":404}}
+            raise FakeS3Missing("Source object missing")
         return {"ContentLength":10000,"ContentType":"application/octet-stream"}
 
 
