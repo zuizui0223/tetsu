@@ -1,6 +1,6 @@
 # tetsu v3.6 — 50km macro railway vs road *continuous* accessibility and observed introduced plants
 
-**Status: actual source-backed work completed on 2026-11-10, with additional eight-country species acquisition underway.** The central biological railway-dispersal hypothesis remains **unconfirmed**. No pair-level p-values are justified.
+**Status: actual 8-country source-backed work completed on 2026-11-10.** The central biological railway-dispersal hypothesis remains **unconfirmed**. No pair-level p-values are justified.
 
 ## Research question
 
@@ -39,6 +39,32 @@ Response is the ratio of expected species intersection to expected union under r
 
 Both predeclared v3.2 rail anchor strategies gave identical correlations in these US and French regions, since their selected anchors belonged to the same relevant graph and did not alter pair distances. This does not repair missing biological controls.
 
+## Newly verified v3.6: EIGHT countries, ten 50km geographic blocks
+
+**[Actual eight-country source run #42761140912](https://github.com/zuizui0223/tetsu/actions/runs/42761140912) SUCCESS**, four offline source-join unit tests, 10/10 geographically frozen macro blocks, zero recorded source query errors. It re-used independently completed frozen country-polygon and GBIF counts and fetched **fully paginated GRIIS-listed introduced plant speciesKey counts** in 2010–17 and 2018–25, after requiring both-period source opportunity.
+
+- 160 predefined 2500km² equal-area cells across 10 nonoverlapping regional blocks in eight countries;
+- 132/160 have **>=80% surface of designated Natural Earth country polygon** (not a full terrestrial habitat mask);
+- 121/160 pass this source-country mask and >=100 GBIF indexed Plantae records + >=3 GBIF source datasets in **both periods**;
+- **121/121** country/source-eligible cells have complete two-period speciesKey facet retrieval;
+- **105/160** cells have BOTH-period >=5 GRIIS listed introduced speciesKey categories AND >=20 introduced indexed records, plus all earlier eligibility gates.
+
+| Country | Frozen macro blocks | All 50km cells | Both-period introduced-flora source-qualified |
+|---|---:|---:|---:|
+| JP Japan (Tohoku/Kyushu) | 2 | 32 | **3** (1 + 2) |
+| US (Midwest/Southeast) | 2 | 32 | **27** (15 + 12) |
+| CA Ontario | 1 | 16 | **10** |
+| GB Yorkshire | 1 | 16 | **12** |
+| FR Burgundy | 1 | 16 | **16** |
+| AU Southeast | 1 | 16 | **16** |
+| DE Saxony | 1 | 16 | **14** |
+| NZ North | 1 | 16 | **7** |
+| **Total** | **10** | **160** | **105** |
+
+**This is source data availability, not 105 independent ecological plots or 105 rail treatments.** Eight-country taxon incidence now exists, but continuous 50km physical rail-vs-road network routes were only completed for US Midwest and France Burgundy in v3.4. Japan's low qualifying count reflects at least partly dataset/GRIIS source availability; no low biological alien diversity or train dispersal mechanism is inferred.
+
+Current verified scripts: [v3.6 country-masked full-facet macro species acquisition](../scripts/harvest_griis_50km_10blocks_v36.py), [quality-mask tests](../tests/test_griis_50km_10blocks_v36.py), [real-source workflow](../.github/workflows/griis-50km-10block-countrymask-v36.yml). The original GRIIS country list, 2021/2026 source maps and historical observation periods remain different-year inputs, and original DOI-bearing GBIF event rows / observer effort remain unavailable.
+
 ## Evidence gaps / current inference boundary
 
 1. Physical transport source is Overture **2026**, whereas plant records are 2010–17 and 2018–25. Historical route opening/traffic and actual active freight operations are missing.
@@ -50,7 +76,7 @@ Both predeclared v3.2 rail anchor strategies gave identical correlations in thes
 
 ## Next test (separate current workstream, no future result claimed)
 
-The pre-frozen geographic macro frame already has **10 blocks / 8 countries / 160 cells**, with 121 cells passing both national-area and earlier GBIF source quality screens. The next immediate source task is a 10-block country-masked full species-key GRIIS census, followed by actual same-block RAIL/ROAD continuous-route contrasts in more blocks, with source ecoregions and source-effort quality. Regional selection and all sensitivity settings must be frozen before examining ecological effect signs, not filtered toward positive effects.
+The pre-frozen **10 blocks / 8 countries / 160 cells** now have a country-masked full speciesKey GRIIS census, with **105 two-period introduced-source-qualified cells**. The next ecological identification gate is to calculate actually comparable RAIL and ROAD continuous routes for more of these same broad blocks, verify actual ecoregions, land and event-level source effort, and seek independent geographic replication before any biological effect claim. Regional selection and all sensitivity settings must be frozen before examining ecological effect signs, not filtered toward positive effects.
 
 Reproducibility:
 - [Physical rail source paths](../scripts/audit_overture_50km_rail_paths_v32.py) and [unit tests](../tests/test_overture_50km_rail_paths_v32.py).
