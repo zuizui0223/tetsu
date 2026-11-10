@@ -41,6 +41,9 @@ MAX_STATUS_NOT_DETECTED_SHARE=0.02
 MAX_SOURCE_INDEXED_DRIFT_SHARE=0.10
 MIN_DATASET_COVERAGE=0.98
 SOURCE_SLEEP=0.1
+# Frozen before US Southeast RAIL/ROAD and GRIIS ecological source response.
+ADDITIONAL_OUT_OF_ANALYSIS_REGION=("us_southeast",)
+ALLOWED_SOURCE_BLOCKS=BLOCKS_SIX+ADDITIONAL_OUT_OF_ANALYSIS_REGION
 
 
 def source_query(cell,period,offset=0):
@@ -175,8 +178,8 @@ def full_dataset_profile(client,cell,period,prior,request=source_json,sleep=time
 def run_one_block(block,flora,request=source_json,sleep=time.sleep):
     if flora.get("complete") is not True or flora.get("source_errors"):
         raise ValueError("Original country-GRIIS source incomplete")
-    if block not in BLOCKS_SIX:
-        raise ValueError("Nonpredeclared independent country source block")
+    if block not in ALLOWED_SOURCE_BLOCKS:
+        raise ValueError("Nonpredeclared independent or frozen holdout country source block")
     row=flora["regions"][block]
     if row.get("country")!=BLOCKS[block][0]:
         raise ValueError("Source country identity mismatch")
@@ -247,7 +250,7 @@ def run_one_block(block,flora,request=source_json,sleep=time.sleep):
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument("--block",choices=BLOCKS_SIX,required=True)
+    p.add_argument("--block",choices=ALLOWED_SOURCE_BLOCKS,required=True)
     p.add_argument("--flora",required=True)
     p.add_argument("--output",required=True)
     a=p.parse_args()
