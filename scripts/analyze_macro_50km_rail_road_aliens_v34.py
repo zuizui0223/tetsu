@@ -224,13 +224,17 @@ def run(griis,rail,road):
     for block in MACRO_BLOCKS:
         v=analyze_one_block(block,griis,rail,road)
         result["regions"][block]=v
-        print(json.dumps({
-            "block":block,"n_qualified_two_period_cells":v["n_source_qualified_two_period_plant_cells"],
-            "early_pairs":v["periods"]["2010_2017"]["nearest_in_cell"]["n_plant_pair_routes_with_both_network_lengths"],
-            "late_pairs":v["periods"]["2018_2025"]["nearest_in_cell"]["n_plant_pair_routes_with_both_network_lengths"],
-            "late_partial_rank":v["periods"]["2018_2025"]["nearest_in_cell"]["responses"]["source_expected_rarefied20_intersection_union_ratio"]["descriptive_partial_rank_correlation"],
-            "late_main_component_partial_rank":v["periods"]["2018_2025"]["nearest_largest_component_in_cell"]["responses"]["source_expected_rarefied20_intersection_union_ratio"]["descriptive_partial_rank_correlation"],
-        },ensure_ascii=False),flush=True)
+        for period in ("2010_2017","2018_2025"):
+            for strat in STRATEGIES:
+                row=v["periods"][period][strat]
+                print(json.dumps({
+                    "block":block,"period":period,"anchor_strategy":strat,
+                    "n_qualified_two_period_cells":v["n_source_qualified_two_period_plant_cells"],
+                    "n_valid_pairs":row["n_plant_pair_routes_with_both_network_lengths"],
+                    "rail_vs_road_route_ratio_quartiles":row["network_rail_over_road_path_ratio_quantiles"],
+                    "partial_rank_rarefied20":row["responses"]["source_expected_rarefied20_intersection_union_ratio"]["descriptive_partial_rank_correlation"],
+                    "partial_rank_observed_Jaccard":row["responses"]["source_observed_alien_jaccard"]["descriptive_partial_rank_correlation"],
+                },ensure_ascii=False),flush=True)
     result["limitations"]=[
         "Exactly two selected wide 50km source blocks (US Midwest and France Burgundy), so do NOT present a globally significant ecological relationship.",
         "The 2026 physical Overture networks are not historical train/freight routes for 2010–2017 or 2018–2025 GBIF observation periods.",
