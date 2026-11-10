@@ -1,0 +1,40 @@
+name: v4.0 Major ROAD backbone circuit: real network resistor control for 50km macro
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_overture_50km_road_backbone_circuit_v40.py'
+      - 'tests/test_road_backbone_circuit_v40.py'
+      - '.github/workflows/road-backbone-circuit-v40.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-road-backbone-circuit-v40
+  cancel-in-progress: true
+jobs:
+  us-midwest-backbone-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install sparse network solver and geospatial cloud input
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Test real road class restriction and exact circuit-vs-shortest mathematics
+        run: python -m unittest discover -s tests -p 'test_road_backbone_circuit_v40.py' -v
+      - name: Estimate current real Overture major backbone road circuit redundancy in US Midwest 50km macro block
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_overture_50km_road_backbone_circuit_v40.py \
+            --blocks us_midwest \
+            --output results/audit/road_backbone_circuit_v40.json
+      - name: Archive backbone source quality diagnostics, not original Overture geometry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overture-road-backbone-physical-circuit-US-midwest-v40
+          path: results/audit/road_backbone_circuit_v40.json
+          if-no-files-found: warn
