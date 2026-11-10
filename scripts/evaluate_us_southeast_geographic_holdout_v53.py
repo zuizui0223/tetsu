@@ -81,7 +81,7 @@ def evaluate(flora,rail,road,dataset):
             "period":PRIMARY_PERIOD,
             "rarefaction_indexed_RECORDS":FIXED_RECORD_COHORT,
             "source_anchor":PRIMARY_SOURCE_ANCHOR,
-            "observed_introduced_specieskey_response":"ratio of expected rarefied20? NO; K80 expected intersection/expected union",
+            "observed_introduced_specieskey_response":"K80 records per cell: expected recorded species-key intersection divided by expected union, not expected Jaccard",
             "partial_rank_route_predictor":"log physical RAIL distance / physical ROAD distance",
             "source_covariates":"geography, ROAD shortest paths, GBIF record scale/balance, ALL-Plantae DATASET_KEY overlap",
             "negative_sign_compatible_with_railway_source_hypothesis":True,
