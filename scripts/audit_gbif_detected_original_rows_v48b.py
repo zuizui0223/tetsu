@@ -113,8 +113,8 @@ def run(flora,query=source_page,sleep=time.sleep):
                         baseline is None or
                         abs(detected-baseline)<=max(5,baseline*.05)
                     )
-                    if baseline is not None and baseline>0 and
-                       (detected==0 or not audit["prior_DETECTED_indexed_source_reconciled_to_5pct"]):
+                    if (baseline is not None and baseline>0 and
+                        (detected==0 or not audit["prior_DETECTED_indexed_source_reconciled_to_5pct"])):
                         raise ValueError(f"Prior indexed DETECTED source denominator drift: prior {baseline}, current {detected}")
                     periods[period]=audit
                 except Exception as exc:
