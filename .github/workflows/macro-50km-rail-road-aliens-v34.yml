@@ -1,0 +1,60 @@
+name: v3.4 Real 50km GRIIS introduced plant assemblages versus continuous RAIL/ROAD routes
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_macro_50km_rail_road_aliens_v34.py'
+      - 'tests/test_macro_50km_rail_road_aliens_v34.py'
+      - '.github/workflows/macro-50km-rail-road-aliens-v34.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-macro-50km-rail-road-observed-aliens-v34
+  cancel-in-progress: true
+jobs:
+  actual-macro-composition-network-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical validation dependency
+        run: pip install 'numpy>=1.26,<3'
+      - name: Validate independent macro source join, rank residualization and no fake pairwise p-values
+        run: python -m unittest discover -s tests -p 'test_macro_50km_rail_road_aliens_v34.py' -v
+      - name: Retrieve original successful 50km GRIIS alien plant speciesKey source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-macro-threeblocks-actual-specieskey-source-v31
+          run-id: 42740320597
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/plants
+      - name: Retrieve independently successful 50km source physical rail routes
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Retrieve independently successful 50km source physical road routes
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road
+      - name: Compare source-verified US FR introduced plant pair similarity vs competitive rail route efficiency
+        run: |
+          python scripts/analyze_macro_50km_rail_road_aliens_v34.py             --griis-macro-source source/plants/griis_macro_50km_three_regions_v31.json             --rail-path-source source/rail/overture_50km_continuous_rail_routes_v32.json             --road-path-source source/road/overture_50km_macro_road_paths_v33.json             --output results/audit/macro_50km_rail_road_aliens_v34.json
+      - name: Archive actual matched source macro results, all anchor/response sensitivities
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 50km-introduced-plant-composition-vs-rail-road-routes-v34
+          path: results/audit/macro_50km_rail_road_aliens_v34.json
+          if-no-files-found: warn
