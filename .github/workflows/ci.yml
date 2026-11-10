@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install mask geometry test dependencies
-        run: pip install 'Pillow>=10,<13' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'pyshp>=2.3,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+        run: pip install 'Pillow>=10,<13' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'pyshp>=2.3,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2'
       - name: Run input validation tests
         run: python -m unittest discover -s tests -v
       - name: Run synthetic example (not real analysis)
