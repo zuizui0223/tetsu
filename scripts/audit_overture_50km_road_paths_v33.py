@@ -35,6 +35,7 @@ from audit_overture_road_network_v28 import _valid_road_segment
 
 SNAP_MAX_M=35000.0
 CELL_M=50000.0
+MAX_SKIPPED_INCOMPLETE_ENDPOINT_ROAD_FRACTION=0.02
 
 
 def road_query(block):
@@ -89,9 +90,18 @@ def network_source(block,rows):
     inside=defaultdict(set)
     graph=defaultdict(dict)
     found=set();class_counts=Counter();same_at=0;disagree=0
+    n_skipped_incomplete_endpoint_rows=0
     if not rows:raise ValueError("Missing Overture ROAD source rows")
     for row in rows:
-        sid,cls,geo,length,links=_valid_road_segment(row)
+        try:
+            sid,cls,geo,length,links=_valid_road_segment(row)
+        except ValueError as exc:
+            if str(exc)!="Road endpoint connectors missing":
+                raise
+            # Only exclude incomplete physical source row; do not invent
+            # an unknown junction or interpret missing road as plant absence.
+            n_skipped_incomplete_endpoint_rows+=1
+            continue
         if sid in found:raise ValueError("Duplicate road segment source ID")
         found.add(sid);class_counts[cls]+=1
         for at,cid in links:
@@ -115,6 +125,8 @@ def network_source(block,rows):
             prev=graph[u].get(v,float("inf"))
             if weight<prev:
                 graph[u][v]=weight;graph[v][u]=weight
+    if n_skipped_incomplete_endpoint_rows/len(rows)>MAX_SKIPPED_INCOMPLETE_ENDPOINT_ROAD_FRACTION:
+        raise ValueError(f"Road source missing-endpoint fraction exceeds fixed 2% QA gate: {n_skipped_incomplete_endpoint_rows}/{len(rows)}")
     if not graph:raise ValueError("Source Overture road graph had no edges")
     comp,sizes=_components(graph)
     biggest=max(range(len(sizes)),key=sizes.__getitem__)
@@ -138,6 +150,10 @@ def network_source(block,rows):
     return graph,anchors,{
         "country":BLOCKS[block][0],
         "n_source_road_segments_within_bbox_plus_halo":len(found),
+        "n_original_source_road_segments_returned":len(rows),
+        "n_excluded_source_road_segments_missing_endpoints":n_skipped_incomplete_endpoint_rows,
+        "excluded_incomplete_road_fraction":round(n_skipped_incomplete_endpoint_rows/len(rows),7),
+        "incomplete_road_source_NOT_interpreted_as_biological_absence":True,
         "n_source_road_connectors":len(graph),
         "n_source_graph_components":len(sizes),
         "n_largest_component_connectors":sizes[biggest],
