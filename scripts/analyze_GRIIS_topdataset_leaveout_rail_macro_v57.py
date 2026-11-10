@@ -96,14 +96,10 @@ def source_eligible_cell_pairs(block,flora,splits,compo,k):
     for cid,old in original["cells"].items():
         if not old.get("source_pre_outcome_both_period_recording_eligible"):
             continue
-        if not all(old["periods"].get(p,{}).get("alien_observed_minimum_5_species_and20_records") is True
+        if not all(old["periods"].get(p,{}).get(
+                "alien_observed_minimum_5_species_and_20_records") is True
                    for p in PERIODS):
-            # Original source used 'alien_observed_minimum_5_species_and_20_records';
-            # protect that exact historical key rather than silently
-            # turning all cell sources into missing.
-            if not all(old["periods"].get(p,{}).get(
-                "alien_observed_minimum_5_species_and_20_records") is True for p in PERIODS):
-                continue
+            continue
         part=frag[cid]
         if part.get("country")!=name or part.get("original_two_period_country_GRIIS_eligible") is not True:
             raise ValueError("Current indexed source expected country-GRIIS original eligibility")
