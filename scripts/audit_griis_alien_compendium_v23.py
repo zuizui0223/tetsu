@@ -48,8 +48,8 @@ def pick_csv_source(metadata):
     return url
 
 
-def parse_source(raw):
-    if hashlib.md5(raw).hexdigest()!=EXPECTED_MD5:
+def parse_source(raw,expected_md5=EXPECTED_MD5):
+    if hashlib.md5(raw).hexdigest()!=expected_md5:
         raise ValueError("GRIIS dataset bytes differ from archived Zenodo MD5")
     text=raw.decode("utf-8-sig")
     reader=csv.DictReader(io.StringIO(text))
