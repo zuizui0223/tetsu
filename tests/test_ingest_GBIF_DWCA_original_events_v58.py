@@ -118,6 +118,51 @@ class OriginalDWCAParserTests(unittest.TestCase):
             self.assertNotIn("oa",str(a))
             self.assertNotIn("ob",str(a))
 
+    def test_non_numeric_COL_original_source_is_not_fake_botanical_zero(self):
+        import csv
+        from io import StringIO
+        with tempfile.TemporaryDirectory() as tmp:
+            file=Path(tmp)/"synthetic_COL_ZIP.zip"
+            fake_dwca(file)
+            with zipfile.ZipFile(file) as old:
+                raw=old.read("occurrence.txt").decode("utf-8")
+                meta=old.read("meta.xml")
+            rows=list(csv.DictReader(StringIO(raw),delimiter="\t"))
+            for entry in rows:
+                if entry["speciesKey"] in ("100","101","104"):
+                    entry["speciesKey"]="COL"+entry["speciesKey"]
+            b=StringIO(newline="")
+            writer=csv.DictWriter(b,fieldnames=rows[0].keys(),delimiter="\t")
+            writer.writeheader()
+            writer.writerows(rows)
+            with zipfile.ZipFile(file,"w",zipfile.ZIP_DEFLATED) as z:
+                z.writestr("occurrence.txt",b.getvalue())
+                z.writestr("meta.xml",meta)
+            with self.assertRaisesRegex(ValueError,"COL XR alpha-numeric speciesKey"):
+                analyze_archive(file,"us_midwest",fake_griis(),FAKE_META)
+            bridge={
+                "official_mapping_url":"https://download.checklistbank.org/col/gbif/gbif-col265.tsv.gz",
+                "source_taxonomy_version":"26.5 XR / May 2026",
+                "countries":{"US":{
+                    "country":"US","old_GRIIS_to_COL_strict_accepted_map":{
+                        "100":"COL100","104":"COL104"
+                    },
+                    "old_GRIIS_to_COL_synonym_acceptedID_map":{"101":"COL101"},
+                    "n_old_keys_unmapped_or_no_usable_COL":107,
+                }}
+            }
+            base=analyze_archive(file,"us_midwest",fake_griis(),FAKE_META,
+                                 col_taxonomy_bridge=bridge)
+            self.assertTrue(base["country_GRIIS_specieskey_taxonomy_namespace"]["COL_XR_mapping_used"])
+            self.assertEqual(base["country_GRIIS_specieskey_taxonomy_namespace"]["n_resolved_country_COL_species_IDs"],2)
+            self.assertEqual(base["periods"]["2018_2025"]["us_midwest_x1_y1"][
+                "country_GRIIS_introduced_event_speciesKey_count_all_valid_geometry"],{"COL100":2})
+            sensitivity=analyze_archive(file,"us_midwest",fake_griis(),FAKE_META,
+                               col_taxonomy_bridge=bridge,include_synonym_resolution=True)
+            self.assertEqual(sensitivity["country_GRIIS_specieskey_taxonomy_namespace"]["n_resolved_country_COL_species_IDs"],3)
+            self.assertEqual(sensitivity["periods"]["2018_2025"]["us_midwest_x1_y1"][
+                "country_GRIIS_introduced_event_speciesKey_count_all_valid_geometry"],{"COL100":2,"COL101":1})
+
     def test_invalid_archive_not_misreported_as_real_data(self):
         with tempfile.TemporaryDirectory() as tmp:
             f=Path(tmp)/"corrupt.zip";f.write_bytes(b"not a DWCA")
