@@ -1,0 +1,48 @@
+name: "v6.3 Official old GBIF GRIIS taxon keys to COL26.5 XR accepted/synonym map across all six macro countries"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/build_sixcountry_GRIIS_COL_crosswalk_v63.py'
+      - 'tests/test_sixcountry_GRIIS_COL_crosswalk_v63.py'
+      - '.github/workflows/GBIF-sixcountry-GRIIS-COL-taxonomy-v63.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-all-sixcountry-COL-taxonomic-key-bridge-v63
+  cancel-in-progress: true
+jobs:
+  full-sixcountry-official-COL-backbone-crosswalk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official crosswalk and original country GRIIS source dependencies
+        run: pip install 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2'
+      - name: Verify six-country strict species mapping, synonym resolutions, missing keys and TSV line integrity
+        run: python -m unittest discover -s tests -p 'test_sixcountry_GRIIS_COL_crosswalk_v63.py' -v
+      - name: Read original nine-country GRIIS country accepted legacy speciesKey lists from successful source run
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Stream official full old GBIF Backbone to COL XR single TSV once, extract only source-six-country GRIIS keys, retain explicit old-to-new crosswalk
+        run: |
+          python -u scripts/build_sixcountry_GRIIS_COL_crosswalk_v63.py \
+            --griis-accepted-keys source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/sixcountry_GRIIS_GBIF_to_COL_XR_crosswalk_v63.json
+      - name: Archive taxonomic key bridge, independent country source unmapped/synonym counts and exact official mapping provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sixcountry-GRIIS-2023GBIF-to-COL26XR-corrected-taxonomy-key-bridge-v63
+          path: results/audit/sixcountry_GRIIS_GBIF_to_COL_XR_crosswalk_v63.json
+          if-no-files-found: warn
