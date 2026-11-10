@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install numerical validation dependency
-        run: pip install 'numpy>=1.26,<3'
+        run: pip install 'numpy>=1.26,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
       - name: Validate independent macro source join, rank residualization and no fake pairwise p-values
         run: python -m unittest discover -s tests -p 'test_macro_50km_rail_road_aliens_v34.py' -v
       - name: Retrieve original successful 50km GRIIS alien plant speciesKey source
