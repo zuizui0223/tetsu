@@ -36,7 +36,7 @@ Reproduction: [v3.9 physical source audit](../scripts/audit_rail_circuit_paralle
 
 **Interpretation:** ROAD infrastructure also has strong alternative-path electrical redundancy. Circuit redundancy is therefore NOT a distinctive indicator of rail-mediated plant dispersal by itself. It would be erroneous to say roads move seeds more than rails from these abstract resistor values. Source maps use different classes, network densities and adjacent anchors, and actual train/vehicle movement/transport frequencies remain unknown.
 
-The French Burgundy independent source run is a separate workflow [major road circuit comparison](../.github/workflows/road-backbone-circuit-fr-v40.yml). No conclusion from its output until a successful live source run and residual/size gates.
+[French Burgundy major-road circuit #42776680197](https://github.com/zuizui0223/tetsu/actions/runs/42776680197) **SUCCESS**. The independent preselected French block contained **186,209** major-road source segments, 16/16 road-anchored equal-area cells and 120/120 connected pairs. After exact series/deadend reduction the grounded road graph retained **45,256** vertices, above the original direct 35k sparse solver resource gate. A separate **AMG-preconditioned conjugate-gradient** source solver, independently cross-tested against direct numerical results on triangle/diamond/series/parallel graphs, converged under strict residual checks. Median French major-road backbone (Q_{\mathrm{road}}=\mathbf{0.877251}), compared with original French RAIL source (Q_{\mathrm{rail}}=\mathbf{0.588462}). These medians concern distinct physical network class sets and connector choices and are **not** equivalent seed transmission or road traffic rates.
 
 Reproduction: [road circuit class-restricted source](../scripts/audit_overture_50km_road_backbone_circuit_v40.py), [offline source tests](../tests/test_road_backbone_circuit_v40.py).
 
@@ -53,6 +53,23 @@ Reproduction: [road circuit class-restricted source](../scripts/audit_overture_5
 **Conclusion:** The network format is truly executable by Julia and the two mathematical implementations agree on tested cases. This is **not** a claim that an entire mapped 8,581–41,380-node source railway network has been recomputed in Julia, nor that conductance parameters represent seed dispersal.
 
 Source adapter [SciPy physical network](../src/tetsu/circuit_graph.py), [actual Julia executable input generator and crosscheck](../scripts/verify_actual_julia_circuitscape_v41.py), [Julia driver](../scripts/verify_actual_julia_circuitscape_v41.jl), [real workflow](../.github/workflows/actual-julia-circuitscape-v41.yml). Official [Circuitscape.jl documentation](https://docs.circuitscape.org/Circuitscape.jl/latest/options/).
+
+## 3b. Botanical test with independent MAJOR-ROAD circuit source — verified real two-block result
+
+[Actual six-source US/FR GRIIS observed-flora × RAIL and MAJOR-ROAD circuit run #42777378885](https://github.com/zuizui0223/tetsu/actions/runs/42777378885), **SUCCESS**, all five synthetic source cardinality tests, complete original source artifacts. Uses 50km source-country-qualified GRIIS introduced plant species-key frequencies, physical RAIL and ROAD shortest routes, physical RAIL electric redundancy Q, and separately completed MAJOR ROAD source electric redundancy Q in US/FR. The *extra* source partial rank checks rail Q after also controlling road Q, geography, shortest rail and road path distances and simple GBIF indexed recording opportunity. This is descriptive/POSTHOC, no credible pairwise p-value.
+
+| Country block | Source period | Source cell pairs with complete positive indexed plant and BOTH physical circuit Q values | Rail Q vs introduced-source similarity partial rho **given** major-road Q and routing/record controls | Major-road Q vs source flora partial rho **given** rail Q and same controls |
+|---|---|---:|---:|---:|
+| US Midwest | 2010–2017 | 91 | **−0.232874** | +0.131834 |
+| US Midwest | 2018–2025 | 91 | **−0.182192** | −0.026440 |
+| FR Burgundy | 2010–2017 | 120 | **−0.242016** | +0.078061 |
+| FR Burgundy | 2018–2025 | 120 | **+0.079969** | −0.102273 |
+
+Positive extra RAIL-Q association is the hypothesis-compatible direction. The modern/late sign differs between US and France and is close to zero in France, while early signs in both are *negative* (not supportive). **No independent generalized positive railway introduction signal emerges from this added ROAD circuit source control.** Those 91/120 pairs share cells, so the geographic independent unit count remains **two**, not >200.
+
+Important: ROAD electric Q is derived from only motorway/trunk/primary/secondary mapped classes; the ROAD shortest-route control uses more road classes, and the RAIL graph has different mapped source edge density and role. Neither electrical model uses actual vehicle/train/freight flows, historical operations or biological seeds. GRIIS-indexed record counts are not survey-corrected occupancy or actual absence. Thus even a stable positive rho could not by itself establish rail-mediated seeds.
+
+Reproduction: [main source join](../scripts/analyze_rail_vs_major_road_circuit_plants_v42.py), [five synthetic QA tests](../tests/test_rail_vs_major_road_circuit_plants_v42.py), [actual six-source GitHub Actions workflow](../.github/workflows/rail-vs-road-circuit-plants-v42.yml), and [source ROAD numerical AMG small-circuit tests](../tests/test_road_circuit_amg_v40.py). All raw source line maps remain outside the published result bundle.
 
 ## 4. Identifiability and next check
 
