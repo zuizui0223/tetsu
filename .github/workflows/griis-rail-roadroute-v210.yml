@@ -1,0 +1,72 @@
+name: v2.10 GRIIS alien plant rail network vs actual Overture road ROUTE distances
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_griis_rail_vs_road_paths_v210.py'
+      - 'tests/test_griis_rail_vs_road_paths_v210.py'
+      - '.github/workflows/griis-rail-roadroute-v210.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-griis-rail-road-route-v210
+  cancel-in-progress: true
+jobs:
+  five-source-ecological-association-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Strict no-fake-absence road route and independent-city validation
+        run: python -m unittest discover -s tests -p 'test_griis_rail_vs_road_paths_v210.py' -v
+      - name: Source GBIF plant-key observed 90 cells × two periods
+        uses: actions/download-artifact@v4
+        with:
+          name: gbif-10country-90cells-two-period-full-facet-matrix-v20
+          run-id: 42728479639
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gbif
+      - name: Source actual mapped physical railway connector graph
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-real-rail-connectors-10country-v21
+          run-id: 42728551036
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Source nine-country introduced GRIIS species backbone keys
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Source measured road and railway kilometers and km/km2
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-10country-90cells-transport-road-rail-geodesic-v26
+          run-id: 42731846908
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/transport
+      - name: Source real ten-country physical Overture ROAD route distance graph
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-road-physical-shortestpath-10country-v28
+          run-id: 42737690925
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/roadgraph
+      - name: Compare GRIIS-introduced observed similarity across rail-connected vs unconnected pairs matched on road routes
+        run: |
+          python scripts/analyze_griis_rail_vs_road_paths_v210.py             --gbif-source source/gbif/gbif_specieskey_10country_90cells_2periods_v20.json             --rail-source source/rail/overture_rail_connectors_10country_v21.json             --griis-source source/griis/griis_9country_alien_backbone_keys_v24.json             --transport-source source/transport/overture_transport_cell_lengths_10country_v26.json             --road-path-source source/roadgraph/overture_road_connector_paths_10country_v28.json             --output results/audit/griis_rail_road_paths_v210.json
+      - name: Retain all sensitivity tests, including failures of covariate support
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: introduced-plants-railway-vs-road-route-10country-v210
+          path: results/audit/griis_rail_road_paths_v210.json
+          if-no-files-found: warn
