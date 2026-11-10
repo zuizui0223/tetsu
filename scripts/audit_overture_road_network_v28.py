@@ -77,8 +77,13 @@ def _valid_road_segment(row):
         raise ValueError("Road endpoint connectors missing")
     if len({cid for at,cid in links})!=len(links):
         raise ValueError("Repeated connector ID within road segment")
-    if any(a[0]>=b[0] for a,b in zip(links,links[1:])):
-        raise ValueError("Duplicate or nonordered connector fractions")
+    # Equal-at *different* connector IDs occur on actual Overture road
+    # segments (a junction represented at identical linear reference).
+    # Sharing the same source segment allows an approximately zero-length
+    # within-segment edge, not an arbitrary coordinate-crossing join.
+    # The graph model still ignores turn/access restrictions.
+    if any(a[0]>b[0] for a,b in zip(links,links[1:])):
+        raise ValueError("Nonordered connector fractions")
     return sid,road_class,geo,length_m,links
 
 
@@ -93,6 +98,7 @@ def graph_from_source_rows(rows):
     node_positions={}
     seen=set();counts=Counter()
     n_position_disagreement=0
+    n_same_at_adjacent_links=0
     for row in rows:
         sid,road_class,geo,length_m,links=_valid_road_segment(row)
         if sid in seen: raise ValueError("Duplicate Overture road segment ID")
@@ -109,7 +115,9 @@ def graph_from_source_rows(rows):
                 if delta>100.:
                     n_position_disagreement+=1
         for (at1,a),(at2,b) in zip(links,links[1:]):
-            weight=length_m*(at2-at1)
+            if at2==at1:
+                n_same_at_adjacent_links+=1
+            weight=max(0.001,length_m*(at2-at1))
             if weight<=0: raise ValueError("Degenerate road edge")
             old=adj[a].get(b)
             if old is None or weight<old:
@@ -122,6 +130,7 @@ def graph_from_source_rows(rows):
         "source_class_counts":dict(sorted(counts.items())),
         "n_source_connector_ids":len(node_positions),
         "n_position_disagreements_gt100m":n_position_disagreement,
+        "n_same_at_source_connector_links_epsilon_edge":n_same_at_adjacent_links,
         "physical_only_not_vehicle_route":True,
     }
 
