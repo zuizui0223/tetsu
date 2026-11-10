@@ -100,7 +100,7 @@ def simplify_resistance_graph(graph,terminals):
     }
 
 
-def pairwise_effective_resistance(graph,terminals,max_reduced_nodes=35000):
+def pairwise_effective_resistance(graph,terminals,max_reduced_nodes=35000,solver="direct"):
     """Sparse exact pairwise resistance, including only terminal-relevant components.
 
     Returns dict keyed by sorted (terminalA,terminalB) with values in input
@@ -110,6 +110,8 @@ def pairwise_effective_resistance(graph,terminals,max_reduced_nodes=35000):
     from scipy.sparse import coo_matrix
     from scipy.sparse.linalg import splu
     import numpy as np
+    if solver not in ("direct","amg"):
+        raise ValueError("Electrical solver must be direct or amg; no silent approximation")
 
     original_focals=list(terminals)
     focal=sorted(set(original_focals))
@@ -121,7 +123,9 @@ def pairwise_effective_resistance(graph,terminals,max_reduced_nodes=35000):
     details={"n_anchors":len(focal),"n_usable_components":0,
              "n_exact_grounded_solves":0,"n_reduced_nodes_max":0,
              "n_computed_connected_pairs":0,"n_disconnected_pairs":len(allpairs),
-             "individual_components":[]}
+             "individual_components":[],
+             "numerical_solver":solver,
+             "AMG_is_iterative_with_explicit_residual_checks":solver=="amg"}
     for comp in components(graph):
         active=sorted(comp&set(focal))
         if len(active)<2:continue
@@ -149,14 +153,28 @@ def pairwise_effective_resistance(graph,terminals,max_reduced_nodes=35000):
         keep=[i for i in range(n) if i!=ground]
         if not keep:raise ValueError("No Laplacian grounded source vertices")
         A=L[keep,:][:,keep].tocsc()
-        factor=splu(A)
+        if solver=="direct":
+            factor=splu(A)
+            preconditioner=None
+        else:
+            import pyamg
+            from scipy.sparse.linalg import cg
+            multigrid=pyamg.smoothed_aggregation_solver(A,max_levels=20,max_coarse=20)
+            preconditioner=multigrid.aspreconditioner(cycle="V")
+            factor=None
         lookup={node:j for j,node in enumerate(nodes)}
         reduced_index={old:idx for idx,old in enumerate(keep)}
         voltages={active[0]:np.zeros(n,dtype=float)}
         for focal_node in active[1:]:
             b=np.zeros(n-1,dtype=float)
             b[reduced_index[lookup[focal_node]]]=1.
-            solved=factor.solve(b)
+            if solver=="direct":
+                solved=factor.solve(b)
+            else:
+                solved,flag=cg(A,b,M=preconditioner,rtol=1e-9,
+                               atol=1e-12,maxiter=6000)
+                if flag!=0:
+                    raise RuntimeError(f"AMG-preconditioned CG did not converge: code={flag}")
             error=np.linalg.norm(A@solved-b,ord=np.inf)
             if not math.isfinite(error) or error>1e-5:
                 raise ValueError(f"Grounded Laplacian residual too large: {error}")
