@@ -68,7 +68,7 @@ class RoadNetworkTests(unittest.TestCase):
         self.assertTrue(actual["window_clipped_unknown_outside_links"])
 
     def test_invalid_road_source_fails_closed(self):
-        with self.assertRaisesRegex(ValueError,"Missing Overture"):
+        with self.assertRaisesRegex(ValueError,"Duplicate Overture"):
             graph_from_source_rows([road("x",[(140.8,38.2),(140.9,38.2)],"a","b"),
                                     road("x",[(140.8,38.2),(140.9,38.2)],"a","b")])
         with self.assertRaisesRegex(ValueError,"connector"):
