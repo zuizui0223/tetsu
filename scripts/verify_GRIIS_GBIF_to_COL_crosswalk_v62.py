@@ -135,6 +135,11 @@ def fetch_official_mapping(country_old):
     # raw crosswalk file and no model-selected source names.
     with gzip.GzipFile(fileobj=response.raw) as gz:
         with io.TextIOWrapper(gz,encoding="utf-8-sig",newline="") as stream:
+            # The official broad taxonomic crosswalk includes some
+            # exceptionally long col:classification entries. Python's
+            # default 131,072-char CSV cap is insufficient, despite the
+            # schema being valid. Raise a finite defensive limit.
+            csv.field_size_limit(10_000_000)
             reader=csv.DictReader(stream,delimiter="\t")
             if not reader.fieldnames or any(c not in reader.fieldnames for c in REQUIRED_COLUMNS):
                 raise ValueError("Official GBIF-COL mapping TSV header schema mismatch")
