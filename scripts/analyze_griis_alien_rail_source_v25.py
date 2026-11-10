@@ -114,7 +114,7 @@ def city_pair_analysis(plant,rail,aliens,period):
             "log_occurrence_effort_ratio":abs(log(x["n_total_source_records"]/y["n_total_source_records"])),
             "log_geomean_records":(log(x["n_total_source_records"])+log(y["n_total_source_records"]))/2,
             "observed_introduced_species_key_jaccard":obs,
-            "ratio_expected_rarefied_100_record_intersection_to_union":rare
+            "ratio_expected_rarefied_20_record_intersection_to_union":rare
         })
     result={
         "n_qualified_all_plant_cell_sources_with_at_least_one_griis_alien":sum(bool(
@@ -123,10 +123,10 @@ def city_pair_analysis(plant,rail,aliens,period):
             ) for cell in plant["cells"].values()),
         "n_source_eligible_introduced_plant_cells":len(cell_data),
         "n_griis_introduced_species_keys_observed_in_qualified_total_plant_cells":len(source_union),
-        "n_independent_cell_pair_source_rows":len(rows),
+        "n_dependent_pairwise_source_rows":len(rows),
         "n_connected_cell_pair_sources":sum(r["mapped_rail_connected_within_window"] for r in rows),
-        "all_pairs_comparison":matched_contrasts(rows,"all"),
-        "strict_both_rail_comparison":matched_contrasts(rows,"both")
+        "all_pairs_comparison":matched_contrasts(rows,"all",metric="ratio_expected_rarefied_20_record_intersection_to_union"),
+        "strict_both_rail_comparison":matched_contrasts(rows,"both",metric="ratio_expected_rarefied_20_record_intersection_to_union")
     }
     return result
 
@@ -155,6 +155,7 @@ def analyze(plant,rail,griis):
     out={
         "utc":datetime.now(timezone.utc).isoformat(),
         "study":"Exploratory 9-country GRIIS-introduced only speciesKey × observed records × mapped Overture rail graph",
+        "rarefaction_records_per_cell":ALIEN_RAREFACTION_RECORDS,
         "unassessed_country":{"TW":"No verified comparable GRIIS country checklist, source status unknown"},
         "country_lists":{},"regions":{},"independent_city_direction":{},
         "not_train_seed_transport_effect":True,
@@ -183,7 +184,7 @@ def analyze(plant,rail,griis):
                     "city":name,"period":period,
                     "observed_alien_taxon_union":ans["n_griis_introduced_species_keys_observed_in_qualified_total_plant_cells"],
                     "alien_cells_eligible":ans["n_source_eligible_introduced_plant_cells"],
-                    "source_pairs":ans["n_independent_cell_pair_source_rows"],
+                    "source_pairs":ans["n_dependent_pairwise_source_rows"],
                     "rail_connected_pairs":ans["n_connected_cell_pair_sources"],
                     "matched_pairs":ans["all_pairs_comparison"]["n_distance_and_record_effort_matched_pairs"],
                     "descriptive_rarefied20_delta":ans["all_pairs_comparison"]["median_matched_similarity_delta"]
