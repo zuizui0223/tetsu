@@ -1,0 +1,39 @@
+name: "v5.5 GBIF official DOI-bearing DWCA download predicates for original 10 frozen 50km macro blocks (PREPARE ONLY)"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/prepare_GBIF_original_DWCA_download_manifests_v55.py'
+      - 'tests/test_GBIF_original_DWCA_download_manifests_v55.py'
+      - '.github/workflows/GBIF-DWCA-manifests-v55.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-DOI-manifest-prepare-only-v55
+  cancel-in-progress: true
+jobs:
+  generate_official_predicates_no_api_submission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original EPSG6933 geographic source and WKT validators
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'requests>=2.31,<3'
+      - name: Test 10 immutable source WKT within geometry and GBIF predicate format without requesting downloads
+        run: python -m unittest discover -s tests -p 'test_GBIF_original_DWCA_download_manifests_v55.py' -v
+      - name: PREPARE ONLY 10 official DWCA source predicate manifests with no credentials or network POST
+        run: |
+          python -u scripts/prepare_GBIF_original_DWCA_download_manifests_v55.py \
+            --outputdir results/audit/GBIF_official_DWCA_request_manifests_v55
+      - name: Preserve source filter specifications ONLY, not DOI claims or original occurrence rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-ten-country-region-50km-official-DWCA-download-request-MANIFESTS-only-v55
+          path: results/audit/GBIF_official_DWCA_request_manifests_v55/
+          if-no-files-found: warn
