@@ -119,6 +119,8 @@ def process_rows(name,source_rows):
             key=f"{subtype}_class_length_km"
             m[key][klass]+=km
             m[f"n_intersecting_{subtype}_segments"]+=1
+    if n_rows==0 or by_subtype["rail"]==0 or by_subtype["road"]==0:
+        raise ValueError("Missing required real rail and road source segments in city")
     for cid,m in metrics.items():
         rail=round(sum(m["rail_class_length_km"].values()),6)
         road=round(sum(m["road_class_length_km"].values()),6)
