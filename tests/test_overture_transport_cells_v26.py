@@ -62,7 +62,7 @@ class TransportCellSourceTests(unittest.TestCase):
                                       ("id","road","primary",g)])
         with self.assertRaisesRegex(ValueError,"Unexpected source"):
             process_rows("jp_sendai",[("id","road","subway",g)])
-        with self.assertRaisesRegex(ValueError,"invalid"):
+        with self.assertRaisesRegex(ValueError,"Invalid"):
             run(["not_real_city"],db=None)
 
     def test_missing_source_city_is_not_claimed_complete(self):
