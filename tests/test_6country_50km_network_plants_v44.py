@@ -96,8 +96,9 @@ class SixCountryMacroTests(unittest.TestCase):
         self.assertTrue(x["observational_and_dependent_pairwise_no_p_values"])
         self.assertEqual(x["country_equal_weight_aggregate"]["2018_2025"]["nearest_in_cell"][study.RESPONSES[0]]["n_independent_regions_with_qualified_network_and_flora"],6)
         flora["regions"]["ca_ontario"]["country"]="FR"
-        with self.assertRaisesRegex(ValueError,"country mismatch"):
-            study.analyze(flora,rail,road)
+        with patch.object(study,"analyze_one_block",side_effect=lambda name,*args:synthetic_region(-.1)):
+            with self.assertRaisesRegex(ValueError,"country mismatch"):
+                study.analyze(flora,rail,road)
 
 
 if __name__=="__main__":
