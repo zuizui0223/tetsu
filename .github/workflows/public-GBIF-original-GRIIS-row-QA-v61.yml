@@ -25,7 +25,7 @@ jobs:
           python-version: '3.11'
       - name: Install DuckDB remote Parquet, EPSG6933 and coordinate quality tools
         run: pip install 'duckdb>=1.4,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
-      - name: Unit tests: exact original country cells, source-present rows, event/source duplicates and location precision
+      - name: "Unit tests — exact 50km cells, source presence, event duplicates and location precision"
         run: python -m unittest discover -s tests -p 'test_public_GBIF_original_GRIIS_rows_v61.py' -v
       - name: Retrieve versioned country GRIIS accepted species-key registry, not a reclassified native species list
         uses: actions/download-artifact@v4
