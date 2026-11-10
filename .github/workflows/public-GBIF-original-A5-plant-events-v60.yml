@@ -1,0 +1,40 @@
+name: "v6.0 Read actual public GBIF original Plantae occurrence events in frozen 50km A5 region pilot"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/probe_public_GBIF_A5_plant_events_v60.py'
+      - 'tests/test_public_GBIF_A5_plant_event_pilot_v60.py'
+      - '.github/workflows/public-GBIF-original-A5-plant-events-v60.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-actual-anonymous-GBIF-A5-Plantae-event-sample-v60
+  cancel-in-progress: true
+jobs:
+  one-frozen-US-midwest-original-plant-preview-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public S3 unsigned file metadata, DuckDB A5 and EPSG6933 clients
+        run: pip install 'duckdb>=1.4,<2' 'boto3>=1.34,<2' 'botocore>=1.34,<2' 'numpy>=1.26,<3' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify non-outcome-selective geographic/taxonomic public Parquet source file selection
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_A5_plant_event_pilot_v60.py' -v
+      - name: Read ACTUAL public GBIF August 2026 original Plantae Parquet event rows from one bounded A5 source file
+        run: |
+          python -u scripts/probe_public_GBIF_A5_plant_events_v60.py \
+            --blocks us_midwest \
+            --output results/audit/GBIF_public_A5_original_Plant_event_source_v60.json
+      - name: Archive ONLY source provenance and aggregated sample counts without recorder/individual record IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-2026-August-public-original-Plantae-A5-US-source-sample-v60
+          path: results/audit/GBIF_public_A5_original_Plant_event_source_v60.json
+          if-no-files-found: warn
