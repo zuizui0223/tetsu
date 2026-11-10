@@ -20,8 +20,6 @@ def mock_holdout():
     def transform(x):
         return json.loads(json.dumps(x).replace(base,HOLDOUT_BLOCK))
     f=transform(flora)
-    rail={"complete":True,"regions":{HOLDOUT_BLOCK:frozen}
-          for frozen in []}
     rail={"complete":True,"regions":{
         HOLDOUT_BLOCK:transform(rails["regions"][base])
     }}
