@@ -133,17 +133,35 @@ def fetch_official_mapping(country_old):
     response.raise_for_status()
     # Use streaming gzip decompression: no publication or upload of
     # raw crosswalk file and no model-selected source names.
+    source_row_counter=[0]
     with gzip.GzipFile(fileobj=response.raw) as gz:
         with io.TextIOWrapper(gz,encoding="utf-8-sig",newline="") as stream:
-            # The official broad taxonomic crosswalk includes some
-            # exceptionally long col:classification entries. Python's
-            # default 131,072-char CSV cap is insufficient, despite the
-            # schema being valid. Raise a finite defensive limit.
-            csv.field_size_limit(10_000_000)
-            reader=csv.DictReader(stream,delimiter="\t")
-            if not reader.fieldnames or any(c not in reader.fieldnames for c in REQUIRED_COLUMNS):
+            # GBIF publishes a TSV, not a conventional RFC 4180
+            # quoted CSV. Its classification/author fields include
+            # quote-like text that can confuse csv.DictReader and make
+            # unrelated lines merge into a >10MB pseudo-field.
+            # Therefore stream one PHYSICAL TSV row at a time, inspect
+            # ONLY the first (gbif:ID) field, and parse columns only
+            # for the ~thousands of country-GRIIS keys we actually need.
+            header=stream.readline().rstrip("\r\n").split("\t")
+            if not header or header[0]!="gbif:ID" or any(
+                    c not in header for c in REQUIRED_COLUMNS):
                 raise ValueError("Official GBIF-COL mapping TSV header schema mismatch")
-            result=map_country_griis_old_keys(reader,country_old)
+            indices={c:header.index(c) for c in REQUIRED_COLUMNS}
+            def filtered_rows():
+                for line in stream:
+                    source_row_counter[0]+=1
+                    if source_row_counter[0]>30_000_000:
+                        raise ValueError("Official mapping exceeds 30m row source safe limit")
+                    gbif_id=line.split("\t",1)[0]
+                    if gbif_id not in country_old:
+                        continue
+                    columns=line.rstrip("\r\n").split("\t")
+                    if len(columns)!=len(header):
+                        raise ValueError("Selected GBIF/COL mapping TSV row has malformed column count")
+                    yield {field:columns[idx] for field,idx in indices.items()}
+            result=map_country_griis_old_keys(filtered_rows(),country_old)
+    result["n_official_full_TSV_rows_streamed_not_just_GRIIS_matches"]=source_row_counter[0]
     if not result["strict_accepted"] and not result["synonym_accepted_additional"]:
         raise ValueError("No official crosswalk matches to old US introduced taxa")
     result["source_official_mapping_url"]=OFFICIAL_CROSSWALK
