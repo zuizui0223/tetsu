@@ -36,6 +36,7 @@ import io,json,math
 from pathlib import Path
 import re,sqlite3,tempfile
 import zipfile
+from urllib.parse import urlparse
 
 from pyproj import Transformer
 from shapely import wkt
@@ -63,8 +64,10 @@ def metadata_contract(metadata):
     if not DOWNLOAD_KEY_PATTERN.fullmatch(key):
         raise ValueError("Original GBIF download request key invalid")
     link=metadata.get("downloadLink") or metadata.get("downloadlink")
-    if not isinstance(link,str) or "gbif.org" not in link or not link.startswith("https://"):
-        raise ValueError("GBIF download metadata must contain official HTTPS downloadLink")
+    host=urlparse(link).hostname if isinstance(link,str) else None
+    if not isinstance(link,str) or urlparse(link).scheme!="https" or (
+            host!="gbif.org" and (host is None or not host.endswith(".gbif.org"))):
+        raise ValueError("GBIF download metadata must contain genuine HTTPS gbif.org hostname")
     return {"source_download_key":key,"source_download_doi":doi,
             "original_download_status":status,"user_supplied_metadata_not_verified_against_live_GBIF_API":True}
 
