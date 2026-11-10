@@ -148,19 +148,24 @@ def diagnostic(block,rows,export_dir=None,max_reduced_nodes=35000):
                     v=0.;d=0.
                 if v is None or d is None:
                     raise ValueError("Circuit solver and shortest-rail path disagree on connectivity")
-                if v< -1e-7 or d<0 or v>d+max(1e-4,d*1e-5):
-                    raise ValueError(f"Effective resistance violates shortest-path bound: {v} > {d}")
+                # v3.2 Dijkstra returns METERS; circuit edge resistances
+                # are normalized in KM-equivalent units. Always convert
+                # before comparing! Otherwise a fabricated 1000x circuit
+                # redundancy appears in all source regions.
+                shortest_km=d/1000.
+                if v< -1e-7 or d<0 or v>shortest_km+max(1e-7,shortest_km*1e-5):
+                    raise ValueError(f"Effective resistance violates shortest-path bound: {v} > {shortest_km}")
                 entry["physical_circuit_reachable"]=True
                 entry["R_effective_rail_equiv_km"]=round(v,6)
-                entry["shortest_rail_connector_km"]=round(d,6)
-                if d>1e-8:
-                    ratio=min(1.,max(0.,v/d))
+                entry["shortest_rail_connector_km"]=round(shortest_km,6)
+                if shortest_km>1e-8:
+                    ratio=min(1.,max(0.,v/shortest_km))
                     entry["R_effective_divided_by_Dijkstra"]=round(ratio,8)
                     entry["independent_path_redundancy_1minusRoverD"]=round(1.-ratio,8)
                 total_access=p["snap_m"]+q["snap_m"]
                 entry["centroid_augmented_R_eff_divided_by_Dijkstra"]=round(
-                    (v*1000+total_access)/(d*1000+total_access),8
-                ) if d*1000+total_access>0 else None
+                    (v*1000+total_access)/(d+total_access),8
+                ) if d+total_access>0 else None
             rows_out.append(entry)
         values=[v["independent_path_redundancy_1minusRoverD"] for v in rows_out
                 if v["independent_path_redundancy_1minusRoverD"] is not None]
