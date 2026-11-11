@@ -53,7 +53,7 @@ def scan_bounded_source(db,block,candidates,query=read_true_public_parquet_sourc
     def source_sort_key(item):
         key=item["key"]
         leaf=key.rsplit("/",1)[-1]
-        m=re.fullmatch(r"data_(\\d+)\\.parquet",leaf)
+        m=re.fullmatch(r"data_(\d+)\.parquet",leaf)
         if m:
             return (key.rsplit("/",1)[0],0,int(m.group(1)),key)
         return (key.rsplit("/",1)[0],1,0,key)
