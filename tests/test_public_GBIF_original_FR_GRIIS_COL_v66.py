@@ -62,7 +62,7 @@ def synthetic_rows():
         row(5,sp="COL-UNKNOWN",occ="O5",evt="E4"),
         row(6,occ="O6",evt="E5",year=2013,unc=200),
         row(1,occ="O1",evt="E1",unc=10000),
-        row(8,occ="O1",evt="E9",unc=8000),
+        row(8,occ="O1",evt="E1",unc=8000),
         row(9,occ="O9",evt="E10",rank="GENUS"),
     ]
     return rows,columns
@@ -98,12 +98,21 @@ class AuthenticFRPublicGBIFEventSourceTests(unittest.TestCase):
         self.assertEqual(late_b["n_GRIIS_strict_COL_event_species_known_uncertainty_le5000m"],1)
         self.assertEqual(late_a["n_GRIIS_strict_plus_synonym_COL_event_species"],2)
         self.assertEqual(a["2010_2017"]["n_strict_country_GRIIS_distinct_event_species_counts"],1)
-        self.assertEqual(counts["n_source_duplicate_same_event_species_group"],1)
-        self.assertEqual(counts_reverse["n_source_duplicate_same_event_species_group"],1)
+        self.assertEqual(counts["n_source_duplicate_same_event_species_group"],2)
+        self.assertEqual(counts_reverse["n_source_duplicate_same_event_species_group"],2)
         self.assertEqual(counts["n_source_duplicate_GBIF_unique_ID"],1)
         self.assertEqual(counts["n_source_duplicate_same_dataset_occurrenceID"],1)
         self.assertEqual(counts["n_source_non_PRESENT_or_unknown_status"],1)
         self.assertEqual(counts["n_source_speciesKey_not_in_country_GRIIS_accepted_unknown"],1)
+
+    def test_conflicting_same_dataset_occurrenceID_event_is_not_chosen_by_input_order(self):
+        rows,columns=synthetic_rows()
+        conflict=list(rows[-2])
+        conflict[columns.index("eventid")]="CONFLICT_OTHER_EVENT"
+        altered=list(rows)
+        altered[-2]=tuple(conflict)
+        with self.assertRaisesRegex(ValueError,"Conflicting event/taxon/cell"):
+            audit_rows(altered,columns,{"COL-A"},{"COL-A","COL-B"})
 
     def test_missing_source_status_does_not_mean_plant_absence_or_zero(self):
         rows,columns=synthetic_rows()
