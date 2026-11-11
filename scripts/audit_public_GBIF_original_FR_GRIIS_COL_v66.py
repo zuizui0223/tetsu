@@ -47,7 +47,7 @@ PREVIEW_ROOT="development/2026-08-01-DWCA/occurrence/p_taxon_a5/"
 PUBLIC_S3_BUCKET="gbif-public-data"
 ORIGINAL_UNDERLYING_DOI="10.15468/dl.8yrbe7"
 MAX_SOURCE_PARQUET_OBJECTS=48
-MAX_BOUNDING_ROWS=2_000_000
+MAX_BOUNDING_ROWS=1_000_000
 BATCH_SIZE=25000
 MAX_SOURCE_COUNTRY_GRIIS_EVENTS=1_500_000
 STRICT_UNCERTAINTY_M=5000
@@ -120,7 +120,7 @@ def sql_source(db,keys):
     cells=[wkt.loads(r["gbif_geometry_wgs84"]) for r in make_grid(BLOCK)]
     footprint=unary_union(cells)
     west,south,east,north=footprint.bounds
-    predicate=(f"{col('countrycode')}='FR' AND TRY_CAST({col('year')} AS INTEGER) BETWEEN 2010 AND 2025 "
+    predicate=(f"{col('countrycode')}='FR' AND TRY_CAST({col('year')} AS INTEGER) BETWEEN 2018 AND 2025 "
                f"AND TRY_CAST({col('decimallongitude')} AS DOUBLE) BETWEEN {west:.9f} AND {east:.9f} "
                f"AND TRY_CAST({col('decimallatitude')} AS DOUBLE) BETWEEN {south:.9f} AND {north:.9f}")
     sql=f"SELECT {selected} FROM {source} WHERE {predicate}"
@@ -334,6 +334,12 @@ def run(preflight,bridge,checklists):
                         expected_late_bbox_count=source_info["n_actual_interpreted_event_source_rows_in_selected_files_and_bbox"])
     finally:
         db.close()
+    # The original attempt on years 2010-2025 exceeded the frozen
+    # 2,000,000-row safety gate. The v6.5 original Parquet manifest
+    # had been independently validated for 2018-2025 ONLY. Analyze
+    # that predefined late period first rather than relaxing the cap
+    # or claiming unsampled older years are botanical zeros.
+    periods.pop("2010_2017",None)
     result={
         "utc":datetime.now(timezone.utc).isoformat(),
         "source":"ACTUAL original interpreted GBIF August2026 A5 development preview Parquet event rows",
@@ -348,6 +354,9 @@ def run(preflight,bridge,checklists):
         "source_Parquet_object_keys_sha256":sha256("\n".join(source_keys).encode()).hexdigest(),
         "source_selection_verified_before_any_country_GRIIS_taxon_outcome":True,
         "source_original_2018to2025_bbox_rows_verified_against_v65":True,
+        "source_only_period_analyzed":"2018_2025",
+        "historical_2010_2017_NOT_SCANNED_due_to_source_size_gate":True,
+        "historical_2010_2017_absence_NOT_inferred":True,
         "GRIIS_col_taxonomy":taxmeta,
         "GRIIS_col_synonym_sensitivity_taxonomy":taxmeta2,
         "source_sql_metadata":info,
@@ -356,6 +365,7 @@ def run(preflight,bridge,checklists):
         "no_source_complete_census_or_actual_train_seed_transport_inferred":True,
         "limits":[
             "Only 48 of 71 source small Parquet files were scanned in ORIGINAL A5 centroid partitions, with more source objects and >=400 MB files excluded; missing published original plant records may change species/source sample.",
+            "Original first 2010–2025 pass exceeded the 2-million event source cap, so only the independently v6.5 validated 2018–2025 bounding envelope was analyzed; the 2010–2017 period is NOT zero or absent.",
             "Source A5 r2 geographic selection used original cell centroids, not all overlapping tile polygons, so a 200km-region complete plant census is NOT established.",
             "Original subset may include multiple events from the same biological observer or survey even after record and event/species ID dedup; absence remains unknown.",
             "Official source GRIIS old GBIF numeric Backbone2023 -> May2026 COL XR accepted/synonym crosswalk is not guaranteed identical to the August2026 preview taxonomy snapshot; unmapped keys stay unknown.",
