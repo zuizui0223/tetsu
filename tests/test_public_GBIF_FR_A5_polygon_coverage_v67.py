@@ -67,6 +67,24 @@ class GBIFA5PolygonCompletenessTests(unittest.TestCase):
         self.assertEqual(source["n_A5_polygon_cover_partition_ids"],2)
         self.assertEqual(source["extra_A5_partition_ids_missed_by_centroids"],[456])
 
+    def test_source_A5_polygon_centroid_disagreement_is_disclosed_not_invented_complete(self):
+        class ConflictedDuck(FakeDuck):
+            def execute(self,query,params=None):
+                if "a5_lonlat_to_cell" in query:
+                    class Q:
+                        def fetchone(self):return (123,)
+                    return Q()
+                if "a5_geometry_to_cells" in query:
+                    class Q:
+                        def fetchall(self):return [(456,)]
+                    return Q()
+                raise AssertionError("Unexpected A5 query")
+        values,meta=polygon_cells(ConflictedDuck())
+        self.assertEqual(values,[123,456])
+        self.assertEqual(meta["centroid_A5_IDs_missing_from_official_polygon_function"],[123])
+        self.assertTrue(meta["polygon_cover_disagreed_with_centroid_lookup"])
+        self.assertTrue(meta["true_complete_polygon_intersection_cover_NOT_verified_if_disagreement"])
+
     def test_source_Parquet_metadata_integrity_and_oversized_file_counter(self):
         c=FakeS3()
         a,n=list_all_source_parquets(c,ROOT+"taxonpartition=Plantae/a5_r2=123/")
@@ -84,7 +102,7 @@ class GBIFA5PolygonCompletenessTests(unittest.TestCase):
         self.assertEqual(result["n_original_lexically_fixed_48_Parquet_source_files"],48)
         self.assertEqual(result["n_additional_source_files_not_covered_by_old_v65_query"],6)
         self.assertEqual(result["n_large_files_omitted_by_old_400MB_filter"],4)
-        self.assertTrue(result["complete_source_object_metadata_listing"])
+        self.assertTrue(result["complete_source_object_metadata_listing_WITHIN_THE_COMPUTED_UNION_A5_IDs"])
         self.assertTrue(result["not_a_full_GBIF_original_event_population"])
 
     def test_fail_closed_if_source_contract_48_keys_missing_in_full_cover(self):
