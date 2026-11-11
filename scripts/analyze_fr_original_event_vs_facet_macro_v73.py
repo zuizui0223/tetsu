@@ -200,6 +200,35 @@ def compare_anchor(cells, rail, road, anchor):
                      if n_cells >= MIN_CELLS and len(rows) >= MIN_PAIRS else None)
                 report["responses"][source][group][metric] = {"partial_rho":r,
                                 "n_dependent_cell_pairs":len(rows), "n_distinct_cells":n_cells}
+    # Leave-one-CELL-out, not leave-one-PAIR-out: dependent within-block pairs
+    # are never treated as independent source replicates or p-value units.
+    leaveouts = {}
+    for source in SOURCES:
+        leaveouts[source] = {}
+        for group in GROUPS:
+            leaveouts[source][group] = {}
+            for metric in ("rarefied20", "raw_jaccard"):
+                vals = {}
+                for excluded_cell in sorted(cells):
+                    remaining = [p for p in rows if excluded_cell not in (p["a"], p["b"])]
+                    distinct = {c for p in remaining for c in (p["a"],p["b"])}
+                    if len(distinct) < MIN_CELLS or len(remaining) < MIN_PAIRS:
+                        continue
+                    estimated = partial_rank_r(
+                        [p["x"] for p in remaining],
+                        [p["responses"][source][group][metric] for p in remaining],
+                        [p["covars"] for p in remaining])
+                    if estimated is not None:
+                        vals[excluded_cell] = estimated
+                leaveouts[source][group][metric] = {
+                    "n_cell_exclusions_estimable":len(vals),
+                    "n_negative_partial_rho":sum(v<0 for v in vals.values()),
+                    "n_positive_partial_rho":sum(v>0 for v in vals.values()),
+                    "min_partial_rho":min(vals.values()) if vals else None,
+                    "max_partial_rho":max(vals.values()) if vals else None,
+                    "not_independent_ecological_replication":True,
+                }
+    report["leave_one_original_50km_cell_out"] = leaveouts
     return report
 
 
