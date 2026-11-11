@@ -169,6 +169,19 @@ def build_block(block,flora,fra,traits):
               controls:partial_rank_cells(rows,name,fields)
               for controls,fields in COVARIATES.items()
             }
+    # A TRUE positive-through-train sensitivity is scientifically critical:
+    # a presently OPEN crossing can nevertheless report 0 trains.
+    # Exclude zero-train median cells BEFORE estimating sign; never relax
+    # the prespecified >=10 distinct 50km cells when it removes a region.
+    nonzero_rows=[r for r in rows if r["raw_reported_crossing_median_through_train_count"]>0]
+    positive_only={}
+    for group in GROUPS:
+        positive_only[group]={}
+        for metric in MEASURES:
+            response=f"{group}__{metric}"
+            positive_only[group][metric]={
+                control:partial_rank_cells(nonzero_rows,response,fields)
+                for control,fields in COVARIATES.items()}
     jackknife={}
     for group in GROUPS:
         jackknife[group]={}
@@ -178,6 +191,9 @@ def build_block(block,flora,fra,traits):
                 rows,response,COVARIATES["gbif_and_crossing_opportunity"])
     return {
       "leave_one_cell_out_sensitivity_gbif_and_crossing_adjusted":jackknife,
+      "positive_reported_train_only_sensitivity":positive_only,
+      "n_nonzero_reported_train_50km_cells":len(nonzero_rows),
+      "nonzero_trains_cannot_be_assumed_operated_freight_only":True,
       "n_original_cells":len(cells),
       "n_eligible_cells_for_source_observations":len(rows),
       "n_GIFT_source_eligible_cells":sum(r["source_growth_form_taxon_match_fraction"]>=MIN_GIFT_TRAIT_COVERAGE for r in rows),
