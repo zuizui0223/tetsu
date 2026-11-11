@@ -102,9 +102,9 @@ def source_manifest(manifest):
     return keys,row
 
 
-def sql_source(db,keys):
-    if len(keys)!=MAX_SOURCE_PARQUET_OBJECTS:
-        raise ValueError("Only the original exactly 48 tested source objects can be queried")
+def sql_source(db,keys,expected_source_object_count=MAX_SOURCE_PARQUET_OBJECTS):
+    if expected_source_object_count not in (48,81) or len(keys)!=expected_source_object_count:
+        raise ValueError("Source object count must match explicitly validated 48 or 81 original FR Parquet object audit")
     files="["+",".join("'s3://"+PUBLIC_S3_BUCKET+"/"+key+"'" for key in keys)+"]"
     source=f"read_parquet({files}, hive_partitioning=true, hive_types={{'a5_r2':UBIGINT}}, union_by_name=true)"
     schema=db.execute(f"DESCRIBE SELECT * FROM {source}").fetchall()
