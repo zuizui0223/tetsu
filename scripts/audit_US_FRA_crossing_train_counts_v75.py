@@ -149,6 +149,11 @@ def assign_cell(cells,attrs,geometry):
     return hits[0],None
 
 def summarise_block(cells,records):
+    """Audit all inventory rows, but ACTIVE-train opportunity only if source says OPEN.
+
+    Closed crossing rows can retain historical nonzero train movements and
+    years. Never convert those past counts into current train exposures.
+    """
     by_cell={cid:[] for cid in cells}
     excluded=Counter();seen=set();raw_types=Counter();closed=Counter()
     for item in records:
@@ -157,7 +162,6 @@ def summarise_block(cells,records):
         if not isinstance(cid,str) or not cid.strip():
             excluded["missing_crossing_id"]+=1
             continue
-        # FRA Crossing_ID is source-unique in the hosted current layer.
         if cid in seen:
             excluded["duplicate_crossing_id"]+=1
             continue
@@ -172,13 +176,21 @@ def summarise_block(cells,records):
     output={}
     for cell,rows in by_cell.items():
         yr=Counter();nreport=0;through=[];freight_tag=0;pass_tag=0
-        speed=[];supported=[];unverified=0
+        speed=[];supported=[];unverified=0;open_n=0;closed_n=0;unknown_n=0
         for r in rows:
+            status=str(r.get("Crossing_Closed") or "").strip()
+            if status=="Yes":
+                closed_n+=1
+                continue
+            if status!="No":
+                unknown_n+=1
+                continue
+            open_n+=1
             year=year_of_count(r.get("Trains_Per_Week_Captured_Year"))
             if year is None:yr["unknown"]+=1
             else:yr[str(year)]+=1
-            # Neither "freight operator" nor service code indicates
-            # an observed freight count on this route.
+            # Freight code identifies a crossing-service CATEGORY only.
+            # No distinct observed freight movement counts are available.
             tags=source_categories(r.get("Type_Of_Train_Service_IDs"))
             if "11" in tags: freight_tag+=1
             if any(x in tags for x in ("12","13","14","15")):pass_tag+=1
@@ -188,12 +200,16 @@ def summarise_block(cells,records):
             day=numeric_count(r.get("Total_Daylight_Thru_Trains"),500)
             night=numeric_count(r.get("Total_Nighttime_Thru_Trains"),500)
             if day is not None and night is not None:
-                nreport+=1;through.append(day+night)
+                nreport+=1
+                through.append(day+night)
                 supported.append(int(day+night>0))
             sp=numeric_count(r.get("Typical_Maximum_Speed_Over_Crossing"),200)
             if sp is not None:speed.append(sp)
         output[cell]={
             "n_distinct_crossing_inventory_records":len(rows),
+            "n_crossings_confirmed_open_in_current_source":open_n,
+            "n_crossings_confirmed_closed_excluded_from_operating_exposure":closed_n,
+            "n_crossings_unknown_status_not_assumed_open":unknown_n,
             "n_crossings_with_2018to2026_train_count_year_and_both_daily_count_fields":nreport,
             "n_crossings_with_positive_reported_daily_through_train_counts":sum(supported),
             "median_reported_total_daily_through_trains_at_eligible_crossings":median(through) if through else None,
@@ -202,16 +218,22 @@ def summarise_block(cells,records):
             "n_crossings_reporting_passenger_service_type_NOT_passenger_only_control":pass_tag,
             "reported_train_count_year_histogram":dict(yr),
             "n_missing_or_outside_2018to2026_year":unverified,
+            "train_opportunity_metrics_USE_confirmed_OPEN_crossings_ONLY":True,
             "NOT_active_freight_volume_or_measured_gust_intensity":True
         }
     return {
         "by_original_50km_cells":output,
         "n_in_cell_source_crossing_records":sum(len(v) for v in by_cell.values()),
+        "n_in_cell_crossings_confirmed_open":sum(x["n_crossings_confirmed_open_in_current_source"] for x in output.values()),
+        "n_in_cell_crossings_confirmed_closed":sum(x["n_crossings_confirmed_closed_excluded_from_operating_exposure"] for x in output.values()),
+        "n_in_cell_crossings_unknown_operating_status":sum(x["n_crossings_unknown_status_not_assumed_open"] for x in output.values()),
         "n_cells_with_any_record":sum(bool(rows) for rows in by_cell.values()),
+        "n_cells_with_any_confirmed_open_crossing":sum(x["n_crossings_confirmed_open_in_current_source"]>0 for x in output.values()),
         "n_cells_with_year_eligible_daily_train_counts":sum(x["n_crossings_with_2018to2026_train_count_year_and_both_daily_count_fields"]>0 for x in output.values()),
         "source_exclusion_diagnostics":dict(excluded),
         "source_type_service_raw_category_histogram":dict(raw_types),
         "source_crossing_closed_raw_category_histogram":dict(closed),
+        "source_open_closed_balance_verified":True,
         "DO_NOT_TREAT_CROSSINGS_AS_INDEPENDENT_RAIL_SEGMENTS":True,
     }
 
