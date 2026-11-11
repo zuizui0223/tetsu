@@ -48,3 +48,21 @@ K20 is the ratio of expected cross-cell present-species intersection to expected
 First partition original *event-grain* plant records by the actual largest GBIF dataset source before aggregation, retaining strict source-specific row/event dedup and known coordinate uncertainty, then compare FULL and WITHOUT the dominant provider on identical source cell pairs. This must be attempted in multiple geographically independent blocks; France alone cannot establish macroecological universality. Next, obtain independently dated **active freight connectivity** plus species-specific dispersal or cargo-pathway traits, and separate independently measured railway **mowing/wind/heat exposure** and road/verge controls. Only then can network-mediated delivery be statistically distinguished from environmental filtering and sampling artifacts.
 
 Code: [real original event-vs-facet GIFT test](../scripts/analyze_fr_original_GBIF_GIFT_rail_macro_v73.py) · [strict synthetic QA](../tests/test_fr_original_GBIF_GIFT_rail_macro_v73.py) · [live Actions workflow](../.github/workflows/FR-original-events-GIFT-rail-macro-v73.yml). The raw observation IDs, precise locations and human names are never committed.
+
+
+## v7.3b — 16-cell leave-one-cell-out sensitivity (source verified)
+
+**[Actual extended source workflow SUCCESS #43033395401](https://github.com/zuizui0223/tetsu/actions/runs/43033395401).** Every one of the 16 France 50km cells was excluded in turn, then the same physical RAIL/ROAD route-ratio partial rank was recalculated on the remaining 15 cells (105 dependent cell pairs); all 16 refits were estimable. This is a robustness diagnostic, NOT 16 independent country/ecoregion replications or 16 significance tests.
+
+| Plant source and group | Full K20 partial rho | K20 negative leaveouts | Raw Jaccard partial rho | Raw positive leaveouts |
+|---|---:|---:|---:|---:|
+| Original ALL events, **woody** | −0.149633 | 15/16 | +0.055146 | 13/16 |
+| Original **known ≤5km**, **woody** | **−0.208302** | **16/16** | +0.049118 | **13/16** |
+| Original ALL events, herbaceous | −0.011523 | 9/16 | −0.158238 | 0/16 |
+| Original known ≤5km, herbaceous | −0.057278 | 15/16 | −0.071956 | 0/16 |
+| Legacy indexed species facets, woody | −0.141642 | 15/16 | +0.047549 | 13/16 |
+
+For the primary **known ≤5km woody K20**, all 16 excluded-cell refits had negative signed coefficients, range **−0.394052 to −0.036500**. But for the SAME exact source group using unstandardized species-list Jaccard, 13/16 refits were positive (range **−0.036542 to +0.171270**). **Response-definition dependence is NOT explained away by deleting any single 50km cell.**
+
+This does not identify the true process: it could reflect source dataset/detection composition, a differing sensitivity of rarefied overlap to taxa with many records, taxonomic resolution or habitat effects. It remains only one France block with current (2026) map paths and observation records in 2018–25. Before promoting a railway dispersal effect, perform source datasetKey exclusion on ORIGINAL de-duplicated event rows and replicate among independent country–ecoregion blocks with independently verified freight service. Neither the apparent positive nor negative direction is claimed as universal.
+
