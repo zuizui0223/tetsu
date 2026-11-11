@@ -100,4 +100,15 @@ class CountAndTraitSafety(unittest.TestCase):
                          out["descriptive_partial_rank_results"]["woody"]
                          ["raw_recorded_species_richness"]
                          ["gbif_and_crossing_opportunity"]["rho"])
+    def test_no_claim_of_operating_train_gradient_if_positive_support_too_small(self):
+        flora,fra=fake_sources()
+        # Simulate a region with 8 running-report cells and 8 0-train cells.
+        for index,k in enumerate(sorted(fra["by_original_50km_cells"])):
+            if index>=8:
+                fra["by_original_50km_cells"][k]["median_reported_total_daily_through_trains_at_eligible_crossings"]=0
+        out=build_block("us_midwest",flora,fra,TRAITS)
+        self.assertEqual(out["n_nonzero_reported_train_50km_cells"],8)
+        stats=out["positive_reported_train_only_sensitivity"]["woody"]["rarefied20_expected_species_richness"]
+        self.assertIsNone(stats["gbif_and_crossing_opportunity"]["rho"])
+        self.assertFalse(stats["gbif_and_crossing_opportunity"]["support"])
 if __name__=="__main__":unittest.main()
