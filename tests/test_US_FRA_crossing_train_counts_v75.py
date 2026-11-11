@@ -59,4 +59,31 @@ class FRATrainCountSourceTests(unittest.TestCase):
         self.assertEqual(params["geometryType"],"esriGeometryEnvelope")
         self.assertIn("Crossing_ID",FIELDS)
         self.assertNotIn("RrCont",FIELDS)
+    def test_closed_crossings_do_not_create_operational_train_intensity(self):
+        cells={"c":box(-90,42,-89,43)}
+        a={"Crossing_ID":"A","Longitude":-89.5,"Latitude":42.5,
+           "Trains_Per_Week_Captured_Year":"2024",
+           "Total_Daylight_Thru_Trains":13,"Total_Nighttime_Thru_Trains":7,
+           "Typical_Maximum_Speed_Over_Crossing":80,
+           "Type_Of_Train_Service_IDs":"11","Crossing_Closed":"Yes"}
+        b=dict(a,Crossing_ID="B",Crossing_Closed="No",
+               Total_Daylight_Thru_Trains":2,Total_Nighttime_Thru_Trains":1)
+        rows=[{"attributes":a,"geometry":{"x":-89.5,"y":42.5}},
+              {"attributes":b,"geometry":{"x":-89.5,"y":42.5}}]
+        result=summarise_block(cells,rows)
+        self.assertEqual(result["n_in_cell_crossings_confirmed_closed"],1)
+        self.assertEqual(result["n_in_cell_crossings_confirmed_open"],1)
+        source=result["by_original_50km_cells"]["c"]
+        self.assertEqual(source["median_reported_total_daily_through_trains_at_eligible_crossings"],3)
+        self.assertEqual(source["n_crossings_reporting_freight_service_type_NOT_freight_train_counts"],1)
+        self.assertTrue(source["train_opportunity_metrics_USE_confirmed_OPEN_crossings_ONLY"])
+    def test_unknown_operating_status_not_assumed_active(self):
+        cells={"c":box(-90,42,-89,43)}
+        a={"Crossing_ID":"Z","Longitude":-89.5,"Latitude":42.5,
+           "Trains_Per_Week_Captured_Year":"2026",
+           "Total_Daylight_Thru_Trains":25,"Total_Nighttime_Thru_Trains":0,
+           "Type_Of_Train_Service_IDs":"11","Crossing_Closed":None}
+        v=summarise_block(cells,[{"attributes":a,"geometry":{"x":-89.5,"y":42.5}}])
+        self.assertEqual(v["n_in_cell_crossings_unknown_operating_status"],1)
+        self.assertEqual(v["n_cells_with_year_eligible_daily_train_counts"],0)
 if __name__=="__main__":unittest.main()
