@@ -8,10 +8,10 @@ from analyze_growthform_source_leaveout_v72 import (
 
 def source_fixture():
     xs={"11":20,"12":16,"13":15,"21":21,"22":20,"23":12}
-    return {"a":{"original_two_period_country_GRIIS_eligible":True,"periods":{
+    return {"source_cells":{"a":{"original_two_period_country_GRIIS_eligible":True,"periods":{
         "2018_2025":{"dataset_partition_is_count_of_indexed_speciesKey_records_NOT_independent_surveys":True,
                      COUNT_KEYS["full"]:dict(xs),
-                     COUNT_KEYS["without_dominant_dataset"]:dict(xs)}}}}
+                     COUNT_KEYS["without_dominant_dataset"]:dict(xs)}}}}}
 
 class SourceSensitivityContractTests(unittest.TestCase):
     def test_both_source_variants_and_both_growth_forms_required(self):
@@ -20,12 +20,12 @@ class SourceSensitivityContractTests(unittest.TestCase):
         self.assertEqual(set(fixed_group_source_cells("us_midwest","2018_2025",
                          {"regions":{"us_midwest":{"cells":old}}},source_fixture(),t)),{"a"})
         f=source_fixture()
-        for k in ("21","22","23"):f["a"]["periods"]["2018_2025"][COUNT_KEYS["without_dominant_dataset"]].pop(k)
+        for k in ("21","22","23"):f["source_cells"]["a"]["periods"]["2018_2025"][COUNT_KEYS["without_dominant_dataset"]].pop(k)
         self.assertFalse(fixed_group_source_cells("us_midwest","2018_2025",
                           {"regions":{"us_midwest":{"cells":old}}},f,t))
     def test_incomplete_GBIF_record_partition_fails_closed(self):
         t={"11":"herbaceous","21":"woody"}
-        f=source_fixture();f["a"]["periods"]["2018_2025"].pop(
+        f=source_fixture();f["source_cells"]["a"]["periods"]["2018_2025"].pop(
             "dataset_partition_is_count_of_indexed_speciesKey_records_NOT_independent_surveys")
         with self.assertRaisesRegex(ValueError,"dataset split"):
             fixed_group_source_cells("us_midwest","2018_2025",
