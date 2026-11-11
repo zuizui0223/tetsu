@@ -14,10 +14,21 @@ def source_fixture():
                      COUNT_KEYS["without_dominant_dataset"]:dict(xs)}}}
     return {"source_cells":{"a":cell,**{f"dummy_{i}":cell for i in range(15)}}}
 
+def original_eligible_fixture():
+    counts={"11":10,"12":10,"13":10,"21":10,"22":10,"23":10}
+    one={"full_facet_source_pagination_completed":True,
+         "alien_observed_minimum_5_species_and_20_records":True,
+         "observed_alien_specieskey_counts":dict(counts),
+         "n_indexed_GRIIS_introduced_plant_records":60,
+         "indexed_all_plantae_source_records":100,
+         "prior_2026_GBIF_indexed_source_record_count":100}
+    return {"a":{"source_pre_outcome_both_period_recording_eligible":True,
+                 "periods":{"2010_2017":dict(one),"2018_2025":dict(one)}}}
+
 class SourceSensitivityContractTests(unittest.TestCase):
     def test_both_source_variants_and_both_growth_forms_required(self):
         t={str(k):"herbaceous" if k<20 else "woody" for k in [11,12,13,21,22,23]}
-        old={"a":{"2018_2025":{"counts":{},"all_plant_indexed_records":100}}}
+        old=original_eligible_fixture()
         self.assertEqual(set(fixed_group_source_cells("us_midwest","2018_2025",
                          {"regions":{"us_midwest":{"cells":old}}},source_fixture(),t)),{"a"})
         f=source_fixture()
@@ -30,7 +41,7 @@ class SourceSensitivityContractTests(unittest.TestCase):
             "dataset_partition_is_count_of_indexed_speciesKey_records_NOT_independent_surveys")
         with self.assertRaisesRegex(ValueError,"dataset split"):
             fixed_group_source_cells("us_midwest","2018_2025",
-               {"regions":{"us_midwest":{"cells":{"a":{"2018_2025":{}}}}}},f,t)
+               {"regions":{"us_midwest":{"cells":original_eligible_fixture()}}},f,t)
     def test_source_category_names_and_not_assuming_native(self):
         self.assertEqual(set(COUNT_KEYS),{"full","without_dominant_dataset"})
         self.assertEqual(GROUPS,("herbaceous","woody"))
