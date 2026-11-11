@@ -8,10 +8,11 @@ from analyze_growthform_source_leaveout_v72 import (
 
 def source_fixture():
     xs={"11":20,"12":16,"13":15,"21":21,"22":20,"23":12}
-    return {"source_cells":{"a":{"original_two_period_country_GRIIS_eligible":True,"periods":{
+    cell={"original_two_period_country_GRIIS_eligible":True,"periods":{
         "2018_2025":{"dataset_partition_is_count_of_indexed_speciesKey_records_NOT_independent_surveys":True,
                      COUNT_KEYS["full"]:dict(xs),
-                     COUNT_KEYS["without_dominant_dataset"]:dict(xs)}}}}}
+                     COUNT_KEYS["without_dominant_dataset"]:dict(xs)}}}
+    return {"source_cells":{"a":cell,**{f"dummy_{i}":cell for i in range(15)}}}
 
 class SourceSensitivityContractTests(unittest.TestCase):
     def test_both_source_variants_and_both_growth_forms_required(self):
