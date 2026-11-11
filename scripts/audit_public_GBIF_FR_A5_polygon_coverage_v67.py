@@ -57,13 +57,26 @@ def polygon_cells(db,block=BLOCK):
     if len(all_cells)>MAX_A5_SOURCE_IDS:
         raise ValueError("True source polygons cover too many A5 grid partitions for bounded audit")
     center=set(source_a5_cells(db,block))
-    if not center.issubset(all_cells):
-        raise ValueError("Centroid A5 code did not lie within its polygon A5 coverage")
+    # Official A5 polygon cell cover is NOT always consistent with
+    # independently calculated A5 lon/lat centroid membership for
+    # small source geometries. Do not conceal the disagreement or
+    # call one an exhaustive spatial cover: combine both as a
+    # conservative candidate set, and publish the discrepancy.
+    polygon_only=set(all_cells)
+    not_in_polygon=sorted(center-polygon_only)
+    additional=sorted(polygon_only-center)
+    all_cells.update(center)
+    if len(all_cells)>MAX_A5_SOURCE_IDS:
+        raise ValueError("Conservative A5 source ID union exceeds bounded source metadata budget")
     return sorted(all_cells),{
         "n_original_50km_source_cells":len(rows),
-        "n_A5_polygon_cover_partition_ids":len(all_cells),
+        "n_A5_polygon_cover_partition_ids":len(polygon_only),
+        "n_A5_conservative_polygon_plus_centroid_partition_ids":len(all_cells),
         "n_A5_centroid_partition_ids":len(center),
-        "extra_A5_partition_ids_missed_by_centroids":sorted(all_cells-center),
+        "extra_A5_partition_ids_missed_by_centroids":additional,
+        "centroid_A5_IDs_missing_from_official_polygon_function":not_in_polygon,
+        "polygon_cover_disagreed_with_centroid_lookup":bool(not_in_polygon),
+        "true_complete_polygon_intersection_cover_NOT_verified_if_disagreement":bool(not_in_polygon),
         "source_A5_r2_cell_cover_by_original_50km_cells":audit,
         "original_centroid_A5_partition_ids":sorted(center),
     }
@@ -137,7 +150,7 @@ def analyze(old,db,client):
         "original_country_area_source":"16 equal-area 2500km2 EPSG6933 cells",
         "underlying_source_GBIF_DWCA_DOI":UNDERLYING_GBIF_DOI,
         "actual_source_original_event_rows_NOT_downloaded_in_this_metadata_audit":True,
-        "full_source_50km_polygon_A5_grid_cover":geog,
+        "source_50km_polygon_plus_centroid_A5_grid_audit":geog,
         "source_public_Plant_parquet_prefixes":[v[len(ROOT):] for v in plants],
         "n_total_source_parquet_files_in_all_true_A5_polygon_intersecting_partitions":len(all_files),
         "n_original_lexically_fixed_48_Parquet_source_files":len(oldkeys),
@@ -147,11 +160,12 @@ def analyze(old,db,client):
         "source_compressed_all_candidate_size_bytes":sum(x["size_bytes"] for x in all_files),
         "fraction_files_scanned_by_v65":round(len(oldkeys)/len(keys),6) if keys else None,
         "source_file_metadata_by_A5_partition":group_results,
-        "complete_source_object_metadata_listing":True,
+        "complete_source_object_metadata_listing_WITHIN_THE_COMPUTED_UNION_A5_IDs":True,
+        "full_original_50km_polygon_spatial_A5_coverage_guaranteed":not geog["polygon_cover_disagreed_with_centroid_lookup"],
         "not_a_full_GBIF_original_event_population":True,
         "not_causal_train_seed_dispersal":True,
         "limits":[
-            "This is a metadata-only full source Parquet object listing within A5 polygon-cover of 16 frozen cells, NOT row-level completeness or published snapshot population audit.",
+            "This is a metadata-only full Parquet object listing within the conservative UNION of official polygon-cover and centroid-index A5 IDs; the two functions disagreed on some IDs, so full polygon spatial coverage is NOT independently guaranteed.",
             "GBIF preview is developmental derivative of August2026 official DWCA DOI, NOT a new DOI or user-authenticated bulk download.",
             "Number of source objects or compressed bytes does NOT equal number of original country GRIIS plant records.",
             "Total source objects include many taxonomic/other geography records in A5; row-level country/year/true 50km-cell spatial filters remain essential.",
@@ -162,7 +176,9 @@ def analyze(old,db,client):
     print(json.dumps({
         "block":BLOCK,
         "n_original_50km_cells":geog["n_original_50km_source_cells"],
-        "n_full_polygon_A5_source_partition_ids":geog["n_A5_polygon_cover_partition_ids"],
+        "n_official_polygon_A5_source_partition_ids":geog["n_A5_polygon_cover_partition_ids"],
+        "n_conservative_union_A5_source_partition_ids":geog["n_A5_conservative_polygon_plus_centroid_partition_ids"],
+        "n_centroid_A5_IDs_not_in_polygon_cover":len(geog["centroid_A5_IDs_missing_from_official_polygon_function"]),
         "n_centroid_A5_source_partition_ids":geog["n_A5_centroid_partition_ids"],
         "n_centroid_missed_A5_source_partition_ids":len(geog["extra_A5_partition_ids_missed_by_centroids"]),
         "n_all_source_parquet_objects":len(all_files),
