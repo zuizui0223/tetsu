@@ -73,6 +73,33 @@ def species_metrics(group):
         "rarefied20_expected_species_richness":sum(incidence_probabilities(group,k=K).values())
     }
 
+def leave_one_cell_out_diagnostic(rows,response,controls):
+    """Posthoc source sensitivity. NOT spatial-block independent inference.
+
+    Remove every original cell once from the already matched source rows,
+    retaining the SAME response/controls and immutable exposure selection.
+    """
+    original=partial_rank_cells(rows,response,controls)
+    estimates={}
+    for item in sorted(rows,key=lambda v:v["cell_id"]):
+        cid=item["cell_id"]
+        value=partial_rank_cells([r for r in rows if r["cell_id"]!=cid],response,controls)
+        estimates[cid]=value["rho"]
+    valid=[v for v in estimates.values() if v is not None]
+    base=original["rho"]
+    return {
+        "complete_n_withheld_cells":len(estimates),
+        "n_eligible_withheld_50km_cells":len(valid),
+        "n_unestimable_withheld_cells":len(estimates)-len(valid),
+        "baseline_partial_rho":base,
+        "min_and_max_partial_rho_excluding_one_cell":[min(valid),max(valid)] if valid else None,
+        "n_negative_rho_jackknife":sum(v<0 for v in valid),
+        "n_positive_rho_jackknife":sum(v>0 for v in valid),
+        "same_sign_for_all_estimable_leaveone_cellout":bool(valid) and base is not None and all(
+            (v<0)==(base<0) for v in valid if v!=0) and all(v!=0 for v in valid),
+        "no_country_replication_or_statistical_significance_from_withheld_cells":True,
+    }
+
 def build_block(block,flora,fra,traits):
     if block not in BLOCKS or flora["country"]!="US":
         raise ValueError("Pre-frozen US botanical source block required")
@@ -142,7 +169,15 @@ def build_block(block,flora,fra,traits):
               controls:partial_rank_cells(rows,name,fields)
               for controls,fields in COVARIATES.items()
             }
+    jackknife={}
+    for group in GROUPS:
+        jackknife[group]={}
+        for metric in MEASURES:
+            response=f"{group}__{metric}"
+            jackknife[group][metric]=leave_one_cell_out_diagnostic(
+                rows,response,COVARIATES["gbif_and_crossing_opportunity"])
     return {
+      "leave_one_cell_out_sensitivity_gbif_and_crossing_adjusted":jackknife,
       "n_original_cells":len(cells),
       "n_eligible_cells_for_source_observations":len(rows),
       "n_GIFT_source_eligible_cells":sum(r["source_growth_form_taxon_match_fraction"]>=MIN_GIFT_TRAIT_COVERAGE for r in rows),
