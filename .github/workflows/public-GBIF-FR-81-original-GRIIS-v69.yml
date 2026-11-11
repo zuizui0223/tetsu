@@ -12,7 +12,7 @@ concurrency:
   group: tetsu-france-original-A5-all81-COL-GRIIS-events-v69
   cancel-in-progress: true
 jobs:
-  81-public-original-parquet-objects-event-source:
+  original-81-public-parquet-objects-event-source:
     runs-on: ubuntu-latest
     timeout-minutes: 50
     permissions:
