@@ -148,7 +148,7 @@ def audit_rows(rows,columns,strict_set,strict_plus_synonyms,
         db=sqlite3.connect(str(Path(tmp)/"events.sqlite"))
         try:
             db.execute("CREATE TABLE unique_gbif(h TEXT PRIMARY KEY)")
-            db.execute("CREATE TABLE source_occ(h TEXT PRIMARY KEY)")
+            db.execute("CREATE TABLE source_occ(h TEXT PRIMARY KEY, event_hash TEXT NOT NULL)")
             db.execute("""CREATE TABLE concepts (
                 h TEXT PRIMARY KEY, period TEXT, cell TEXT, species TEXT,
                 strict INTEGER, strict5 INTEGER, strict25 INTEGER,
@@ -200,11 +200,32 @@ def audit_rows(rows,columns,strict_set,strict_plus_synonyms,
                     quality["n_source_duplicate_GBIF_unique_ID"]+=1
                     continue
                 occ=str(row.get("occurrenceid") or "").strip()
-                if occ and db.execute("INSERT OR IGNORE INTO source_occ VALUES (?)",
-                               (hashed("DATASET_OCCURRENCE",dataset,occ),)).rowcount==0:
-                    quality["n_source_duplicate_same_dataset_occurrenceID"]+=1
-                    continue
-                quality["n_country_GRIIS_presence_records_after_occurrenceID_dedup"]+=1
+                evt=str(row.get("eventid") or "").strip()
+                date=str(row.get("eventdate") or "").strip()
+                # The repeated dataset+occurrence ID must refer to the
+                # SAME biological source event/taxon/cell; otherwise no
+                # ordering convention can safely choose a canonical row.
+                # When eventID is absent, use a stable dataset/occurrence
+                # key, not a read-order-selected GBIF row ID.
+                unit=("EVENT",dataset,evt,date,taxon,cell,period) if evt else (
+                    "DATASET_OCC",dataset,occ,taxon,cell,period) if occ else (
+                    "GBIF_OCC",original,taxon,cell,period)
+                identifier=hashed(*unit)
+                if occ:
+                    hashed_occ=hashed("DATASET_OCCURRENCE",dataset,occ)
+                    prior_event=db.execute(
+                        "SELECT event_hash FROM source_occ WHERE h=?",(hashed_occ,)
+                    ).fetchone()
+                    if prior_event is not None:
+                        if prior_event[0]!=identifier:
+                            raise ValueError("Conflicting event/taxon/cell under one dataset+occurrenceID, cannot resolve source by input row order")
+                        quality["n_source_duplicate_same_dataset_occurrenceID"]+=1
+                    else:
+                        db.execute("INSERT INTO source_occ(h,event_hash) VALUES (?,?)",
+                                   (hashed_occ,identifier))
+                        quality["n_country_GRIIS_presence_records_after_occurrenceID_dedup"]+=1
+                else:
+                    quality["n_country_GRIIS_presence_records_after_occurrenceID_dedup"]+=1
                 datasets[(period,cell)].add(dataset)
                 uncertainty=_numeric(row.get("coordinateuncertaintyinmeters"))
                 if uncertainty is None or uncertainty<=0:
@@ -215,14 +236,6 @@ def audit_rows(rows,columns,strict_set,strict_plus_synonyms,
                     has25=uncertainty<=SECONDARY_UNCERTAINTY_M
                     if not has5:quality["n_source_known_uncertainty_gt5000m"]+=1
                     if not has25:quality["n_source_known_uncertainty_gt25000m"]+=1
-                evt=str(row.get("eventid") or "").strip()
-                date=str(row.get("eventdate") or "").strip()
-                # When eventID is missing, the only safe unit is GBIF
-                # occurrence ID. Do not fabricate duplicate survey events
-                # by rounding coordinates or assuming a common observer.
-                unit=("EVENT",dataset,evt,date,taxon,cell,period) if evt else (
-                    "OCC",original,taxon,cell,period)
-                identifier=hashed(*unit)
                 flags=(int(is_strict),int(is_strict and has5),
                        int(is_strict and has25),1,int(has5),int(has25))
                 current=db.execute("SELECT strict,strict5,strict25,extended,extended5,extended25 FROM concepts WHERE h=?",
