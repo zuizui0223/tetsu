@@ -21,7 +21,7 @@ never raw GBIF record IDs or coordinate rows. No seed transport effect.
 """
 from __future__ import annotations
 
-import argparse,json
+import argparse,json,re
 from datetime import datetime,timezone
 from pathlib import Path
 
@@ -47,7 +47,17 @@ def scan_bounded_source(db,block,candidates,query=read_true_public_parquet_sourc
     filenames=[p.get("key") for p in candidates]
     if any(not isinstance(key,str) or not key.startswith(ROOT) for key in filenames) or len(set(filenames))!=len(filenames):
         raise ValueError("Source candidate object key prefix/uniqueness wrong")
-    selected=sorted(candidates,key=lambda x:(x["key"],x["size_bytes"]))[:scan_limit]
+    # Natural-number ordering is frozen independently of botanical
+    # outcomes: lexical sort data_1, data_11, ... before data_2
+    # silently oversamples source files with two-digit suffixes.
+    def source_sort_key(item):
+        key=item["key"]
+        leaf=key.rsplit("/",1)[-1]
+        m=re.fullmatch(r"data_(\\d+)\\.parquet",leaf)
+        if m:
+            return (key.rsplit("/",1)[0],0,int(m.group(1)),key)
+        return (key.rsplit("/",1)[0],1,0,key)
+    selected=sorted(candidates,key=source_sort_key)[:scan_limit]
     observed=[]
     failed=[]
     for candidate in selected:
@@ -80,7 +90,7 @@ def scan_bounded_source(db,block,candidates,query=read_true_public_parquet_sourc
     stats={
         "block":block,
         "source_candidate_objects_in_centroid_A5_bound":len(candidates),
-        "n_source_objects_selected_by_lexical_key_BEFORE_reading_species_outcomes":len(selected),
+        "n_source_objects_selected_by_natural_numeric_filename_BEFORE_reading_species_outcomes":len(selected),
         "n_source_objects_actually_scanned":len(observed),
         "n_source_objects_failed_API_or_IO":len(failed),
         "n_source_objects_with_nonzero_actual_source_occurrences":sum(x["original_interpreted_source_rows_in_200km_bounding_envelope"]>0 for x in observed),
@@ -149,7 +159,7 @@ def run(blocks,query=read_true_public_parquet_source,scan_limit=MAX_BOUNDED_SOUR
         "The original 50km A5 source partitions are identified using cell CENTROIDS, not complete coverage of cell boundary A5 tiles.",
         "The source A5 snapshot is an August2026 EXPERIMENTAL preview; it is not a new DOI authenticated download or assuredly complete country population.",
         "Candidate objects are only <=400MB due to original source listing cap; larger files and unselected A5 partitions may contain relevant events.",
-        "Every scanned Parquet is reported, including zeros and failed files; selection by lexical order and source resource budget is not random representative sampling.",
+        "Every scanned Parquet is reported, including zeros and failed files; selection by prespecified natural numeric file order and a source resource budget is not random representative sampling.",
         "The source aggregation is a COUNTRY 200km BOUNDING BOX, not necessarily exact original sixteen EPSG6933 geographic cell membership.",
         "No country GRIIS alien species status, original row dedup, railway active freight service, or seed transport effects are calculated in this acquisition QA.",
     ]
