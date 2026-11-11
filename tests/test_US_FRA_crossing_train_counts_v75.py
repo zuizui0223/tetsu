@@ -67,7 +67,7 @@ class FRATrainCountSourceTests(unittest.TestCase):
            "Typical_Maximum_Speed_Over_Crossing":80,
            "Type_Of_Train_Service_IDs":"11","Crossing_Closed":"Yes"}
         b=dict(a,Crossing_ID="B",Crossing_Closed="No",
-               Total_Daylight_Thru_Trains":2,Total_Nighttime_Thru_Trains":1)
+               Total_Daylight_Thru_Trains=2,Total_Nighttime_Thru_Trains=1)
         rows=[{"attributes":a,"geometry":{"x":-89.5,"y":42.5}},
               {"attributes":b,"geometry":{"x":-89.5,"y":42.5}}]
         result=summarise_block(cells,rows)
