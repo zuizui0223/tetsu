@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"scripts"))
 from analyze_US_train_counts_GRIIS_traits_v76 import (
     BLOCKS, PERIOD, K, MIN_COUNTRY_CELLS, split_counts, species_metrics,
-    build_block, partial_rank_cells,
+    build_block, partial_rank_cells, leave_one_cell_out_diagnostic,
 )
 
 TRAITS={"11":"herbaceous","12":"herbaceous","13":"herbaceous",
@@ -87,4 +87,17 @@ class CountAndTraitSafety(unittest.TestCase):
         self.assertIsNone(x["raw_recorded_species_richness"]
                           ["gbif_and_crossing_opportunity"]["rho"])
 
+    def test_cell_jackknife_does_not_create_country_replicates(self):
+        flora,fra=fake_sources()
+        out=build_block("us_midwest",flora,fra,TRAITS)
+        test=out["leave_one_cell_out_sensitivity_gbif_and_crossing_adjusted"]
+        self.assertEqual(test["woody"]["rarefied20_expected_species_richness"]
+                         ["complete_n_withheld_cells"],16)
+        self.assertTrue(test["woody"]["rarefied20_expected_species_richness"]
+                        ["no_country_replication_or_statistical_significance_from_withheld_cells"])
+        self.assertEqual(test["woody"]["raw_recorded_species_richness"]
+                         ["baseline_partial_rho"],
+                         out["descriptive_partial_rank_results"]["woody"]
+                         ["raw_recorded_species_richness"]
+                         ["gbif_and_crossing_opportunity"]["rho"])
 if __name__=="__main__":unittest.main()
