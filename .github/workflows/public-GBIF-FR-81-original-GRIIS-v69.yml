@@ -1,0 +1,88 @@
+name: "v6.9 REAL France Burgundy 81-file GBIF original event GRIIS-COL strict plus 5km QA"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_public_GBIF_FR_full_81_original_events_v69.py'
+      - 'tests/test_public_GBIF_FR_full_81_original_events_v69.py'
+      - '.github/workflows/public-GBIF-FR-81-original-GRIIS-v69.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-france-original-A5-all81-COL-GRIIS-events-v69
+  cancel-in-progress: true
+jobs:
+  81-public-original-parquet-objects-event-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official public original GBIF Parquet streaming and exact 50km geography
+        run: pip install 'duckdb>=1.4,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Test independently source-audited 48+33 original file union, source denominator and strict monotonic event/species counts
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_FR_full_81_original_events_v69.py' -v
+      - name: Retrieve original full 48-file GBIF source-object selection and independent 671528 bbox count
+        uses: actions/download-artifact@v4
+        with:
+          name: GBIF-Aug26-public-original-FR-Burgundy-bounded-multifile-source-v65
+          run-id: 42959420881
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/old48
+      - name: Retrieve independently checked complete conservative geographic A5 81-object metadata union
+        uses: actions/download-artifact@v4
+        with:
+          name: GBIF-France-A5-full-50km-polygon-cover-and-unscanned-source-file-metadata-v67
+          run-id: 42961205346
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/A5metadata
+      - name: Retrieve all 33 real newly scanned GBIF source file rows with independent +26049 bounding count
+        uses: actions/download-artifact@v4
+        with:
+          name: GBIF-Aug26-FR-original-33-previously-unread-plant-source-file-counts-v68
+          run-id: 42961551265
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/new33
+      - name: Retrieve original 48-source file event GRIIS-COL observed-key aggregates and precise record baseline
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-GBIF-Aug26-FR-Burgundy-COL-GRIIS-original-50km-event-quality-v66
+          run-id: 42961896676
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/events48
+      - name: Retrieve independent six-country GRIIS 2023 GBIF backbone to COL26.5 accepted taxonomy key bridge
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-GRIIS-2023GBIF-to-COL26XR-corrected-taxonomy-key-bridge-v63
+          run-id: 42844630098
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/bridge
+      - name: Retrieve country GRIIS 2023 source-published accepted introduced plant taxon keys
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Stream actual 697577 independently audited FR 2018-25 source bounding rows from all 81 public files and re-estimate exact cell GRIIS-COL events
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_public_GBIF_FR_full_81_original_events_v69.py \
+            --original-48-source source/old48/GBIF_real_aug2026_FR_Burgundy_bounded_all_source_files_v65.json \
+            --metadata-81-source source/A5metadata/GBIF_FR_full_polygon_A5_source_metadata_v67.json \
+            --new-33-source source/new33/GBIF_original_FR_added_33_source_file_counts_v68.json \
+            --original-48-country-GRIIS-event-source source/events48/public_GBIF_original_FR_GRIIS_COL_50km_event_quality_v66.json \
+            --sixcountry-COL-taxonomy-bridge source/bridge/sixcountry_GRIIS_GBIF_to_COL_XR_crosswalk_v63.json \
+            --griis-original-country-keys source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/GBIF_FR_Burgundy_original_81file_GRIIS_COL_v69.json
+      - name: Archive real source-only 81-file GRIIS-COL species-event 16-cell aggregates, not any individual occurrence IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authentic-GBIF-Aug26-FR-Burgundy-81file-GRIIS-original-event-source-v69
+          path: results/audit/GBIF_FR_Burgundy_original_81file_GRIIS_COL_v69.json
+          if-no-files-found: warn
