@@ -85,7 +85,7 @@ class GBIFA5PolygonCompletenessTests(unittest.TestCase):
         self.assertEqual(result["n_additional_source_files_not_covered_by_old_v65_query"],6)
         self.assertEqual(result["n_large_files_omitted_by_old_400MB_filter"],4)
         self.assertTrue(result["complete_source_object_metadata_listing"])
-        self.assertFalse(result["not_a_full_GBIF_original_event_population"])
+        self.assertTrue(result["not_a_full_GBIF_original_event_population"])
 
     def test_fail_closed_if_source_contract_48_keys_missing_in_full_cover(self):
         data=old()
