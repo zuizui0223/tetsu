@@ -116,7 +116,7 @@ class HistoricalINatObserverSiteSample(unittest.TestCase):
                 "nonrandom_ordered_search_API_probe_not_randomized_sampling":True}
         with patch("audit_US48_iNat_observer_site_repeat_v95.fetch_original_rows",
                    side_effect=fake):
-            output=run({"complete":True},inat,set(str(n) for n in range(1000,1200)),
+            output=run({"complete":True,"source_periods":dict(EXPECTED_BINS)},inat,set(str(n) for n in range(1000,1200)),
                        census,None)
         self.assertTrue(output["complete"])
         self.assertEqual(output["summary"]["n_Census_state_sources_completed"],48)
