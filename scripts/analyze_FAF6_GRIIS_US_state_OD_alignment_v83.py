@@ -21,7 +21,7 @@ from itertools import combinations
 from pathlib import Path
 from statistics import median
 import numpy as np
-import pandas as pd
+from html.parser import HTMLParser
 import requests
 
 from analyze_macro_50km_rail_road_aliens_v34 import _rank
@@ -50,15 +50,55 @@ MIN_NONZERO_STATE_PAIRS=30
 K=20
 
 
+class _SourceTableHTML(HTMLParser):
+    """Standard-library HTML table parser, so the global source QA smoke
+    test and production both use exactly the same Census TIGER data path."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.tables=[]
+        self.table=None
+        self.row=None
+        self.cell=None
+    def handle_starttag(self,tag,attrs):
+        if tag=="table":
+            self.table=[]
+        elif tag=="tr" and self.table is not None:
+            self.row=[]
+        elif tag in ("th","td") and self.row is not None:
+            self.cell=[]
+    def handle_data(self,data):
+        if self.cell is not None:
+            self.cell.append(data)
+    def handle_endtag(self,tag):
+        if tag in ("th","td") and self.cell is not None:
+            self.row.append("".join(self.cell).strip())
+            self.cell=None
+        elif tag=="tr" and self.row is not None:
+            if self.table is not None and self.row:
+                self.table.append(self.row)
+            self.row=None
+        elif tag=="table" and self.table is not None:
+            if self.table:self.tables.append(self.table)
+            self.table=None
+
+
 def parse_census_centroids(html,source_states):
-    tables=pd.read_html(io.StringIO(html))
-    candidates=[table for table in tables if REQUIRED_CENSUS_COLUMNS.issubset(
-        {str(x).upper() for x in table.columns})]
-    if len(candidates)!=1:
+    parser=_SourceTableHTML()
+    parser.feed(html)
+    tables=[]
+    for table in parser.tables:
+        for k,header in enumerate(table[:6]):
+            names=[str(x).strip().upper() for x in header]
+            if REQUIRED_CENSUS_COLUMNS.issubset(set(names)):
+                tables.append((names,table[k+1:]))
+    if len(tables)!=1:
         raise ValueError("Exact one official 2025 Census TIGER US states centroid table not found")
-    df=candidates[0]
+    header,items=tables[0]
     result={}
-    for row in df.to_dict(orient="records"):
+    for values in items:
+        if len(values)!=len(header):
+            raise ValueError("Malformed US Census geographic source row width")
+        row=dict(zip(header,values))
         code=str(row["STATE"]).strip().zfill(2)
         if code not in source_states:
             continue
