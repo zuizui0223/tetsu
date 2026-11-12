@@ -50,6 +50,8 @@ class AllStateSourceBounds(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"FAF6"):
             run({},census(),None,bad)
     def test_missing_state_not_impersonated_as_absence(self):
-        with self.assertRaisesRegex(ValueError,"Census"):
-            run({},{"01":{"name":"State 1"}},None,baseline())
+        with patch("harvest_US_all51_state_GRIIS_GBIF_recent_v82.valid_griis",
+                   return_value={"US":set(str(x) for x in range(1000,1200))}):
+            with self.assertRaisesRegex(ValueError,"Census"):
+                run({},{"01":{"name":"State 1"}},None,baseline())
 if __name__=="__main__":unittest.main()
