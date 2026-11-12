@@ -1,0 +1,80 @@
+name: "v8.8 REAL US2022 directed crop vs resource FAF RAIL freight against pre/post GRIIS state records"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_US_FAF6_directional_crop_resource_temporal_v88.py'
+      - 'tests/test_US_FAF6_directional_crop_resource_temporal_v88.py'
+      - '.github/workflows/US-FAF6-directional-crop-resource-temporal-v88.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US-2022-FAF6-crop-resource-directional-GBIF-v88
+  cancel-in-progress: true
+jobs:
+  authentic-origin-to-destination-freight-crop-resource-first-record-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact original FAF6, Census state GRIIS plant source mathematical clients
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify same directed state pairs and no implied viable-weed-seed or ecological causality
+        run: python -m unittest discover -s tests -p 'test_US_FAF6_directional_crop_resource_temporal_v88.py' -v
+      - name: Load independent official 2022 FAF6 crop/resource rail/truck marginal source checksum
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-BTS-FAF6-state-2022-rail-truck-crop-freight-v79
+          run-id: 43128165864
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/FA79
+      - name: Load true economic 2022 51-state FAF6 crop RAIL vs TRUCK original OD and source SHA
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-2022-FAF6-RAIL-TRUCK-crop-state-OD-network-v80
+          run-id: 43142647675
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/FA80
+      - name: Load prior 51-state 2018–2025 GBIF recorded country GRIIS source geographic frame
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-all51-state-GRIIS-GBIF-2018-25-v82
+          run-id: 43144396513
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GBIF82
+      - name: Load verified separated 2018–21 versus 2023–25 GBIF country GRIIS recorded source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          run-id: 43153476962
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GBIF85
+      - name: Load verified 48-state directional first-recorded before/after 2022 cargo source baseline
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-FAF6-2022-directional-recorded-source-taxa-v86
+          run-id: 43154108559
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/BASE86
+      - name: Re-query same OFFICIAL 2022 FAF6 source, verify original ZIP SHA and compare crop vs resources freight on temporal directed recorded flora
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_US_FAF6_directional_crop_resource_temporal_v88.py \
+            --temporal85 source/GBIF85/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json \
+            --flora82 source/GBIF82/US_all51_state_GRIIS_GBIF_2018_25_source_v82.json \
+            --prior86 source/BASE86/US_FA6_2022_directional_source_recorded_taxa_v86.json \
+            --fa79 source/FA79/BTS_FAF6_2022_rail_truck_crop_OD_v79.json \
+            --fa80 source/FA80/BTS_FAF6_2022_crop_OD_RAIL_vs_TRUCK_network_v80.json \
+            --output results/audit/US_FA6_2022_crop_resource_directional_prepost_GRIIS_v88.json
+      - name: Preserve all matched cargo comparison groups including nonestimable group and no seed causality
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US-48state-crop-resource-FAF6-directional-GBIF-v88
+          path: results/audit/US_FA6_2022_crop_resource_directional_prepost_GRIIS_v88.json
+          if-no-files-found: warn
