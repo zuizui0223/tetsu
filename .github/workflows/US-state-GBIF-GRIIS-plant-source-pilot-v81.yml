@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install public Census FIPS, GBIF plant species and 2023 GRIIS taxon clients
-        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3'
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'scipy>=1.12,<2'
       - name: Test Census 51-state FIPS code join, GBIF source status, species facets and missingness gates
         run: python -m unittest discover -s tests -p 'test_US_state_GRIIS_GBIF_plant_source_v81.py' -v
       - name: Download independently sourced 9-country accepted GRIIS species key source list
