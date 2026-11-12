@@ -1,0 +1,57 @@
+name: "v10.0 REAL MIREN field resurvey same-road-plot alien gains/losses and proportional turnover 11 regions"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_MIREN_roadside_alien_resurvey_turnover_v100.py'
+      - 'tests/test_MIREN_roadside_alien_resurvey_turnover_v100.py'
+      - '.github/workflows/MIREN-roadside-alien-repeated-field-plots-v100.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-MIREN-roadsite-original-actual-plant-resurvey-turnover-v100
+  cancel-in-progress: true
+jobs:
+  true-original-MIREN-survey-site-repeat-alien-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install published MIREN true vegetation plot statistical dependencies
+        run: pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3'
+      - name: Test first-to-last true plot recorded Alien species gain/loss, denominator and replacement safeguards
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_MIREN_roadside_alien_resurvey_turnover_v100.py' -v
+      - name: Get independently source-MD5-verified MIREN 167804 original actual plant records 2007-2023
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/miren98
+      - name: Get independently real v9.9 same original road-site-year standard plot pairing 24-region source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-global-MIREN-road-edge-alien-flora-matched-plots-v99
+          run-id: 43214312718
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/miren99
+      - name: Estimate actual original 484 road site time-resurvey Alien names gain vs loss and normalize by union, 11 region codes
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_MIREN_roadside_alien_resurvey_turnover_v100.py \
+            --original-csv source/miren98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --verified-v99 source/miren99/results/audit/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json \
+            --output results/audit/MIREN_real_original_road_verge_Alien_resurvey_gains_losses_v100.json
+      - name: Preserve true 484 repeated ROAD plot source result + all region opposite rate results without RAIL seed causality
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-MIREN-global-road-verge-alien-repeat-plot-turnover-v100
+          path: results/audit/MIREN_real_original_road_verge_Alien_resurvey_gains_losses_v100.json
+          if-no-files-found: warn
