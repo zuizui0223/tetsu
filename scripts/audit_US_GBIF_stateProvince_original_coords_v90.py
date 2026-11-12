@@ -3,7 +3,7 @@
 against ACTUAL coordinate point in U.S. Census 2025 1:500k state polygons.
 
 Eight PRE-FROZEN U.S. states from v8.1, BEFORE and AFTER 2022 GBIF
-occurrence search original row pages, four deterministic API offsets
+occurrence search original row pages, two deterministic API offsets
 per state/period. Source sample is BOUNDED first <=50k result offsets,
 not a random or representative sample of ALL GBIF records.
 All-Plantae original source and separately U.S.-country-GRIIS-listed
@@ -30,7 +30,7 @@ from harvest_US_state_GRIIS_GBIF_plant_source_v81 import (
 
 CENSUS_SHAPE_URL="https://www2.census.gov/geo/tiger/GENZ2025/shp/cb_2025_us_state_500k.zip"
 PERIODS={"before_2022":"2018,2021","after_2022":"2023,2025"}
-REQUEST_OFFSETS=(0,1000,10000,50000)
+REQUEST_OFFSETS=(0,1000)
 ROWS_PER_PAGE=100
 MAX_SOURCE_GBIF_POINTS=8*2*len(REQUEST_OFFSETS)*ROWS_PER_PAGE
 MAX_ZIP_BYTES=12000000
@@ -128,7 +128,7 @@ def bounded_source_points(sess,code,state_name,period):
             if type(year)!=int or not low<=year<=high:
                 raise ValueError("GBIF original occurrence event YEAR inconsistent with requested period")
             allrows.append(row)
-    if len(allrows)>len(offsets)*ROWS_PER_PAGE or len(allrows)>4*ROWS_PER_PAGE:
+    if len(allrows)>len(offsets)*ROWS_PER_PAGE or len(allrows)>len(REQUEST_OFFSETS)*ROWS_PER_PAGE:
         raise ValueError("GBIF original source exceeded fixed page budget")
     return allrows,{
       "source_GBIF_count_in_stateProvince_query":count,
@@ -212,7 +212,7 @@ def run(census_text,shape_zip,griis,sess):
         "2025_Census_state_shapefile_source_url":CENSUS_SHAPE_URL,
         "original_Census_state_polygon_zip_SHA256":sha256(shape_zip).hexdigest(),
         "original_Census_state_FIPS_txt_SHA256":sha256(census_text.encode()).hexdigest(),
-        "sample_design":"4 deterministic stateProvince occurrence/search offsets (0, 1000, 10000, 50000) per period; bounded ≤400 raw source records per window; NOT random nationwide",
+        "sample_design":"2 deterministic stateProvince occurrence/search offsets (0, 1000) per period; bounded ≤200 raw source records per window; NOT random nationwide",
         "quality_boundary_tolerance_meters":GEO_BORDER_TOLERANCE_METERS,
         "states":{},"errors":{},
         "NO_evidence_for_rail_seed_distribution_or_state_nativity":True}
