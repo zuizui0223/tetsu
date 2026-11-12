@@ -8,12 +8,12 @@ from audit_BTS_FAF6_2022_agricultural_rail_freight_v79 import (
 
 def toy_zip():
     f=io.StringIO()
-    cols=("dms_orig","dms_dest","sctg2","dms_mode","trade_type","tons_2022","value_2022")
+    cols=("dms_origst","dms_destst","sctg2","dms_mode","trade_type","tons_2022","value_2022")
     writer=csv.DictWriter(f,fieldnames=cols)
     writer.writeheader()
     for i in range(600):
         writer.writerow({
-            "dms_orig":str(i%12+1),"dms_dest":str((i+2)%12+1),
+            "dms_origst":str(i%12+1),"dms_destst":str((i+2)%12+1),
             "sctg2":str([2,3,10,11,12,20][i%6]),
             "dms_mode":str((i//6)%2+1),
             "trade_type":"1",
