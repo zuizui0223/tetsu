@@ -26,14 +26,14 @@ class GBIFOriginalStateGeoContracts(unittest.TestCase):
     def test_eight_preselected_and_disjoint_years_and_independent_Census(self):
         self.assertEqual(PILOT_FIPS,("06","12","17","19","36","37","48","53"))
         self.assertEqual(PERIODS,{"before_2022":"2018,2021","after_2022":"2023,2025"})
-        self.assertEqual(REQUEST_OFFSETS,(0,1000,10000,50000))
+        self.assertEqual(REQUEST_OFFSETS,(0,1000))
         self.assertEqual(ROWS_PER_PAGE,100)
         self.assertIn("census.gov",CENSUS_SHAPE_URL)
     def test_fixed_source_bounded_page_offsets_are_NOT_uniform_global_random(self):
         self.assertEqual(chosen_offsets(0),[])
         self.assertEqual(chosen_offsets(70),[0])
         self.assertEqual(chosen_offsets(101),[0,1])
-        self.assertEqual(chosen_offsets(1000000),[0,1000,10000,50000])
+        self.assertEqual(chosen_offsets(1000000),[0,1000])
         with self.assertRaisesRegex(ValueError,"Malformed"):
             chosen_offsets(-1)
     def test_actual_GBIF_source_query_no_source_PRESENCE_enum(self):
