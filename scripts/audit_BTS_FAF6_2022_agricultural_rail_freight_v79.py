@@ -66,7 +66,7 @@ def records_from_faf6_zip(data):
             with io.TextIOWrapper(payload,encoding="utf-8-sig",newline="") as stream:
                 reader=csv.DictReader(stream)
                 if reader.fieldnames is None or not REQUIRED.issubset(set(reader.fieldnames)):
-                    raise ValueError("FAF6.0 STATE CSV missing official mode/commodity/year fields")
+                    raise ValueError("FAF6.0 STATE CSV missing official mode/commodity/year fields. Actual original columns: "+repr(reader.fieldnames))
                 for i,row in enumerate(reader):
                     if i>=MAX_CSV_ROWS:
                         raise ValueError("FAF6 source exceeds predeclared max rows")
