@@ -1,0 +1,46 @@
+name: "v9.6 REAL US48 iNaturalist observer+10/50km coarse-site GRIIS K20 source SUPPORT gate"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_US48_observer_site_strict_GRIIS_K20_gate_v96.py'
+      - 'tests/test_US48_observer_site_strict_GRIIS_K20_gate_v96.py'
+      - '.github/workflows/US48-GBIF-iNat-same-observer-site-source-K20-v96.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US48-iNat-observer-site-GRIIS-20records-audit-v96
+  cancel-in-progress: true
+jobs:
+  real-same-observer-site-original-GBIF-GRIIS-source-eligibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run synthetic mathematical upper-bound observer-and-site record support tests
+        run: python -m unittest discover -s tests -p 'test_US48_observer_site_strict_GRIIS_K20_gate_v96.py' -v
+      - name: Download REAL original iNaturalist 48-state before/after observed/source metadata aggregate (no observer names or coordinates)
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US48-iNat-original-observer-site-deidentified-source-v95
+          run-id: 43203802514
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/original95
+      - name: Calculate necessary K20 GRIIS source record upper-bound under both observer and 10km/50km site recurrence; stop unsupported 40-state model
+        run: |
+          python -u scripts/audit_US48_observer_site_strict_GRIIS_K20_gate_v96.py \
+            --original95 source/original95/US48_iNat_GBIF_original_observer_site_10km50km_v95.json \
+            --output results/audit/US48_GBIF_iNaturalist_observer_site_GRIIS_K20_source_gate_v96.json
+      - name: Retain actual GBIF aggregate source support gate but no fictitious observer-matched colonizations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US48-GBIF-iNat-observer-site-GRIIS-K20-source-gate-v96
+          path: results/audit/US48_GBIF_iNaturalist_observer_site_GRIIS_K20_source_gate_v96.json
+          if-no-files-found: warn
