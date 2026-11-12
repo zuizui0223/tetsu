@@ -98,7 +98,7 @@ class MIRENIndependentRoadPlantSourceTests(unittest.TestCase):
                 self.assertEqual(actualmd5,md5)
                 self.assertEqual(len(actual),len(df))
                 audit.write_text('{"complete":false}')
-                with self.assertRaisesRegex(KeyError):
+                with self.assertRaises(KeyError):
                     source_integrity(csv,audit)
             finally:
                 model.SOURCE_MD5,model.SOURCE_ROWS=oldmd5,oldrows
