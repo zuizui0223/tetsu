@@ -223,6 +223,56 @@ def refit_without_one_state(rows,metric,predictor):
     }
 
 
+def commodity_specificity_stress_test(rows):
+    """Posthoc sensitivity: same-OD crop/resource contrast under state
+    deletion, independently defined cargo-tonnage exclusions and all
+    predeclared covariate definitions. Do not select favorable cases."""
+    metric="rarefied20_expected_inclusion_overlap"
+    controls={
+        "full_joint_adjustment":JOINT_CONTROLS,
+        "omit_all_node_strength_proxies":CONTROL_GEOGRAPHY+(
+            "log1p_crop_truck_OD","log1p_resource_truck_OD"),
+        "distance_and_recording_effort_plus_both_truck_modes":(
+            "log_state_centroid_geo_distance",
+            "log_allplant_record_geomean","log_allplant_record_ratio",
+            "log1p_crop_truck_OD","log1p_resource_truck_OD"),
+    }
+    out={
+        "n_source_pairs_not_independent":len(rows),
+        "n_source_states":len({s for r in rows for s in (r["a"],r["b"])}),
+        "source_outcome":"2018-25 country-GRIIS-indexed GBIF K20",
+        "all_predeclared_alternatives_reported_even_if_hypothesis_incompatible":True,
+        "covariate_sensitivity":{},
+        "one_state_deleted":{},
+        "largest_economic_cargo_OD_pairs_removed":{},
+    }
+    for name,ctl in controls.items():
+        rhos={p:partial_rank_pair(rows,metric,p,ctl)
+              for p in ("crop_rail","resource_rail")}
+        a,b=rhos["crop_rail"],rhos["resource_rail"]
+        out["covariate_sensitivity"][name]={
+            "source_partial_rhos":rhos,
+            "source_crop_minus_resource_delta":round(a-b,6)
+                if a is not None and b is not None else None,
+            "n_rank_covariates_plus_other_rail_cargo":len(ctl)+1}
+    for p in ("crop_rail","resource_rail"):
+        out["one_state_deleted"][p]=refit_without_one_state(rows,metric,p)
+    for n in (1,3,5):
+        ordered=sorted(rows,key=lambda r:(-(r["crop_rail"]+r["resource_rail"]),r["a"],r["b"]))
+        subset=ordered[n:]
+        rhos={p:partial_rank_pair(subset,metric,p,JOINT_CONTROLS)
+              for p in ("crop_rail","resource_rail")}
+        a,b=rhos["crop_rail"],rhos["resource_rail"]
+        out["largest_economic_cargo_OD_pairs_removed"][f"remove_top_{n}"]={
+            "remaining_pairs":len(subset),
+            "remaining_unique_states":len({s for r in subset for s in (r["a"],r["b"])}),
+            "source_partial_rhos":rhos,
+            "source_crop_minus_resource_delta":round(a-b,6)
+                if a is not None and b is not None else None}
+    out["NOT_evidence_for_seed_contamination_or_mowing_adaptation"]=True
+    return out
+
+
 def run(previous_fa79,previous_fa80,botanical,previous_v83,
         census_bytes,raw_faf_bytes):
     if (previous_v83.get("complete") is not True or
@@ -257,6 +307,7 @@ def run(previous_fa79,previous_fa80,botanical,previous_v83,
         "cohorts":{},
         "leave_one_state_source_sensitivity":{},
         "source_flow_network_overlap":{},
+        "conditional_crop_specificity_robustness":{},
         "NOT_a_negative_control_of_viable_seed_contamination":True,
         "NOT_observed_cargo_seed_flux_or_mowing_wind_evolution":True,
     }
@@ -273,6 +324,8 @@ def run(previous_fa79,previous_fa80,botanical,previous_v83,
     for cohort in PRIMARY_COHORTS:
         sub=same_pair_cohort(joined,cohort)
         out["cohorts"][cohort]=one_cohort(sub)
+        if cohort in ("crop_rail_and_truck_positive","both_crop_and_resource_rail_positive"):
+            out["conditional_crop_specificity_robustness"][cohort]=commodity_specificity_stress_test(sub)
     for predictor in ("crop_rail","resource_rail"):
         out["leave_one_state_source_sensitivity"][predictor]=refit_without_one_state(
             joined,"rarefied20_expected_inclusion_overlap",predictor)
@@ -317,6 +370,7 @@ def main():
       "cohorts":out["cohorts"],
       "leave_one_state_source_sensitivity":out["leave_one_state_source_sensitivity"],
       "economic_OD_overlap":out["source_flow_network_overlap"],
+      "conditional_crop_specificity_robustness":out["conditional_crop_specificity_robustness"],
       "NO_biological_or_train_seed_mowing_wind_adaptation_claim":True,
     },ensure_ascii=False),flush=True)
 
