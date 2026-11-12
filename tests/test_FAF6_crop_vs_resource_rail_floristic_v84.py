@@ -9,6 +9,7 @@ from analyze_FAF6_crop_vs_resource_rail_floristic_v84 import (
   COMMODITIES,JOINT_CONTROLS,
   extract_OD,symmetric_OD,verify_matrix_marginals,
   augment_base_pairs,one_cohort,same_pair_cohort,partial_rank_pair,
+  commodity_specificity_stress_test,
   assert_original_FAF_integrity)
 
 def network():
@@ -110,6 +111,12 @@ class FAFResourceAsComparison(unittest.TestCase):
         self.assertFalse(c["sufficient_independent_state_source_opportunity_not_independent_ecological_tests"])
         self.assertIsNone(c["outcome_source"]["rarefied20_expected_inclusion_overlap"]
                           ["crop_rail"]["joint_adjusted_partial_rank_rho"])
+        robust=commodity_specificity_stress_test(rr)
+        self.assertIsNone(robust["covariate_sensitivity"]["full_joint_adjustment"]
+                          ["source_crop_minus_resource_delta"])
+        self.assertEqual(robust["one_state_deleted"]["crop_rail"]["n_estimable_refits"],0)
+        self.assertIsNone(robust["largest_economic_cargo_OD_pairs_removed"]["remove_top_1"]
+                          ["source_crop_minus_resource_delta"])
     def test_original_official_hash_and_state_universe_validated(self):
         raw=b"FAF6-2022-mock-bytes"
         sha=sha256(raw).hexdigest()
