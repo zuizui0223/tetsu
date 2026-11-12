@@ -5,7 +5,7 @@ as freight seed transport, selection, wind or heritable adaptation.
 import sys,io,unittest
 from pathlib import Path
 from types import SimpleNamespace
-import pandas as pd
+from html import escape
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 
 from analyze_FAF6_GRIIS_US_state_OD_alignment_v83 import (
@@ -37,7 +37,10 @@ def tigertable(source):
          "STUSAB":f"S{i}","CENTLAT":30+i*.25,
          "CENTLON":-120+i*.5,"AREALAND":100000000+i*123456,
          "REGION":(i%4)+1,"DIVISION":(i%9)+1})
-    return pd.DataFrame(rows).to_html(index=False)
+    columns=list(rows[0])
+    header="<tr>"+"".join("<th>"+escape(key)+"</th>" for key in columns)+"</tr>"
+    body="".join("<tr>"+"".join("<td>"+escape(str(row[key]))+"</td>" for key in columns)+"</tr>" for row in rows)
+    return "<html><body><table>"+header+body+"</table></body></html>"
 
 def freight_fixture():
     return {
