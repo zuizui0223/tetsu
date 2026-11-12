@@ -29,7 +29,7 @@ MODES={"1":"TRUCK","2":"RAIL"}
 TRADE={"1":"domestic","2":"imports","3":"exports"}
 CROPLINKED={"02","03"}
 RESOURCE_CONTROLS={"10","11","12"}
-REQUIRED={"dms_orig","dms_dest","sctg2","dms_mode","trade_type","tons_2022"}
+REQUIRED={"dms_origst","dms_destst","sctg2","dms_mode","trade_type","tons_2022"}
 
 
 def normalize_code(value):
@@ -90,8 +90,8 @@ def summarize_records(records):
         mode=normalize_code(row.get("dms_mode"))
         tradetype=normalize_code(row.get("trade_type"))
         sctg=normalize_code(row.get("sctg2"))
-        o=normalize_code(row.get("dms_orig"))
-        d=normalize_code(row.get("dms_dest"))
+        o=normalize_code(row.get("dms_origst"))
+        d=normalize_code(row.get("dms_destst"))
         tons=source_float(row.get("tons_2022"))
         if o is None or d is None or sctg is None:
             coded["incomplete_origin_dest_or_commodity"]+=1
