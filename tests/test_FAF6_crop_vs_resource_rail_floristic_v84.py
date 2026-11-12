@@ -80,7 +80,7 @@ class FAFResourceAsComparison(unittest.TestCase):
                           "log_state_land_area_geomean":12.,
                           "log_state_land_area_ratio":.1,
                           "same_census_region":1,
-                          "same_census_division":1}}],
+                          "same_census_division":1}}]
         out=augment_base_pairs(base,mats)
         self.assertEqual(out[0]["crop_rail"],13)
         self.assertEqual(out[0]["resource_rail"],5)
