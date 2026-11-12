@@ -46,7 +46,7 @@ jobs:
         run: |
           OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_MIREN_roadside_alien_resurvey_turnover_v100.py \
             --original-csv source/miren98/source_original/MIREN_road_survey_2007_2023_v3.csv \
-            --verified-v99 source/miren99/results/audit/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json \
+            --verified-v99 source/miren99/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json \
             --output results/audit/MIREN_real_original_road_verge_Alien_resurvey_gains_losses_v100.json
       - name: Preserve true 484 repeated ROAD plot source result + all region opposite rate results without RAIL seed causality
         if: always()
