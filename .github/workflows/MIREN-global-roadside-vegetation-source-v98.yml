@@ -1,0 +1,39 @@
+name: "v9.8 MIREN independent real 25-region 2007-2023 standardized roadside vegetation source Zenodo MD5 audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_MIREN_road_vegetation_real_source_v98.py'
+      - '.github/workflows/MIREN-global-roadside-vegetation-source-v98.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-MIREN-original-global-road-verge-source-v98
+  cancel-in-progress: true
+jobs:
+  independent-real-MIREN-roadside-plots-original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original MIREN CSV HTTP client
+        run: pip install 'requests>=2.31,<3'
+      - name: Fetch authentic MIREN v3 Zenodo 2025 road-vs-surrounding vegetation plot CSV and validate original publisher MD5/schema
+        run: |
+          python -u scripts/audit_MIREN_road_vegetation_real_source_v98.py \
+            --source-csv source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --audit-output results/audit/MIREN_original_standardized_roadside_vegetation_source_v98.json
+      - name: Preserve source raw CSV and complete source-schema audit; no railway biological effect claimed
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          path: |
+            source_original/MIREN_road_survey_2007_2023_v3.csv
+            results/audit/MIREN_original_standardized_roadside_vegetation_source_v98.json
+          if-no-files-found: warn
