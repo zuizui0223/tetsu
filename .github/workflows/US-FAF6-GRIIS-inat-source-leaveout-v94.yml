@@ -1,0 +1,81 @@
+name: "v9.4 REAL US40 FAF6 directional crop RAIL/TRUCK plant records full vs iNaturalist-only vs NON-iNaturalist"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_US_FAF6_firstrecord_inat_leaveout_v94.py'
+      - 'tests/test_US_FAF6_firstrecord_inat_leaveout_v94.py'
+      - '.github/workflows/US-FAF6-GRIIS-inat-source-leaveout-v94.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US40-FAF6-GRIIS-iNat-leaveout-v94
+  cancel-in-progress: true
+jobs:
+  actual-GBIF-iNat-OTHER-source-recomputed-temporal-FAF-directions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-matched GBIF and economic freight mathematical dependencies
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify exact speciesKey record subtraction and source frame to avoid invented other-provider records
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_US_FAF6_firstrecord_inat_leaveout_v94.py' -v
+      - name: Original GBIF 2018-21/2023-25 51 US state GRIIS speciesKey facets
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          run-id: 43153476962
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GBIF85
+      - name: Original verified full-country 48 state iNaturalist-only GBIF speciesKey source record counts
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US48-iNaturalist-GBIF-GRIIS-source-v93
+          run-id: 43199018455
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/INAT93
+      - name: Original economic 2022 FAF6 state directional crop RAIL and TRUCK freight estimated OD matrix
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-2022-FAF6-RAIL-TRUCK-crop-state-OD-network-v80
+          run-id: 43142647675
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/FAF80
+      - name: Original 2018-2025 51-state source Census FIPS and country GRIIS taxon identities
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-all51-state-GRIIS-GBIF-2018-25-v82
+          run-id: 43144396513
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/FLORA82
+      - name: Original successful v8.6 48-state 2255 directed source freight-vs-GBIF coefficient baseline
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-FAF6-2022-directional-recorded-source-taxa-v86
+          run-id: 43154108559
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/PRIOR86
+      - name: Compare real 2022 directed freight-vs-recorded taxon source under EXACT all/inat/other provider 40-state common cohort and fixed botanical source controls
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_US_FAF6_firstrecord_inat_leaveout_v94.py \
+            --temporal85 source/GBIF85/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json \
+            --inat93 source/INAT93/US48_iNaturalist_GBIF_2018_21_vs_2023_25_provider_source_v93.json \
+            --fa80 source/FAF80/BTS_FAF6_2022_crop_OD_RAIL_vs_TRUCK_network_v80.json \
+            --flora82 source/FLORA82/US_all51_state_GRIIS_GBIF_2018_25_source_v82.json \
+            --prior86 source/PRIOR86/US_FA6_2022_directional_source_recorded_taxa_v86.json \
+            --output results/audit/US40_FA6_2022_record_source_full_inat_OTHER_v94.json
+      - name: Preserve all GBIF provider-specific source comparison results and non-estimable source support failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US40-FAF6-GRIIS-all-iNat-and-excluded-iNat-source-v94
+          path: results/audit/US40_FA6_2022_record_source_full_inat_OTHER_v94.json
+          if-no-files-found: warn
