@@ -124,6 +124,8 @@ def audit(source_get=get_json):
             if "version" in key.lower() and isinstance(vals,list):
                 versions.extend(vals)
         if isinstance(j.get("versions"),list):versions.extend(j["versions"])
+        if j.get("id") is not None and j.get("versionNumber") is not None:
+            versions.append(j)
     summaries=[]
     for v in versions:
         if not isinstance(v,dict):continue
