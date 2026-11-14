@@ -1,0 +1,63 @@
+name: "v10.5 original Slovenia RAIL 15-section bootstrap and missing-diaspore bounds"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_v105_cluster_missingness.py'
+      - 'tests/test_Slovenia_rail_v105_cluster_missingness.py'
+      - '.github/workflows/Slovenia-RAIL-section-bootstrap-trait-missingness-v105.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-RAIL-v105-cluster
+  cancel-in-progress: true
+jobs:
+  original-railway-15-section-missingness-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic tests of section resampling, all-taxa bounds and source identity gates
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_v105_cluster_missingness.py' -v
+      - name: Download unchanged original 2026 Slovenia railway field XLSX plus source SHA receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Download independently verified 2022-23 89-site railway ballast comparisons v10.3
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-railway-BS-BT-flora-microhabitat-v103
+          run-id: 43539536809
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO103
+      - name: Download independently verified v10.4 wind guild response receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-wind-diaspore-vs-annual-v104
+          run-id: 43540382128
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO104
+      - name: Revalidate locked v10.4 and quantify original 15-section cluster, missingness and coverage sensitivities
+        run: |
+          python -u scripts/analyze_Slovenia_rail_v105_cluster_missingness.py \
+            --original-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --verified103 source/SLO103/Slovenia_2026_original_RAIL_ballast_shoulder_toe_functional_flora_v103.json \
+            --verified104 source/SLO104/SLO_RAIL_2026_real_wind_diaspore_vs_annual_BS_BT_v104.json \
+            --output results/audit/SLO_RAIL_2026_v105_section_cluster_missingness.json
+      - name: Archive all signed and opposite results as real-source machine-readable output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-section-bootstrap-missingness-v105
+          path: results/audit/SLO_RAIL_2026_v105_section_cluster_missingness.json
+          if-no-files-found: warn
