@@ -160,14 +160,17 @@ def validate_original_keys(original):
         float_field(row["richness"],"richness")
         if row.get("cover") is not None:float_field(row["cover"],"cover",allow200=True)
     species=defaultdict(set)
-    missing=0
+    n_original_repeated_EPPO_within_zone=0
     for r in taxa:
         k=(r["location_id"],r["zone_id"])
         t=r["EPPO_code"]
         if k not in keys or t not in tr:
             raise ValueError("Railway taxon original source zone or trait foreign key invalid")
         if t in species[k]:
-            raise ValueError("Duplicated original species EPPO in the same field railway zone")
+            # Original Supplementary source contains repeated EPPO codes
+            # for the SAME field zone. Biological richness is the UNIQUE
+            # taxon set; keep raw row provenance and report duplicate count.
+            n_original_repeated_EPPO_within_zone+=1
         species[k].add(t)
     for k,row in keys.items():
         if int(row["richness"])!=len(species.get(k,set())):
@@ -181,6 +184,8 @@ def validate_original_keys(original):
         "n_original_field_locations":len(loc),
         "n_original_published_zone_rows":len(keys),
         "n_original_species_zone_occurrence_rows":len(taxa),
+        "n_original_duplicate_species_EPPO_rows_within_field_zone_deduplicated":n_original_repeated_EPPO_within_zone,
+        "n_unique_original_EPPO_species_times_zone_source_incidence":sum(len(x) for x in species.values()),
         "n_original_312_taxa_complete_trait_codebook":len(tr),
         "n_original_railway_line_segments":len(segments),
         "n_source_cover_values_above_100_not_assumed_percent":len(overs),
