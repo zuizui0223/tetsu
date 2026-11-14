@@ -76,7 +76,7 @@ class CzechRealSourceCommonSupportMathTests(unittest.TestCase):
                     z[plot]=survey_plants(codes)
         spec=("Z",10,"exact",2)
         blocks,diag=matched_blocks(meta,z,"strict",spec)
-        self.assertEqual(diag["n_source_blocks_retaining_both_arms"],2)
+        self.assertEqual(diag["n_original_source_blocks_retaining_both_arms"],2)
         self.assertEqual(diag["n_source_rail_plots_on_matched_common_support"],6)
         m=block_standardized_guild(blocks,z)
         self.assertTrue(m["identified"])
@@ -95,7 +95,7 @@ class CzechRealSourceCommonSupportMathTests(unittest.TestCase):
         source_taxa={str(i):survey_plants(["W1A"]) for i in (0,1,3,4)}
         blocks,diag=matched_blocks(meta,source_taxa,"strict",("x",10,"exact",2))
         self.assertEqual(diag["candidate_plots_with_no_source_vascular_records_excluded"],2)
-        self.assertEqual(diag["n_source_blocks_retaining_both_arms"],1)
+        self.assertEqual(diag["n_original_source_blocks_retaining_both_arms"],1)
 
     def test_forged_source_v119_stops_before_independent_country_biology(self):
         with self.assertRaisesRegex(ValueError,"not present"):
