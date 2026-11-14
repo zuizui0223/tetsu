@@ -76,13 +76,13 @@ def taxa_preference(source_sites,traits,exclude_section=None):
             continue
         nloc+=1
         bs=site["BS"]; bt=site["BT"]
-        for code in (bs|bt):
+        for code in sorted(bs|bt):
             v=accum[code]
             if code in bs and code in bt:v[2]+=1
             elif code in bs:v[0]+=1
             else:v[1]+=1
     out=[]
-    for code,v in accum.items():
+    for code,v in sorted(accum.items()):
         meta=source_guild(traits[code])
         if meta is None:
             continue
