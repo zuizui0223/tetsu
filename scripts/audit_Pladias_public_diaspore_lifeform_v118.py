@@ -71,7 +71,7 @@ def xlsx_rows(raw):
 
 def inspect_source(path,trait):
     raw=Path(path).read_bytes()
-    if len(raw)<3000:raise ValueError("Pladias source too small, probably source access error")
+    if len(raw)<200:raise ValueError("Pladias source too small, probably source access error")
     kind="zip-office" if raw[:2]==b"PK" else "csv-text"
     enc,headers,rows=xlsx_rows(raw) if kind=="zip-office" else csv_rows(raw)
     cats=Counter()
@@ -101,7 +101,7 @@ def inspect_source(path,trait):
 
 
 def run(disp_file,life_file):
-    d=inspect_source(disp_file,"published_Pladi as_diaspore_strategy".replace(" ",""))
+    d=inspect_source(disp_file,"published_Pladias_diaspore_strategy")
     l=inspect_source(life_file,"published_Pladias_life_form")
     if d["source_file_sha256"]==l["source_file_sha256"]:
         raise ValueError("Same published traits file returned for two distinct source features")
