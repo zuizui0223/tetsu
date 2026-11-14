@@ -1,0 +1,33 @@
+name: Japan real iNaturalist phenophase + rail-proximity feasibility
+
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_inat_rail_phenophases.py'
+      - '.github/workflows/inat-rail-phenophase.yml'
+  workflow_dispatch:
+
+jobs:
+  realdata-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install GIS, API, geometry dependencies
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'shapely>=2.0,<3' 'pyproj>=3.5,<4'
+      - name: Real photo-phenophase counts and vicinity feasibility, with API rate limiting
+        run: python scripts/audit_inat_rail_phenophases.py --output results/inat/rail_phenophase_audit.json --limit 100 --delay 1.10
+      - name: Upload only aggregated audit, not sensitive positions or third-party photos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-inat-rail-phenophase-audit
+          path: results/inat/rail_phenophase_audit.json
+          if-no-files-found: warn

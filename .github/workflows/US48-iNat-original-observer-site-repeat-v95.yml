@@ -1,0 +1,65 @@
+name: "v9.5 REAL GBIF iNaturalist 48-state observer and 10/50km site temporal recurrence original bounded source QA"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_US48_iNat_observer_site_repeat_v95.py'
+      - 'tests/test_US48_iNat_observer_site_repeat_v95.py'
+      - '.github/workflows/US48-iNat-original-observer-site-repeat-v95.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US48-iNat-original-observer-10km-site-temporal-v95
+  cancel-in-progress: true
+jobs:
+  real-original-GBIF-48state-iNat-observer-and-site-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-identification, equal-area geometry and original GBIF client
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Run source identity, nonrandom audit and PII-deidentification tests
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_US48_iNat_observer_site_repeat_v95.py' -v
+      - name: Download verified original 48 Census state pre/post iNaturalist scoped source denominators
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US48-iNaturalist-GBIF-GRIIS-source-v93
+          run-id: 43199018455
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/INAT93
+      - name: Download verified 51 state 2018-21 and 2023-25 GBIF year-bins source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          run-id: 43153476962
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GBIF85
+      - name: Download verified original US country GRIIS accepted source speciesKeys
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GRIIS24
+      - name: Query real original iNaturalist GBIF occurrence/source observer and 10/50km coarse location recurrences for 48 states 2018-21 vs 2023-25
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_US48_iNat_observer_site_repeat_v95.py \
+            --griis source/GRIIS24/griis_9country_alien_backbone_keys_v24.json \
+            --temporal85 source/GBIF85/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json \
+            --inat93 source/INAT93/US48_iNaturalist_GBIF_2018_21_vs_2023_25_provider_source_v93.json \
+            --output results/audit/US48_iNat_GBIF_original_observer_site_10km50km_v95.json
+      - name: Archive aggregate source-quality cells and observer-repeat COUNTS only; never raw observer IDs or geolocations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US48-iNat-original-observer-site-deidentified-source-v95
+          path: results/audit/US48_iNat_GBIF_original_observer_site_10km50km_v95.json
+          if-no-files-found: warn

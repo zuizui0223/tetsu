@@ -1,0 +1,37 @@
+name: Verify actual 2017 vs 2024 OSM road history along LRT and 2024 N13 source
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_lrt_2017_osm_road_history.py'
+      - 'tests/test_lrt_2017_osm_road_history.py'
+      - '.github/workflows/lrt-historical-osm-roads-v14.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-LRT-historical-OSM2017-roads
+  cancel-in-progress: true
+jobs:
+  history-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install official road, GIS, and HeiGIT historical OpenStreetMap client dependencies
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Verify 2017 geometry and historical-Osm-road-missing-is-not-absence rules
+        run: python -m unittest discover -s tests -p 'test_lrt_2017_osm_road_history.py' -v
+      - name: Inspect road ways mapped in 2017 and 2024, 6 fixed tram anchors, crosscheck 2024 official N13
+        run: python -u scripts/audit_lrt_2017_osm_road_history.py --output results/audit/lrt_2017_osm_road_history_vs_2024_N13_v14.json
+      - name: Save only aggregated road-history mapping quality with OSM attribution
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lrt-2017-osm-road-history-versus-2024-n13-source-coverage
+          path: results/audit/lrt_2017_osm_road_history_vs_2024_N13_v14.json
+          if-no-files-found: warn

@@ -1,0 +1,47 @@
+name: "v4.5 Circuitscape-equivalent RAIL effective resistance on four NEW country 50km macro blocks"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - '.github/workflows/rail-circuit-four-new-macro-v45.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-circuit-rail-four-independent-v45
+  cancel-in-progress: true
+jobs:
+  circuit-on-true-frozen-country-block:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        block:
+          - ca_ontario
+          - gb_yorkshire
+          - de_saxony
+          - au_southeast
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact source network circuit sparse numerical dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Verify exact resistor solver triangle diamond tree parallel source properties
+        run: python -m unittest discover -s tests -p 'test_circuit_network_v37.py' -v
+      - name: Source actual October2026 physical RAIL network resistor distances for independent 50km country block
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_overture_50km_circuit_v37.py \
+            --blocks ${{ matrix.block }} \
+            --output results/audit/rail_circuit_${{ matrix.block }}_v45.json
+      - name: Archive circuit source term-pair Q and physically valid source geometry only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-50km-rail-circuit-${{ matrix.block }}-v45
+          path: results/audit/rail_circuit_${{ matrix.block }}_v45.json
+          if-no-files-found: warn

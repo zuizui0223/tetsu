@@ -1,0 +1,92 @@
+name: "v5.1 Same-cell six-country GRIIS flora vs RAIL/ROAD after GBIF dataset-source overlap adjustment"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_dataset_overlap_adjusted_rail_plants_v51.py'
+      - 'tests/test_dataset_overlap_adjusted_rail_plants_v51.py'
+      - '.github/workflows/gbif-dataset-adjusted-rail-plants-v51.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-dataset-overlap-source-adjustment-v51
+  cancel-in-progress: true
+jobs:
+  six-country-same-pair-dataset-source-adjusted-plant-rail:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numeric plant rank and geographic source dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Test identical source pairs and recording overlap, fail-closed missingness and independent country weights
+        run: python -m unittest discover -s tests -p 'test_dataset_overlap_adjusted_rail_plants_v51.py' -v
+      - name: Retrieve existing GRIIS 50km country-introduced 2-period speciesKey source matrix
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Retrieve real all-plant DATASET_KEY + DETECTED source composition in same six-country cells
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-GBIF-50km-dataset-composition-*-v50'
+          run-id: 42796286437
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/datasets
+          merge-multiple: false
+      - name: Retrieve real preselected original US FR physical RAIL routes (plus excluded Japan provenance)
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_old
+      - name: Retrieve real preselected original US FR physical ROAD routes
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_old
+      - name: Retrieve actual four additional country RAIL routes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-rail-physical-paths-*-v43'
+          run-id: 42780398147
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_new
+          merge-multiple: false
+      - name: Retrieve actual four additional country ROAD routes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-road-physical-paths-*-v43'
+          run-id: 42781107642
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_new
+          merge-multiple: false
+      - name: Compare unadjusted and dataset-overlap-adjusted rank association on IDENTICAL true source pairs
+        run: |
+          test "$(find source/datasets -name '*.json' | wc -l)" -eq 6
+          test "$(find source/rail_new -name '*.json' | wc -l)" -eq 4
+          test "$(find source/road_new -name '*.json' | wc -l)" -eq 4
+          python -u scripts/analyze_dataset_overlap_adjusted_rail_plants_v51.py \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --rail-sources source/rail_old/overture_50km_continuous_rail_routes_v32.json source/rail_new/*/*.json \
+            --road-sources source/road_old/overture_50km_macro_road_paths_v33.json source/road_new/*/*.json \
+            --dataset-sources source/datasets/*/*.json \
+            --output results/audit/GBIF_dataset_adjusted_6country_rail_plant_v51.json
+      - name: Preserve complete observational country source directions and missingness, no per-pair significance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-6country-50km-dataset-overlap-adjusted-rail-plant-diagnostic-v51
+          path: results/audit/GBIF_dataset_adjusted_6country_rail_plant_v51.json
+          if-no-files-found: warn

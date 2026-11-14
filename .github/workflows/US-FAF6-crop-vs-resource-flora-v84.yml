@@ -1,0 +1,72 @@
+name: "v8.4 REAL USA 49 state crop vs resource railway cargo specificity against GBIF GRIIS flora"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_FAF6_crop_vs_resource_rail_floristic_v84.py'
+      - 'tests/test_FAF6_crop_vs_resource_rail_floristic_v84.py'
+      - '.github/workflows/US-FAF6-crop-vs-resource-flora-v84.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US-FAF6-rail-crop-vs-resource-GRIIS-49state-v84
+  cancel-in-progress: true
+jobs:
+  actual-crop-versus-resource-rail-freight-OD-plant-source-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-record freight and floristic matrix analysis dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Validate commodity-specific same-pair source and strict provenance gates
+        run: python -m unittest discover -s tests -p 'test_FAF6_crop_vs_resource_rail_floristic_v84.py' -v
+      - name: Original official US FAF6.0 2022 599529-row checksum/marginal source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-BTS-FAF6-state-2022-rail-truck-crop-freight-v79
+          run-id: 43128165864
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/fa79
+      - name: Original 2022 51-state crop rail and truck OD matrices + resource original source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-2022-FAF6-RAIL-TRUCK-crop-state-OD-network-v80
+          run-id: 43142647675
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/fa80
+      - name: Original 2018–25 GBIF country-listed GRIIS flora source over Census 51 states
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-all51-state-GRIIS-GBIF-2018-25-v82
+          run-id: 43144396513
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora82
+      - name: Exact original v8.3 49 state × 1176 pair crop rail association source coefficients
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-2022-FAF6-GBIF-GRIIS-state-floristic-OD-source-v83
+          run-id: 43145635279
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/previous83
+      - name: Compare ORIGINAL FAF2022 SCTG02/03 crop rail/truck against SCTG10/11/12 resource rail/truck on identical 49-state GBIF floristic pairs
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_FAF6_crop_vs_resource_rail_floristic_v84.py \
+            --fa79 source/fa79/BTS_FAF6_2022_rail_truck_crop_OD_v79.json \
+            --fa80 source/fa80/BTS_FAF6_2022_crop_OD_RAIL_vs_TRUCK_network_v80.json \
+            --flora82 source/flora82/US_all51_state_GRIIS_GBIF_2018_25_source_v82.json \
+            --source83 source/previous83/US_2022_crop_FAF6_GRIIS_state_similarity_v83.json \
+            --output results/audit/US_FA6_2022_crop_vs_resource_rail_GRIIS_similarity_v84.json
+      - name: Preserve real cargo comparison original results and all non-estimable geographical pair cells
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US-49state-FAF6-crop-vs-resource-rail-GBIF-GRIIS-v84
+          path: results/audit/US_FA6_2022_crop_vs_resource_rail_GRIIS_similarity_v84.json
+          if-no-files-found: warn

@@ -1,0 +1,52 @@
+name: "v4.1 Genuine Julia Circuitscape NETWORK executable versus independent SciPy"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/verify_actual_julia_circuitscape_v41.py'
+      - 'scripts/verify_actual_julia_circuitscape_v41.jl'
+      - '.github/workflows/actual-julia-circuitscape-v41.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-julia-circuitscape-parity-v41
+  cancel-in-progress: true
+jobs:
+  verify-synthetic-networks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independent Python resistor numerical reference
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2'
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1.11'
+      - uses: julia-actions/cache@v2
+      - name: Install actual Circuitscape Julia package
+        run: |
+          julia --color=no --startup-file=no -e 'import Pkg; Pkg.add("Circuitscape"); using Circuitscape; println("Julia Circuitscape.jl loaded")'
+      - name: Create actual network resistor triples, focal nodes, configs and SciPy reference
+        run: python scripts/verify_actual_julia_circuitscape_v41.py --outdir results/audit/actual_julia_circuitscape_v41
+      - name: Run ACTUAL Julia Circuitscape NETWORK pairwise on three analytic resistor networks
+        run: |
+          for name in triangle diamond series; do
+            JULIA_NUM_THREADS=1 julia --color=no --startup-file=no \
+              scripts/verify_actual_julia_circuitscape_v41.jl \
+              "results/audit/actual_julia_circuitscape_v41/$name/$name.ini" \
+              "results/audit/actual_julia_circuitscape_v41/$name/julia_matrix.tsv"
+          done
+      - name: Verify Julia output numerical parity with independent SciPy source
+        run: python scripts/verify_actual_julia_circuitscape_v41.py --outdir results/audit/actual_julia_circuitscape_v41 --validate
+      - name: Preserve only synthetic executable parity (no licensed railway geometry)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: actual-Julia-Circuitscape-network-synthetic-verification-v41
+          path: results/audit/actual_julia_circuitscape_v41/parity_result.json
+          if-no-files-found: warn

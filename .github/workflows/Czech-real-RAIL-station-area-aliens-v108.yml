@@ -1,0 +1,50 @@
+name: "v10.8 REAL Czech railway 39 stations source S2 area-mix alien-flora"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Czech_2024_rail_station_area_aliens_v108.py'
+      - 'tests/test_Czech_2024_rail_station_area_aliens_v108.py'
+      - '.github/workflows/Czech-real-RAIL-station-area-aliens-v108.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Czech-RAIL-v108-source-area-flora
+  cancel-in-progress: true
+jobs:
+  real-published-czech-station-aliens:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only original supplementary spreadsheet parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Independently test five-source-stretch station area regression/permutation and original SHA gate
+        run: python -m unittest discover -s tests -p 'test_Czech_2024_rail_station_area_aliens_v108.py' -v
+      - name: Fetch original 2024 Czech article S1 plus corrected S2 erratum source without archiving copyrighted sheets
+        run: |
+          mkdir -p source/CZE108
+          curl --fail --location --silent --show-error --retry 3 --max-time 90 \
+            --output source/CZE108/S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --silent --show-error --retry 3 --max-time 90 \
+            --output source/CZE108/S2_corrected.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+      - name: Recheck exact independent original source hashes and fit 39 station adjusted alien composition estimates
+        run: |
+          python -u scripts/analyze_Czech_2024_rail_station_area_aliens_v108.py \
+            --s1 source/CZE108/S1.xlsx \
+            --s2 source/CZE108/S2_corrected.xlsx \
+            --output results/audit/CZE_2024_39rail_stations_5_stretch_area_mix_alien_fraction_v108.json
+      - name: Preserve machine-readable real source estimates including all negative and non-significant outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Czech-real-39station-5stretch-source-area-alien-fraction-v108
+          path: results/audit/CZE_2024_39rail_stations_5_stretch_area_mix_alien_fraction_v108.json
+          if-no-files-found: warn

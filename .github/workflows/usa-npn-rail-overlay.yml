@@ -1,0 +1,34 @@
+name: USA-NPN 2024 sites to FRA 2026 railway proximity audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_npn_rail_proximity.py'
+      - '.github/workflows/usa-npn-rail-overlay.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-usa-npn-rail-overlay
+  cancel-in-progress: true
+jobs:
+  source-overlay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install NPN and GIS clients
+        run: pip install 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Join monitored 2024 plant phenophases to 2026 FRA mapped rail
+        run: python scripts/audit_npn_rail_proximity.py --output results/audit/usa_npn_rail_proximity.json
+      - name: Upload aggregated site-exposure audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usa-npn-fra-railway-site-overlap-audit
+          path: results/audit/usa_npn_rail_proximity.json
+          if-no-files-found: warn

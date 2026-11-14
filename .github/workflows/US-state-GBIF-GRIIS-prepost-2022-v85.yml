@@ -1,0 +1,64 @@
+name: "v8.5 REAL US51 pre2022 vs post2022 GBIF recorded GRIIS source audit 2018-21 vs 2023-25"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/harvest_US_state_GRIIS_temporal_split_v85.py'
+      - 'tests/test_US_state_GRIIS_temporal_split_v85.py'
+      - '.github/workflows/US-state-GBIF-GRIIS-prepost-2022-v85.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US51-GBIF-GRIIS-separated-2022-year-v85
+  cancel-in-progress: true
+jobs:
+  census51-real-GBIF-GRIIS-split-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original Census/GBIF/GRIIS source and geometry dependencies
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Validate split window source gates and no false colonization or year-2022 overlap
+        run: python -m unittest discover -s tests -p 'test_US_state_GRIIS_temporal_split_v85.py' -v
+      - name: Load 2022 FAF6 verified 51-state original source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-BTS-FAF6-state-2022-rail-truck-crop-freight-v79
+          run-id: 43128165864
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/faf
+      - name: Load original 2026 GRIIS USA country-accepted GBIF speciesKey list
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Load original 51-state US 2018-25 GBIF indexed plant source map
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-all51-state-GRIIS-GBIF-2018-25-v82
+          run-id: 43144396513
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora82
+      - name: Query authentic 2026 GBIF 51-state USA GRIIS-list flora in disjoint 2018-21 and 2023-25 source event years
+        run: |
+          python -u scripts/harvest_US_state_GRIIS_temporal_split_v85.py \
+            --griis source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --fa79 source/faf/BTS_FAF6_2022_rail_truck_crop_OD_v79.json \
+            --flora82 source/flora82/US_all51_state_GRIIS_GBIF_2018_25_source_v82.json \
+            --output results/audit/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json
+      - name: Retain actual 51-state temporal recording source without false species absence or seed movement inference
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          path: results/audit/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json
+          if-no-files-found: warn

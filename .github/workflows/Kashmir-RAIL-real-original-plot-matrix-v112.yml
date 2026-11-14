@@ -1,0 +1,46 @@
+name: "v11.2 REAL Kashmir Dryad 2021 original railway vegetation plot matrix audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_Kashmir_2021_original_plot_matrix_v112.py'
+      - 'tests/test_Kashmir_2021_original_plot_matrix_v112.py'
+      - '.github/workflows/Kashmir-RAIL-real-original-plot-matrix-v112.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Kashmir-real-original-Dryad-plot-matrix-v112
+  cancel-in-progress: true
+jobs:
+  original-Himalayan-railway-transects:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-original XLSX read-only parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Validate original Kashmir Dryad file checksum and no fabricated railway plots
+        run: python -m unittest discover -s tests -p 'test_Kashmir_2021_original_plot_matrix_v112.py' -v
+      - name: Fetch exactly independently verified Dryad file 546003 for corrected dataset DOI
+        run: |
+          mkdir -p source/Kashmir112
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/Kashmir112/Matrix_plot.xlsx \
+            'https://datadryad.org/api/v2/files/546003/download'
+      - name: Verify real original SHA and inspect species-plot-year source matrix without fitting invented biology
+        run: |
+          python -u scripts/audit_Kashmir_2021_original_plot_matrix_v112.py \
+            --original-xlsx source/Kashmir112/Matrix_plot.xlsx \
+            --output results/audit/Kashmir_2021_original_rail_2014_2017_plot_matrix_structure_v112.json
+      - name: Archive source metadata only until species plot-year structure is verified
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-Kashmir-rail-2014-2017-Dryad-plot-matrix-metadata-v112
+          path: results/audit/Kashmir_2021_original_rail_2014_2017_plot_matrix_structure_v112.json
+          if-no-files-found: warn

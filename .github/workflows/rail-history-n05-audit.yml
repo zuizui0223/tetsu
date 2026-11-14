@@ -1,0 +1,36 @@
+name: MLIT N05 2025 historical passenger rail opens/ends — noncommercial source audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_n05_historical_railway.py'
+      - '.github/workflows/rail-history-n05-audit.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-n05-history-source-audit
+  cancel-in-progress: true
+jobs:
+  historical-rail-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install small shapefile reader and HTTP source client
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3'
+      - name: Verify historical N05 source and operator/attribute-change event counts
+        run: python scripts/audit_n05_historical_railway.py --output results/audit/n05_2025_historical_rail_summary.json
+      - name: Test historical opening/closure versus record variant distinctions
+        run: python -m unittest discover -s tests -p 'test_n05_history.py' -v
+      - name: Upload only aggregate year counts (never source-licensed N05 geometry)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlit-n05-2025-noncommercial-railway-history-source-audit
+          path: results/audit/n05_2025_historical_rail_summary.json
+          if-no-files-found: warn

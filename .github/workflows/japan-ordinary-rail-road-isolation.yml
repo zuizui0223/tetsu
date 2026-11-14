@@ -1,0 +1,38 @@
+name: Real ordinary Japan N02 rail corridors versus N13 roads (3 independent regions)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/ordinary_rail_corridors.py'
+      - 'scripts/audit_japan_ordinary_rail_road_separation.py'
+      - 'tests/test_japan_ordinary_rail_corridors.py'
+      - '.github/workflows/japan-ordinary-rail-road-isolation.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-japan-n02-n13-ordinary-road-separated-regions
+  cancel-in-progress: true
+jobs:
+  road-isolation-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independent official shapefile geometry clients
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Assert ordinary rail, road-only control and geographic sample rules
+        run: python -m unittest discover -s tests -p 'test_japan_ordinary_rail_corridors.py' -v
+      - name: Actually download official N02-25 and three N13-24 road meshes and rank road-separated ordinary rail
+        run: python -u scripts/audit_japan_ordinary_rail_road_separation.py --output results/audit/japan_ordinary_rail_road_separation_v15.json
+      - name: Keep aggregate road/rail candidate counts and exact source provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jp-n02-ordinary-rail-vs-n13-current-road-isolation-three-regions
+          path: results/audit/japan_ordinary_rail_road_separation_v15.json
+          if-no-files-found: warn

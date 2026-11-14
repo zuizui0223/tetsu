@@ -1,0 +1,48 @@
+name: "v9.0 REAL GBIF 8 pre-frozen stateProvince ORIGINAL coordinates vs Census 2025 500k state borders source QA"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_US_GBIF_stateProvince_original_coords_v90.py'
+      - 'tests/test_US_GBIF_stateProvince_original_coords_v90.py'
+      - '.github/workflows/US-GBIF-stateProvince-Census-geospatial-QA-v90.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US8-preselected-GBIF-stateProvince-Census-shape-v90
+  cancel-in-progress: true
+jobs:
+  real-2025-Census-state-GBIF-occurrence-coordinate-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original GBIF occurrence and official Census SHP geometry parser
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'pyshp>=2.3,<3'
+      - name: Validate source-year and geographic QA tests, no exact occurrence ids exported
+        run: python -m unittest discover -s tests -p 'test_US_GBIF_stateProvince_original_coords_v90.py' -v
+      - name: Download verified GRIIS USA country-listed species keys to distinguish broad botanical vs GRIIS source subsets
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/US_GRIIS
+      - name: Fetch real original GBIF occurrence point-source year records for original 8 preselected US states and compare to 2025 Census state polygons
+        run: |
+          python -u scripts/audit_US_GBIF_stateProvince_original_coords_v90.py \
+            --griis source/US_GRIIS/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/US_GBIF_stateProvince_original_coord_Census2025_QA_v90.json
+      - name: Preserve ONLY aggregate state source quality not original GBIF locations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US8-GBIF-original-stateProvince-Census2025-geography-source-v90
+          path: results/audit/US_GBIF_stateProvince_original_coord_Census2025_QA_v90.json
+          if-no-files-found: warn

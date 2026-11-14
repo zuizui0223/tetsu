@@ -1,0 +1,17 @@
+region_id,taxon,status
+A,alien_1,alien
+A,alien_2,alien
+A,native_1,native
+A,native_2,native
+B,alien_1,alien
+B,alien_2,alien
+B,native_3,native
+B,native_4,native
+C,alien_3,alien
+C,alien_4,alien
+C,native_1,native
+C,native_3,native
+D,alien_3,alien
+D,alien_4,alien
+D,native_2,native
+D,native_4,native

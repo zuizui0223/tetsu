@@ -1,0 +1,48 @@
+name: "v6.7 GBIF original A5 real polygon coverage versus centroid-only France Burgundy source omission"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_public_GBIF_FR_A5_polygon_coverage_v67.py'
+      - 'tests/test_public_GBIF_FR_A5_polygon_coverage_v67.py'
+      - '.github/workflows/public-GBIF-FR-A5-polygon-source-coverage-v67.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-public-GBIF-FR-full-geometry-source-audit-v67
+  cancel-in-progress: true
+jobs:
+  verify-source-spatial-partition-completeness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official GBIF community A5 and anonymous S3 metadata clients
+        run: pip install 'duckdb>=1.4,<2' 'boto3>=1.34,<2' 'botocore>=1.34,<2' 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify all original 50km polygon A5 coverage and strict source object listing completeness
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_FR_A5_polygon_coverage_v67.py' -v
+      - name: Retrieve PREOUTCOME GBIF France bounded 48-object source metadata snapshot
+        uses: actions/download-artifact@v4
+        with:
+          name: GBIF-Aug26-public-original-FR-Burgundy-bounded-multifile-source-v65
+          run-id: 42959420881
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gbif
+      - name: Query TRUE A5 polygon covers of ALL original 16 equal-area 50km France cells and list every published original source Parquet file
+        run: |
+          python -u scripts/audit_public_GBIF_FR_A5_polygon_coverage_v67.py \
+            --original-v65-source-json source/gbif/GBIF_real_aug2026_FR_Burgundy_bounded_all_source_files_v65.json \
+            --output results/audit/GBIF_FR_full_polygon_A5_source_metadata_v67.json
+      - name: Archive public S3 file metadata, missing-object/partition audit, no individual original GBIF events
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-France-A5-full-50km-polygon-cover-and-unscanned-source-file-metadata-v67
+          path: results/audit/GBIF_FR_full_polygon_A5_source_metadata_v67.json
+          if-no-files-found: warn

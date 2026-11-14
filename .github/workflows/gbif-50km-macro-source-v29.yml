@@ -1,0 +1,40 @@
+name: Macro ecology 50km equal-area GBIF source coverage (10 pre-frozen independent blocks)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_gbif_equalarea_macroblocks_v29.py'
+      - 'tests/test_gbif_equalarea_macroblocks_v29.py'
+      - '.github/workflows/gbif-50km-macro-source-v29.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-gbif-50km-macro-source-v29
+  cancel-in-progress: true
+jobs:
+  initial-independent-macro-blocks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install geographic equal-area and GBIF source clients
+        run: pip install 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Validate pre-outcome 24-block equal-area geometry and source coverage flags
+        run: python -m unittest discover -s tests -p 'test_gbif_equalarea_macroblocks_v29.py' -v
+      - name: Query actual GBIF 10 geographic blocks times 16 equal-area cells times two periods
+        run: |
+          python -u scripts/audit_gbif_equalarea_macroblocks_v29.py \
+            --blocks jp_tohoku jp_kyushu us_midwest us_southeast ca_ontario gb_yorkshire fr_burgundy au_southeast de_saxony nz_north \
+            --output results/audit/gbif_50km_10macroblocks_source_v29.json
+      - name: Preserve aggregated macro spatial source-opportunity audit and missingness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbif-50km-independent-macro-10block-source-v29
+          path: results/audit/gbif_50km_10macroblocks_source_v29.json
+          if-no-files-found: warn

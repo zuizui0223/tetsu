@@ -1,0 +1,64 @@
+name: "v7.6 REAL FRA open-crossing train intensity vs GRIIS alien-GIFT plant richness (2 US 50km blocks)"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_US_train_counts_GRIIS_traits_v76.py'
+      - 'tests/test_US_train_counts_GRIIS_traits_v76.py'
+      - '.github/workflows/US-FRA-traffic-GRIIS-functional-macro-v76.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-FRA-GRIIS-US2block-50km-train-traffic-v76
+  cancel-in-progress: true
+jobs:
+  real-fra-open-crossing-GRIIS-GIFT-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install real GBIF-GRIIS/FRA/GIFT source analysis dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify fixed two region and observed crossing QA without a causal freight claim
+        run: python -m unittest discover -s tests -p 'test_US_train_counts_GRIIS_traits_v76.py' -v
+      - name: Load verified FRA source open crossing day night train counts reported year 2018-2026
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-FRA-US3block-50km-crossing-train-source-v75
+          run-id: 43048727413
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/fra
+      - name: Load original eight-country ten-block GRIIS GBIF source species counts
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Load real public GIFT growth form 1.2.1 with source-tracked GBIF accepted species keys
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-real-GIFT-growthform-railroad-macro-v71
+          run-id: 42980383943
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gift
+      - name: Run real two-US-block observed crossing-train intensity versus GRIIS richness & growth forms macro
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_US_train_counts_GRIIS_traits_v76.py \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --fra source/fra/US_FRA_crossing_train_year_source_v75.json \
+            --gift source/gift/sixcountry_GIFT_growth_form_source_v70.json \
+            --output results/audit/US_FRA_train_count_vs_GRIIS_growthform_source_v76.json
+      - name: Retain all signed country results, complete cross-source QA, nonestimable countries and limitations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US2block-FRA-GBIF-GRIIS-GIFT-traffic-traits-source-v76
+          path: results/audit/US_FRA_train_count_vs_GRIIS_growthform_source_v76.json
+          if-no-files-found: warn

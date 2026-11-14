@@ -1,0 +1,33 @@
+name: Real licensed plant photo ROI-review cohort
+
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/sample_photo_roi_candidates.py'
+      - '.github/workflows/real-photo-roi-review.yml'
+  workflow_dispatch:
+
+jobs:
+  photo-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install source, GIS and imaging libraries
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'shapely>=2.0,<3' 'pyproj>=3.5,<4' 'Pillow>=10,<13'
+      - name: Audit natural plant photos near / far from rail
+        run: python scripts/sample_photo_roi_candidates.py --output-dir results/inat/roi_photos --per-group 3 --delay 1.10
+      - name: Upload reviewed-license image cohort and attribution (not segmentation ground truth)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-rail-plant-licensed-photo-roi-review
+          path: results/inat/roi_photos/
+          if-no-files-found: warn

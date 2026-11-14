@@ -1,0 +1,37 @@
+name: Crosscheck two 2021 mapped-grass conventional railway sites with 2025 S2 and GSI aerial coverage
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_japan_two_posthoc_grass_sites_S2_GSI.py'
+      - 'tests/test_japan_two_posthoc_grass_sites.py'
+      - '.github/workflows/japan-posthoc-2-grass-S2-GSI.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-posthoc-two-map-grass-sites-S2-GSI-v16
+  cancel-in-progress: true
+jobs:
+  independent-source-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install official GIS, public 2021 ESA COG, 2025 Sentinel and GSI image metadata dependencies
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3' 'Pillow>=10,<13'
+      - name: Verify exact posthoc grass source selection before 2025 imagery and reject GSI imagery as ground truth
+        run: python -m unittest discover -s tests -p 'test_japan_two_posthoc_grass_sites.py' -v
+      - name: Inspect 2025 actual red/NIR/SCL and current GSI seamless aerial source for Niigata and Nagano mapped grass sites
+        run: python -u scripts/audit_japan_two_posthoc_grass_sites_S2_GSI.py --output results/audit/japan_two_posthoc_grass_site_S2_GSI_v16.json
+      - name: Archive source QA and route labels only, never GSI photo bytes or private coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-two-new-2021-mapped-grass-railway-sites-2025-SCL-GSI-photo-source
+          path: results/audit/japan_two_posthoc_grass_site_S2_GSI_v16.json
+          if-no-files-found: warn

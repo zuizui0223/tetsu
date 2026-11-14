@@ -1,0 +1,60 @@
+name: "v13.1 REAL Swiss Basel 2013-2020 freight station vs port 7908 feral OSR DNA tests gov PDF"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/Swiss_Basel_CantonalLab_2020_GM_rapeseed_station_port_2013_2020_v131.csv'
+      - 'scripts/analyze_Swiss_Basel_rail_freight_port_GM_rapeseed_2013_2020_v131.py'
+      - 'tests/test_Swiss_Basel_rail_freight_port_GM_rapeseed_2013_2020_v131.py'
+      - '.github/workflows/Swiss-Basel-original-government-feral-OSR-v131.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-SWISS-Basel-official-original-rapeseed-monitor-2013-2020-v131
+  cancel-in-progress: true
+jobs:
+  original-Basel-8year-freight-station-port-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Ensure native original government PDF table parser without any OCR
+        run: |
+          if ! command -v pdftotext >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          pdftotext -v
+      - name: Unit-test 2 original Swiss locations 8 years 7908 PCR tests 459 GMO positives source table fail-closed
+        run: python -m unittest discover -s tests -p 'test_Swiss_Basel_rail_freight_port_GM_rapeseed_2013_2020_v131.py' -v
+      - name: Download original Swiss Canton Basel 2020 original report 2 field localities and 8 observation years
+        run: |
+          mkdir -p source/Swiss131
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/Swiss131/Basel_Kanton2020_GV_Raps_author_report.pdf \
+            'https://media.bs.ch/original_file/9ff1074caebc95c112c02d023afc713a69e28f42/2020-gvraps.pdf'
+          sha256sum source/Swiss131/Basel_Kanton2020_GV_Raps_author_report.pdf
+          pdfinfo source/Swiss131/Basel_Kanton2020_GV_Raps_author_report.pdf | grep Pages
+      - name: Inspect first 180 source lines of native PDF extracted page2 Tables 1 and 2 to allow original publisher report source audit
+        run: |
+          pdftotext -layout source/Swiss131/Basel_Kanton2020_GV_Raps_author_report.pdf \
+            source/Swiss131/Basel_Kanton2020_GV_Raps_original_author.txt
+          grep -A 12 -B 4 'Tabelle 1:' source/Swiss131/Basel_Kanton2020_GV_Raps_original_author.txt | head -55
+      - name: Independently check original 2020 Canton Basel official PDF annual estimated rapeseed vs genotyped counts and 7908/459 total
+        run: |
+          python -u scripts/analyze_Swiss_Basel_rail_freight_port_GM_rapeseed_2013_2020_v131.py \
+            --reported-tables-csv data/Swiss_Basel_CantonalLab_2020_GM_rapeseed_station_port_2013_2020_v131.csv \
+            --original-canton-pdf source/Swiss131/Basel_Kanton2020_GV_Raps_author_report.pdf \
+            --output results/audit/Swiss_Basel_2020_author_2013_2020_feral_GM_OSR_8yr_v131.json
+      - name: Archive source sample size/estimated population distinction and authentic PDF fingerprint, no original full PDF redistribution
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-SWISS-Basel-2013-2020-freight-station-GM-OSR-v131
+          path: results/audit/Swiss_Basel_2020_author_2013_2020_feral_GM_OSR_8yr_v131.json
+          if-no-files-found: warn

@@ -1,0 +1,37 @@
+name: Japan macro rail/road 8-new-region WorldCover holdout audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_japan_rail_macro_holdout_worldcover_v17.py'
+      - 'tests/test_japan_rail_macro_holdout_worldcover_v17.py'
+      - '.github/workflows/japan-rail-macro-holdout-v17.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-japan-rail-macro-holdout-v17
+  cancel-in-progress: true
+jobs:
+  geographically-heldout-replication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install official source and COG raster dependencies
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Validate geography-frozen frame, class quality and region-level replicates
+        run: python -m unittest discover -s tests -p 'test_japan_rail_macro_holdout_worldcover_v17.py' -v
+      - name: Independently fetch actual N02 2025 N13 2024 and ESA WorldCover 2021 across 8 unseen regions
+        run: python -u scripts/audit_japan_rail_macro_holdout_worldcover_v17.py --output results/audit/japan_heldout_8region_worldcover_2021_v17.json
+      - name: Retain aggregated source classes and incomplete-source diagnostics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-8new-regions-worldcover-rail-road-holdout-v17
+          path: results/audit/japan_heldout_8region_worldcover_2021_v17.json
+          if-no-files-found: warn

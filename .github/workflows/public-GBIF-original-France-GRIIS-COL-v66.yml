@@ -1,0 +1,65 @@
+name: "v6.6 ACTUAL France Burgundy original GBIF A5 Parquet event GRIIS-COL taxon + precise source audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_public_GBIF_original_FR_GRIIS_COL_v66.py'
+      - 'tests/test_public_GBIF_original_FR_GRIIS_COL_v66.py'
+      - '.github/workflows/public-GBIF-original-France-GRIIS-COL-v66.yml'
+      - 'docs/GBIF_public_FR_Burgundy_original_events_v66_protocol.md'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-real-original-public-GBIF-France-COL-GRIIS-eventQA-v66
+  cancel-in-progress: true
+jobs:
+  original-france-source-only-col-taxonomy-precision:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official GBIF source remote Parquet, SQLite and geographic crosswalk dependencies
+        run: pip install 'duckdb>=1.4,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify EXACT frozen France 48-source-file provenance, strict GRIIS taxa and event duplicate coordinate precision order invariance
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_original_FR_GRIIS_COL_v66.py' -v
+      - name: Read independently verified France source object list and 2018-25 raw Plantae bounding-count audit
+        uses: actions/download-artifact@v4
+        with:
+          name: GBIF-Aug26-public-original-FR-Burgundy-bounded-multifile-source-v65
+          run-id: 42959420881
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/fr_a5
+      - name: Read official six country GRIIS 2023 old keys to May2026 COL-XR crosswalk
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-GRIIS-2023GBIF-to-COL26XR-corrected-taxonomy-key-bridge-v63
+          run-id: 42844630098
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/taxa
+      - name: Read original nine-country GRIIS published introduced species-key sets
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: STREAM ACTUAL official public August 2026 interpreted original GBIF rows in preselected bounded France files; verify bbox denominator and species COL/Griis event quality
+        run: |
+          python -u scripts/audit_public_GBIF_original_FR_GRIIS_COL_v66.py \
+            --pre-outcome-original-source-scan source/fr_a5/GBIF_real_aug2026_FR_Burgundy_bounded_all_source_files_v65.json \
+            --sixcountry-COL-taxonomy-bridge source/taxa/sixcountry_GRIIS_GBIF_to_COL_XR_crosswalk_v63.json \
+            --griis-original-country-keys source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/public_GBIF_original_FR_GRIIS_COL_50km_event_quality_v66.json
+      - name: Archive ONLY source event count aggregates and taxon ID quality in original 16 equal-area cells
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authentic-GBIF-Aug26-FR-Burgundy-COL-GRIIS-original-50km-event-quality-v66
+          path: results/audit/public_GBIF_original_FR_GRIIS_COL_50km_event_quality_v66.json
+          if-no-files-found: warn

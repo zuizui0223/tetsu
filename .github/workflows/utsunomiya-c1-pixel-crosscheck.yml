@@ -1,0 +1,34 @@
+name: REAL reprocessed Sentinel2 Collection1 COG vs legacy NDVI pixel source validation
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/verify_utsunomiya_s2_c1_pixels.py'
+      - '.github/workflows/utsunomiya-c1-pixel-crosscheck.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-s2-c1-pixel-crosscheck-v12
+  cancel-in-progress: true
+jobs:
+  actual-c1-pixels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public COG/GIS and STAC clients
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Verify actual Collection1 COG calibrated NDVI against same-date legacy pixel values
+        run: python -u scripts/verify_utsunomiya_s2_c1_pixels.py --output results/satellite/utsunomiya_s2_c1_legacy_pixel_comparison.json
+      - name: Keep only aggregated calibration and paired pixel quality (no restricted geometry)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: utsunomiya-reprocessed-C1-vs-legacy-S2-measured-NDVI-source
+          path: results/satellite/utsunomiya_s2_c1_legacy_pixel_comparison.json
+          if-no-files-found: warn

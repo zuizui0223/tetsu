@@ -1,0 +1,34 @@
+name: "v4.9 CRITICAL GBIF faceted source count versus occurrence row API reconciliation"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/diagnose_gbif_facet_row_mismatch_v49.py'
+      - '.github/workflows/gbif-facet-vs-rows-v49.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-facet-versus-rows-v49
+  cancel-in-progress: true
+jobs:
+  verify-real-source-consistency-before-ecological-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original GBIF API query and equal-area macro cell source tools
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Compare original GBIF country-cell geometry and date filters across facet vs real row search modes
+        run: python -u scripts/diagnose_gbif_facet_row_mismatch_v49.py
+      - name: Preserve ONLY source API count/status mismatch audit with fixed cell identity
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbif-actual-count-vs-original-occurrence-row-query-consistency-v49
+          path: results/audit/gbif_facet_vs_rows_v49.json
+          if-no-files-found: warn

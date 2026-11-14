@@ -1,0 +1,52 @@
+name: "v10.7 independent REAL Czech 2024 railway flora S1/S2 original-source audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_Czech_2024_real_railway_appendices_v107.py'
+      - 'tests/test_Czech_2024_real_railway_appendices_v107.py'
+      - '.github/workflows/Czech-real-railway-flora-S1-S2-source-v107.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-real-Czech-RAIL-v107-source
+  cancel-in-progress: true
+jobs:
+  original-czech-railway-botanical-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install only source XLSX read-only parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test original-source metadata and SHA validation on synthetic workbook
+        run: python -m unittest discover -s tests -p 'test_Czech_2024_real_railway_appendices_v107.py' -v
+      - name: Fetch true Czech 2024 publisher supplementary railway station presence and station information XLSX ephemerally
+        run: |
+          mkdir -p source/CZE107
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --user-agent 'tetsu-open-science-source-audit/1.0' \
+            --output source/CZE107/Preslia_2024_original_S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --user-agent 'tetsu-open-science-source-audit/1.0' \
+            --output source/CZE107/Preslia_2024_original_S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+      - name: Audit independent published Czech railway data workbook structures and original SHA, but do not fit ecological results yet
+        run: |
+          python -u scripts/audit_Czech_2024_real_railway_appendices_v107.py \
+            --s1 source/CZE107/Preslia_2024_original_S1.xlsx \
+            --s2 source/CZE107/Preslia_2024_original_S2.xlsx \
+            --output results/audit/Czech_2024_real_railway_39_station_S1_S2_original_schema_v107.json
+      - name: Preserve authorship and schema audit ONLY; do not redistribute raw copyrighted publisher source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Czech-2024-RAIL-station-S1-S2-schema-only-v107
+          path: results/audit/Czech_2024_real_railway_39_station_S1_S2_original_schema_v107.json
+          if-no-files-found: warn

@@ -1,0 +1,38 @@
+name: Overture real rail-connector graph across 10 macro source windows
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - '.github/workflows/overture-rail-graph-10country-v21.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-overture-graph-10country-v21
+  cancel-in-progress: true
+jobs:
+  ten-country-rail-topology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Overture graph and geometry clients
+        run: pip install 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Check physical connector logic in source cell graph
+        run: python -m unittest discover -s tests -p 'test_overture_rail_cell_graph_v21.py' -v
+      - name: Read actual global Overture physical rail connectors in 10 country study windows
+        run: |
+          python -u scripts/audit_overture_rail_cell_graph_v21.py \
+            --regions jp_sendai de_leipzig kr_daejeon tw_hsinchu us_madison ca_ottawa gb_york fr_dijon au_canberra nz_hamilton \
+            --output results/audit/overture_rail_connectors_10country_v21.json
+      - name: Archive independent geographic-region source cell network topology (no raw proprietary GIS)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overture-real-rail-connectors-10country-v21
+          path: results/audit/overture_rail_connectors_10country_v21.json
+          if-no-files-found: warn

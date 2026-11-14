@@ -1,0 +1,53 @@
+name: v3.1 GRIIS introduced plants on independent 50km equal-area macro grid (JP US FR)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/harvest_griis_macro_50km_facets_v31.py'
+      - 'tests/test_griis_macro_50km_facets_v31.py'
+      - '.github/workflows/griis-50km-macro-species-v31.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-50km-GBIF-GRIIS-macro-v31
+  cancel-in-progress: true
+jobs:
+  independent-macro-plant-incidence-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public botanical source geographic client
+        run: pip install 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Validate country-specific species facet source and no native imputation
+        run: python -m unittest discover -s tests -p 'test_griis_macro_50km_facets_v31.py' -v
+      - name: Retrieve the 10-block actual 50km botanical source opportunity frame
+        uses: actions/download-artifact@v4
+        with:
+          name: gbif-50km-independent-macro-10block-source-v29
+          run-id: 42738021553
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/coverage
+      - name: Retrieve nine-country source-verified GRIIS introduced flora keys
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Query complete GBIF speciesKey source facets and country-introduced taxon incidence for 3 macro region grids
+        run: |
+          python -u scripts/harvest_griis_macro_50km_facets_v31.py             --gbif-coverage source/coverage/gbif_50km_10macroblocks_source_v29.json             --griis-keys source/griis/griis_9country_alien_backbone_keys_v24.json             --blocks jp_tohoku us_midwest fr_burgundy             --output results/audit/griis_macro_50km_three_regions_v31.json
+      - name: Preserve only GRIIS-matched positive indexed speciesKey source aggregates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: griis-50km-macro-threeblocks-actual-specieskey-source-v31
+          path: results/audit/griis_macro_50km_three_regions_v31.json
+          if-no-files-found: warn

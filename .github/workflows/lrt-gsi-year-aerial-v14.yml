@@ -1,0 +1,37 @@
+name: Actual 2016-2018 and 2024 GSI annual aerial photo pixel source coverage
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_lrt_gsi_2017_aerial_tile_coverage.py'
+      - 'tests/test_lrt_gsi_2017_tiles.py'
+      - '.github/workflows/lrt-gsi-year-aerial-v14.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-lrt-yearly-GSI-aerial-photo-coverage
+  cancel-in-progress: true
+jobs:
+  real-source-tiles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install GSI PNG reader and N05 GIS source dependencies
+        run: pip install 'requests>=2.31,<3' 'Pillow>=10,<13' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Test actual tile semantics, 404 and transparent/blank source rejection
+        run: python -m unittest discover -s tests -p 'test_lrt_gsi_2017_tiles.py' -v
+      - name: Audit 2016/17/18/24 YEAR-LABELED source images at fixed LRT 20m/35m/1.6km points
+        run: python -u scripts/audit_lrt_gsi_2017_aerial_tile_coverage.py --output results/audit/lrt_gsi_historical_aerial_tile_coverage_v14.json
+      - name: Upload only derived source coverage, not raw copyrighted photos or noncommercial rail GIS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lrt-GSI-2016-2018-2024-annual-orthophoto-availability
+          path: results/audit/lrt_gsi_historical_aerial_tile_coverage_v14.json
+          if-no-files-found: warn

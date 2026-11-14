@@ -1,0 +1,67 @@
+name: v3.8 Circuit-theory railway route redundancy vs observed 50km introduced flora (US FR)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_macro_alien_circuit_increment_v38.py'
+      - 'tests/test_macro_alien_circuit_increment_v38.py'
+      - '.github/workflows/circuit-increment-plants-v38.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-circuit-rail-plant-increment-v38
+  cancel-in-progress: true
+jobs:
+  exploratory-circuit-versus-shortest-flora:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install historical macro analysis and source geometry dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Validate two-block source circuit versus Dijkstra and plant quality gates
+        run: python -m unittest discover -s tests -p 'test_macro_alien_circuit_increment_v38.py' -v
+      - name: Get original outcome-independent frozen eight-country GRIIS speciesKey 50km cells
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/plants
+      - name: Get original 50km mapped rail Dijkstra routes
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Get original same-grid mapped road Dijkstra source routes
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road
+      - name: Get real 2026-10 physical railway circuit resistance and redundancy source
+        uses: actions/download-artifact@v4
+        with:
+          name: 50km-rail-physical-circuit-effective-resistance-v37
+          run-id: 42766118921
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/circuit
+      - name: Descriptive source study of circuit vs shortest railway accessibility conditioned on road routes
+        run: |
+          python scripts/analyze_macro_alien_circuit_increment_v38.py             --griis-source source/plants/griis_50km_10blocks_country_mask_v36.json             --rail-shortest-source source/rail/overture_50km_continuous_rail_routes_v32.json             --road-shortest-source source/road/overture_50km_macro_road_paths_v33.json             --circuit-source source/circuit/50km_rail_circuit_resistance_v37.json             --output results/audit/50km_alien_circuit_incremental_v38.json
+      - name: Save full exploratory two-block four-source association sensitivity with no p-values
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 50km-observed-GRIIS-alien-circuit-versus-shortest-v38
+          path: results/audit/50km_alien_circuit_incremental_v38.json
+          if-no-files-found: warn

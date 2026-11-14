@@ -1,0 +1,48 @@
+name: "v8.0 REAL BTS FAF6 2022 crop freight state OD RAIL vs TRUCK directional network"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_FAF6_crop_OD_rail_vs_truck_network_v80.py'
+      - 'tests/test_FAF6_crop_OD_rail_vs_truck_network_v80.py'
+      - '.github/workflows/BTS-FAF6-agriculture-OD-network-v80.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-BTS-FAF6-2022-crop-OD-network-v80
+  cancel-in-progress: true
+jobs:
+  official-FAF6-crop-mode-OD-network:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source reader for 2022 BTS FAF6 official state CSV ZIP
+        run: pip install 'requests>=2.31,<3'
+      - name: Test original state OD flow weight conservation, source completeness, directed links and not biological inference
+        run: python -m unittest discover -s tests -p 'test_FAF6_crop_OD_rail_vs_truck_network_v80.py' -v
+      - name: Download independently verified original state-scale FAF6 2022 source marginal baseline
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-BTS-FAF6-state-2022-rail-truck-crop-freight-v79
+          run-id: 43128165864
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v79
+      - name: Re-download 2022 official FAF6 CSV and build crop-specific state-origin to destination freight matrix without physical rail-route assignment
+        run: |
+          python -u scripts/analyze_FAF6_crop_OD_rail_vs_truck_network_v80.py \
+            --previous-v79 source/v79/BTS_FAF6_2022_rail_truck_crop_OD_v79.json \
+            --output results/audit/BTS_FAF6_2022_crop_OD_RAIL_vs_TRUCK_network_v80.json
+      - name: Preserve original state OD source opportunities, mode/commodity differences and independent conservation audits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US-2022-FAF6-RAIL-TRUCK-crop-state-OD-network-v80
+          path: results/audit/BTS_FAF6_2022_crop_OD_RAIL_vs_TRUCK_network_v80.json
+          if-no-files-found: warn

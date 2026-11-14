@@ -1,0 +1,88 @@
+name: "v7.3 REAL FR original GBIF event vs indexed facet x GIFT growth form x rail/road macro"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_fr_original_GBIF_GIFT_rail_macro_v73.py'
+      - 'tests/test_fr_original_GBIF_GIFT_rail_macro_v73.py'
+      - '.github/workflows/FR-original-events-GIFT-rail-macro-v73.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-FR-original-event-vs-indexed-trait-macro-v73
+  cancel-in-progress: true
+jobs:
+  fr-real-original-events-trait-rail-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install scientific analysis and source geometry dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Validate synthetic strict original-event source and GIFT-COL crosswalk contracts
+        run: python -m unittest discover -s tests -p 'test_fr_original_GBIF_GIFT_rail_macro_v73.py' -v
+      - name: Download REAL August 2026 GBIF original deduplicated 81file FR GRIIS events by 16 cells
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-GBIF-Aug26-FR-Burgundy-81file-GRIIS-original-event-source-v69
+          run-id: 42978217481
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/original
+      - name: Download official six-country strict GBIF-to-COL 26.5 crosswalk
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-GRIIS-2023GBIF-to-COL26XR-corrected-taxonomy-key-bridge-v63
+          run-id: 42844630098
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/crosswalk
+      - name: Download independent real GIFT growth-form-by-GBIF species mapping
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-real-GIFT-growthform-railroad-macro-v71
+          run-id: 42980383943
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gift
+      - name: Download original indexed GRIIS flora by frozen 50km cells
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Download original Overture France / US 50km RAIL graph paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Download original Overture France / US ROAD graph paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road
+      - name: Run REAL France original-event and strict-precision plus indexed species-key matched growth-form RAIL/ROAD source comparison
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_fr_original_GBIF_GIFT_rail_macro_v73.py \
+            --event source/original/GBIF_FR_Burgundy_original_81file_GRIIS_COL_v69.json \
+            --crosswalk source/crosswalk/sixcountry_GRIIS_GBIF_to_COL_XR_crosswalk_v63.json \
+            --gift source/gift/sixcountry_GIFT_growth_form_source_v70.json \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --rail source/rail/overture_50km_continuous_rail_routes_v32.json \
+            --road source/road/overture_50km_macro_road_paths_v33.json \
+            --output results/audit/FR_original_GBIF_event_vs_facet_GIFT_railroad_v73.json
+      - name: Retain true source categories/coverage, not individual IDs, no pairwise p-values
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: FR-real-GBIF81-original-vs-facet-GIFT-growthform-RAILROAD-v73
+          path: results/audit/FR_original_GBIF_event_vs_facet_GIFT_railroad_v73.json
+          if-no-files-found: warn

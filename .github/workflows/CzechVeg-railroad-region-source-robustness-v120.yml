@@ -1,0 +1,46 @@
+name: "v12.0 verified CzechVeg RAIL-vs-ROAD original habitat region balance and leaveout"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_CzechVeg_rail_road_region_robustness_v120.py'
+      - 'tests/test_CzechVeg_rail_road_region_robustness_v120.py'
+      - '.github/workflows/CzechVeg-railroad-region-source-robustness-v120.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-authentic-CzechVeg-Pladias-source-v120-regions
+  cancel-in-progress: true
+jobs:
+  authenticated-original-Czech-phyto-geography:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit test original source region definition and provenance source sensitivity
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_rail_road_region_robustness_v120.py' -v
+      - name: Retrieve exact source-verified original 2026 CzechVeg 117739 plot and Pladias trait joined country result
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE119
+      - name: Calculate only identified original source regional wind guild comparisons, 8000 region resamples and leaveout
+        run: |
+          python -u scripts/analyze_CzechVeg_rail_road_region_robustness_v120.py \
+            --verified119 source/CZE119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --output results/audit/CzechVeg_2026_v120_phyto_region_rail_road_diaspore_robustness.json
+      - name: Archive positive negative non-identifiable region support and original-source comparator caveats
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-CzechVeg-Pladias-railroad-phyto-regional-v120
+          path: results/audit/CzechVeg_2026_v120_phyto_region_rail_road_diaspore_robustness.json
+          if-no-files-found: warn

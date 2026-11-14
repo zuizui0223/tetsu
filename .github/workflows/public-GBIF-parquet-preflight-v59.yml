@@ -1,0 +1,39 @@
+name: "v5.9 Validate anonymous GBIF source Parquet geographic preview and October snapshot missing-file integrity"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/probe_public_GBIF_partitioned_original_v59.py'
+      - 'tests/test_public_GBIF_partition_source_preflight_v59.py'
+      - '.github/workflows/public-GBIF-parquet-preflight-v59.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-public-GBIF-A5-H3-2026-preview-v59
+  cancel-in-progress: true
+jobs:
+  anonymous-real-public-data-source-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public unsigned AWS S3 source clients
+        run: pip install 'boto3>=1.34,<2' 'botocore>=1.34,<2'
+      - name: Test unsigned public data listing and 2026 missing-chunk controls offline
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_partition_source_preflight_v59.py' -v
+      - name: Inspect ACTUAL anonymous public GBIF August 2026 A5/H3 preview partition metadata and missing October objects
+        run: |
+          python -u scripts/probe_public_GBIF_partitioned_original_v59.py \
+            --output results/audit/GBIF_public_A5_H3_source_preflight_v59.json
+      - name: Preserve immutable source metadata only — no private records and no new DOI request
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-anonymous-2026-August-A5-H3-Parquet-source-integrity-preflight-v59
+          path: results/audit/GBIF_public_A5_H3_source_preflight_v59.json
+          if-no-files-found: warn

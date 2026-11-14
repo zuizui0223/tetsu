@@ -1,0 +1,48 @@
+name: "v7.7 REAL US Pacific preselected third-region GRIIS source coverage current GBIF DETECTED"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_US_pacific_GRIIS_current_source_v77.py'
+      - 'tests/test_US_pacific_GRIIS_current_source_v77.py'
+      - '.github/workflows/US-pacific-third-GRIIS-source-v77.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US-Pacific-50km-GBIF-GRIIS-source-v77
+  cancel-in-progress: true
+jobs:
+  authentic-US-pacific-plant-source-QA:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install same frozen 50km ecology geometry and current GBIF status source tools
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'pyshp>=2.3,<3'
+      - name: Test pre-outcome Pacific original cells and status/facet quality gates (synthetic only)
+        run: python -m unittest discover -s tests -p 'test_US_pacific_GRIIS_current_source_v77.py' -v
+      - name: Download original country-level REAL GRIIS GBIF accepted speciesKey list
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Check actual current GBIF DETECTED source completeness in 16 outcome-blind US Pacific 50km cells in both periods
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_US_pacific_GRIIS_current_source_v77.py \
+            --griis source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/US_pacific_50km_GRIIS_current_source_v77.json
+      - name: Preserve all source eligibility, missingness, original country masks and source counts without a rail/plant causal claim
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US-pacific-GRIIS-50km-source-current-GBIF-v77
+          path: results/audit/US_pacific_50km_GRIIS_current_source_v77.json
+          if-no-files-found: warn

@@ -1,0 +1,93 @@
+name: "v12.5 REAL CzechVeg RAIL-ROAD Sádlo wind traits matched by original SYNTAXON+study+area"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_CzechVeg_syntaxon_matched_rail_road_traits_v125.py'
+      - 'tests/test_CzechVeg_syntaxon_matched_rail_road_traits_v125.py'
+      - '.github/workflows/CzechVeg-original-SYNTAXON-wind-source-v125.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-original-CzechVeg-2026-botanical-syntaxon-RAILROAD-v125
+  cancel-in-progress: true
+jobs:
+  true-original-same-vegetation-source-plots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public Pladias XLSX source parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test no invented source SYNTAXON rank, original study provenance and source study block resampling math
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_syntaxon_matched_rail_road_traits_v125.py' -v
+      - name: Download official-source-verified CzechVeg full data trait joined v11.9 receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE125/v119
+      - name: Download source-verified v12.3 same-original-publication wind group estimate
+        uses: actions/download-artifact@v4
+        with:
+          name: original-CzechVeg-Pladias-2026-within-publication-railroad-v123
+          run-id: 43584571818
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE125/v123
+      - name: Download source-verified v12.4 original source SYNTAXON presence and all candidate matched plot census
+        uses: actions/download-artifact@v4
+        with:
+          name: original-CzechVeg-same-study-source-vegetation-syntaxon-v124
+          run-id: 43585535257
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE125/v124
+      - name: Inspect publisher Zenodo immutable original 2026 CzechVeg source checksums
+        run: |
+          mkdir -p source/CZE125/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/CZE125/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+      - name: Download all original 117739 vegetation plots including source SYNTAXON
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/CZE125/raw/headers.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content'
+      - name: Download source original 2510340 taxon×vegetation plot observations (ephemeral)
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 1200 \
+            --output source/CZE125/raw/species.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content'
+      - name: Download Sádlo original public Pladias strategy archetypes and original Raunkiaer lifeform files
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/CZE125/raw/Pladias_diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/CZE125/raw/Pladias_lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+      - name: Test exact source study region decade area SYNTAXON matching and original plant guild with study clustering
+        run: |
+          python -u scripts/analyze_CzechVeg_syntaxon_matched_rail_road_traits_v125.py \
+            --zenodo-record source/CZE125/raw/zenodo.json \
+            --header-csv source/CZE125/raw/headers.csv \
+            --species-csv source/CZE125/raw/species.csv \
+            --dispersal-xlsx source/CZE125/raw/Pladias_diaspore.xlsx \
+            --lifeform-xlsx source/CZE125/raw/Pladias_lifeform.xlsx \
+            --verified119 source/CZE125/v119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --verified123 source/CZE125/v123/CzechVeg_2026_v123_same_published_study_railroad_diaspore_source.json \
+            --verified124 source/CZE125/v124/CzechVeg_2026_v124_same_study_syntaxon_source_overlap.json \
+            --output results/audit/CzechVeg_2026_v125_original_syntaxon_source_wind_railroad_matched.json
+      - name: Preserve original source matched plot counts, identified and NONidentified outcomes, cluster sensitivity but not original huge raw data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-CzechVeg-Pladias-2026-syntaxon-matched-source-wind-v125
+          path: results/audit/CzechVeg_2026_v125_original_syntaxon_source_wind_railroad_matched.json
+          if-no-files-found: warn

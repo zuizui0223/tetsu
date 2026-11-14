@@ -1,0 +1,58 @@
+name: GRIIS introduced plants × GBIF geographic observations × rail connectivity (9 countries)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_griis_alien_rail_source_v25.py'
+      - 'tests/test_griis_alien_rail_source_v25.py'
+      - '.github/workflows/griis-rail-alien-9country-v25.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-griis-9country-introduced-rail-v25
+  cancel-in-progress: true
+jobs:
+  source-verified-alien-plant-macro-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test country-introduced-only taxon filtering, rarefaction20 and invalid controls
+        run: python -m unittest discover -s tests -p 'test_griis_alien_rail_source_v25.py' -v
+      - name: Retrieve source GBIF indexed full 90 geographical cell two-period plant species census
+        uses: actions/download-artifact@v4
+        with:
+          name: gbif-10country-90cells-two-period-full-facet-matrix-v20
+          run-id: 42728479639
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gbif
+      - name: Retrieve actual Overture ten-country mapped rail connector network
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-real-rail-connectors-10country-v21
+          run-id: 42728551036
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Retrieve nine GRIIS country-specific source alien species backbone ID sets
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Estimate exclusively GRIIS-introduced observed plant source composition and rail connectivity diagnostics
+        run: |
+          python scripts/analyze_griis_alien_rail_source_v25.py --gbif-source source/gbif/gbif_specieskey_10country_90cells_2periods_v20.json --rail-source source/rail/overture_rail_connectors_10country_v21.json --griis-source source/griis/griis_9country_alien_backbone_keys_v24.json --output results/audit/alien_rail_source_cross9country_v25.json
+      - name: Archive descriptive geographic-block outcomes with explicit incomplete controls
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: griis-9country-alien-plant-observation-versus-rail-v25
+          path: results/audit/alien_rail_source_cross9country_v25.json
+          if-no-files-found: warn

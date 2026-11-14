@@ -1,0 +1,57 @@
+name: "v9.3 REAL US48 GBIF iNaturalist source dominance 2018-21 vs 2023-25 and non-iNat quality gate"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_US48_iNaturalist_GBIF_source_dominance_v93.py'
+      - 'tests/test_US48_iNaturalist_GBIF_source_dominance_v93.py'
+      - '.github/workflows/US48-iNaturalist-GBIF-source-dominance-v93.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US48-iNat-GBIF-original-source-prepost-v93
+  cancel-in-progress: true
+jobs:
+  real-GBIF-original-inat-source-state-record-concentration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install authentic original GBIF facet and US Census FIPS dependency chain
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Validate independent original data provider UUID source, 48 states and no species/colonization assumptions
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_US48_iNaturalist_GBIF_source_dominance_v93.py' -v
+      - name: Load independently verified 51-state pre/post 2022 GBIF GRIIS country checklist source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          run-id: 43153476962
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GBIF85
+      - name: Load real original US GRIIS country species taxon-source checklist
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GRIIS
+      - name: Query actual 48 2018-21 and 2023-25 state source dataset key facets and iNaturalist research-grade only full speciesKey facets
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_US48_iNaturalist_GBIF_source_dominance_v93.py \
+            --griis source/GRIIS/griis_9country_alien_backbone_keys_v24.json \
+            --baseline85 source/GBIF85/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json \
+            --output results/audit/US48_iNaturalist_GBIF_2018_21_vs_2023_25_provider_source_v93.json
+      - name: Preserve all 48 source-indexed taxonomy and provider coverage fractions, including non-iNat record-gate limits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US48-iNaturalist-GBIF-GRIIS-source-v93
+          path: results/audit/US48_iNaturalist_GBIF_2018_21_vs_2023_25_provider_source_v93.json
+          if-no-files-found: warn

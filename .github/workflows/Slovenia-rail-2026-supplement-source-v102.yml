@@ -1,0 +1,39 @@
+name: "v10.2 independent TRUE Slovenian RAIL 2026 published 92-site vegetation supplementary original source XLSX audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_Slovenia_rail_vegetation_supplement_v102.py'
+      - '.github/workflows/Slovenia-rail-2026-supplement-source-v102.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-original-rail-2026-vegetation-XLSX-v102
+  cancel-in-progress: true
+jobs:
+  original-field-measured-railway-plant-supplement-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original independent scholarly source XLSX downloader dependencies
+        run: pip install 'requests>=2.31,<3'
+      - name: Download ORIGINAL 2026 Springer Slovenia railway flora 92-location / 15 railway sections species and traits XLSX source; verify ZIP without inventing raw plot data
+        run: |
+          python -u scripts/audit_Slovenia_rail_vegetation_supplement_v102.py \
+            --xlsx-output source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --audit-output results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: Retain actual publication supplement and only raw source provenance; no seed causal effect assumed
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          path: |
+            source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx
+            results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+          if-no-files-found: warn

@@ -1,0 +1,56 @@
+name: "v8.2 REAL USA 51 states Census FIPS x 2018-2025 GBIF GRIIS indexed flora source"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/harvest_US_all51_state_GRIIS_GBIF_recent_v82.py'
+      - 'tests/test_US_all51_state_GRIIS_GBIF_recent_v82.py'
+      - '.github/workflows/US-all51-GBIF-GRIIS-FIPS-flora-v82.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US-51state-FIPS-GRIIS-GBIF-2026-source-v82
+  cancel-in-progress: true
+jobs:
+  real-US-all-51state-introduced-flora-recording-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install preverified GBIF/Census GRIIS and source geometry clients
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'scipy>=1.12,<2'
+      - name: Test original 51 state fixed independent source and recent-only recording gates
+        run: python -m unittest discover -s tests -p test_US_all51_state_GRIIS_GBIF_recent_v82.py -v
+      - name: Download real 2022 FAF6 original STATE marginal source to verify identical country economic geography
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-BTS-FAF6-state-2022-rail-truck-crop-freight-v79
+          run-id: 43128165864
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/faf
+      - name: Download 9-country original GRIIS 2023 accepted GBIF plant species-key checklist source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Query actual GBIF 2018-2025 51-state country GRIIS-listed speciesKey positive indexed record source, preserve every missingness/invalid status
+        run: |
+          python -u scripts/harvest_US_all51_state_GRIIS_GBIF_recent_v82.py \
+            --griis source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --faf-v79 source/faf/BTS_FAF6_2022_rail_truck_crop_OD_v79.json \
+            --output results/audit/US_all51_state_GRIIS_GBIF_2018_25_source_v82.json
+      - name: Keep all source state taxon facets as source-only geographic recording matrix without seed/nativity inference
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US-all51-state-GRIIS-GBIF-2018-25-v82
+          path: results/audit/US_all51_state_GRIIS_GBIF_2018_25_source_v82.json
+          if-no-files-found: warn

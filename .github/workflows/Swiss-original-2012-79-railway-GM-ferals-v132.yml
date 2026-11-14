@@ -1,0 +1,61 @@
+name: "v13.2 REAL Swiss 2012 original 79 railway areas, 58 feral sites 2403 tests four GM hotspots direct PDF"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Swiss_2012_full_railway_GM_sites_v132.py'
+      - 'tests/test_Swiss_2012_full_railway_GM_sites_v132.py'
+      - '.github/workflows/Swiss-original-2012-79-railway-GM-ferals-v132.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Swiss-original-2012-79-railway-areas-GM-PCR-v132
+  cancel-in-progress: true
+jobs:
+  original-CCBY-2012-railway-site-genetic-phenotype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Ensure original 2012 open access paper is natively PDF-text extractable without OCR
+        run: |
+          if ! command -v pdftotext >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+      - name: Test original 79 rail-area sampling, original Table1 58 feral sites, nonrail field negative control and actual 4 positive GM hotspots
+        run: python -m unittest discover -s tests -p 'test_Swiss_2012_full_railway_GM_sites_v132.py' -v
+      - name: Fetch genuine 8-page 2012 SpringerOpen original scientific article PDF CC-BY with fallback original author paper government attachment
+        run: |
+          mkdir -p source/Swiss132
+          if ! curl --fail --location --show-error --silent --retry 1 --max-time 80 \
+             --output source/Swiss132/2012_original_railway_bnapus_GM_research.pdf \
+             'https://enveurope.springeropen.com/counter/pdf/10.1186/2190-4715-24-23.pdf'; then
+             curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+               --output source/Swiss132/2012_original_railway_bnapus_GM_research.pdf \
+               'https://downloads.regulations.gov/APHIS-2012-0031-0101/attachment_2.pdf'
+          fi
+          pdfinfo source/Swiss132/2012_original_railway_bnapus_GM_research.pdf | grep Pages
+          sha256sum source/Swiss132/2012_original_railway_bnapus_GM_research.pdf
+      - name: Read original Swiss botanical paper Table1 source site header+positive fields for extraction debugging
+        run: |
+          pdftotext -layout source/Swiss132/2012_original_railway_bnapus_GM_research.pdf \
+            source/Swiss132/publisher-original-native-text.txt
+          grep -A 28 -B 2 'Table 1 Distribution' source/Swiss132/publisher-original-native-text.txt | head -85
+      - name: Reanalyze all 58 railway source locations with real 2398 individual plant marker tests and 4 hotspots, exclude nonrail NC
+        run: |
+          python -u scripts/analyze_Swiss_2012_full_railway_GM_sites_v132.py \
+            --original-author-2012-full-PDF source/Swiss132/2012_original_railway_bnapus_GM_research.pdf \
+            --output results/audit/Swiss_original2012_RAIL79_SCHOENENBERGER_Table1_feral_GM_site_v132.json
+      - name: Preserve true source 59-row paper Table1-derived original site and marker counts and source PDF digest, but not entire copied PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Swiss-original-2012-rail-79areas-58feral-GMhotspots-v132
+          path: results/audit/Swiss_original2012_RAIL79_SCHOENENBERGER_Table1_feral_GM_site_v132.json
+          if-no-files-found: warn

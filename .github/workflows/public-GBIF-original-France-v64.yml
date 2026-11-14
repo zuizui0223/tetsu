@@ -1,0 +1,38 @@
+name: "v6.4 Independent original GBIF August 2026 public Plantae A5 event source — France Burgundy"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - '.github/workflows/public-GBIF-original-France-v64.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-real-public-GBIF-France-A5-original-events-v64
+  cancel-in-progress: true
+jobs:
+  originally-frozen-France-Burgundy-source-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install DuckDB A5 remote original-Parquet and source geometry dependencies
+        run: pip install 'duckdb>=1.4,<2' 'boto3>=1.34,<2' 'botocore>=1.34,<2' 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify non-outcome-driven source partition and frozen country polygon cells
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_A5_plant_event_pilot_v60.py' -v
+      - name: Read ACTUAL public GBIF August2026 ORIGINAL Plantae row source from one A5 file in PREDECLARED France Burgundy 50km region
+        run: |
+          python -u scripts/probe_public_GBIF_A5_plant_events_v60.py \
+            --blocks fr_burgundy \
+            --output results/audit/GBIF_public_A5_original_France_source_v64.json
+      - name: Preserve privacy-safe original public source file schema/record counts only, not observer locations or IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authentic-GBIF-August2026-FR-Burgundy-original-Parquet-A5-source-pilot-v64
+          path: results/audit/GBIF_public_A5_original_France_source_v64.json
+          if-no-files-found: warn

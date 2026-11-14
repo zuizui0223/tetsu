@@ -1,0 +1,55 @@
+name: "v11.0 REAL Slovenia railway plant rarity-vs-wind weighting diagnostic"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_species_occupancy_weighting_v110.py'
+      - 'tests/test_Slovenia_rail_species_occupancy_weighting_v110.py'
+      - '.github/workflows/Slovenia-RAIL-plant-frequency-wind-weighting-v110.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-v110-original-species-rarity
+  cancel-in-progress: true
+jobs:
+  original-Slovenia-railway-taxon-frequency-filter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source-taxonomy source-frequency weighting reversal and null calculation
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_species_occupancy_weighting_v110.py' -v
+      - name: Retrieve original Slovenian published RAIL vegetation workbook with checksum receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Retrieve original species-equal v10.9 result and ensure source taxonomy is unchanged
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-species-occupancy-label-permutation-v109
+          run-id: 43566361231
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO109
+      - name: Estimate true 89-site species-equal vs species-occupancy-weighted wind contrasts across real lifespan and occupancy classes
+        run: |
+          python -u scripts/analyze_Slovenia_rail_species_occupancy_weighting_v110.py \
+            --original-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --verified109 source/SLO109/Slovenia_real_RAIL_2026_v109_species_occupancy_permutation.json \
+            --output results/audit/SLO_RAIL_2026_v110_species_equal_vs_occ_frequency_weighted_wind.json
+      - name: Preserve empirical source evidence including null and reversal estimates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-RAIL-species-frequency-estimand-reversal-v110
+          path: results/audit/SLO_RAIL_2026_v110_species_equal_vs_occ_frequency_weighted_wind.json
+          if-no-files-found: warn

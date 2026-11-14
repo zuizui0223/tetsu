@@ -1,0 +1,42 @@
+name: LRT observed 2017 land-class and 2024 official N13 road balance
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/rail_road_landbalance.py'
+      - 'scripts/audit_lrt_n13_road_land_balance.py'
+      - 'tests/test_lrt_n13_road_land_balance.py'
+      - '.github/workflows/lrt-road-landcover-v13.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-lrt-n13-2017-landbalance
+  cancel-in-progress: true
+jobs:
+  actual-source-road-satellite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install real GIS/road and Sentinel COG clients
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Validate source clipping, road-balance gates, matched-SCL and block calculations
+        run: python -m unittest discover -s tests -p 'test_lrt_n13_road_land_balance.py' -v
+      - name: Download N13 5439/5440 locally; compare preconstruction SCL and NDVI at fixed LRT pairs
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          GDAL_HTTP_MAX_RETRY: "3"
+          GDAL_HTTP_RETRY_DELAY: "2"
+        run: python -u scripts/audit_lrt_n13_road_land_balance.py --anchors 48 --output results/satellite/lrt_n13_2024_road_baseline_2017_balance_v13.json
+      - name: Preserve only source checksums and aggregated diagnostic counts (no N05 rail or N13 road geometries)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lrt-n13-2017-prelandcover-2024-roaddistance-48anchor-diagnostics
+          path: results/satellite/lrt_n13_2024_road_baseline_2017_balance_v13.json
+          if-no-files-found: warn
