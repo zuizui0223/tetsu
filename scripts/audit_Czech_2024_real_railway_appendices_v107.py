@@ -96,6 +96,9 @@ def audit_presence_matrix_header_s1(s1_path,s2_path):
                              "source_record_type":rec})
     categories=Counter()
     values=Counter()
+    marker_by_type=Counter()
+    presence_by_station=Counter()
+    recent_alien_by_station=Counter()
     taxa=[]
     for row in rows[7:]:
         species=row[1] if len(row)>1 else None
@@ -110,10 +113,24 @@ def audit_presence_matrix_header_s1(s1_path,s2_path):
                 v=row[col]
                 if v is not None and str(v).strip():
                     values[str(v).strip().lower()]+=1
+                    typ=desc["source_record_type"]
+                    marker_by_type[(typ,str(v).strip().lower())]+=1
+                    if typ=="rec":
+                        presence_by_station[desc["locality_code"]]+=1
+                        if "arch" in cat.lower() or "neo" in cat.lower():
+                            recent_alien_by_station[desc["locality_code"]]+=1
     w2=next(iter(b.worksheets))
     w2rows=list(w2.values)
     s2codes=[str(x[1]).strip() for x in w2rows[5:]
              if len(x)>1 and x[1] is not None and str(x[1]).strip()]
+    s2recent={}
+    for x in w2rows[5:]:
+        if len(x)<6 or x[1] is None or not str(x[1]).strip():
+            continue
+        code=str(x[1]).strip()
+        s2recent[code]={"reported_taxa":int(x[3]),"reported_aliens":int(x[4]),
+                        "reported_invasives":int(x[5]),
+                        "source_total_area_ha":float(x[10]) if x[10] is not None else None}
     a.close()
     b.close()
     combos=sorted(set((x["locality_code"],x["source_record_type"]) for x in stations))
@@ -126,6 +143,11 @@ def audit_presence_matrix_header_s1(s1_path,s2_path):
         "n_repeated_taxon_labels":len(taxa)-len(set(taxa)),
         "original_source_S1_category_col_values":dict(categories.most_common()),
         "original_S1_presence_marker_types":dict(values.most_common()),
+        "original_presence_marker_by_rec_hist":{typ+"__"+mark:n for (typ,mark),n in marker_by_type.most_common()},
+        "n_recent_station_columns":sum(d["source_record_type"]=="rec" for d in stations),
+        "n_historical_station_columns":sum(d["source_record_type"]=="hist" for d in stations),
+        "station_s1_rec_any_marker_count_vs_s2_richness":{k:{"recent_marker_taxa":presence_by_station[k],"published_s2_taxa":s2recent[k]["reported_taxa"]} for k in sorted(s2recent)},
+        "station_s1_rec_explicit_arch_neo_vs_s2_aliens":{k:{"recent_arch_neo_tagged":recent_alien_by_station[k],"published_s2_aliens":s2recent[k]["reported_aliens"]} for k in sorted(s2recent)},
         "n_original_S2_station_code_rows":len(s2codes),
         "n_original_S2_unique_station_codes":len(set(s2codes)),
         "S1_locality_codes_not_in_S2":sorted(set(x["locality_code"] for x in stations)-set(s2codes)),
