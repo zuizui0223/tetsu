@@ -80,7 +80,7 @@ class OriginalRailwaySpeciesPreferenceTests(unittest.TestCase):
     def test_species_omission_changes_result_when_one_taxon_carries_weak_signal(self):
         d=[]
         for annual in (True,False):
-            for i in range(3):
+            for i in range(4):
                 d.append(r("W"+str(annual)+str(i),True,annual,-.5 if i==0 else .5))
                 d.append(r("N"+str(annual)+str(i),False,annual,0))
         orig=contrast(d,1)
