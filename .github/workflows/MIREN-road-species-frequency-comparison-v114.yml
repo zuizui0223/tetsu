@@ -47,7 +47,7 @@ jobs:
         run: |
           OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_MIREN_road_flora_species_frequency_estimands_v114.py \
             --source-csv source/miren98/source_original/MIREN_road_survey_2007_2023_v3.csv \
-            --source-audit-v98 source/miren98/results/audit/MIREN_original_source_road_flora_v98.json \
+            --source-audit-v98 source/miren98/results/audit/MIREN_original_standardized_roadside_vegetation_source_v98.json \
             --verified-v99 source/miren99/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json \
             --output results/audit/MIREN_2026_REAL_global_road_species_occupancy_weight_reversal_source_v114.json
       - name: Archive all original region-level opposite and null signs, no fictitious railway causality
