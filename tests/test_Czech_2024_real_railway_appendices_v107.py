@@ -1,5 +1,6 @@
 """Original Czech 2024 published XLSX metadata audit source/checksum gates."""
 import sys
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,6 +11,8 @@ from audit_Czech_2024_real_railway_appendices_v107 import (
 )
 
 
+@unittest.skipUnless(importlib.util.find_spec("openpyxl") is not None,
+                     "openpyxl is installed in dedicated real-source audit workflow")
 class CzechRailwaySourceDiscoveryTests(unittest.TestCase):
     def test_no_invalid_workbook_accepted(self):
         with tempfile.TemporaryDirectory() as td:
