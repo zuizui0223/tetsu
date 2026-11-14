@@ -1,0 +1,71 @@
+name: "v10.6 REAL Slovenia rail wind strategy vs annual-mix decomposition"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_v106_annual_wind_decomposition.py'
+      - 'tests/test_Slovenia_rail_v106_annual_wind_decomposition.py'
+      - '.github/workflows/Slovenia-RAIL-annual-wind-composition-v106.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-RAIL-v106-composition
+  cancel-in-progress: true
+jobs:
+  true-railway-annual-mix-versus-wind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check exact two-stratum wind/annual decomposition mathematics and missingness gates
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_v106_annual_wind_decomposition.py' -v
+      - name: Download original Slovenian field plots plus publication SHA receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Download verified original site field trait summaries v10.3
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-railway-BS-BT-flora-microhabitat-v103
+          run-id: 43539536809
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO103
+      - name: Download verified original wind strategy observation v10.4
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-wind-diaspore-vs-annual-v104
+          run-id: 43540382128
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO104
+      - name: Download independently checked 15-section bootstrap and all-missing-strategy bounds v10.5
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-section-bootstrap-missingness-v105
+          run-id: 43560671012
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO105
+      - name: Decompose original actual RAIL paired field data into annual-composition and within-lifespan wind contrasts
+        run: |
+          python -u scripts/analyze_Slovenia_rail_v106_annual_wind_decomposition.py \
+            --original-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --verified103 source/SLO103/Slovenia_2026_original_RAIL_ballast_shoulder_toe_functional_flora_v103.json \
+            --verified104 source/SLO104/SLO_RAIL_2026_real_wind_diaspore_vs_annual_BS_BT_v104.json \
+            --verified105 source/SLO105/SLO_RAIL_2026_v105_section_cluster_missingness.json \
+            --output results/audit/SLO_RAIL_2026_v106_wind_annual_exact_decomposition.json
+      - name: Archive all positive negative and nonidentifiable field results with honest source coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-wind-vs-annual-exact-decomposition-v106
+          path: results/audit/SLO_RAIL_2026_v106_wind_annual_exact_decomposition.json
+          if-no-files-found: warn
