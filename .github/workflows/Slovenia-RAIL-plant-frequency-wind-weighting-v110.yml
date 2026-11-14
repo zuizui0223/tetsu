@@ -36,7 +36,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: real-Slovenia-2026-RAIL-species-occupancy-label-permutation-v109
-          run-id: 43566139553
+          run-id: 43566361231
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: source/SLO109
       - name: Estimate true 89-site species-equal vs species-occupancy-weighted wind contrasts across real lifespan and occupancy classes
