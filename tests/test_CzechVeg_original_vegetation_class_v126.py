@@ -1,11 +1,11 @@
 """v12.6: only original published CzechVeg class prefix if anchored in original source."""
 from __future__ import annotations
-import sys,unittest
+import sys,unittest,tempfile
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from audit_CzechVeg_original_vegetation_class_v126 import (
     source_canonical_syntaxon_class,convert_source_syntaxon_meta,
-    matched_class_summary,run,
+    matched_class_summary,canonical_roots_from_original_full_publisher_csv,run,
 )
 
 def raw(arm,study="real paper",region="18a",year=2012,area=16,syntax="XDA01"):
@@ -46,6 +46,18 @@ class OriginalSourceCanonicalClassTests(unittest.TestCase):
         self.assertEqual(base["n_original_road_plots_on_class_comparable_support"],2)
         self.assertEqual(base["matched_source_class_codes"],["XD"])
         self.assertEqual(q["candidate_with_verified_original_source_class_code"],5)
+
+    def test_original_full_metadata_NA_is_not_a_vegetation_class_root(self):
+        with tempfile.TemporaryDirectory() as d:
+            f=Path(d)/"plot_source.csv"
+            with f.open("w",encoding="utf-8",newline="") as o:
+                o.write("RELEVE_NR,SYNTAXON\\n".replace("\\\\n","\\n"))
+                for i in range(117739):
+                    o.write(f"{i},{'XD' if i==0 else 'XDA01' if i==1 else 'NA'}\\n")
+            roots,quality=canonical_roots_from_original_full_publisher_csv(f)
+        self.assertEqual(roots,{"XD"})
+        self.assertEqual(quality["n_independent_source_class_code_root_labels"],1)
+        self.assertEqual(quality["n_source_syntaxon_nonmissing_all_original"],2)
 
     def test_original_publication_year_area_region_not_silently_pooled(self):
         src={
