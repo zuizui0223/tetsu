@@ -199,6 +199,7 @@ def run(original,verified106):
                     "n_qualifying_species":c.get("n_qualifying_species"),
                     "species_equal_within_lifespan_wind_minus_other_BS_preference":
                         c.get("equal_species_within_lifespan_wind_minus_other_preference")})
+    original_negative=original_contrast["equal_species_within_lifespan_wind_minus_other_preference"]<0
     influence=[]
     for t in preference:
         if t["n_original_locations_present_either_zone"]<preferred:continue
@@ -242,7 +243,10 @@ def run(original,verified106):
             for x in loo),
         "n_original_taxa_with_leave_one_out_estimable":len(influence),
         "n_taxa_whose_removal_changes_sign":sum(
-            x["sign_after_taxon_leaveout"]!="negative" for x in influence),
+            (x["sign_after_taxon_leaveout"]=="negative")!=original_negative
+            for x in influence),
+        "original_primary_species_equal_contrast_sign":
+            "negative" if original_negative else "positive_or_zero",
         "top_20_influential_species_coded_without_full_raw_source_records":by_influence[:20],
         "source_integrity":{
             "original_source_taxa_incidence_deduplicated":integrity[
