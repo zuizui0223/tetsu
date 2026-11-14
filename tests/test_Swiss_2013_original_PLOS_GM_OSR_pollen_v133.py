@@ -34,7 +34,7 @@ class Swiss2013GeneticSourceCohort(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             f=Path(d)/"false-PLOS.csv"
             f.write_text(txt.replace("2013,279,64,","2013,279,65,"),encoding="utf-8")
-            with self.assertRaisesRegex(ValueError,"published original author"):
+            with self.assertRaisesRegex(ValueError,"Published original author"):
                 read_original_leaf_source_table(f)
 
     def test_original_PLOS_article_source_requires_true_empirical_sentences(self):
@@ -59,7 +59,7 @@ class Swiss2013GeneticSourceCohort(unittest.TestCase):
                 verify_actual_PLOS_fulltext_source(f)
 
     def test_2020_gov_source_receipt_needed_to_avoid_overlapping_2013_spliced_cohort(self):
-        with self.assertRaisesRegex(ValueError,"v13.1"):
+        with self.assertRaisesRegex(ValueError,"Require verified original independent"):
             run("none",CSV,{"complete":False})
 
 
