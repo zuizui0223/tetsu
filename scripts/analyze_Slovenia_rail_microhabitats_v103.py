@@ -149,8 +149,14 @@ def validate_original_keys(original):
     loc={r["location_id"]:r for r in locs}
     tr={r["EPPO_code"]:r for r in traits}
     cb={r["EPPO_code"]:r for r in names}
-    if len(loc)!=92 or len(tr)!=312 or len(cb)!=312 or set(tr)!=set(cb):
-        raise ValueError("Original Slovenian 92-source-location or 312-species taxonomy maps inconsistent")
+    if len(loc)!=92 or len(tr)!=312 or len(cb)!=312:
+        raise ValueError("Original Slovenian 92-source-location or 312-species source row counts inconsistent")
+    # Original published workbook has EPPO_code LOTHE in traits and
+    # species observations, but corresponding Lotus herbaceus is DOYPH
+    # in the codebook. Preserve source disagreement rather than silently
+    # matching codes by name or deleting the 4 actual occurrence rows.
+    trait_not_codebook=sorted(set(tr)-set(cb))
+    codebook_not_trait=sorted(set(cb)-set(tr))
     keys={}
     for row in zones:
         k=(row["location_id"],row["zone_id"])
@@ -187,6 +193,10 @@ def validate_original_keys(original):
         "n_original_duplicate_species_EPPO_rows_within_field_zone_deduplicated":n_original_repeated_EPPO_within_zone,
         "n_unique_original_EPPO_species_times_zone_source_incidence":sum(len(x) for x in species.values()),
         "n_original_312_taxa_complete_trait_codebook":len(tr),
+        "trait_EPPO_codes_absent_from_species_codebook":trait_not_codebook,
+        "codebook_EPPO_codes_absent_from_trait_source":codebook_not_trait,
+        "n_original_occurrence_rows_with_trait_EPPO_not_in_codebook":sum(1 for r in taxa if r["EPPO_code"] in trait_not_codebook),
+        "do_not_silently_reconcile_original_LOTHE_vs_DOYPH_codebook_mismatch":True,
         "n_original_railway_line_segments":len(segments),
         "n_source_cover_values_above_100_not_assumed_percent":len(overs),
         "all_482_original_zone_richness_equals_unique_species_codes":True,
