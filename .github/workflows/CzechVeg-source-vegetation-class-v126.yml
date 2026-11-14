@@ -1,0 +1,65 @@
+name: "v12.6 REAL CzechVeg original vegetation CLASS hierarchy verified public source railway-road overlap"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_CzechVeg_original_vegetation_class_v126.py'
+      - 'tests/test_CzechVeg_original_vegetation_class_v126.py'
+      - '.github/workflows/CzechVeg-source-vegetation-class-v126.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-CzechVeg-original-2026-vegetation-class-v126
+  cancel-in-progress: true
+jobs:
+  original-published-class-inferred-only-with-source-class-anchor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test Czech vegetation class tree XD XDA XDA01, source class anchor and true original study/area/year matching
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_original_vegetation_class_v126.py' -v
+      - name: Read v11.9 authentic original CzechVeg 117739 full plot+species source receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE126/v119
+      - name: Read original 117739 vegetation source full SYNTAXON exact matching v12.4 receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: original-CzechVeg-same-study-source-vegetation-syntaxon-v124
+          run-id: 43585535257
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE126/v124
+      - name: Fetch original public Czech vegetation source and publisher MD5 proof
+        run: |
+          mkdir -p source/CZE126/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/CZE126/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/CZE126/raw/headers.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content'
+      - name: Audit authentic class code anchors, true author study/region/year/area matching and syntaxon group support
+        run: |
+          python -u scripts/audit_CzechVeg_original_vegetation_class_v126.py \
+            --zenodo-record source/CZE126/raw/zenodo.json \
+            --source-headers source/CZE126/raw/headers.csv \
+            --verified119 source/CZE126/v119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --verified124 source/CZE126/v124/CzechVeg_2026_v124_same_study_syntaxon_source_overlap.json \
+            --output results/audit/CzechVeg_2026_v126_source_vegetation_class_hierarchy_railroad_overlap.json
+      - name: Preserve external author class metadata and source matching summary only, no original raw table redistribution
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-CzechVeg-source-class-2026-overlap-v126
+          path: results/audit/CzechVeg_2026_v126_source_vegetation_class_hierarchy_railroad_overlap.json
+          if-no-files-found: warn
