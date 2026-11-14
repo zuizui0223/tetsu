@@ -51,9 +51,9 @@ class OriginalSourceCanonicalClassTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             f=Path(d)/"plot_source.csv"
             with f.open("w",encoding="utf-8",newline="") as o:
-                o.write("RELEVE_NR,SYNTAXON\\n".replace("\\\\n","\\n"))
+                o.write("RELEVE_NR,SYNTAXON\n")
                 for i in range(117739):
-                    o.write(f"{i},{'XD' if i==0 else 'XDA01' if i==1 else 'NA'}\\n")
+                    o.write(f"{i},{'XD' if i==0 else 'XDA01' if i==1 else 'NA'}\n")
             roots,quality=canonical_roots_from_original_full_publisher_csv(f)
         self.assertEqual(roots,{"XD"})
         self.assertEqual(quality["n_independent_source_class_code_root_labels"],1)
