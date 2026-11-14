@@ -1,0 +1,55 @@
+name: "v10.4 REAL Slovenia RAIL wind-diaspore vs annual plant functional guilds same-side ballast BS-BT"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_wind_diaspore_vs_annual_v104.py'
+      - 'tests/test_Slovenia_rail_wind_diaspore_vs_annual_v104.py'
+      - '.github/workflows/Slovenia-RAIL-diaspore-wind-vs-annual-v104.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-real-RAIL-diaspore-wind-vs-annual-v104
+  cancel-in-progress: true
+jobs:
+  original-slovenia-rail-microhabitat-diaspore-trait-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check original author Diaspore.strategy codebook, source denominators and independent within-track-location/segment metrics
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_wind_diaspore_vs_annual_v104.py' -v
+      - name: Load genuine published Šabić et al. (2026) original 401279-byte Slovenian RAIL XLSX supplement
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Load source-audited original Slovenian 89 field RAIL locations vs 173 matched BS/BT sides v10.3
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-railway-BS-BT-flora-microhabitat-v103
+          run-id: 43539536809
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO103
+      - name: Compute source-verified WIND-diaspore guild BS vs BT within same railway site/track side versus annual life form, compare other original propagule dispersal modes
+        run: |
+          python -u scripts/analyze_Slovenia_rail_wind_diaspore_vs_annual_v104.py \
+            --original-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --verified103 source/SLO103/Slovenia_2026_original_RAIL_ballast_shoulder_toe_functional_flora_v103.json \
+            --output results/audit/SLO_RAIL_2026_real_wind_diaspore_vs_annual_BS_BT_v104.json
+      - name: Preserve real source sign contrast and all independent field segment counterexamples, no observed gust/seed mechanism
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-wind-diaspore-vs-annual-v104
+          path: results/audit/SLO_RAIL_2026_real_wind_diaspore_vs_annual_BS_BT_v104.json
+          if-no-files-found: warn
