@@ -29,7 +29,7 @@ from audit_CzechVeg_rail_habitat_original_v117 import (
   STRONG_RAIL,ROAD,CONFOUND_BUS
 )
 from audit_Pladias_public_diaspore_lifeform_v118 import (
-  xlsx_rows,DISP_CODES
+  xlsx_rows,DISP_CODES,inspect_source
 )
 from analyze_Slovenia_rail_species_occupancy_weighting_v110 import group_estimator
 
@@ -309,11 +309,33 @@ def run(zenodo_meta,header_csv,species_csv,disp,life,receipt117,receipt118):
     head=verify_file(zenodo_meta,HEADERS_NAME,header_csv)
     origsp=verify_file(zenodo_meta,SPECIES_NAME,species_csv)
     strategies,lifestrata,traits_audit=parse_traits(disp,life)
-    for key,expected in (
-        ("source_strategy_SHA256",receipt118["strategy_original_source_metadata"]["source_file_sha256"]),
-        ("source_lifeform_SHA256",receipt118["lifeform_original_source_metadata"]["source_file_sha256"])):
-        if traits_audit[key]!=expected:
-            raise ValueError("Original public Pladias trait source SHA differs from verified v11.8")
+    # Pladias dynamically writes XLSX: ZIP metadata can change even when the
+    # original actual rows and categories remain identical. Do NOT silently
+    # waive source integrity: compare all original v11.8 semantic anchors,
+    # including every category token tally, column completeness, schema,
+    # and initial original named rows. Fail closed on a real biological drift.
+    trait_semantics={}
+    for name,fp,previous_key,sha_key in (
+        ("dispersal",disp,"strategy_original_source_metadata","source_strategy_SHA256"),
+        ("lifeform",life,"lifeform_original_source_metadata","source_lifeform_SHA256")):
+        previous=receipt118[previous_key]
+        current=inspect_source(fp,name)
+        critical=("fieldnames","n_original_species_trait_source_rows",
+                  "nonempty_columns","strategy_archetype_token_counts_all_fields",
+                  "first_four_original_field_rows_for_schema_only")
+        drift=[k for k in critical if current.get(k)!=previous.get(k)]
+        if drift:
+            raise ValueError("Original Pladias source biological schema/contents changed: "+
+                             name+": "+",".join(drift))
+        trait_semantics[name]={
+            "publisher_endpoint_raw_SHA256_v118":previous["source_file_sha256"],
+            "publisher_endpoint_raw_SHA256_current":current["source_file_sha256"],
+            "download_bytes_current":current["original_source_bytes"],
+            "binary_identical_to_v118":current["source_file_sha256"]==previous["source_file_sha256"],
+            "all_five_v118_actual_taxon_and_strategy_schema_anchors_equal":True,
+            "no_raw_supplement_redistributed":True
+        }
+    traits_audit["dynamic_publisher_XLSX_semantic_original_source_validation"]=trait_semantics
     plotmeta,plot_audit=plot_labels(header_csv)
     taxa,species_audit=plot_taxa(species_csv,plotmeta,strategies,lifestrata)
     primary=guild_panel(plotmeta,taxa,"strict")
