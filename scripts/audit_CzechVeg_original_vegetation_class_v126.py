@@ -56,7 +56,7 @@ def canonical_roots_from_original_full_publisher_csv(original_header):
         for row in reader:
             counts["n_source_vegetation_plot_header_rows"]+=1
             code=str(row.get("SYNTAXON") or "").strip()
-            if CLASS_CODE_RE.fullmatch(code):
+            if CLASS_CODE_RE.fullmatch(code) and code.upper() not in SOURCE_MISSING:
                 observed[code]+=1
             if code and code.upper() not in SOURCE_MISSING:
                 counts["n_source_vegetation_syntaxon_code_nonmissing"]+=1
