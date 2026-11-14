@@ -1,0 +1,55 @@
+name: "v12.8.1 ORIGINAL Austrian 2016 government 107 page PDF full Table14 site-by-year source audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_Austria_2016_original_gov_pdf_table14_v1281.py'
+      - 'tests/test_Austria_2016_original_gov_pdf_table14_v1281.py'
+      - '.github/workflows/Austria-source-government-PDF-Table14-v1281.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-actual-AustrianGov-2016-feral-Bnapus-PDF-source-v1281
+  cancel-in-progress: true
+jobs:
+  government-original-60-source-sites-120-year-cells:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit test exact Austrian original 60 site, 120 year-cell source parsing versus independent Table14 transcription
+        run: python -m unittest discover -s tests -p 'test_Austria_2016_original_gov_pdf_table14_v1281.py' -v
+      - name: Ensure original PDF native text extraction command exists without using OCR
+        run: |
+          if ! command -v pdftotext >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          pdftotext -v
+      - name: Download genuine original 107 page Austrian Federal Ministry of Health report and verify source signature
+        run: |
+          mkdir -p original_source
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output original_source/Pascher2016_Austrian_Government_Feral_OSR.pdf \
+            'https://www.verbrauchergesundheit.gv.at/dam/jcr:e7da8178-d364-4ca4-8e1d-5fa87f4cd1dc/rapsstudie_risk_of_speed_spillage_201707071.pdf'
+          sha256sum original_source/Pascher2016_Austrian_Government_Feral_OSR.pdf
+          test "$(sha256sum original_source/Pascher2016_Austrian_Government_Feral_OSR.pdf | cut -d ' ' -f1)" = \
+            "52a1910fb24cc9a38da841322ce28e9c97b51758a632146551981edac696125d"
+      - name: Machine-parse original 2016 government report Table14 and verify every real field site 2014 and 2015 source sample count
+        run: |
+          python -u scripts/audit_Austria_2016_original_gov_pdf_table14_v1281.py \
+            --gov-pdf original_source/Pascher2016_Austrian_Government_Feral_OSR.pdf \
+            --manually-transcribed-v128 data/austria_pascher_2016_feral_osr_table14_manual_transcription_v128.csv \
+            --output results/audit/Austria_Pascher2016_PDF_Table14_all_60_sites_120_cells_verified_v1281.json
+      - name: Preserve full original source fingerprint and per-site verification only, not original government PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Austria-original-Gov-2016-60site-120cell-true-PDF-verified-v1281
+          path: results/audit/Austria_Pascher2016_PDF_Table14_all_60_sites_120_cells_verified_v1281.json
+          if-no-files-found: warn
