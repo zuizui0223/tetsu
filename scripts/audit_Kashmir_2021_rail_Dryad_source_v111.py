@@ -113,12 +113,23 @@ def audit(source_get=get_json):
         [result["publisher_api_dataset_url"]+"/versions"]))
     errors=[]
     versions=[]
+    version_file_urls=[]
+    version_probe=[]
     for u in versionurl[:4]:
         try:
             j=source_get(u)
         except Exception as e:
             errors.append(type(e).__name__+": "+str(e)[:120])
             continue
+        version_file_urls.extend(extract_links(j,"files"))
+        version_probe.append({
+            "url":u,
+            "json_keys":list(j),
+            "id":j.get("id"),"versionNumber":j.get("versionNumber"),
+            "original_version_link_rel":list(j.get("_links",{}))
+                if isinstance(j.get("_links"),dict) else [],
+            "raw_public_metadata_first_1500_chars":json.dumps(j,ensure_ascii=False)[:1500],
+        })
         embed=j.get("_embedded",{})
         for key,vals in (embed.items() if isinstance(embed,dict) else []):
             if "version" in key.lower() and isinstance(vals,list):
@@ -133,7 +144,8 @@ def audit(source_get=get_json):
         if id is None:continue
         summaries.append({"id":id,"versionNumber":v.get("versionNumber"),"versionStatus":v.get("versionStatus")})
     result["publisher_dataset_versions"]=summaries
-    candidateurls=extract_links(meta,"files")
+    result["publisher_version_endpoint_probes"]=version_probe
+    candidateurls=extract_links(meta,"files")+version_file_urls
     for v in summaries:
         candidateurls.append(BASE+"versions/"+str(v["id"])+"/files")
     candidates=list(dict.fromkeys(candidateurls))
