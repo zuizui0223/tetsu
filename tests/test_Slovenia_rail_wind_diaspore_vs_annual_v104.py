@@ -48,8 +48,8 @@ class TrueRailDiasporeSourceTests(unittest.TestCase):
     def test_same_location_two_sides_first_before_section_aggregation(self):
         pairs=[]
         for i in range(1,90):
-            pairs.append(srcpair("loc"+str(i),"L",section=i%11,wind=-0.05,annual=0.1))
-            if i<85:pairs.append(srcpair("loc"+str(i),"R",section=i%11,
+            pairs.append(srcpair("loc"+str(i),"L",section=i%15,wind=-0.05,annual=0.1))
+            if i<85:pairs.append(srcpair("loc"+str(i),"R",section=i%15,
                                        wind=-0.03,annual=0.05))
         source=location_level(pairs)
         self.assertEqual(len(source),89)
@@ -57,7 +57,7 @@ class TrueRailDiasporeSourceTests(unittest.TestCase):
         wind=summarize_locations(source,WIND_STRA+"_delta")
         self.assertEqual(wind["n_independent_actual_RAIL_field_locations"],89)
         self.assertEqual(wind["n_locations_BT_larger"],89)
-        self.assertEqual(wind["n_source_RAIL_segments_with_3plus_independent_locations"],11)
+        self.assertEqual(wind["n_source_RAIL_segments_with_3plus_independent_locations"],15)
     def test_annual_up_wind_down_categories_not_selection_causality(self):
         rows=[srcpair("loc"+str(i),"L",section=i%15,
                       wind=-.05 if i<50 else .03,
