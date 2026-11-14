@@ -164,12 +164,19 @@ def recent_station_data(s1,s2):
     book=load_workbook(s2,read_only=True,data_only=True)
     sheet=next(iter(book.worksheets))
     records={}
+    missing_area_source_codes=[]
+    source_station_codes=[]
     for data in list(sheet.values)[5:]:
         if not data or len(data)<11 or not data[1] or not str(data[1]).strip():
             continue
         code=str(data[1]).strip()
-        if code in records:raise ValueError("Duplicated original station code")
+        if code in source_station_codes:raise ValueError("Duplicated original station code")
+        source_station_codes.append(code)
         stretch=str(data[2]).strip()
+        if any(v is None or str(v).strip().upper() in ("", "NA", "N/A", "NAN")
+               for v in (data[7],data[8],data[9],data[10])):
+            missing_area_source_codes.append(code)
+            continue
         area=float(data[10])
         building=float(data[7])
         surround=float(data[8])
@@ -190,9 +197,9 @@ def recent_station_data(s1,s2):
             "invasive_fraction_of_aliens":invasive/alien if alien else 0,
         }
     book.close()
-    if len(records)!=39 or len(set(r["stretch"] for r in records.values()))!=5:
-        raise ValueError("Original erratum 39 stations/5 stretches not recovered")
-    return records
+    if len(source_station_codes)!=39 or len(records)+len(missing_area_source_codes)!=39 or len(set(r["stretch"] for r in records.values()))!=5:
+        raise ValueError("Original erratum 39 stations/5 stretches source inventory not recovered")
+    return records,missing_area_source_codes,source_station_codes
 
 
 def audit_and_run(s1,s2):
@@ -205,8 +212,8 @@ def audit_and_run(s1,s2):
         m["n_historical_station_columns"]!=33 or
         m["original_presence_marker_by_rec_hist"].get("rec__x")!=6941):
         raise ValueError("Original published station rec/hist taxon matrix changed")
-    rec=recent_station_data(s1,s2)
-    station_codes=set(rec)
+    rec,missing_area_codes,source_codes=recent_station_data(s1,s2)
+    station_codes=set(source_codes)
     if station_codes!=set(m["station_s1_rec_any_marker_count_vs_s2_richness"]):
         raise ValueError("Original station flora vs station data IDs mismatch")
     mismatch_taxa=[s for s in rec
@@ -230,12 +237,14 @@ def audit_and_run(s1,s2):
         "original_article_DOI":SOURCE_DOI,
         "original_source_S1_sha256":EXPECTED_S1_SHA,
         "original_corrected_S2_erratum_sha256":EXPECTED_S2_SHA,
-        "n_recent_stations":len(rows),
+        "n_original_source_recent_stations_total":len(source_codes),
+        "n_recent_stations_with_complete_three_zone_area":len(rows),
+        "original_station_codes_excluded_from_area_model_for_NA":missing_area_codes,
         "n_source_rail_stretches":len(set(r["stretch"] for r in rows)),
         "n_recent_species_times_station_x_from_S1":6941,
-        "n_recent_station_richness_exact_S1_to_S2":39-len(mismatch_taxa),
+        "n_area_complete_station_richness_exact_S1_to_S2":len(rec)-len(mismatch_taxa),
         "original_station_richness_disagreement_codes":sorted(mismatch_taxa),
-        "n_recent_station_arch_neo_exact_S1_to_S2":39-len(mismatch_aliens),
+        "n_area_complete_station_arch_neo_exact_S1_to_S2":len(rec)-len(mismatch_aliens),
         "original_station_alien_status_disagreement_codes":sorted(mismatch_aliens),
         "source_area_ha_range":[round(min(r["area_ha"] for r in rows),4),
                                 round(max(r["area_ha"] for r in rows),4)],
