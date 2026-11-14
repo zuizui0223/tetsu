@@ -52,7 +52,7 @@ class Original2016GovernmentReportPDFExactPairs(unittest.TestCase):
         rows=validate_original_table(CSV)
         txt="Table 14: Sample sites and number of sampled feral OSR plants.\n"
         for r in rows[:59]:
-            txt+=f"{r['source_site_code']} Somewhere {r['sampled_2014']} {r['sampled_2015']}\n"
+            txt+=f"{r['source_site_code']} Original Austrian field report location Federal State original source sampling {r['sampled_2014']} {r['sampled_2015']}\n"
         txt+="In total, 2,113 feral plant individuals were sampled."
         with self.assertRaisesRegex(ValueError,"Cannot faithfully recover all"):
             extract_original_pdf_table_pairs(isolate_table14(txt))
