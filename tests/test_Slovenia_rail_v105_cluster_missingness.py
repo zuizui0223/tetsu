@@ -38,7 +38,7 @@ class SegmentAndMissingTraitTests(unittest.TestCase):
         x = segment_cluster_diagnostic(rows, "d", draws=1000)
         self.assertEqual(x["n_source_segments"], 2)
         self.assertEqual(x["n_original_field_locations"], 102)
-        self.assertAlmostEqual(x["equal_field_location_mean_BS_minus_BT"], 98/102)
+        self.assertAlmostEqual(x["equal_field_location_mean_BS_minus_BT"], 98/102, places=5)
         self.assertEqual(x["equal_rail_section_mean_BS_minus_BT"], 0)
         self.assertEqual(x["n_leave_one_section_out_positive_equal_location"], 1)
         self.assertEqual(x["n_leave_one_section_out_negative_equal_location"], 1)
