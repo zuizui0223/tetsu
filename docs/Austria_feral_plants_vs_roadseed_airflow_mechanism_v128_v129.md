@@ -1,5 +1,13 @@
 # tetsu v12.8–v12.9: separate the mechanism of arriving seeds from sampled feral establishment and source railway functional filters
 
+## Subsequent v13.0 UPDATE: genuine RAILWAY physical cargo grain deposition was found
+
+The newer [v13.0 genuine Canadian moving-TRAIN spilled grain source, 19 real rail sites and 1,979 repeated seed-kernel-trap samples](Canada_direct_freight_train_grain_deposition_v130.md) resolves the narrower **"did any actual freight train physically spill grain at source railway ballast?"** empirical gap: **YES**. Its [original peer-reviewed paper by Gangadharan et al. 2017 DOI 10.1111/acv.12336](https://doi.org/10.1111/acv.12336) actually counted deposited grain, including *Brassica* canola (25% original source grain mass), wheat, peas and lentils, across original 134km Canadian railway, and original source study author extrapolated about 110 tonnes per annum from observed rates. [Actual v13.0 author-published numeric source reanalysis SUCCESS #43590341083](https://github.com/zuizui0223/tetsu/actions/runs/43590341083).
+
+This still does **NOT** determine whether the train-spilled seeds germinated or established railway populations, whether all collected kernels were viable, or whether wind diaspores of wild noncrop species were moved by TRAIN slipstream. Source 2017 original 19×visit×grain raw data were not acquired in tetsu: **published seasonal summary only**. The Austrian 2016 2,113 sampled feral *Brassica* PLANTS, original Berlin MOTORWAY 2007 viable seed trap counts and original 2013 CAR airflow experiment remain separate source studies and effect estimands. Earlier sentences below referring to absent "actual train cargo seed observation" should be read as **the still-unidentified viable-seed-to-established-plant same-site linked mechanism**, not absence of any railway grain spillage measurement.
+
+---
+
 ## Result: three truly different original field evidence types cannot be treated as one estimated rail causal process
 
 The core macro question is now split between **transported viable seed arrival**, **post-arrival feral plant detection/establishment**, and **traits of plants found in surveyed railway habitats**. Each arrow requires independent data with the SAME site/year/species/study unit before a statistically identified arrival-to-establishment effect can be estimated.
