@@ -1,0 +1,55 @@
+name: "v10.9 REAL Slovenian RAIL species-equal wind-diaspore occupancy permutation"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_species_occupancy_permutation_v109.py'
+      - 'tests/test_Slovenia_rail_species_occupancy_permutation_v109.py'
+      - '.github/workflows/Slovenia-RAIL-species-occupancy-permutation-v109.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-real-Slovenia-RAIL-v109-species
+  cancel-in-progress: true
+jobs:
+  original-railway-species-occupancy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test lifespan-stratified species-label null and real field site scoring algebra
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_species_occupancy_permutation_v109.py' -v
+      - name: Download verified original Slovenian 2026 authors field XLSX and provenance
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Download verified v10.6 actual-life-history wind decomposition source receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-wind-vs-annual-exact-decomposition-v106
+          run-id: 43561008890
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO106
+      - name: Check original workbook and compare wind-typed plant species BS/BT preference across 89 sites with 15-section and species leave-outs
+        run: |
+          python -u scripts/analyze_Slovenia_rail_species_occupancy_permutation_v109.py \
+            --original-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --verified106 source/SLO106/SLO_RAIL_2026_v106_wind_annual_exact_decomposition.json \
+            --output results/audit/Slovenia_real_RAIL_2026_v109_species_occupancy_permutation.json
+      - name: Preserve real source species-level null and ALL opposite-sign sensitivity results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-2026-RAIL-species-occupancy-label-permutation-v109
+          path: results/audit/Slovenia_real_RAIL_2026_v109_species_occupancy_permutation.json
+          if-no-files-found: warn
