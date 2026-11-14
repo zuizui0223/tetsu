@@ -218,7 +218,7 @@ def joint_direction(loc):
 
 def run(supplement,previous):
     if (previous.get("complete") is not True or
-        previous.get("n_same_track_side_pairs")!=173 or
+        previous.get("n_same_side_BS_BT_zone_pairs_NOT_independent_field_locations")!=173 or
         previous.get("n_distinct_actual_railway_field_locations")!=89):
         raise ValueError("Independently verified RAIL v10.3 site source not available")
     loc,zones,sp,traits,cb,source=validate_original_keys(supplement)
