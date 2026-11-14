@@ -69,6 +69,71 @@ def audit_workbook(path):
             "NOT_original_republication_or_new_rail_plant_survey":True}
 
 
+
+def audit_presence_matrix_header_s1(s1_path,s2_path):
+    """Source-only diagnostics for the unusual merged locality headers.
+
+    Row 5 is the locality code with merged cells, row 6 is the source
+    rec/hist type; DO NOT assume 39 paired historical stations.
+    """
+    from openpyxl import load_workbook
+    a=load_workbook(s1_path,read_only=True,data_only=True)
+    b=load_workbook(s2_path,read_only=True,data_only=True)
+    sheet=next(iter(a.worksheets))
+    rows=list(sheet.values)
+    if len(rows)<800 or len(rows[4])<50:
+        raise ValueError("Czech original S1 presence sheet unexpectedly changed")
+    stations=[]
+    last=None
+    for col in range(2,len(rows[4])):
+        code=rows[4][col]
+        if code is not None and str(code).strip():
+            last=str(code).strip()
+        rec=rows[5][col]
+        rec=str(rec).strip().lower() if rec is not None else None
+        if last is not None and rec in ("rec","hist"):
+            stations.append({"col_one_based":col+1,"locality_code":last,
+                             "source_record_type":rec})
+    categories=Counter()
+    values=Counter()
+    taxa=[]
+    for row in rows[7:]:
+        species=row[1] if len(row)>1 else None
+        if species is None or not str(species).strip():
+            continue
+        taxa.append(str(species).strip())
+        cat=str(row[0]).strip() if row[0] is not None else "(blank)"
+        categories[cat]+=1
+        for desc in stations:
+            col=desc["col_one_based"]-1
+            if col<len(row):
+                v=row[col]
+                if v is not None and str(v).strip():
+                    values[str(v).strip().lower()]+=1
+    w2=next(iter(b.worksheets))
+    w2rows=list(w2.values)
+    s2codes=[str(x[1]).strip() for x in w2rows[5:]
+             if len(x)>1 and x[1] is not None and str(x[1]).strip()]
+    a.close()
+    b.close()
+    combos=sorted(set((x["locality_code"],x["source_record_type"]) for x in stations))
+    return {
+        "source_S1_row5_locality_by_merged_cells_row6_hist_rec":stations,
+        "n_S1_station_x_record_type_columns":len(stations),
+        "n_unique_S1_locality_codes":len(set(x["locality_code"] for x in stations)),
+        "n_S1_union_taxon_rows_not_recent_only":len(taxa),
+        "n_unique_S1_taxon_labels":len(set(taxa)),
+        "n_repeated_taxon_labels":len(taxa)-len(set(taxa)),
+        "original_source_S1_category_col_values":dict(categories.most_common()),
+        "original_S1_presence_marker_types":dict(values.most_common()),
+        "n_original_S2_station_code_rows":len(s2codes),
+        "n_original_S2_unique_station_codes":len(set(s2codes)),
+        "S1_locality_codes_not_in_S2":sorted(set(x["locality_code"] for x in stations)-set(s2codes)),
+        "S2_locality_codes_not_in_S1":sorted(set(s2codes)-set(x["locality_code"] for x in stations)),
+        "source_observer_effort_historical_not_assumed_comparable":True,
+    }
+
+
 def run(s1_path,s2_path):
     s1=audit_workbook(s1_path)
     s2=audit_workbook(s2_path)
@@ -79,6 +144,7 @@ def run(s1_path,s2_path):
         "record_type":"original_czech_station_survey_appendix_schema_audit_ONLY",
         "first_appendix":{"publisher_url":S1_URL,**s1},
         "second_appendix":{"publisher_url":S2_URL,**s2},
+        "original_presence_table_semantics_audit":audit_presence_matrix_header_s1(s1_path,s2_path),
         "no_Czech_vs_Slovenia_biological_effect_fitted_yet":True,
         "authors": "Kutlvašr, Turková, Hejda, Vojík, Kadlecová, Berchová Bímová, Pyšek & Pergl (2024)",
         "publication_reported_design":"39 railway localities in Czech Republic during 2020–2022; tracks/embankments vs wider surroundings vs buildings; published 11139 species records and 764 taxa (article metadata, not independently verified workbook count).",
