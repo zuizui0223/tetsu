@@ -1,0 +1,59 @@
+name: "v11.4 TRUE global MIREN ROAD 100m2 flora rarity weighting negative-control"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_MIREN_road_flora_species_frequency_estimands_v114.py'
+      - 'tests/test_MIREN_road_flora_species_frequency_estimands_v114.py'
+      - '.github/workflows/MIREN-road-species-frequency-comparison-v114.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-real-MIREN-road-v114-frequency
+  cancel-in-progress: true
+jobs:
+  genuine-MIREN-region-balanced-roadside-flora:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original MIREN source dataframe dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3'
+      - name: Unit test regional taxon-specific status and exact road-interior species preference
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests \
+            -p 'test_MIREN_road_flora_species_frequency_estimands_v114.py' -v
+      - name: Download authentic real MIREN 2007-23 survey species CSV and original Zenodo MD5 audit
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/miren98
+      - name: Download independently verified true 1005 field road-site plot1/3 source report
+        uses: actions/download-artifact@v4
+        with:
+          name: real-global-MIREN-road-edge-alien-flora-matched-plots-v99
+          run-id: 43214312718
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/miren99
+      - name: Compare observed Alien-versus-Native source species equal versus frequency weighted roadside preference in 24 code regions
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_MIREN_road_flora_species_frequency_estimands_v114.py \
+            --source-csv source/miren98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --source-audit-v98 source/miren98/results/audit/MIREN_original_source_road_flora_v98.json \
+            --verified-v99 source/miren99/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json \
+            --output results/audit/MIREN_2026_REAL_global_road_species_occupancy_weight_reversal_source_v114.json
+      - name: Archive all original region-level opposite and null signs, no fictitious railway causality
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-global-MIREN-road-100m2-species-frequency-contrasts-v114
+          path: results/audit/MIREN_2026_REAL_global_road_species_occupancy_weight_reversal_source_v114.json
+          if-no-files-found: warn
