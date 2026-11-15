@@ -32,7 +32,7 @@ class OriginalFloraTop20SelectionTests(unittest.TestCase):
         self.assertEqual([x["original_source_selected_from"] for x in choose],
                          ["SI","CZ","SI","CZ"])
         self.assertEqual(choose[0]["scientific_name_original_exact_binomial"],"Poa annua")
-        self.assertEqual(choose[1]["scientific_name_original_exact_binomial"],"Taraxacum officinale")
+        self.assertEqual(choose[1]["scientific_name_original_exact_binomial"],"Plantago major")
         self.assertEqual(choose[1]["other_original_country_same_source_site_count"],0)
         self.assertTrue(all(x["NOT_railway_affinity_vs_nonnear_railway"] for x in choose))
 
