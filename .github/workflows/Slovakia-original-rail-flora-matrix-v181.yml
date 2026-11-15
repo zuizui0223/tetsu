@@ -40,6 +40,12 @@ jobs:
           python -u scripts/extract_Slovakia_rail_station_species_matrix_v181.py \
             --source-pdf source_original/v181/Majekova_et_al_2016.pdf \
             --output-dir results/audit/v181
+      - name: Report source extraction failures and actual count table in logs
+        if: always()
+        run: |
+          if [ -f results/audit/v181/Slovakia_2016_original_table2_provenance_audit.json ]; then
+            cat results/audit/v181/Slovakia_2016_original_table2_provenance_audit.json
+          fi
       - name: Preserve generated audit and candidate matrix (only if source-count gate passed)
         if: always()
         uses: actions/upload-artifact@v4
