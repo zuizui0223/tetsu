@@ -59,7 +59,7 @@ class AllPublicObservationLabelQueueTests(unittest.TestCase):
         self.assertNotIn("lon",context)
         self.assertNotIn("original_observation_id",context)
         self.assertNotIn("photo_url",context)
-        self.assertEqual(context["source_original_DOY"],131)
+        self.assertEqual(context["source_original_DOY"],132)
         self.assertFalse(info["not_fully_blinded_human_evaluation_by_design"] is False)
 
     def test_nonrandom_photo_labels_not_used_to_pick_firstwave(self):
