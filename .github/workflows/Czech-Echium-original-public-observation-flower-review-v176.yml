@@ -1,0 +1,70 @@
+name: "v17.6 ORIGINAL Czech Echium 4176 public photo observation IDs and empty human flower-label review queue"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/create_Czech_Echium_all_public_obs_label_REVIEW_queue_v176.py'
+      - 'tests/test_Czech_Echium_all_public_review_queue_v176.py'
+      - '.github/workflows/Czech-Echium-original-public-observation-flower-review-v176.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v176-public-Echium-obs-id-reviewed-metadata-no-pixels
+  cancel-in-progress: true
+jobs:
+  original-public-observation-id-human-flower-QA-worklist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Real spatial metadata requirements for photo pipeline and read-only API, no image pixels
+        run: python -m pip install 'requests==2.32.3' 'shapely==2.1.2' 'pyproj==3.6.1' 'osmium==4.2.0'
+      - name: Test fake-only 4235 original-public observation ID photos, 4176 source-valid and no-license/image phenotype-selected firstwave 356 sample
+        run: python -m unittest discover -s tests -p 'test_Czech_Echium_all_public_review_queue_v176.py' -v
+      - name: Download independently verified original 4235-photo source official open Flowers vs No Flowers annotations v17.5
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Czech-Echium-full4235-public-photo-annotation-source-no-rights-v175
+          run-id: 43711977035
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v176/v175
+      - name: Download original 20-source species public photo 30m audited Czech source v16.6
+        uses: actions/download-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          run-id: 43693580409
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v176/v166
+      - name: Restore real historical 2023 Czech railway COUNTRY PBF source SHA from v15.5 successful cached original
+        uses: actions/cache/restore@v4
+        with:
+          path: source/CZE155/czech-republic-230101.osm.pbf
+          key: tetsu-czech-20230101-geofabrik-original-816159635-pbf-source
+          fail-on-cache-miss: true
+      - name: Fail closed on nonoriginal 2023 country railway graph PBF SHA size
+        run: |
+          set -euo pipefail
+          test "$(stat -c%s source/CZE155/czech-republic-230101.osm.pbf)" = "816159635"
+          printf '%s  %s\n' \
+            '26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747' \
+            source/CZE155/czech-republic-230101.osm.pbf | sha256sum --check
+      - name: Re-read real original 4235 PUBLIC photo metadata and reproduce v17.5 exact annotation/source geography counts, then build ONLY blank human review fields and public observation ID link
+        run: |
+          python -u scripts/create_Czech_Echium_all_public_obs_label_REVIEW_queue_v176.py \
+            --source-v166 source/v176/v166/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
+            --source-v175 source/v176/v175/Czech_Echium_2018_2025_all_original4235_public_photo_annotations_no_image_rights_v175.json \
+            --original-Czech-OSM source/CZE155/czech-republic-230101.osm.pbf \
+            --output-dir results/audit/Echium_2018_2025_original_public_iNat_observation_review_queue_v176
+      - name: Ephemeral public observation ID and URL review worklist only; separate coarse source context, NO photo pixels exact GPS private obs or usernames committed
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Czech-Echium-original-public-4176-OBS_ID-flower-review-fields-empty-v176
+          path: results/audit/Echium_2018_2025_original_public_iNat_observation_review_queue_v176/
+          compression-level: 6
+          if-no-files-found: warn
