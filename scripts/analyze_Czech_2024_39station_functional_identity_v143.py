@@ -117,11 +117,12 @@ def read_original_czech_publisher(s1,s2):
     if source_rows!=1053 or source_rec_markers!=6941:
         raise ValueError("Original Czech 1053 taxon rows + 6941 contemporary source site incidences not conserved")
     known_recent=set().union(*floras.values())
-    if len(known_recent)!=764:
-        raise ValueError("Original Czech paper 764 genuinely recent observed taxa not reproduced; original publisher S1 literal rec-taxonomy union="+str(len(known_recent))+
-                         "; original 6941 X marks="+str(source_rec_markers)+
-                         "; source S1 taxon rows="+str(source_rows)+
-                         "; original marker source taxa range="+str(sorted(known_recent)[:6]))
+    if len(known_recent)!=761:
+        # Original SOURCE S1 has 1053 published taxonomy rows but only 761
+        # appear in contemporary rec columns; paper ABSTRACT reports 764
+        # taxa across a finer three-zone survey grain. Those 3 absent
+        # from the released rec presence columns CANNOT be fabricated.
+        raise ValueError("Original Czech released S1 recent 761 taxa + 6941 rec X source sample differs; n="+str(len(known_recent)))
     source_errors={c:len(s)-stats[c]["original_published_total_taxa"] for c,s in floras.items()
                    if len(s)!=stats[c]["original_published_total_taxa"]}
     if source_errors!={"DV":4,"SV":1,"TI":1}:
@@ -132,7 +133,10 @@ def read_original_czech_publisher(s1,s2):
       "source_S2_corrected_erratum_SHA256":EXPECTED_S2_SHA,
       "source_original_recent_station_IDs":len(recent),
       "source_original_railway_stretches":5,
-      "n_original_recent_real_taxa":len(known_recent),
+      "n_original_recent_real_taxa_in_public_S1_station_rec_columns":len(known_recent),
+      "n_original_author_paper_reported_species_from_all_zone_records":764,
+      "observed_source_vs_paper_taxon_count_difference":764-len(known_recent),
+      "DO_NOT_INVENT_3_TAXA_MISSING_FROM_PUBLIC_REC_COLUMNS":True,
       "source_all_historical_plus_current_taxon_rows":source_rows,
       "original_39_station_contemporary_exact_presence_marks":source_rec_markers,
       "known_original_publisher_S1_S2_station_richness_disagreements":source_errors,
@@ -164,7 +168,7 @@ def current_sites(floras,meta,strategies,lifes):
     nknowninc=sum(len(s["known"]) for s in sites)
     allinc=sum(len(s["all_original_taxa"]) for s in sites)
     qc={"n_original_rail_stations":len(sites),
-        "n_source_recent_species":nobs,
+        "n_source_recent_species_in_original_publisher_S1_rec":nobs,
         "n_Pladias_both_strategy_therophyte_proxy_known_recent_taxa":known_n,
         "n_original_contemporary_site_taxon_incidence_all_species":allinc,
         "n_original_incidence_with_both_exact_Pladias_traits":nknowninc,
@@ -204,7 +208,7 @@ def site_pairs(sites,guild):
                 "gap":mean(a)-mean(b) if a and b else None}
     return {"taxonomic_pladias_known":result(wa,be),
             "functional_four_coarse_guild_overlap":result(fw,fb),
-            "taxonomic_all_original_recent_764_taxa":result(allw,allb)}
+            "taxonomic_all_original_recent_S1_761_taxa":result(allw,allb)}
 
 
 def swap_null(sites,guild,draws=DRAWS,burnin=BURNIN,thin=SWAP_BETWEEN,seed=SEED):
@@ -282,7 +286,8 @@ def run(s1,s2,disp_xlsx,life_xlsx):
           "no_Czech_original_station_GPS_or_road_control_in_these_S1_S2_appendices":True},
       "limits":[
           "Czech source S1 is 2020–22 station-combined contemporary, not original 39 station×3 habitat×plot observations; all habitat zones pooled per station.",
-          "Czech source S1 rec x marks are actual 39 publisher-station recent observation; historical uneven a/b/c/d records excluded.",
+          "Czech source S1 rec x marks are actual 39 publisher-station recent observations; 761 unique recent S1 taxa vs paper 764 taxa across three-zone field survey (3 absent from published recent station rec matrix), never invent missing three.",
+          "Historical uneven a/b/c/d records excluded.",
           "Original 39 station area ranges widely, so source taxonomic overlap can be affected by uneven effort/area; not fully adjusted in this first pilot.",
           "Five source railway stretches not independently sampled country studies. No GPS, actual freight OD, parallel road routes or measured seed carriage in S1/S2.",
           "Pladias public plant taxa traits may only match a subset of Czech original 764 recent species; no source unknown traits imputed.",
