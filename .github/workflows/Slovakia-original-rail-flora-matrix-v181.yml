@@ -1,0 +1,49 @@
+name: "v18.1 SOURCE Slovak 2016 original four station-period species incidence verification"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/extract_Slovakia_rail_station_species_matrix_v181.py"
+      - "tests/test_extract_Slovakia_rail_station_species_matrix_v181.py"
+      - ".github/workflows/Slovakia-original-rail-flora-matrix-v181.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v181-slovakia-publisher-matrix
+  cancel-in-progress: true
+jobs:
+  source-original-two-stations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install source PDF glyph layout reader, no OCR
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Test literal header-to-incidence parsing, count-gate never bypassed
+        run: python -m unittest discover -s tests -p 'test_extract_Slovakia_rail_station_species_matrix_v181.py' -v
+      - name: Retrieve original institutional 2016 16page PDF, fallback institutional archived original
+        run: |
+          mkdir -p source_original/v181
+          curl -LfsS --retry 2 --connect-timeout 15 --max-time 90 \
+            'https://www.upjs.sk/app/uploads/sites/15/2022/10/173-188_Majekova_et_al-upr.pdf' \
+            -o source_original/v181/Majekova_et_al_2016.pdf || \
+          curl -LfsS --retry 3 --connect-timeout 15 --max-time 90 \
+            'https://cbrb.sav.sk/usr/Janka/docs/Majekova_et_al_Thaiszia_2016.pdf' \
+            -o source_original/v181/Majekova_et_al_2016.pdf
+          file source_original/v181/Majekova_et_al_2016.pdf
+          sha256sum source_original/v181/Majekova_et_al_2016.pdf
+      - name: Parse original glyph locations, verify published 72 192 56 191 and union 207 204 before CSV
+        run: |
+          python -u scripts/extract_Slovakia_rail_station_species_matrix_v181.py \
+            --source-pdf source_original/v181/Majekova_et_al_2016.pdf \
+            --output-dir results/audit/v181
+      - name: Preserve generated audit and candidate matrix (only if source-count gate passed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Slovak2016-original-2stations-modern-vs-historic-QC-v181
+          path: results/audit/v181/
+          if-no-files-found: warn
