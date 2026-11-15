@@ -1,0 +1,60 @@
+# 鉄 v16.4–v16.5：実原著から候補20種を固定し、iNaturalist写真×線路30mの可用性を監査
+
+更新：2026-11-15。**v16.4元植物原表からの候補20種選定は本物の原著データで成功。v16.5の写真×30m実件数は真正API実行後に追記する（原本取得前に件数を捏造しない）。**
+
+## 目標：種間の環境フィルターと種内の表現型シフトは同じ向きか
+
+大きな問い：鉄道が強く選別すると予測される植物形質軸は、鉄道上に定着した**同じ植物種の集団内の形質シフト**にも表れるか。元データでスロベニア鉄道枕木の道床肩BSは、近接道床法尻BTより植物被覆が低く、原著の厳密annual比が+5.47ポイント高いことが確認されている。一方、wind diaspore原著形質の地理相関と列車風自体を混同しない。群集がannualへ収束することと、同じ種が鉄道で小型化/早期開花することは**異なる推定対象**。
+
+種間 A / 種内 D を共通の reference trait を用いた exact additive CWM 分解にする：
+- 対照Cと鉄道Rで、種iの真の元個体比・被度比をp_i,C / p_i,R、地理ごとの真の平均形質をz_i,C / z_i,Rとし、各種に共通の外部reference値z_i,*を定める。
+- すると差ΔCWM は厳密に
+  **Σ_i(p_i,R−p_i,C)z_i,* + Σ_i[p_i,R(z_i,R−z_i,*)−p_i,C(z_i,C−z_i,*)]**
+  と書ける。前者は元種構成の入れ替わり（組成／種間）、後者は種内形質のずれ（ただし各生育地の種内実測が必要）。写真だけでは種内の可塑性と遺伝的適応を分けられない。各生育地に実出現していない種のzを任意に補完しない。元A/Dの分類ラベルは既存の「種子A」「管理D」のsource台帳とは対応が違うため、実装上は turnover / ITV と呼び分ける。
+- 種間の鉄道環境におけるreference最適値θ_railを推定するには、**鉄道と非鉄道の同じ地域・努力・面積の比較フロラ**と独立の形質値が必要。現存するチェコの39鉄道駅フロラだけから「鉄道への選好順位」やθを独立に推定することはできない。
+
+## v16.4 原著20種の候補定義（SOURCE VERIFIED）
+
+[**成功元source #43692256719**](https://github.com/zuizui0223/tetsu/actions/runs/43692256719)。スロベニアの元著者2022–23年の89地点実地鉄道100m調査×312 taxon traits/codebook、チェコの元著者2020–22年39全駅REC調査（過去の非均等historyは使わない）を各原著の元SHAと外部原著付表で検証。元地点の**存在有無**を種ごとに数え、各原著で出現地点が多い順にrank、国ごと交互（SI奇数rank・CZ偶数rank）に候補を追加し、全20種は学名で重複させない。これは植物の**鉄道選好率**ではなく、鉄道出現記録が原著で比較的多い種のセット。非鉄道側の母集団出現数を事前に持たないため、source preferenceランキングとは呼ばない。
+
+**重要な原著taxonomy修正**：スロベニアの元種出現は学名ではなく**EPPOコード**。元のspecies_codebookの明示的な学名欄からだけ照合し、原著のLOT​​HE / DOYPH（Lotus herbaceus）コード不整合を勝手な推測同定で結ばない。さらに「Taraxacum sect. Ruderalia」は分類学上の節であり、属名＋第2語があるからといって**1種（Taraxacum sect）として扱わない**。正規の二名法の種に限り候補を選び、同一種の別名による重複を可能な範囲で監査する。
+
+**最終固定の原著20種**（奇数rankはSI、偶数rankはCZ；括弧内はその原著で観測された地点数）：
+
+| 固定順位 | 元選定国 | 学名 | 元出現地点 |
+|---:|:---:|---|---:|
+| 1 | SI | *Convolvulus arvensis* | 71/89 |
+| 2 | CZ | *Arrhenatherum elatius* | 39/39 |
+| 3 | SI | *Erigeron annuus* | 69/89 |
+| 4 | CZ | *Artemisia vulgaris* | 39/39 |
+| 5 | SI | *Vicia cracca* | 68/89 |
+| 6 | CZ | *Conyza canadensis* | 39/39 |
+| 7 | SI | *Equisetum arvense* | 67/89 |
+| 8 | CZ | *Daucus carota* | 39/39 |
+| 9 | SI | *Lactuca serriola* | 65/89 |
+| 10 | CZ | *Echium vulgare* | 39/39 |
+| 11 | SI | *Galium mollugo* | 63/89 |
+| 12 | CZ | *Hypericum perforatum* | 39/39 |
+| 13 | SI | *Setaria pumila* | 62/89 |
+| 14 | CZ | *Linaria vulgaris* | 39/39 |
+| 15 | SI | *Rubus caesius* | 51/89 |
+| 16 | CZ | *Lolium perenne* | 39/39 |
+| 17 | SI | *Euonymus europaea* | 50/89 |
+| 18 | CZ | *Medicago lupulina* | 39/39 |
+| 19 | SI | *Geranium robertianum* | 50/89 |
+| 20 | CZ | *Plantago lanceolata* | 39/39 |
+
+*Conyza canadensis*はiNaturalistで*Erigeron canadensis*として認識されうることが、先行の別source監査で確認されている。その狭い別名だけをsource名と独立に許し、他の属の別種を混ぜない。*Equisetum arvense*は胞子を出すシダ植物の仲間で**花を作らない**ため、花期シフトの候補種として流用せず、肥沃茎・胞子嚢穂などの別形質軸のみ対象とする。
+
+## v16.5 30m以内の写真機会の正確な定義
+
+- iNaturalist 2018-01-01〜2025-12-31、research-gradeかつ写真を持つ記録、元学名・承認された明示的な別名のみ。実ソースの全件をAPIの1〜200/ページで取得し、1秒に最大約1件、上限1万を超えるbulk要求はしない。
+- 最初の空間範囲は**チェコ＋スロベニア2か国を覆う固定地理矩形**。必ずしも国境に沿ったpolygon集計ではない。両国の**源GISは Geofabrik元2023年CZと2024年SIの真のOSM Railway Way**。元PBF SHAを照合し、線路を形作るPolylineへ投影、観察点と**最寄り線路の線形**の距離が**30m以内**か判定。元の節点（OSM node）だけへの距離では、曲線や長い直線辺で大きな見落としがある。
+- 必ず公開座標で、geoprivacy private/obscured・明示された栽培個体を除外。座標不確実性（positional_accuracy）が**0超30m以下**の実写真記録だけを厳格件数として数える。位置が確実に30m以内となるのは、線形までの距離＋位置不確実性半径 ≤30m のさらに狭いサブセット。30m以内の記録には、ホーム・駅周辺の公園・道路沿い・立ち入り許可区域外の写真も入り得る。
+- 30–100mと100–1000mの同種記録を別に数える。観察者IDや公開座標の原本は成果に含めず、観察者の**ユニーク数・100mの小セル数の整数集計だけ**を公開。各種について月別に撮影日があっても、それだけで**開花開始日**ではない。写真をダウンロードせず、実際の全草丈が測れるかは別段のROI可用性監査が必要。
+- 一種×国矩形のAPI研究品質写真観測が**8,000件を超える場合はAPIのbulk制限を尊重して「完全取得不能、30m件数は不明」**と報告し、0件とはしない。世界全域でのresearch-grade写真総数は**全球写真の観察機会数**として別取得可能だが、線路30m以内の世界総数ではない。
+- **全球という本来の目標はまだ未達**。この第1波は原著2国の真正線路ベクターを使ったサンプル機会の確認。世界全体の30mをやるには世界鉄道ベクターとiNat大規模DwC/公開exportの空間結合が別途必要。最初に数が極端に少なければ、写真由来の種内モデルより同種共通栽培・文献統合を優先する。
+
+[元source20種選択の再現](../scripts/select_two_original_rail_20_species_for_inat_v164.py)・[v16.4 verdaderamente元作者source CI](../.github/workflows/rail-original-20species-inat-feasibility-v164.yml)・[30m真正写真API×線路Polylineのコード](../scripts/audit_20_original_rail_plants_inat_30m_two_regions_v165.py)・[v16.5元GIS/写真source CI](../.github/workflows/rail-iNat-source-top20-photo30m-SI-CZ-v165.yml)。
+
+研究はPR #1 Draft、main未マージ。写真・元座標は成果リポに複製しない。
