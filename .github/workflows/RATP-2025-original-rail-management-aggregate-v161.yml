@@ -1,0 +1,38 @@
+name: "v16.1 ORIGINAL French RATP 2025 394 botanical plots vs 170 management ALERTS source-stage audit"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'data/literature/Rakotoson2025_original_published_aggregate_not_raw_v161.json'
+      - 'scripts/audit_Rakotoson2025_RATP_original_published_aggregate_v161.py'
+      - 'tests/test_Rakotoson2025_RATP_original_published_aggregate_v161.py'
+      - '.github/workflows/RATP-2025-original-rail-management-aggregate-v161.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v161-original-author-published-FR-rail-RATP-394plots-170alerts
+  cancel-in-progress: true
+jobs:
+  original-French-source-aggregate-stage-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test original published source count/mean fidelity and alert vs actual intervention nonidentification
+        run: python -m unittest discover -s tests -p 'test_Rakotoson2025_RATP_original_published_aggregate_v161.py' -v
+      - name: Reproduce public-author aggregate means and fixed-area counts from HUMAN TRANSCRIPTION without claiming raw publisher dataset download
+        run: |
+          python -u scripts/audit_Rakotoson2025_RATP_original_published_aggregate_v161.py \
+            --manifest data/literature/Rakotoson2025_original_published_aggregate_not_raw_v161.json \
+            --output results/audit/RATP_2025_original_rail_mowing_ALERT_and_vegetation_aggregates_v161.json
+      - name: Archive source-mapped publisher aggregate/eligibility gate only, no private original 394 plant plots or 170 personnel alert points
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: France-RATP-2025-author-published-rail-management-stage-v161
+          path: results/audit/RATP_2025_original_rail_mowing_ALERT_and_vegetation_aggregates_v161.json
+          if-no-files-found: warn
