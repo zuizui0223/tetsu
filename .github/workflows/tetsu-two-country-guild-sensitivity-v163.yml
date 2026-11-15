@@ -1,0 +1,53 @@
+name: "v16.3 VERIFIED two original field studies four functional-guild rail-vs-ROAD source robustness"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_two_original_countries_four_guild_railroad_sensitivity_v163.py'
+      - 'tests/test_two_original_countries_four_guild_railroad_sensitivity_v163.py'
+      - '.github/workflows/tetsu-two-country-guild-sensitivity-v163.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v163-authentic-2original-studies-4guild-2source-richness
+  cancel-in-progress: true
+jobs:
+  audit-two-authentic-SI-CZ-source-original-studies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run synthetic math unit tests to prohibit false independent site-pair and group effects
+        run: python -m unittest discover -s tests -p 'test_two_original_countries_four_guild_railroad_sensitivity_v163.py' -v
+      - name: Retrieve independently original-SHA verified Slovenian 89-site field GPS+2024 OSM 4guild source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Slovenian-original-89site-true-GPS-4guild-railroad-v162
+          run-id: 43688923515
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v163/SI
+      - name: Retrieve independently original-author plant Czech 35 whole-station +2023 OSM 4guild source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Czech-original-35station-centroid-4guild-railroad-v162
+          run-id: 43688923515
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v163/CZ
+      - name: Reproduce true original study full-guild taxon incidence and 4 source guild x 2 country x 2 fixed richness-fold sensitivity
+        run: |
+          python -u scripts/audit_two_original_countries_four_guild_railroad_sensitivity_v163.py \
+            --original-SI-v162 source/v163/SI/SI_original_real_89site_2024_railroad_four_guild_v162.json \
+            --original-CZ-v162 source/v163/CZ/CZ_original_real_35station_2023_railroad_four_guild_v162.json \
+            --output results/audit/2country_original_v162_four_guild_rail_road_source_sensitivity_v163.json
+      - name: Archive only source-independent SHA constrained summaries; no original plant matrix or OSM PBF/GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SI-CZ-authentic-2original-source-4guild-robustness-v163
+          path: results/audit/2country_original_v162_four_guild_rail_road_source_sensitivity_v163.json
+          if-no-files-found: warn
