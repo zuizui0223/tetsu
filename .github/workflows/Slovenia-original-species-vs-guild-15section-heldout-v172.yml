@@ -33,7 +33,7 @@ jobs:
           run-id: 43538799032
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: source/v172/author_original
-      - name: Explicit original source byte length and full author XLSX SHA: refuse fake on-the-fly station data
+      - name: "Explicit original source byte length and full author XLSX SHA: refuse fake on-the-fly station data"
         run: |
           set -euo pipefail
           test "$(stat -c%s source/v172/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx)" = "401279"
