@@ -103,9 +103,9 @@ class FourRealTaxaLocalPhotoControlOpportunityTests(unittest.TestCase):
         # Control band stub conserves non-source 30m metadata.
         prior={
           "source_bbox_iNat_research_photo_total":3,
-          "original_public_accuracy_circle_guaranteed_near30":1,
-          "original_CC_photo_near30":1,
-          "original_photo_controls_100to1000m":2
+          "n_rail_polyline_guaranteed_circle_within_30m":1,
+          "n_rail_polyline_30m_with_CC_photo_license":1,
+          "n_source_species_photo_100to1000m_controls":2
         }
         summ=summarize_source_species(obs,RailStub(),"Echium vulgare",prior)
         self.assertEqual(summ["n_source_point_near30_and_errorcircle_certain_and_CC_licensed"],1)
@@ -122,9 +122,9 @@ class FourRealTaxaLocalPhotoControlOpportunityTests(unittest.TestCase):
     def test_no_strict_cc_or_exact_source_photo_total_mismatch(self):
         prior={
           "source_bbox_iNat_research_photo_total":1,
-          "original_public_accuracy_circle_guaranteed_near30":0,
-          "original_CC_photo_near30":0,
-          "original_photo_controls_100to1000m":1
+          "n_rail_polyline_guaranteed_circle_within_30m":0,
+          "n_rail_polyline_30m_with_CC_photo_license":0,
+          "n_source_species_photo_100to1000m_controls":1
         }
         with self.assertRaisesRegex(ValueError,"source result count"):
             summarize_source_species([photorecord(1),photorecord(2)],RailStub(),"Echium vulgare",prior)
