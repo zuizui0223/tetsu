@@ -1,0 +1,42 @@
+name: "v18.5 original Croatia-Bosnia joint taxonomic and functional fixed-margin null"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/analyze_Croatia_Bosnia_15station_joint_taxonomic_functional_null_v185.py"
+      - "tests/test_Croatia_Bosnia_15station_joint_taxonomic_functional_null_v185.py"
+      - ".github/workflows/Croatia-Bosnia-joint-tax-functional-null-v185.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v185-croatia-bosnia-joint-tax-functional
+  cancel-in-progress: true
+jobs:
+  original-2017-joint-two-metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install non-OCR original PDF layout parser
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Test true taxonomic and functional response metrics plus fixed margins
+        run: python -m unittest discover -s tests -p 'test_Croatia_Bosnia_15station_joint_taxonomic_functional_null_v185.py' -v
+      - name: Fetch exact previously published PDF and check immutable publisher SHA256
+        run: |
+          mkdir -p source_original/v185
+          curl -LfsS --retry 3 --connect-timeout 15 --max-time 120 'https://hrcak.srce.hr/file/282429' -o source_original/v185/Jasprica2017.pdf
+          printf '90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956  source_original/v185/Jasprica2017.pdf\n' | sha256sum -c -
+      - name: Complete original 359 by 15 validation before both-source-matched metrics and 2 nulls
+        run: |
+          python -u scripts/analyze_Croatia_Bosnia_15station_joint_taxonomic_functional_null_v185.py \
+            --original-pdf source_original/v185/Jasprica2017.pdf \
+            --output results/audit/v185/Croatia_Bosnia_2017_joint_taxonomic_lifeform_internal_NULL_v185.json
+      - name: Publish aggregate original-audit statistics only, not publisher PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Croatia-Bosnia-2017-joint-taxonomic-lifeform-source-null-v185
+          path: results/audit/v185/
+          if-no-files-found: warn
