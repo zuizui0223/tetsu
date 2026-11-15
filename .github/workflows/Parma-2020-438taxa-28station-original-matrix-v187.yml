@@ -1,0 +1,50 @@
+name: "v18.7 ORIGINAL Parma 438 taxa x 28 station full occurrence matrix source gate"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/extract_Parma_2020_28station_species_matrix_v187.py"
+      - "tests/test_Parma_2020_matrix_v187.py"
+      - ".github/workflows/Parma-2020-438taxa-28station-original-matrix-v187.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v187-parma-original-matrix
+  cancel-in-progress: true
+jobs:
+  source-438-x-28:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install native PDF font layout reader
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Test synthetic original-native species extraction
+        run: python -m unittest discover -s tests -p 'test_Parma_2020_matrix_v187.py' -v
+      - name: Download and verify journal original 2020 title-locked publication
+        run: |
+          mkdir -p source_original/v187
+          echo 'CAUTION publisher site has expired certificate. Bypass TLS verification only for public PDF; validate original bibliographic content and source SHA.'
+          curl --insecure --location --fail --silent --show-error --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+            -o source_original/v187/Adorni_Ghillani_2020.pdf
+          printf 'c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787  source_original/v187/Adorni_Ghillani_2020.pdf\n' | sha256sum -c -
+      - name: Audit 438 taxa x 28 surveyed stations and 4 publisher-richness benchmarks before writing matrix
+        run: |
+          python -u scripts/extract_Parma_2020_28station_species_matrix_v187.py \
+            --source-pdf source_original/v187/Adorni_Ghillani_2020.pdf \
+            --output-dir results/audit/v187
+      - name: Always show diagnostic discrepancies if source gate fails
+        if: always()
+        run: |
+          test -f results/audit/v187/Parma_2020_original_438taxa_28station_QA.json && \
+            cat results/audit/v187/Parma_2020_original_438taxa_28station_QA.json | head -c 14000 || true
+      - name: Archive only source-derived matrix/QA if complete, not PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Parma-2020-source-438taxa-28stations-QA-and-matrix-v187
+          path: results/audit/v187/
+          if-no-files-found: warn
