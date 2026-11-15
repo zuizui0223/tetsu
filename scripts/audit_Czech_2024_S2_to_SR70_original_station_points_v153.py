@@ -77,14 +77,20 @@ def sr70_records(path):
     try: txt=raw.decode("utf-8-sig")
     except UnicodeDecodeError as e:raise ValueError("Third-party SR70 UTF8 source invalid") from e
     original=[]
+    n_source_missing_coordinate_0_0=0
     for line,row in enumerate(csv.reader(io.StringIO(txt)),start=1):
         if not any(v.strip() for v in row):continue
         if len(row)!=4:raise ValueError("SR70 original derived rows not id,name,lat,lon")
         code,name,lat,lon=(x.strip() for x in row)
         if not (code.isdigit() and len(code)>=5 and name):raise ValueError("Malformed SR70 code/name")
         lat=float(lat);lon=float(lon)
+        if lat==0 and lon==0:
+            # Genuine SR70 derivative marks missing-source geometry with 0,0.
+            # Exclude it from matching, preserving the number of omissions.
+            n_source_missing_coordinate_0_0+=1
+            continue
         if not (48<=lat<=52 and 12<=lon<=20 and math.isfinite(lat) and math.isfinite(lon)):
-            raise ValueError("Source SR70 point out of Czech bounds")
+            raise ValueError("Source SR70 non-missing point outside Czech bounds")
         original.append({"sr70_code":code,"name":name,"lat":lat,"lon":lon,
                          "match_key":normalized_name(name)})
     return original,{
@@ -93,7 +99,8 @@ def sr70_records(path):
       "source_blob_git_sha1":hash_git,
       "downloaded_csv_sha256":hashlib.sha256(raw).hexdigest(),
       "download_bytes":len(raw),
-      "n_sr70_rows":len(original),
+      "n_sr70_valid_coordinate_rows":len(original),
+      "n_sr70_source_rows_with_explicit_zero_zero_missing_coordinate_excluded":n_source_missing_coordinate_0_0,
       "not_original_station_botanical_sampling_coordinates":True,
       "third_party_derived_FROM_official_SR70_NOT_official_2022_original":True,
     }
