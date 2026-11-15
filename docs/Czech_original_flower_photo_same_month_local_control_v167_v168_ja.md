@@ -1,6 +1,6 @@
 # 鉄 v16.7–v16.8：線路30m写真で「同種の花・草姿」まで比較できるか
 
-更新：2026年11月15日。**v16.7の真人工知能ソース集計はSUCCESS、v16.8は同年同月・近接10kmの元写真対照ペア取得プログラムを実装。後者の実件数は真正GitHub Actions成功後に本節へ追記する。**
+更新：2026年11月15日。**v16.7の真人工知能ソース集計とv16.8の同年同月・近接10kmの写真対照ペア取得はそれぞれ元ソース真正GitHub ActionsでSUCCESS。形質の画像判定・草刈り・遺伝的適応は未推定。**
 
 ## 本来の問いは「種間群集フィルターと種内形質シフトが一致するか」
 
@@ -39,7 +39,27 @@ v16.7の「画像レビューに進める4種」に絞り、iNaturalistの**原2
 
 **比較上の制約**：100〜1,000mの写真には道路沿い、居住地、公園、大学構内も含みうる。近傍側でも駅周辺・花壇・線路敷地外がありうる。厳しい線路位置精度だけでは真正な「鉄道草刈り処理vs道路処理」を同定できない。今回の4種選定もv16.7任意の注釈数を見た事後的な作業効率の選別で、効果方向についての無作為・事前登録仮説検定ではない。
 
-[源原本を取得して距離・年/月・観察者の対応を再計算するスクリプト](../scripts/audit_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py)・[合成データのみの1対1/source privacy検証](../tests/test_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py)・[v16.8真正国土OSMソースとiNaturalist再取得のGitHub CI](../.github/workflows/Czech-4flower-original-local-photo-matched-v168.yml)。**実写真ペア数は成功CIログを確認後にのみ追記する**。
+[源原本を取得して距離・年/月・観察者の対応を再計算するスクリプト](../scripts/audit_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py)・[合成データのみの1対1/source privacy検証](../tests/test_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py)・[v16.8真正国土OSMソースとiNaturalist再取得のGitHub CI](../.github/workflows/Czech-4flower-original-local-photo-matched-v168.yml)。**実写真ペア数は下記の真正元データ再取得成功CIで62ペアと検証された**。
+
+## v16.8 真のソースを再取得した同年・同月・10km以内CC画像ペア検証 SUCCESS
+
+[**v16.8：2023年原Geofabrik CZ OSM PBF（原SHA256 26ff09de…）、iNaturalist 2018–25年research-grade実写真の完全再取得、元v16.6とv16.7の独立原本の数値一致を厳格検査したCI SUCCESS #43695087773**](https://github.com/zuizui0223/tetsu/actions/runs/43695087773)。最初の実行ではv16.7の画像レビュー用サマリーにv16.6の元API全数がないため停止した。**元v16.6の完全な種×国API件数とv16.7の4種posthoc選別基準を別々に取得して照合する形に修正**し、成功した。元APIの生座標・観察ID・ユーザー名・写真URLは出力しない。
+
+source photo定義：非obscured・非栽培・公開位置誤差が0–30m・CC写真を1枚以上・同種で同じ暦年と月。鉄道群は線形までの距離＋元位置誤差半径が**厳密に30m以内**、対照群は線形まで100–1,000m・同じ公開精度とCC写真。採録記録はそれぞれ1度しか使わず、候補との直線地理距離**10km以内**、主解析は**観察者のIDが異なる写真同士**を対応させた（観察者の真のIDは元APIから公開成果に含めない）。
+
+| 元著者から選び直したCZ植物種 | 線路30m内のCC写真、GPS誤差円全体が内側 | 100〜1,000mの同種CC写真 | 同年月＋10km内・撮影者異なる1:1ペア | 対となった線路近接写真のうちFlowers陽性注釈 | 異なる撮影年月・年 |
+|---|---:|---:|---:|---:|---|
+| *Echium vulgare* | **97** | **416** | **29** | **4** | 14年月・7年 |
+| *Geranium robertianum* | 54 | 289 | **17** | **0** | 10年月・4年 |
+| *Erigeron annuus* | 46 | 406 | **11** | **0** | 8年月・4年 |
+| *Linaria vulgaris* | 53 | 217 | **5** | **0** | 5年月・4年 |
+| **合計（4種の画像機会、独立生態学的研究数ではない）** | **250** | **1,128** | **62** | **4** | — |
+
+**これらは実際の形質や生殖成功を測った62ペアではない**。後から画像を開いても、葉・花だけの拡大写真で本当の個体高さや茎・花序が全景で分かるかは未知。iNaturalistの「Flowers」タグのない58近接画像は**実際に非開花と判定された画像ではない**。この記録だけで初花日の差・開花頻度・草刈りに対する可塑性/遺伝的適応を推定することは禁止。
+
+実務上は最も本物の観察機会が大きい *Echium vulgare*（29候補ペア、7年）から、画像利用条件を守り、真正の花可視性・全草姿・尺度の有無を独立人手で判読することを優先。元線路の幾何距離30mだけでは本物の道床内植生ではなく、駅周辺の花壇・公園や並走道路・道路端の草地が混ざり得る。背景の管理履歴や日当たり・植生の元種プールは依然未測定。**仮に画像内花が実際に見えても、その年の最初の開花を示すわけではない。**
+
+[**元4種の真のiNaturalist API再取得・元鉄道線形と同年月10kmペア化の再現コード**](../scripts/audit_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py)・[合成ペア1:1・観察者違い・原API全数不変の単体テスト](../tests/test_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py)・[元真PBFと真正API統合GitHub CI](../.github/workflows/Czech-4flower-original-local-photo-matched-v168.yml)。
 
 ## 現段階で残る本当の機構検定
 
