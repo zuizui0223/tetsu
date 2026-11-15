@@ -86,13 +86,13 @@ def run(file5,file8):
          "Mean_treatment","Mean_control","Var_treatment","Var_control",
          "Measure_var_treatment","Measure_var_control"}
     cases=as_records(f8["File"],req)
-    f5=source_tables(file5,SHA5,["Sheet B - Accepted ful-text",
-                                 "Sheet C - Critical appraisal",
-                                 "Sheet D - Systematic review table"])
-    accepted=as_records(f5["Sheet B - Accepted ful-text"],{"DOI","ID_doc","Publication_title"})
-    critical=as_records(f5["Sheet C - Critical appraisal"],
+    f5=source_tables(file5,SHA5,["B - Accepted ful-text",
+                                 "C - Critical appraisal",
+                                 "D - Systematic review table"])
+    accepted=as_records(f5["B - Accepted ful-text"],{"DOI","ID_doc","Publication_title"})
+    critical=as_records(f5["C - Critical appraisal"],
         {"DOI","ID_doc","Risk_of_bias","Other_bias","Reasons_for_rejection"})
-    reviewed=as_records(f5["Sheet D - Systematic review table"],
+    reviewed=as_records(f5["D - Systematic review table"],
         {"ID_doc","DOI","LTI","Included_in_metaanalysis"})
     if len(reviewed)!=316:raise ValueError("Original review 316 included study rows changed")
     return {"version":"v14.8_verified_original_springer_meta","review_DOI":DOI,
