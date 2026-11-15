@@ -1,0 +1,44 @@
+name: "v14.2 REAL Slovenian railway GPS-matched taxonomic sharing beyond functional profiles"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_spatial_matched_taxon_identity_v142.py'
+      - 'tests/test_Slovenia_rail_spatial_matched_taxon_identity_v142.py'
+      - '.github/workflows/Slovenia-original-GPS-matched-identity-v142.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-original-89site-GPS-functional-identity-v142
+  cancel-in-progress: true
+jobs:
+  original-true-GPS-source-spatial-common-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 33
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test original WGS84 source geography/haversine original bin common-support math and two guild degree-preserving nulls
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_spatial_matched_taxon_identity_v142.py' -v
+      - name: Download original CC-BY published Slovenian 2026 92 source vegetation locations and taxon source, already SHA audited
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO142/authentic
+      - name: Recompute 89 original source railway WGS84 pairs, actual functional/geo matched support, 15 section leaveout, and exact trait group/site/species frequency-preserving null
+        run: |
+          python -u scripts/analyze_Slovenia_rail_spatial_matched_taxon_identity_v142.py --original-xlsx source/SLO142/authentic/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx --source-audit102 source/SLO142/authentic/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json --output results/audit/SLO_2026_v142_real_rail_spatially_matched_taxonomic_shared_species.json
+      - name: Preserve original-author geography match coverage and provenance without original published raw workbook
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-Slovenia-rail-GPS-traits-conditioned-same-section-identity-v142
+          path: results/audit/SLO_2026_v142_real_rail_spatially_matched_taxonomic_shared_species.json
+          if-no-files-found: warn
