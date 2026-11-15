@@ -1,0 +1,53 @@
+name: "v15.9 ORIGINAL two-country source HOLDOUT fold-influence audit (no pooled meta)"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Czech_Slovenia_original_railroad_CV_fold_influence_v159.py'
+      - 'tests/test_Czech_Slovenia_original_railroad_CV_fold_influence_v159.py'
+      - '.github/workflows/Czech-Slovenia-CV-source-influence-v159.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v159-authentic-source-rail-road-CV-fold-influence
+  cancel-in-progress: true
+jobs:
+  two-original-cohorts-source-fold-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate true-source no-pseudorep fold arithmetic on synthetic fixtures
+        run: python -m unittest discover -s tests -p 'test_Czech_Slovenia_original_railroad_CV_fold_influence_v159.py' -v
+      - name: Retrieve previously independently verified Slovenian 89site v15.1 source-preserving real result
+        uses: actions/download-artifact@v4
+        with:
+          name: Slovenia-real-rail-road-conditional-identity-v151
+          run-id: 43674532285
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v159/SLO
+      - name: Retrieve independently verified Czech 35 station v15.6 real original source road/rail result
+        uses: actions/download-artifact@v4
+        with:
+          name: Czech-original-2023-35station-rail-vs-road-heldout-v156
+          run-id: 43684840429
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v159/CZE
+      - name: Independently verify original study identifiers, OSM hashes, exact reference CV and fold deletion sensitivity
+        run: |
+          python -u scripts/audit_Czech_Slovenia_original_railroad_CV_fold_influence_v159.py \
+            --source-slovenia-v151 source/v159/SLO/SLO_2024_OSM_real_rail_road_species_identity_heldout_v151.json \
+            --source-czech-v156 source/v159/CZE/Czech_2023_35station_5stretch_railroad_heldout_v156.json \
+            --output results/audit/Czech_and_Slovenia_two_original_studies_CV_fold_influence_v159.json
+      - name: Archive only distinct-source descriptive fold robustness, no false meta effect
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: actual-independent-Czech-Slovenia-road-rail-CV-fold-robustness-v159
+          path: results/audit/Czech_and_Slovenia_two_original_studies_CV_fold_influence_v159.json
+          if-no-files-found: warn
