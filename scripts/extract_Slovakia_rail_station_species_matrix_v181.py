@@ -164,7 +164,6 @@ def extract(pdf_path):
                                       for r in extracted if any(r["values"][i] for i in indices)))
     reconciled=(harmonized_counts==EXPECTED and harmonized_unions==UNION_EXPECTED)
     return extracted,{
-        "layout_debug":layout_debug,
         "source":DOI, "source_pdf_url":PDF_URL,
         "source_pdf_sha256":hashlib.sha256(raw).hexdigest(),
         "source_pdf_bytes":len(raw),"source_pdf_page_count":len(f),
