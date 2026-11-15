@@ -120,17 +120,32 @@ def rows_from_original(pdf):
     for rr in out:
         form_taxa[rr["life_form"]]=form_taxa.get(rr["life_form"],0)+1
     pair_jaccard=[]
+    pair_function_profile_overlap=[]
+    per_station_form_counts={}
+    for i in range(1,16):
+        per_station_form_counts[i]={
+           form:sum(i in rr["source_station_numbers"] and rr["life_form"]==form for rr in out)
+           for form in LF}
     for i in range(1,16):
         for j in range(i+1,16):
             shared=sum(i in rr["source_station_numbers"] and j in rr["source_station_numbers"] for rr in out)
             union=sum(i in rr["source_station_numbers"] or j in rr["source_station_numbers"] for rr in out)
             pair_jaccard.append(shared/union if union else None)
+            ni=station_taxa[i];nj=station_taxa[j]
+            pair_function_profile_overlap.append(sum(
+                min(per_station_form_counts[i][form]/ni,per_station_form_counts[j][form]/nj)
+                for form in LF))
     metadata["station_taxa_counts"] = station_taxa
     metadata["life_form_taxa_counts"] = form_taxa
     metadata["n_pairwise_station_jaccard_descriptive_nonindependent"] = len(pair_jaccard)
     metadata["station_jaccard_min"]=round(min(pair_jaccard),4)
     metadata["station_jaccard_median"]=round(sorted(pair_jaccard)[len(pair_jaccard)//2],4)
     metadata["station_jaccard_max"]=round(max(pair_jaccard),4)
+    metadata["per_station_original_lifeform_counts"]=per_station_form_counts
+    metadata["station_lifeform_profile_overlap_min"]=round(min(pair_function_profile_overlap),4)
+    metadata["station_lifeform_profile_overlap_median"]=round(sorted(pair_function_profile_overlap)[len(pair_function_profile_overlap)//2],4)
+    metadata["station_lifeform_profile_overlap_max"]=round(max(pair_function_profile_overlap),4)
+    metadata["lifeform_overlap_not_comparable_directly_to_Jaccard_or_regional_pool_null"]=True
     metadata["station_jaccard_is_within_ONE_study_not_cross_region_homogenization"]=True
     metadata["full_matrix_verified"]=(metadata["source_count_gate"]
          and metadata["n_station_lists_nonempty"]==359
