@@ -27,6 +27,36 @@ class GenuineStudyOutcomeGate(unittest.TestCase):
         self.assertIn(["CH_Schoenenberger_2012","CH_Schulze_2014_port","CH_BaselCanton_2020"],groups)
         self.assertIn(["FR_Penone_2012","FR_Blanchet_2015"],groups)
 
+    def test_France_RATP_394_source_original_plots_and_170_distinct_alerts_NOT_18th_study(self):
+        studies=inventory(SOURCE)
+        source={r["study_key"]:r for r in studies}
+        self.assertEqual(len(studies),17)
+        r=source["FR_Rakotoson_2025"]
+        self.assertEqual(r["track"],"B_D_MANAGEMENT_CANDIDATE")
+        self.assertEqual(int(r["original_independent_units"]),394)
+        self.assertIn("170 DISTINCT staff alerts",r["original_field_unit"])
+        self.assertEqual(r["true_site_taxon_matrix_obtained"],"false")
+        self.assertEqual(r["true_site_coordinates_verified"],"false")
+        self.assertEqual(r["usable_for_common_species_beta"],"false")
+        self.assertNotIn("FR_Rakotoson_2025",
+                         result(studies)["primary_B_source_true_plot_by_taxon_matrices_obtained"])
+
+    def test_France_RATP_170_reported_alerts_are_not_proven_mowing_or_observed_species_matrix(self):
+        s=SOURCE.read_text(encoding="utf-8")
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/"fake.csv"
+            p.write_text(s.replace(
+                 "FR_Rakotoson_2025,10.1111/wre.70025,FR,B_D_MANAGEMENT_CANDIDATE",
+                 "FR_Rakotoson_2025,10.1111/wre.70025,FR,B"),encoding="utf-8")
+            with self.assertRaisesRegex(ValueError,"RATP original 394"):
+                inventory(p)
+            s2=s.replace(
+                 "200m to alert requests NOT actual mechanical management",
+                 "200m to actual randomized mechanical mowing treatments")
+            p.write_text(s2,encoding="utf-8")
+            with self.assertRaisesRegex(ValueError,"RATP original 394"):
+                inventory(p)
+
     def test_treating_french_published_results_as_retrieved_species_matrix_fails(self):
         s=SOURCE.read_text(encoding="utf-8")
         with tempfile.TemporaryDirectory() as d:
