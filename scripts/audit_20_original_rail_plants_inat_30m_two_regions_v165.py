@@ -45,6 +45,9 @@ STUDY_REGIONS={
 }
 SOURCE_CANDIDATES="v16.4_AUTHOR_ORIGINAL_REAL_RAIL_FLORA_20_SPECIES_FIRST_PHOTO_FEASIBILITY"
 PHOTO_LICENSE_ALLOW={"cc0","cc-by","cc-by-sa","cc-by-nc","cc-by-nc-sa"}
+# Narrow synonym from earlier primary-source botanical taxonomic audit in
+# tetsu, never merge other genus species or treat aliases as absences.
+CURATED_SOURCE_ACCEPTED_ALIASES={"Conyza canadensis":{"Erigeron canadensis"}}
 RAIL_TYPES={"rail","narrow_gauge"}
 ACCURACY_MAX_M=30.
 RAIL_DISTANCE_M=30.
@@ -201,9 +204,12 @@ def load_complete_photo_observations(client,taxon,bbox):
 
 def exact_taxon_or_descendant(name,original):
     if not isinstance(name,str):return False
-    return name==original or (
-      name.startswith(original+" ") and
-      (name[len(original)+1:].startswith(("subsp.","var.","subsp ","var ","ssp.","f.","form ")) )
+    equivalents={original}|CURATED_SOURCE_ACCEPTED_ALIASES.get(original,set())
+    return any(
+        name==target or (
+            name.startswith(target+" ") and
+            name[len(target)+1:].startswith(("subsp.","var.","subsp ","var ","ssp.","f.","form "))
+        ) for target in equivalents
     )
 
 def observation_quality(ob,source_species):
