@@ -29,11 +29,6 @@ STATION_MACROCLIMATE={
     1:"TSS",2:"TWS",3:"TSS",4:"TWS",5:"TWS",6:"TWS",7:"TWS",8:"TWS",
     9:"TWS",10:"MED",11:"MED",12:"TSS",13:"TSS",14:"TSS",15:"TWS"
 }
-STATION_NAMES={
-    1:"Zadar",2:"Benkovac",3:"Devr ske",4:"Kistanje",5:"Knin",
-    6:"Drnis",7:"Unesic",8:"Koprno",9:"Perkovic",10:"Sibenik",
-    11:"Split",12:"Ploce",13:"Metkovic",14:"Capljina",15:"Mostar"
-}
 # Source metadata transcribed independently from Tab. 1, p.274, not modeled climate.
 # We do NOT use LAT/LON of individual sensitive plants; these are public stations.
 assert len(STATION_MACROCLIMATE)==15 and set(STATION_MACROCLIMATE.values())=={"TWS","TSS","MED"}
