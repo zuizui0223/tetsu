@@ -92,7 +92,7 @@ class RealPhotoSourceAuditSafetyTests(unittest.TestCase):
             validate_original_source(c,s)
         c,s=fake_inputs()
         s["two_country_bbox_20taxon_real_iNat_photo_source_30m"]["SI"][0]["taxon"]="Taxon substitute"
-        with self.assertRaisesRegex(ValueError,"candidate"):
+        with self.assertRaisesRegex(ValueError,"photo count order drifted"):
             validate_original_source(c,s)
 
     def test_no_positional_accuracy_count_over_api_total(self):
