@@ -57,7 +57,7 @@ class FourRealTaxaLocalPhotoControlOpportunityTests(unittest.TestCase):
         }
         self.assertEqual(len(review_priority(src)),4)
         src["exploratory_ANGIOSPERM_image_review_priority"][4]["near30_original_iNat_positive_FLOWERS_annotation"]=6
-        with self.assertRaisesRegex(ValueError,"source four"):
+        with self.assertRaisesRegex(ValueError,"original four"):
             review_priority(src)
 
     def test_public_record_quality_and_true_rail_buffer_circle(self):
