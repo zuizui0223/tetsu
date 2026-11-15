@@ -77,7 +77,7 @@ class SourceNetwork:
     def finalize(self):
         import numpy as np
         from scipy.sparse import coo_matrix
-        if len(self.coords)<3 or len(self.edge_min)<2:
+        if len(self.coords)<2 or len(self.edge_min)<1:
             raise ValueError("Original physical OSM network has no usable way topology")
         ids=list(self.coords)
         ix={osm_id:i for i,osm_id in enumerate(ids)}
