@@ -29,7 +29,6 @@ def exact_bounds(frequencies, group_a=35, group_b=36):
         raise ValueError("Groups must each have two or more sites")
     if not frequencies:
         raise ValueError("No source species")
-    low={},{}
     # Additive per-taxon contrast: group allocations can be chosen
     # independently when no per-site richness constraints are known.
     minimum_allocation={}
