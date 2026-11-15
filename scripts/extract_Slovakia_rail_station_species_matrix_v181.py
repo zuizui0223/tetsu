@@ -129,6 +129,19 @@ def extract(pdf_path):
     for i in PAGE_INDICES:
         entries, errors=parse_table_page(f[i],centers[i-4] or header0)
         extracted.extend(entries);diag.extend(errors)
+    targeted = {}
+    for page_idx in [5,7,8,9]:
+        pg=f[page_idx]
+        words=pg.get_text("words", sort=False)
+        for needle in ("Helianthus","Cockerell","Papaver","austromoravicum",
+                       "Setaria","Tzvelev","pycnocoma"):
+            hits=[w for w in words if needle.lower() in str(w[4]).lower()]
+            for w in hits:
+                cy=(w[1]+w[3])/2
+                short=[(round(v[0],1), round((v[1]+v[3])/2,1),str(v[4]))
+                       for v in words if abs((v[1]+v[3])/2-cy) < 22]
+                targeted[f"page{page_idx+1}_{needle}_{round(cy,1)}"]=sorted(short,key=lambda a:(a[1],a[0]))[:100]
+    diag.append({"raw_targeted_pdf_word_coordinates":targeted})
     totals=[0,0,0,0]
     unique=set()
     pairs=set()
