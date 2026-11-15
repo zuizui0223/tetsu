@@ -58,7 +58,9 @@ SEED=20261115
 
 
 def read_original_czech_publisher(s1,s2):
-    from openpyxl import load_workbook
+    # Validate publisher-original fingerprints BEFORE loading an optional
+    # Excel parser; even the minimal built-in CI must fail closed on
+    # counterfeit source workbooks without requiring openpyxl installed.
     expected=((s1,EXPECTED_S1_SHA,79261),(s2,EXPECTED_S2_SHA,13533))
     for path,sha,length in expected:
         raw=Path(path).read_bytes()
@@ -68,6 +70,7 @@ def read_original_czech_publisher(s1,s2):
             raise ValueError("Czech original publisher source Excel invalid")
         with zipfile.ZipFile(path) as z:
             if z.testzip() is not None:raise ValueError("Czech publisher source XLSX CRC failed")
+    from openpyxl import load_workbook
     ws1=load_workbook(s1,read_only=True,data_only=True)
     ws2=load_workbook(s2,read_only=True,data_only=True)
     try:
