@@ -1,0 +1,46 @@
+name: "v16.7 ORIGINAL real near-rail photo Flowers annotation and seasonal image-review eligibility"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_iNat_rail30m_flower_annotation_review_gate_v167.py'
+      - 'tests/test_iNat_rail30m_flower_annotation_review_gate_v167.py'
+      - '.github/workflows/rail-original-photo30m-Flower-review-audit-v167.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v167-authentic-2018-25-20source-plant-photo30m-flower-meta
+  cancel-in-progress: true
+jobs:
+  source-audited-angiosperm-phenophase-photo-review-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test no invented negative nonflowering and no spore plant Flower classifications
+        run: python -m unittest discover -s tests -p 'test_iNat_rail30m_flower_annotation_review_gate_v167.py' -v
+      - name: Download ORIGINAL v16.6 authentic 20 botanist preselected taxa x SI/CZ verified iNat photo metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          run-id: 43693580409
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v167/author_original_real
+      - name: Reproduce authentic railway photo 1009, privacy GPS accuracy circle, 11 candidate original opportunity and optional Flowers tagged source
+        run: |
+          python -u scripts/audit_iNat_rail30m_flower_annotation_review_gate_v167.py \
+            --source-v166 source/v167/author_original_real/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
+            --output results/audit/tetsu_v167_source20_rail_photo30m_real_Flowers_annotation_review_gate.json \
+            --csv results/audit/tetsu_v167_source20_rail_photo30m_species_country_annotation.csv
+      - name: Archive only source photo metadata counts and review opportunity, never photos, original coordinates or observer IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authentic-source-rail-photo30m-Flower-annotation-review-v167
+          path: results/audit/tetsu_v167_source20_rail_photo30m_*
+          if-no-files-found: warn
