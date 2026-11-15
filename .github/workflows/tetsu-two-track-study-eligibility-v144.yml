@@ -1,0 +1,37 @@
+name: "v14.4 Original source two-track railway plant seed stage meta eligibility (no invented pooled effect)"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/literature/tetsu_two_track_original_cohorts_v144.csv'
+      - 'scripts/audit_tetsu_two_track_original_study_eligibility_v144.py'
+      - 'tests/test_tetsu_two_track_original_study_eligibility_v144.py'
+      - '.github/workflows/tetsu-two-track-study-eligibility-v144.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-original-rail-research-two-track-cohort-map-v144
+  cancel-in-progress: true
+jobs:
+  original-published-stage-and-flora-cohort-evidence-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check published source original paper reference units, raw availability, overlapping cohorts, no impossible meta stage multiplications
+        run: python -m unittest discover -s tests -p 'test_tetsu_two_track_original_study_eligibility_v144.py' -v
+      - name: Audit real study catalog and stage A/B eligibility without claiming an invalid pooled rail effect
+        run: |
+          python -u scripts/audit_tetsu_two_track_original_study_eligibility_v144.py --original-source-inventory data/literature/tetsu_two_track_original_cohorts_v144.csv --output results/audit/tetsu_rail_v144_original_two_track_17published_cohorts_eligibility.json
+      - name: Preserve only original-study stage-level selection gates and source repeat restrictions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-original-tetsu-two-track-stage-and-flora-eligibility-v144
+          path: results/audit/tetsu_rail_v144_original_two_track_17published_cohorts_eligibility.json
+          if-no-files-found: warn
