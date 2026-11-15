@@ -23,7 +23,8 @@ FIELDS=("study_key","source_identifier","country","track","observation_stage",
         "usable_for_common_species_beta","source_original_or_authorship",
         "exposure_or_comparator","principal_limit")
 ELIGIBLE_TRACKS={"A","A_ROAD_CONTROL","A_GENETIC_TRIANGULATION",
-                 "B","B_CANDIDATE","B_CONTEXT","B_ROAD_CONTROL"}
+                 "B","B_CANDIDATE","B_CONTEXT","B_ROAD_CONTROL",
+                 "B_D_MANAGEMENT_CANDIDATE"}
 REAL_B_SITE_LIST={"SI_Sabic_2026","CZ_Kutlvasr_2024"}
 SAME_GEO_REGION_OVERLAPS=(
   ("CH_Schoenenberger_2012","CH_Schulze_2014_port","CH_BaselCanton_2020"),
@@ -63,6 +64,24 @@ def inventory(csvpath):
     for group in SAME_GEO_REGION_OVERLAPS:
         if not all(k in seen for k in group):
             raise ValueError("Published overlapping Swiss/French source cohorts not logged")
+    # Rakotoson2025 was ALREADY in the ORIGINAL 17-study inventory.
+    # New B_D label documents authors' 394 equal-area 2021 vegetation
+    # surveys + 170 distinct 2020-22 staff ALERTS, not 170 actual
+    # independently controlled mowing treatments and not 394 raw plots
+    # currently materialized in this project. Never count as a new
+    # 18th study, a third true B species matrix or an intervention effect.
+    management=seen["FR_Rakotoson_2025"]
+    if (management["track"]!="B_D_MANAGEMENT_CANDIDATE" or
+        int(management["original_independent_units"])!=394 or
+        management["true_site_taxon_matrix_obtained"]!="false" or
+        management["usable_for_common_species_beta"]!="false" or
+        management["true_site_coordinates_verified"]!="false" or
+        "170 DISTINCT staff alerts" not in management["original_field_unit"] or
+        "NOT actual mechanical management" not in management["exposure_or_comparator"]):
+        raise ValueError("RATP original 394 flora plots/170 separate ALERTS are only public summaries, NOT original raw matrix or actual mowing treatment")
+    if any(x["track"]=="B_D_MANAGEMENT_CANDIDATE"
+           for x in studies if x["study_key"]!="FR_Rakotoson_2025"):
+        raise ValueError("New management flag cannot silently reclassify independent original studies")
     if seen["FR_Penone_2012"]["true_site_taxon_matrix_obtained"]!="false":
         raise ValueError("Do not claim 2012 original 71-site France flora raw matrix was downloaded")
     if seen["SI_Sabic_2026"]["true_site_coordinates_verified"]!="true":
