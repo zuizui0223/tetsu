@@ -185,11 +185,11 @@ def summarize_source_species(obs,rail,species,source_prior):
         if record is not None:
             if record["group"]=="near30_certain":near.append(record)
             elif record["group"]=="control_100to1000":control.append(record)
-    if len(near)>source_prior["original_public_accuracy_circle_guaranteed_near30"]:
+    if len(near)>source_prior["n_rail_polyline_guaranteed_circle_within_30m"]:
         raise ValueError("Czech original accurate near30 photo count increased beyond original documented source; investigate source data drift")
-    if len(near)>source_prior["original_CC_photo_near30"]:
+    if len(near)>source_prior["n_rail_polyline_30m_with_CC_photo_license"]:
         raise ValueError("Strict source CC photographed 30m group exceeds old source license totals")
-    if len(control)>source_prior["original_photo_controls_100to1000m"]:
+    if len(control)>source_prior["n_source_species_photo_100to1000m_controls"]:
         raise ValueError("Strict source CC control sample exceeds old original full-photo control")
     matched_diff=one_to_one_matched(near,control,restrict_different_observers=True)
     matched_any=one_to_one_matched(near,control,restrict_different_observers=False)
@@ -223,8 +223,30 @@ def summarize_source_species(obs,rail,species,source_prior):
       "cannot_infer_actual_flowering_onset_or_photo_plant_height":True
     }
 
-def run(source,rail,client=None):
+def run(source,original_verified_v166,rail,client=None):
     selected=review_priority(source)
+    if original_verified_v166.get("complete") is not True or original_verified_v166.get("version")!=ORIGINAL_166:
+        raise ValueError("Original v16.6 20-species photo true-country-rail-GIS source required; do not substitute projected v16.7 subset for original raw source counts")
+    source_by_name={
+       row["taxon"]:row
+       for row in original_verified_v166["source_species_country_counts"]
+       if row["region_source_bbox"]=="CZ"
+    }
+    if len(source_by_name)!=20:
+        raise ValueError("Original source v16.6 Czech 20 taxon per source bbox full photo census incomplete")
+    v167_rows={row["species"]:row
+               for row in source["original_species_country_40cells_annotation_and_month_audit"]
+               if row["region"]=="CZ"}
+    for row in selected:
+        name=row["species"]
+        if name not in source_by_name or name not in v167_rows:
+            raise ValueError("Original source species in v16.7 absent from v16.6 author's complete 20-species cohort")
+        original=source_by_name[name]
+        derived=v167_rows[name]
+        if (original["n_rail_polyline_point_near_30m"]!=derived["original_photo_rail_30m_count"] or
+            original["n_rail_polyline_guaranteed_circle_within_30m"]!=derived["original_public_accuracy_circle_guaranteed_near30"] or
+            original["n_rail_polyline_30m_with_CC_photo_license"]!=derived["original_CC_photo_near30"]):
+            raise ValueError("Original verified photo count / true-rail-line 30m geometry drifted between author v16.6 and v16.7 artifacts")
     client=client or ConservativeINat(delay=1.10)
     outputs=[]
     for rank,row in enumerate(selected,1):
@@ -233,11 +255,9 @@ def run(source,rail,client=None):
            client,species,STUDY_REGIONS["CZ"]["bbox"])
         if not meta["complete"] or obs is None:
             raise ValueError("Actual original iNaturalist country taxon primary reviewer photo census capped, never count as 0")
-        prior_by_name={x["species"]:x for x in source["original_species_country_40cells_annotation_and_month_audit"]
-                       if x["region"]=="CZ"}
-        if species not in prior_by_name:
-            raise ValueError("New species not source verified in v16.7")
-        result=summarize_source_species(obs,rail,species,prior_by_name[species])
+        if species not in source_by_name:
+            raise ValueError("New species not source verified in v16.6 full original photo region census")
+        result=summarize_source_species(obs,rail,species,source_by_name[species])
         result["original_preselected_author_botanist_taxon_source_v167_rank"]=rank
         outputs.append(result)
         print(json.dumps({"source_rank":rank,
@@ -278,15 +298,17 @@ def run(source,rail,client=None):
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--verified-v167",required=True)
+    p.add_argument("--verified-v166",required=True)
     p.add_argument("--czech-original-osm",required=True)
     p.add_argument("--output",required=True)
     p.add_argument("--api-delay",type=float,default=1.10)
     a=p.parse_args()
     if a.api_delay<1.0:p.error("iNaturalist rate limit 1 request per second")
     source=json.loads(Path(a.verified_v167).read_text(encoding="utf-8"))
+    original_verified_v166=json.loads(Path(a.verified_v166).read_text(encoding="utf-8"))
     original_pbf_authentic(a.czech_original_osm,"CZ")
     railway=RailwayPolylineSource(a.czech_original_osm,"CZ")
-    result=run(source,railway,ConservativeINat(delay=a.api_delay))
+    result=run(source,original_verified_v166,railway,ConservativeINat(delay=a.api_delay))
     path=Path(a.output);path.parent.mkdir(parents=True,exist_ok=True)
     path.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
     print(json.dumps({
