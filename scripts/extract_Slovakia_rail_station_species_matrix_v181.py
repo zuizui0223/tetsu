@@ -149,7 +149,18 @@ def extract(pdf_path):
         "Kosice_recent_2012_2013":totals[1],
         "Spisska_Nova_Ves_historical_1968_1974_incomplete":totals[2],
         "Spisska_Nova_Ves_recent_2012_2013":totals[3]}
+    layout_debug=[]
+    for pi in (7,9):
+        page_lines=merge_words_to_rows(f[pi].get_text("words",sort=False))
+        for qi,(yy,ww) in enumerate(page_lines):
+            txt=" ".join(str(w[4]) for w in ww)
+            if any(token in txt for token in ("Helianthus","Cockerell","Setaria","Tzvelev")):
+                layout_debug.append({"page":pi+1,"focus":txt[:130],
+                    "neighbours":[{"y":round(py,2),
+                                   "words":[[str(w[4]),round(w[0],1),round(w[2],1)] for w in pw]}
+                                  for py,pw in page_lines[max(0,qi-1):qi+3]]})
     return extracted,{
+        "layout_debug":layout_debug,
         "source":DOI, "source_pdf_url":PDF_URL,
         "source_pdf_sha256":hashlib.sha256(raw).hexdigest(),
         "source_pdf_bytes":len(raw),"source_pdf_page_count":len(f),
