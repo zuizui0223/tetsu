@@ -52,8 +52,7 @@ class SourceAuthorFunctionalSubsetTests(unittest.TestCase):
         sites,guild,rows=synthetic_czech()
         g=guild_sets(sites,guild,"CZ")
         self.assertEqual(g["annual_wind"]["source_label"],"th_wind")
-        self.assertEqual(g["nonannual_other_label"] if "nonannual_other_label" in g else
-                         g["nonannual_nonwind"]["source_label"],"nonth_other")
+        self.assertEqual(g["nonannual_nonwind"]["source_label"],"nonth_other")
         self.assertEqual(sum(v["source_site_guild_incidences"] for v in g.values()),
                          sum(len(s["known"]) for s in sites))
         self.assertTrue(all(v["n_original_site_with_guild_taxa"]==35 for v in g.values()))
@@ -109,7 +108,7 @@ class SourceAuthorFunctionalSubsetTests(unittest.TestCase):
         bad[next(iter(bad))]="unverified_hypothetical_wind"
         with self.assertRaisesRegex(ValueError,"ontology changed"):
             guild_sets(sites,bad,"CZ")
-        with self.assertRaisesRegex(ValueError,"unknown"):
+        with self.assertRaisesRegex(ValueError,"No supported original source"):
             replace_response("XX",base,sites,[set() for _ in sites])
 
 if __name__=="__main__":unittest.main()
