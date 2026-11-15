@@ -42,9 +42,59 @@ def rank_observed_source_floras(site_sets):
                 source[name]+=1
     return sorted(source.items(),key=lambda x:(-x[1],x[0]))
 
+def original_slovenian_EPPO_codebook_binomial_mapping(original):
+    """Only use the PUBLISHER'S explicit species-codebook source name fields.
+
+    v15.1's species identity sets are EPPO CODES, not Latin names. An
+    accidental use of their code labels as iNaturalist "taxon_name"
+    would yield meaningless zeros. EPPO LOTHE has known codebook
+    disagreement with DOYPH; exclude the unmapped EPPO, never invent
+    a species-codebook association or infer a synonym by genus.
+    """
+    rows=original.get("species_codebook") or []
+    if len(rows)!=312:
+        raise ValueError("Slovenia original 312 publisher EPPO species-codebook rows missing")
+    codebook={str(r["EPPO_code"]):r for r in rows}
+    if len(codebook)!=312:
+        raise ValueError("Slovenia original EPPO codebook duplicate IDs")
+    labels={}
+    excluded={}
+    for code,row in codebook.items():
+        # Do NOT parse the EPPO code as a Latin taxon: use source column
+        # carrying explicit accepted/Latin/scientific species name.
+        candidates=[]
+        for key,value in row.items():
+            k=str(key).lower()
+            if not any(tag in k for tag in ("scientific","latin","species","taxon","name")):
+                continue
+            if key=="EPPO_code" or not isinstance(value,str):continue
+            m=re.match(r"^([A-Z][a-zA-Z-]+ [a-z][a-zA-Z-]+)(?:\b|$)",value.strip())
+            if m and SPECIES_RE.fullmatch(m.group(1)):
+                candidates.append((str(key),m.group(1)))
+        uniq={x[1] for x in candidates}
+        if len(uniq)==1:
+            labels[code]=next(iter(uniq))
+        elif not uniq:
+            excluded[code]="no explicit binomial in publisher species name columns"
+        else:
+            excluded[code]="conflicting original publisher codebook name fields, no inference"
+    if len(labels)<100:
+        raise ValueError(
+          "Cannot map original EPPO codebooks to Latin binomial names; "
+          +"publisher keys="+str(sorted(rows[0]))+", mapped="+str(len(labels)))
+    return labels,{
+       "source_codebook_total_original_EPPO":len(rows),
+       "original_EPPO_with_explicit_unambiguous_species_name":len(labels),
+       "publisher_EPPO_without_unambiguous_source_binomial":len(excluded),
+       "original_EPPO_unmapped_codes_not_imputed":sorted(excluded),
+       "source_original_EPPO_codebook_name_fields_only":True,
+    }
+
+
 def source_real_floras(si_original,si_audit,cz_s1,cz_s2):
     orig=extract_original_xlsx(si_original,si_audit)
     si_sites,_,si_meta=source_sites_and_guilds(orig)
+    code_to_species,codebook_qc=original_slovenian_EPPO_codebook_binomial_mapping(orig)
     cz_floras,cz_meta,cz_source=read_original_czech_publisher(cz_s1,cz_s2)
     if (len(si_sites)!=SITE_COUNTS["SI"] or len(cz_floras)!=SITE_COUNTS["CZ"] or
         si_meta["original_sampled_locations"]!=SITE_COUNTS["SI"] or
@@ -53,12 +103,14 @@ def source_real_floras(si_original,si_audit,cz_s1,cz_s2):
     if si_meta["original_authors_field_study_DOI"]!=DOIS["SI"]:
         raise ValueError("Slovenia source original DOI mismatch")
     return {
-      "SI":[set(site["all_original_taxa"]) for site in si_sites],
+      "SI":[{code_to_species[c] for c in site["all_original_taxa"]
+               if c in code_to_species} for site in si_sites],
       "CZ":[set(x) for x in cz_floras.values()],
     },{
       "SI":{"source_DOI":DOIS["SI"],"original_source_sites":len(si_sites),
             "real_author_original_supplement_SHA":si_meta["original_source_supplement_SHA256"],
-            "original_field_site_grain":"89 original 100m rail locations"},
+            "original_field_site_grain":"89 original 100m rail locations",
+            "original_EPPO_to_Latin_name_codebook_source_QC":codebook_qc},
       "CZ":{"source_DOI":DOIS["CZ"],"original_source_sites":len(cz_floras),
             "real_author_original_publisher_S1_SHA":cz_source["source_S1_SHA256"],
             "real_author_original_publisher_S2_SHA":cz_source["source_S2_corrected_erratum_SHA256"],
