@@ -22,6 +22,24 @@
 
 [元ソースコード](../scripts/analyze_Czech_2023_true_rail_road_osm_routes_v155.py)、[テスト](../tests/test_Czech_2023_true_rail_road_osm_routes_v155.py)、[本物の2023国土OSM原本でのCI](../.github/workflows/Czech-2023-original-rail-road-OSM-v155.yml)。原PBF（816MB）は成果ファイルへ再公開せず、GitHub Actionsキャッシュに保持される。次のv15.6はこの**検証済みファイルのキャッシュだけを使い、見かけ上の別データへ置き換えない**。v15.6植物群集係数は本節では未記載。
 
+## v15.6：チェコ35元調査駅×2023年実鉄道・道路網の区間外予測 SUCCESS（2026-11-15）
+
+**[原著生物S1/S2×Pladias形質×SR70駅代表点×816MB真正2023 OSMキャッシュ再読込、5原著区間ホールドアウト SUCCESS #43684840429](https://github.com/zuizui0223/tetsu/actions/runs/43684840429)**。v15.5で実際に取得したアーカイブ原本のSHA256 **26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747** を再検証。元35駅・原著5路線区間・事前距離条件を通る**594の依存する元駅ペア**（2km未満の1ペアのみ非対象）。roads, rails両方の実ネットワークは35/35駅で連結。実原著の植物種Jaccardに対して固定ridge α=10、各元区間内の駅を含むペアを全てテストに回す検証を、**5区間全てで実行できた**。
+
+| 5原著路線区間の等重み平均MSE（低い方が良い） | Pladias両形質既知544分類群 | 元の全観測分類群 |
+|---|---:|---:|
+| M0：測地距離・4機能群・元S2駅面積・元駅種数・同区間・OSMスナップ距離 | **0.002751776** | **0.002264520** |
+| M1：M0＋2023実道路網の最短経路距離 | 0.002760684 | 0.002270473 |
+| M2：M1＋実鉄道網距離／道路網距離の対数比 | 0.002833374 | 0.002348275 |
+
+M2のM1に対する追加予測MSE改善率は、形質既知元分類群で **−2.6330%（悪化）**、元全観測分類群で **−3.4267%（悪化）**。実道路経路距離を追加したM1のM0に対する予測利得も、それぞれ **−0.3237% / −0.2629%（悪化）**。M2がM1より良くなる元区間は両アウトカムで**3/5区間**あったが、**IとIIの誤差悪化が大きいため5区間等重みでは全体悪化**。特定の3区間だけを抽出して列車散布と結論しない。
+
+**地理／形質／面積／同区間を説明した後のin-sample偏回帰は負の傾向**（鉄道経路が道路に比べて短い組ほど種Jaccard共有が大きい方向）：544分類群 β = **−0.050333**／log(rail/road), 全観測種 β = **−0.049579**。相対経路比が2倍での見かけのJaccard変化は各−0.03489／−0.03437、in-sample残差説明率は約1.89%／2.15%。**ところが原著5区間の独立区間外予測には安定した利得がない**。in-sample係数を「鉄道が種を運ぶ因果効果」と読まない。
+
+この結果は独立スロベニア原著89地点と方向が一致する。スロベニアでは同様の2024実OSM道路調整後の鉄道距離追加で区間等重みMSEは **−0.537%（悪化）、改善4/15区間**だった。ただしチェコは各駅の2026年**代表点**、駅全域の不均等面積の元植物調査、2023年の元OSMを使う。スロベニアの2022/23の本物の100m調査GPS、細かい道床の植物群集と、**共通効果量として平均してはいけない**。2か国別々の実原著で共通に「同一区間の種共有を列車による植物散布と誤解する可能性」が観測的に支持されたのであって、真の貨物列車穀粒落下、他国全般の野生植物種子運搬、草刈り/列車風に対する遺伝適応不存在の証明ではない。
+
+[真正元ソース解析](../scripts/analyze_Czech_2023_true_rail_road_heldout_taxon_identity_v156.py)・[源入力用数学テスト](../tests/test_Czech_2023_real_road_rail_heldout_identity_v156.py)・[source SHA locked 816MB PBFキャッシュだけを使うワークフロー](../.github/workflows/Czech-2023-real-rail-road-heldout-v156.yml)。元の原著実地植物リスト・駅代表点SR70・巨大OSM原PBFは再配布せず、集計とSHA及び各5区間ホールドアウトのMSEのみをActions artifactsとして公開。
+
 ## もとデータの規模と不均一な観測単位
 
 - 元植物調査：Kutlvašr et al. (2024), Preslia DOI 10.23855/preslia.2024.247。2020–22年39実駅、5元路線区間、元の3微生育地を合算した駅単位のS1で761現出現分類群、6,941出現欄。Pladias散布戦略＋Raunkiaer生活形の双方が元の公表分類群名に厳密照合できた544分類群/5,081出現。
@@ -56,4 +74,4 @@
 3. M2がM1のholdout MSEを悪化させる場合、チェコ元研究でも鉄道経路の独立した追加予測利得なしとする。改善しても、2026駅代表点と元調査地のズレ・実際の貨物運行データ不足・地域種プール差があるため、種子運搬を示す因果効果としない。
 4. スロベニアとチェコで出るMSE改善率は**予測利得の診断値**として報告できるが、似ている数字だからといって同じ生物の列車散布率を意味せず、異種の応答/条件付け/地点粒度を1つの研究数に重複しない。
 
-**Source CI scripts** [実OSMチェコ真の経路](../scripts/analyze_Czech_2023_true_rail_road_osm_routes_v155.py)、[source回帰・5区間留保](../scripts/analyze_Czech_2023_true_rail_road_heldout_taxon_identity_v156.py)、[source network unit tests](../tests/test_Czech_2023_true_rail_road_osm_routes_v155.py)、[source heldout model tests](../tests/test_Czech_2023_real_road_rail_heldout_identity_v156.py)、[v15.5 workflow](../.github/workflows/Czech-2023-original-rail-road-OSM-v155.yml)。**実OSM物理経路のv15.5は真正原本成功。v15.6の植物群集に対する条件付き道路・鉄道の推定は成功ログ確認後に別途更新する。** mainにはmergeせずPRはDraft。原本PBF、著者原本XLSX、登録位置CSVの再配布なし。
+**Source CI scripts** [実OSMチェコ真の経路](../scripts/analyze_Czech_2023_true_rail_road_osm_routes_v155.py)、[source回帰・5区間留保](../scripts/analyze_Czech_2023_true_rail_road_heldout_taxon_identity_v156.py)、[source network unit tests](../tests/test_Czech_2023_true_rail_road_osm_routes_v155.py)、[source heldout model tests](../tests/test_Czech_2023_real_road_rail_heldout_identity_v156.py)、[v15.5 workflow](../.github/workflows/Czech-2023-original-rail-road-OSM-v155.yml)。**v15.5実鉄道・道路経路およびv15.6実植物群集の条件付き道路・鉄道推定はいずれも独立Actionsで元原本を照合し成功。** mainにはmergeせずPRはDraft。原本PBF、著者原本XLSX、登録位置CSVの再配布なし。
