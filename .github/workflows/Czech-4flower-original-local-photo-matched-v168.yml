@@ -33,6 +33,13 @@ jobs:
           run-id: 43694215159
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: source/CZE168/original-v167
+      - name: Download original v16.6 FULL Czech20 photo source original iNaturalist API counts and source verification
+        uses: actions/download-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          run-id: 43693580409
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE168/original-v166
       - name: Restore existing original CZ 2023 historical 816MB rail PBF source, no latest 2026 rail map substitution
         uses: actions/cache/restore@v4
         with:
@@ -50,6 +57,7 @@ jobs:
         run: |
           python -u scripts/audit_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py \
             --verified-v167 source/CZE168/original-v167/tetsu_v167_source20_rail_photo30m_real_Flowers_annotation_review_gate.json \
+            --verified-v166 source/CZE168/original-v166/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
             --czech-original-osm source/CZE155/czech-republic-230101.osm.pbf \
             --output results/audit/Czech_4original_flowering_rail30_local_pairing_photo_source_v168.json \
             --api-delay 1.10
