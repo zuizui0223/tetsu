@@ -31,7 +31,12 @@ from analyze_Czech_2024_39station_functional_identity_v143 import read_original_
 DOIS={"SI":"10.1007/s44473-026-00155-z","CZ":"10.23855/preslia.2024.247"}
 SITE_COUNTS={"SI":89,"CZ":39}
 N_CANDIDATE=20
-SPECIES_RE=re.compile(r"^[A-Z][a-zA-Z-]+ [a-z][a-zA-Z-]+$")
+# An original codebook taxon such as "Taraxacum sect. Ruderalia" is a
+# SECTION, not a species; never take its first two words as a binomial.
+NON_SPECIES_EPITHETS={"sect","section","agg","aggregate","sp","spp",
+    "subsp","var","cf","aff","group","complex","s","spec","species"}
+SPECIES_RE=re.compile(r"^[A-Z][a-zA-Z-]+ (?!"+
+    "|".join(sorted(NON_SPECIES_EPITHETS))+r"(?=$|\\b))[a-z][a-zA-Z-]+$")
 
 def rank_observed_source_floras(site_sets):
     source=Counter()
