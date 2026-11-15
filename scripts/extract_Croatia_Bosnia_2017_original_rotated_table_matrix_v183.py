@@ -96,6 +96,18 @@ def rows_from_original(pdf):
         metadata["n_frequency_nonempty"] == 359
         and metadata["n_frequency_disagreements"] == 1
         and metadata["source_frequency_anomaly_is_exactly_publisher_Canna_indica"])
+    # Independent publisher text benchmarks (Natura Croatica, p. 276).
+    station_occurrence_frequencies = {rr["taxon_original"]:len(rr["source_station_numbers"]) for rr in out}
+    singletons = sum(c==1 for c in station_occurrence_frequencies.values())
+    abundant = sum(c>=8 for c in station_occurrence_frequencies.values())
+    universal=[k for k,c in station_occurrence_frequencies.items() if c==15]
+    metadata["n_single_stations_original"]=singletons
+    metadata["n_taxa_in_published_259_only_analysis"]=len(out)-singletons
+    metadata["n_taxa_occurring_over_half_15_stations"]=abundant
+    metadata["universal_station_taxa"]=universal
+    metadata["independent_publisher_100_singletons_72_frequent_Chondrilla_gate"]=(
+        singletons==100 and len(out)-singletons==259 and abundant==72
+        and universal == ["Chondrilla juncea L."])
     station_taxa={i:sum(i in rr["source_station_numbers"] for rr in out) for i in range(1,16)}
     form_taxa={}
     for rr in out:
@@ -117,6 +129,7 @@ def rows_from_original(pdf):
          and metadata["n_station_lists_nonempty"]==359
          and metadata["n_life_form_nonempty"]==359
          and metadata["site_frequency_agreement_other_358_taxa"]
+         and metadata["independent_publisher_100_singletons_72_frequent_Chondrilla_gate"]
          and not metadata["malformed_station_ids"])
     return out,metadata
 
