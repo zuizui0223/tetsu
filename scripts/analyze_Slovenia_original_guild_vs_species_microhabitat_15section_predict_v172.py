@@ -324,8 +324,10 @@ def evaluate_study(rows,mode):
           "source_taxon_original_EPPO_code":t,
           "author_original_lifespan_by_diaspore_guild":trs[0]["source_guild"],
           "n_original_heldout_test_site_x_taxon_events":len(trs),
-          "n_sections_species_was_observed_at_least_once":len({rows_section[t]
-                 for rows_section in []}) if False else None,
+          "n_original_source_rail_sections_with_real_taxon_observation":len({
+               x["author_original_section"] for x in train_rows
+               if x["source_taxon_EPPO"]==t
+          }),
           "n_original_source_test_events_with_species_seen_in_other_training_sections":
              sum(x["previously_observed_same_taxon_in_OTHER_source_sections"] for x in trs),
           "source_mean_out_of_section_negative_logloss_by_fixed_model":mean_ll,
