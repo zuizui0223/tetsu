@@ -88,7 +88,7 @@ class RealPhotoSourceAuditSafetyTests(unittest.TestCase):
     def test_country_geo_sha_or_study_row_label_tampering_fails_closed(self):
         c,s=fake_inputs()
         s["country_bbox_rail_geometry_original_source"]["CZ"]["original_Geofabrik_PBF_SHA256"]="false"
-        with self.assertRaisesRegex(ValueError,"original historic OSM"):
+        with self.assertRaisesRegex(ValueError,"authentic historic OSM"):
             validate_original_source(c,s)
         c,s=fake_inputs()
         s["two_country_bbox_20taxon_real_iNat_photo_source_30m"]["SI"][0]["taxon"]="Taxon substitute"
