@@ -1,0 +1,68 @@
+name: "v15.2 POSTHOC exact-source Slovenia rail-road model robustness all taxa and conditioning"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Slovenia_OSM_rail_road_model_robustness_v152.py'
+      - 'tests/test_Slovenia_OSM_rail_road_model_robustness_v152.py'
+      - '.github/workflows/Slovenia-OSM-rail-road-robustness-v152.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v152-posthoc-full-model-robustness-verified-source
+  cancel-in-progress: true
+jobs:
+  author-original-89-sites-full-sensitivity-grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed numeric and real OpenStreetMap node parsing dependencies
+        run: python -m pip install 'numpy==2.1.3' 'scipy==1.14.1' 'osmium==4.2.0'
+      - name: Test exact source v15.1 model reproducibility and no posthoc positive-only censor
+        run: python -m unittest discover -s tests -p 'test_Slovenia_OSM_rail_road_model_robustness_v152.py' -v
+      - name: Load original authenticated 2022-2023 field study author locations and species codes
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO152/authentic
+      - name: Restore historic 2024 Slovenia OSM source from verified complete job cache
+        uses: actions/cache@v4
+        with:
+          path: source/SLO151/osm/slovenia-240101.osm.pbf
+          key: tetsu-Geofabrik-Slovenia-20240101-source-file-280842431-bytes-v1
+      - name: Verify full original 2024 OSM PBF SHA and size; fetch only on cache miss
+        run: |
+          set -euo pipefail
+          mkdir -p source/SLO151/osm
+          if ! test -s source/SLO151/osm/slovenia-240101.osm.pbf; then
+            curl --fail --location --silent --show-error --retry 4 --retry-all-errors --max-time 900 \
+              --user-agent 'tetsu-research-source-audit/1.0' \
+              --output source/SLO151/osm/slovenia-240101.osm.pbf \
+              'https://download.geofabrik.de/europe/slovenia-240101.osm.pbf'
+          fi
+          test "$(stat --format=%s source/SLO151/osm/slovenia-240101.osm.pbf)" = "280842431"
+          printf '%s  %s\n' \
+            'b572258fe000d6dfc76dc63afe5456121c5f463995e132a5dcd79957d819ae39' \
+            'source/SLO151/osm/slovenia-240101.osm.pbf' | sha256sum --check
+      - name: Reproduce exact frozen source v15.1 CV and run all 24 POSTHOC conditioning/regularization/outcome variants
+        run: |
+          python -u scripts/audit_Slovenia_OSM_rail_road_model_robustness_v152.py \
+            --original-xlsx source/SLO152/authentic/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO152/authentic/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --osm-pbf source/SLO151/osm/slovenia-240101.osm.pbf \
+            --output results/audit/SLO_2024_OSM_rail_road_model_posthoc_all_taxa_robustness_v152.json
+      - name: Publish only original source aggregate parameter grid, no original field spreadsheet or OSM PBF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Slovenia-rail-road-v152-posthoc-complete-conditioner-grid
+          path: results/audit/SLO_2024_OSM_rail_road_model_posthoc_all_taxa_robustness_v152.json
+          if-no-files-found: warn
