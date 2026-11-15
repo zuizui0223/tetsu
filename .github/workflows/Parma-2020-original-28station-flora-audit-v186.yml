@@ -1,0 +1,45 @@
+name: "v18.6 ORIGINAL Parma 2020 438 species x 28 stations publisher PDF layout/source audit"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/audit_Parma_2020_28rail_station_flora_original_v186.py"
+      - "tests/test_Parma_2020_original_source_v186.py"
+      - ".github/workflows/Parma-2020-original-28station-flora-audit-v186.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v186-parma-28station-pdf-audit
+  cancel-in-progress: true
+jobs:
+  publisher-original-2020:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install PDF-native text reader without OCR
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Original count and code sanity, synthetic-only
+        run: python -m unittest discover -s tests -p 'test_Parma_2020_original_source_v186.py' -v
+      - name: Download author museum original 2020 PDF
+        run: |
+          mkdir -p source_original/v186
+          curl --location --fail --silent --show-error --retry 4 --connect-timeout 20 --max-time 300 \
+          'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+          -o source_original/v186/Adorni_Ghillani_2020.pdf
+          file source_original/v186/Adorni_Ghillani_2020.pdf
+          sha256sum source_original/v186/Adorni_Ghillani_2020.pdf
+      - name: Audit original page and text-layout only
+        run: |
+          python -u scripts/audit_Parma_2020_28rail_station_flora_original_v186.py \
+            --source-pdf source_original/v186/Adorni_Ghillani_2020.pdf \
+            --output results/audit/v186/Parma_original_28station_flora_PDF_layout.json
+      - name: Archive provenance and structure audit, never source publisher PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Parma_2020_original_438species_28stations_layout_v186
+          path: results/audit/v186/
+          if-no-files-found: warn
