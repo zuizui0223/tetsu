@@ -11,6 +11,18 @@
 
 ---
 
+## v16.4–v16.8：鉄道群集で多い種を源原著で選び、線路30m写真の種内形質測定可用性を検証（2026-11-15）
+
+元のSI89現地100m GPS・CZ39駅植物原表に含まれた種の出現地点頻度から、**原著の鉄道フロラに多い20種**を原著学名へEPPOコードブックを使って真正照合し、iNaturalistを見ずに選定した。[v16.4成功 #43692256719](https://github.com/zuizui0223/tetsu/actions/runs/43692256719)。**鉄道の選好度上位20種とは違う**（非鉄道での種出現分母未取得）。
+
+[v16.5真正iNaturalist写真×2023CZ・2024SIのGeofabrik本物の鉄道Polyline距離30m成功 #43692490652](https://github.com/zuizui0223/tetsu/actions/runs/43692490652)：元2018–25年のreal photograph research-grade、位置精度≤30mを通すと**SI40件、CZ969件、計1,009件**。CCライセンス写真あり732件、座標誤差の円全体が線路30m以内に入る858件。**全球鉄道30m件数ではない**。40/40種×2国を覆う矩形の件数を完全取得。**[v16.6源位置・観察者・独立100mセル・100–1000m対照件数の元データ監査SUCCESS #43693580409](https://github.com/zuizui0223/tetsu/actions/runs/43693580409)**で、厳格写真≥30・観察者≥10・独立100mセル≥10・比較写真≥30の4条件を満たすのは**11/40群（すべてCZ）**。*Equisetum arvense*は胞子植物で開花解析不能。
+
+[**v16.7元写真の撮影月分布・任意Flowers注釈の真正源監査SUCCESS #43694215159**](https://github.com/zuizui0223/tetsu/actions/runs/43694215159)。画像レビューの追加CC/位置誤差/3か月の写真条件を満たす被子植物は**CZ10種**。このうち花の明示的写真注釈が5件以上の4種は*Echium vulgare*（30m内178件、花タグ21）、*Geranium robertianum*（88件、7）、*Linaria vulgaris*（81件、7）、*Erigeron annuus*（77件、5）。他の被子植物も含む陽性Flowers注釈は総計60件で、未注釈写真は花無しの実測ではない。**草丈写真の尺度・初花日・遺伝適応は現時点では未測定**。
+
+これら4種の次の元API再取得は、同じ2023CZ原OSM線路Polylineから**座標不確実性を含め≤30mのCC写真**と、同じ種の**100–1000m離れたCC写真**を、**同じ年・月かつ地理10km以内・重複しない写真1対1**で何ペア作れるかの判定。観察者が異なる対と同じ観察者も許す対は別集計。GitHub [v16.8 SOURCE workflow](.github/workflows/Czech-4flower-original-local-photo-matched-v168.yml) の成功ログまで、その**真の対数は未確定**。成功しても地理的近さは真の鉄道敷地内・実草刈り・列車風の証拠ではない。元写真画素・実個体の草丈測定はまだない。2国群集に近い形質軸で種内変化まで言うには、元道路・鉄道の同じ努力の現地植物個体の反復形質と独立の種平均referenceが要る。[v16.4〜v16.8原著証拠と未識別限界](Czech_original_flower_photo_same_month_local_control_v167_v168_ja.md)。
+
+---
+
 ## v16.2–v16.3：2国の真正原著を風散布×生活史4群に分解して鉄道種子散布候補を検証（2026-11-15）
 
 [**真正出版原著2研究の元植物群集×歴史OSM実鉄道・道路最短経路による国別4群解析SUCCESS #43688923515**](https://github.com/zuizui0223/tetsu/actions/runs/43688923515) ＋ [**元研究DOI・PBF真正SHA・全4群種数/出現記録・元留保区間MSEの別実行監査SUCCESS #43689646677**](https://github.com/zuizui0223/tetsu/actions/runs/43689646677)。SI原著のstrict annual vs other known lifespan × wind-diaspore strategy vs otherは元著者GPS89地点・15元線区・元261形質完備実種2,729出現から4群へ正確に分割。CZ原著のtherophyte生活形proxy×wind strategy は元39駅の真正植物出現のうち、完全駅名に対応する**2026年SR70駅代表点35駅**のみの元**533実出現形質既知種/4,489出現**を4群へ分割（39駅全体の544種/5,081出現を35駅の数字と混同しない）。SI・CZの元国別全植物Jaccard道路調整後の鉄道追加MSEを**先に元原本から完全再現**した。
