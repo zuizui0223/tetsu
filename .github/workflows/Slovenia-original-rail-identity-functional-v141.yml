@@ -1,0 +1,44 @@
+name: "v14.1 REAL Slovenian RAIL 89-site taxonomic vs functional identity null under original species occupancy"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_source_rail_functional_taxonomic_identity_v141.py'
+      - 'tests/test_Slovenia_functional_taxonomic_identity_v141.py'
+      - '.github/workflows/Slovenia-original-rail-identity-functional-v141.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-real-source-Slovenia-functional-identity-guild-null-v141
+  cancel-in-progress: true
+jobs:
+  real-original-Slovenia-source-function-and-identity-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source real-guild exact incidence math full and unknown taxonomy separation and two fixed-margins randomization modes
+        run: python -m unittest discover -s tests -p 'test_Slovenia_functional_taxonomic_identity_v141.py' -v
+      - name: Download previously independently verified author-original Slovenian 2026 92-site XLSX and SHA source audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO141/authentic
+      - name: Run original CC-BY field 89 site BS-BT union 15 railway segments functional similarity against taxonomic identity 2 nulls
+        run: |
+          python -u scripts/analyze_Slovenia_source_rail_functional_taxonomic_identity_v141.py --source-xlsx source/SLO141/authentic/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx --source-audit102 source/SLO141/authentic/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json --output results/audit/SLO_original_2026_v141_89site_rail_section_functional_vs_taxonomic_identity.json
+      - name: Preserve source-authenticated taxonomic/functional similarity and 15 section null summary not raw author xlsx
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-Slovenia-2026-functional-and-taxon-id-89site-v141
+          path: results/audit/SLO_original_2026_v141_89site_rail_section_functional_vs_taxonomic_identity.json
+          if-no-files-found: warn
