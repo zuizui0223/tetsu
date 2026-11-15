@@ -1,0 +1,86 @@
+name: "v16.0 GENUINE Czech archaeo/neophyte source rail vs ROAD 5-stretch botanical holdout"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_Czech_arch_neo_true_railroad_5stretch_CV_v160.py'
+      - 'tests/test_Czech_arch_neo_true_railroad_5stretch_CV_v160.py'
+      - '.github/workflows/Czech-true-railroad-arch-neo-5stretch-v160.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v160-real-Czech-archaeophyte-neophyte-5stretch-historical-railroad
+  cancel-in-progress: true
+jobs:
+  authentic-Czech-source-plant-arrival-group-rail-road:
+    runs-on: ubuntu-latest
+    timeout-minutes: 37
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed publisher XLSX reader, OSM source parser and sparse physical graph solver
+        run: python -m pip install 'numpy==2.1.3' 'scipy==1.14.1' 'osmium==4.2.0' 'openpyxl==3.1.5'
+      - name: Test fixed 5 original source route-stretch study folds, Jaccard math and exact full-ratio route common support
+        run: |
+          python -m unittest discover -s tests -p 'test_Czech_arch_neo_true_railroad_5stretch_CV_v160.py' -v
+          python -m unittest discover -s tests -p 'test_Czech_2023_real_road_rail_heldout_identity_v156.py' -v
+      - name: Fetch and SHA-check original Preslia botanist S1/S2 plus Pladias source trait studies
+        run: |
+          set -euo pipefail
+          mkdir -p source/CZE160
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 \
+            --output source/CZE160/S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 \
+            --output source/CZE160/S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 \
+            --output source/CZE160/diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 \
+            --output source/CZE160/lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/CZE160/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/CZE160/S2.xlsx | sha256sum --check
+      - name: Fetch historic 2026 official-derived SR70 source STATION CENTROIDS (not plant sampling plots)
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE160/SR70.csv \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv'
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' source/CZE160/SR70.csv | sha256sum --check
+      - name: Restore prior authenticated 816MB Czech 2023 whole-country OSM route source from v15.5 original CI
+        uses: actions/cache/restore@v4
+        with:
+          path: source/CZE155/czech-republic-230101.osm.pbf
+          key: tetsu-czech-20230101-geofabrik-original-816159635-pbf-source
+          fail-on-cache-miss: true
+      - name: Validate original 2023 Czech railway and road PBF fingerprint; fail on old, truncated, altered, or unrelated map
+        run: |
+          set -euo pipefail
+          test "$(stat --format=%s source/CZE155/czech-republic-230101.osm.pbf)" = "816159635"
+          printf '%s  %s\n' \
+            '26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747' \
+            'source/CZE155/czech-republic-230101.osm.pbf' | sha256sum --check
+      - name: Reproduce authentic original v15.6 source flora and conduct BOTH arch and neo groups on identical source station pairs / 5 route-stretch test folds
+        run: |
+          python -u scripts/analyze_Czech_arch_neo_true_railroad_5stretch_CV_v160.py \
+            --s1 source/CZE160/S1.xlsx \
+            --s2 source/CZE160/S2.xlsx \
+            --pladias-diaspore source/CZE160/diaspore.xlsx \
+            --pladias-lifeform source/CZE160/lifeform.xlsx \
+            --sr70 source/CZE160/SR70.csv \
+            --osm-pbf source/CZE155/czech-republic-230101.osm.pbf \
+            --output results/audit/Czech_2023_archaeophyte_neophyte_5stretch_true_railroad_v160.json
+      - name: Preserve only original-source SHA-authenticated ecological derived study-level diagnostics; no unpublished raw S1/S2/PBF/point table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-Czech-arch-neo-railroad-source-5stretch-v160
+          path: results/audit/Czech_2023_archaeophyte_neophyte_5stretch_true_railroad_v160.json
+          if-no-files-found: warn
