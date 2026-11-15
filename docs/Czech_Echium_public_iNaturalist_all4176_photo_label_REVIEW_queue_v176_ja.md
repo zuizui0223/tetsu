@@ -46,6 +46,6 @@ GitHub Actionsのアーティファクト内に以下の内容を分けた。
 
 ラベル完成後は、元距離帯近接/遠方で観察される「開いた花が写真中に見えるか」の**条件付き関連**を対象とし、撮影日DOY、調査年、季節、地域格子、観察者グループ、公開位置不確実性、元同種種プール・撮影機会を調整する。第一波の抽出率、iNaturalist観察が生育地点の無作為調査ではないこと、元鉄道管理圧・実列車風・草刈り履歴がないことを明示する。花の遺伝的な前適応、同種の真の花期開始日、草丈の絶対値や繁殖成功はこの段階で測れない。
 
-なお、全球・欧州全域の本来のマクロ研究には**国別公開観測の大規模収集と対応した鉄道線形・道路対照**が必要であり、今回のCzech矩形の4167などを全球数と称さない。
+なお、全球・欧州全域の本来のマクロ研究には**国別公開観測の大規模収集と対応した鉄道線形・道路対照**が必要であり、今回のCzech矩形の4,176件などを全球数と称さない。
 
 再現： [公開元観察IDと場所を分けた本物の全件sourceキュー生成コード](../scripts/create_Czech_Echium_all_public_obs_label_REVIEW_queue_v176.py) と [元架空入力だけの元API件数・ID・ラベル非利用の単体テスト](../tests/test_Czech_Echium_all_public_review_queue_v176.py)、[元2023OSM＋iNat全件 source CI](../.github/workflows/Czech-Echium-original-public-observation-flower-review-v176.yml)。研究ブランチのみ、main未マージ。
