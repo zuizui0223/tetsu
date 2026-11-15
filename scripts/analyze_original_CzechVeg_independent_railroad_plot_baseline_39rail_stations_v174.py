@@ -209,9 +209,14 @@ def standardized_taxon_panel(blocks,source_plot_taxa,station_occs,background,den
     if blocks and total_w<=0:
         raise ValueError("Cannot have original real rail-road matching blocks without source plot opportunity")
     weighted_num=Counter()
+    study_weight=Counter()
+    original_study_species_numerators=defaultdict(Counter)
     for k,nr,nd,w,rc,dc in block_profiles:
+        study_weight[k[0]]+=w
         for t in rc.keys()|dc.keys():
-            weighted_num[t]+=w*(rc[t]/nr-dc[t]/nd)
+            increment=w*(rc[t]/nr-dc[t]/nd)
+            weighted_num[t]+=increment
+            original_study_species_numerators[t][k[0]]+=increment
     species={}
     for name in station_occs:
         rail_n=source_taxon_total_rail[name]
@@ -220,6 +225,17 @@ def standardized_taxon_panel(blocks,source_plot_taxa,station_occs,background,den
         delta=(weighted_num[name]/total_w if total_w>0 and n_both else None)
         if delta is not None and not(-1-1e-10<=delta<=1+1e-10):
             raise ValueError("Original block-standardized taxon rail/road plot prevalence difference outside [-1,1]")
+        # Posthoc influence, not independent validation: remove each whole
+        # original CzechVeg author study's already matched plot blocks, and
+        # recompute the exact weighted prevalence contrast. DO NOT infer
+        # independent station-scale railway adaptation from the sign.
+        omit=[]
+        for pub,total_study_weight in sorted(study_weight.items()):
+            remaining=total_w-total_study_weight
+            if remaining<=0:continue
+            score=(weighted_num[name]-original_study_species_numerators[name][pub])/remaining if n_both else None
+            if score is not None:omit.append(score)
+        positive_loo=sum(x>0 for x in omit if x is not None)
         species[name]={
           "station_original_2020_22_n_of_39":station_occs[name],
           "station_original_2020_22_occupancy_fraction":station_occs[name]/39,
@@ -230,6 +246,13 @@ def standardized_taxon_panel(blocks,source_plot_taxa,station_occs,background,den
           "CzechVeg_same_study_region_decade_area_source_N_ROAD_text_plot_with_this_taxon":road_n,
           "CzechVeg_same_study_source_N_distinct_publications_with_taxon":len(by_study[name]),
           "CzechVeg_same_study_source_N_matched_strata_with_taxon":len(by_block[name]),
+          "CzechVeg_all_original_source_AUTHOR_STUDY_scored_loo_full_source_studies":len(omit),
+          "CzechVeg_original_AUTHOR_STUDY_scored_loo_N_with_positive_rail_minus_road":positive_loo,
+          "CzechVeg_original_AUTHOR_STUDY_scored_loo_min_delta":min(omit) if omit else None,
+          "CzechVeg_original_AUTHOR_STUDY_scored_loo_max_delta":max(omit) if omit else None,
+          "CzechVeg_original_AUTHOR_STUDY_scored_loo_POSITIVE_for_ALL_eligible_omissions":
+              bool(omit and len(omit)==positive_loo and delta is not None and delta>0),
+          "CzechVeg_source_loo_deletes_entire_original_publication_relevés_not_station_cohort":True,
           "CzechVeg_study_region_decade_area_STANDARDIZED_rail_minus_road_plot_prevalence":
                delta,
           "RAIL_text_labels_NOT_externally_validated_right_of_way":True,
@@ -268,6 +291,14 @@ def rank_independent_rail_context(main,modern=None,strict=None):
           "n_original_studies_with_taxon_source":x["CzechVeg_same_study_source_N_distinct_publications_with_taxon"],
           "n_matched_original_plots_with_taxon_RAIL_text":x["CzechVeg_same_study_region_decade_area_source_N_RAIL_text_plot_with_this_taxon"],
           "n_matched_original_plots_with_taxon_ROAD_text":x["CzechVeg_same_study_region_decade_area_source_N_ROAD_text_plot_with_this_taxon"],
+          "source_original_author_study_LOO_sign_always_positive":
+             x["CzechVeg_original_AUTHOR_STUDY_scored_loo_POSITIVE_for_ALL_eligible_omissions"],
+          "source_original_author_study_LOO_min_rail_minus_road":
+             x["CzechVeg_original_AUTHOR_STUDY_scored_loo_min_delta"],
+          "source_original_author_study_LOO_N_positive":
+             x["CzechVeg_original_AUTHOR_STUDY_scored_loo_N_with_positive_rail_minus_road"],
+          "source_original_author_study_LOO_N_evaluable":
+             x["CzechVeg_all_original_source_AUTHOR_STUDY_scored_loo_full_source_studies"],
           "modern_2010plus_source_same_plot_type_score":(
              modern.get(name,{}).get(
                 "CzechVeg_study_region_decade_area_STANDARDIZED_rail_minus_road_plot_prevalence")
