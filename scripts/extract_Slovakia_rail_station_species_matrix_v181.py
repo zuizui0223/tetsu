@@ -66,21 +66,20 @@ def parse_table_page(page, centres):
     if not centres:
         return out, [{"error":"missing original source header centres"}]
     first_center = centres[0]
-    name_end = first_center - 20  # header x, name-column right margin
+    name_end = first_center - 20
+    pending_name = None
     for ym, words in lines:
         left = [w for w in words if (w[0]+w[2])/2 < name_end]
         vals = [w for w in words if (w[0]+w[2])/2 >= name_end]
         if not left:
             continue
         parts = [str(w[4]).strip() for w in left]
-        if len(parts)<2 or not GENUS.fullmatch(parts[0]) or not SPECIES.fullmatch(parts[1]):
-            continue
+        is_taxon = (len(parts) >= 2 and bool(GENUS.fullmatch(parts[0]))
+                    and bool(SPECIES.fullmatch(parts[1])))
         name = " ".join(parts).strip()
-        if len(name)>190 or name.lower().startswith(("tab.", "railway", "thaiszia")):
-            continue
-        slots=["","","",""]
+        slots = ["","","",""]
         for w in vals:
-            token=str(w[4]).strip().replace("–","-")
+            token = str(w[4]).strip().replace("–","-")
             if not ABUNDANCE.fullmatch(token):
                 continue
             xc=(w[0]+w[2])/2
@@ -93,12 +92,24 @@ def parse_table_page(page, centres):
                 diagnostics.append({"page":page.number+1,"taxon":name,
                                     "conflicting_abundance":[slots[k],token]})
             slots[k]=token
-        if any(slots):
-            out.append({"taxon_original":name,"page_pdf_index":page.number,
-                        "values":slots})
-        else:
-            diagnostics.append({"page":page.number+1,
-                                "candidate_without_presence":name[:90]})
+        if is_taxon and len(name)<190 and not name.lower().startswith(("tab.","railway","thaiszia")):
+            if any(slots):
+                out.append({"taxon_original":name,"page_pdf_index":page.number,
+                            "values":slots})
+                pending_name = None
+            else:
+                # Original author names wrap, e.g. Helianthus ... (DC.) /
+                # Cockerell, and Setaria ... (Steud.) / Tzvelev. Await one line.
+                pending_name = name if (" subsp." in name or " var." in name) else None
+                diagnostics.append({"page":page.number+1,"candidate_without_presence":name[:90]})
+        elif pending_name and any(slots) and len(parts)<=5:
+            out.append({"taxon_original":pending_name+" "+name,
+                        "page_pdf_index":page.number,"values":slots})
+            diagnostics.append({"page":page.number+1,"rejoined_wrapped_taxon":
+                                pending_name+" "+name})
+            pending_name = None
+        elif is_taxon:
+            pending_name = None
     return out, diagnostics
 
 
