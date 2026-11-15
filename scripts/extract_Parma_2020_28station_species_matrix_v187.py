@@ -86,7 +86,8 @@ def parse_entry(raw,printed_count):
         if life_category=="NP":life_category="P"  # nanophanerophytes
     status=ALIEN_RE.search(after)
     # 'Autoct.' may be absent from some source records; preserve missingness.
-    if not re.match(r"^[A-Z][A-Za-zÀ-ž-]+\s+[a-z][A-Za-zÀ-ž-]+",taxon_original):
+    if not (re.match(r"^[A-Z][A-Za-zÀ-ž-]+\s+(?:×[a-z][A-Za-zÀ-ž-]+|[a-z][A-Za-zÀ-ž-]+)",taxon_original)
+            or re.match(r"^[A-Z][A-Za-zÀ-ž-]+\s+.*?\bsect\.\s+[A-Z][A-Za-zÀ-ž-]+",taxon_original)):
         return None,dict(cause="no_species_binomial",fragment=entry[:180])
     return {
         "taxon_original":taxon_original,
