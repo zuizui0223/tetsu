@@ -306,9 +306,6 @@ def run(s1,s2,disp,life,sr70):
             null[key]=fixed_source_margin_null(sites,guild,pairs,within_stretch=restricted)
     else:
         null={"identified":False,"reason":"Primary source geographic+guild matching no common support"}
-    all_39_site_source_raw=site_pairs(
-        current_sites(*read_original_czech_publisher(s1,s2)[:2],
-          *parse_traits(disp,life)[:2])[0],guild) if False else None
     return {
         "version":"v15.4_REAL_Czech_original_station_species_sharing_geographic_source",
         "original_study_country":"Czech Republic",
