@@ -48,7 +48,7 @@ class GenuineStudyOutcomeGate(unittest.TestCase):
             p.write_text(s.replace(
                  "FR_Rakotoson_2025,10.1111/wre.70025,FR,B_D_MANAGEMENT_CANDIDATE",
                  "FR_Rakotoson_2025,10.1111/wre.70025,FR,B"),encoding="utf-8")
-            with self.assertRaisesRegex(ValueError,"RATP original 394"):
+            with self.assertRaisesRegex(ValueError,"only two currently verified"):
                 inventory(p)
             s2=s.replace(
                  "200m to alert requests NOT actual mechanical management",
