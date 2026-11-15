@@ -118,7 +118,10 @@ def read_original_czech_publisher(s1,s2):
         raise ValueError("Original Czech 1053 taxon rows + 6941 contemporary source site incidences not conserved")
     known_recent=set().union(*floras.values())
     if len(known_recent)!=764:
-        raise ValueError("Original Czech paper 764 genuinely recent observed taxa not reproduced")
+        raise ValueError("Original Czech paper 764 genuinely recent observed taxa not reproduced; original publisher S1 literal rec-taxonomy union="+str(len(known_recent))+
+                         "; original 6941 X marks="+str(source_rec_markers)+
+                         "; source S1 taxon rows="+str(source_rows)+
+                         "; original marker source taxa range="+str(sorted(known_recent)[:6]))
     source_errors={c:len(s)-stats[c]["original_published_total_taxa"] for c,s in floras.items()
                    if len(s)!=stats[c]["original_published_total_taxa"]}
     if source_errors!={"DV":4,"SV":1,"TI":1}:
