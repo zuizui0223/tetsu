@@ -1,0 +1,62 @@
+name: "v15.3 REAL Czech 39 source botanical stations vs 2026 SR70 exact geolocation audit"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Czech_2024_S2_to_SR70_original_station_points_v153.py'
+      - 'tests/test_Czech_2024_S2_to_SR70_station_points_v153.py'
+      - '.github/workflows/Czech-original-S2-SR70-station-matching-v153.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v153-Czech-original-publisher-station-source-SR70
+  cancel-in-progress: true
+jobs:
+  original-author-source-gps-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only XLSX original publisher parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Validate strict full-name and spatial-coordinate clustering before using real source
+        run: python -m unittest discover -s tests -p 'test_Czech_2024_S2_to_SR70_station_points_v153.py' -v
+      - name: Fetch same exact publisher-original Preslia 2024 S1 and corrected erratum S2 as v14.3
+        run: |
+          set -euo pipefail
+          mkdir -p source/CZE153
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE153/S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE153/S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/CZE153/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/CZE153/S2.xlsx | sha256sum --check
+      - name: Fetch pinned third-party SR70.csv 2026-08 official register derived coordinates read-only
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE153/SR70.csv \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv'
+          git hash-object source/CZE153/SR70.csv | grep -Fx 'df1f4b41a6292071b58c4a9a862bd535914706c3'
+          sha256sum source/CZE153/SR70.csv
+      - name: Audit all 39 REAL publisher station names against EXACT independent source SR70 names and reject ambiguous geography
+        run: |
+          python -u scripts/audit_Czech_2024_S2_to_SR70_original_station_points_v153.py \
+            --s1 source/CZE153/S1.xlsx \
+            --s2 source/CZE153/S2.xlsx \
+            --sr70 source/CZE153/SR70.csv \
+            --output results/audit/Czech_2024_39author_station_SR70_location_identity_v153.json
+      - name: Upload secondary station-identity audit only, not source publishers XLSX or raw derived SR70 CSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-Czech39-author-S2-SR70-geolocation-v153
+          path: results/audit/Czech_2024_39author_station_SR70_location_identity_v153.json
+          if-no-files-found: warn
