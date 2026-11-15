@@ -1,43 +1,39 @@
-# tetsu v18.1–v18.3: 2 original railway-station flora matrices with source-locked text/glyph QA
+# 鉄 v18.1–v18.4：2独立原著・17駅の真正原表から種出現行列を再構成
 
-Date: 2026-11-15. Branch: `research/railway-seed-dispersal-v01`; PR #1 DRAFT. `main` unchanged. This is a **documented SOURCE-verified result**, **NOT** a regional-pool-conditioned multi-country functional-homogenization result.
+更新日 2026-11-15。原著で報告された実測植生を再利用し、研究ブランチ `research/railway-seed-dispersal-v01` のみで実行。研究PR #1はDraft。tetsu独自の現地採集と誤記しない。
 
-## Verified sources and outputs
+## 今回の完成した2つの原著行列
 
-| Original independent paper | Spatial units | Taxa and timing | Source validation | Output |
-| --- | ---: | --- | --- | --- |
-| Májeková et al., Thaiszia 2016, East Slovakia (publisher 16-page PDF) | 2 stations with full Tab 2; 4 station×time strata | Košice contemporary 192 species; Spišská Nová Ves 191 species (published author counts); historical sources incomplete | Source PDF SHA256 `cd87a16377ef351b6aa1f51a3c9302f060f0f52431c5f8cac14ecfbbb94b19eb`; original raw `Setaria viridis` subspecies retained separately and species collapse reconciles source totals | [v18.1 SOURCE SUCCESS](https://github.com/zuizui0223/tetsu/actions/runs/43722187035), original station×taxon×period with source abundance, modern presence, audit JSON |
-| Jasprica et al., Natura Croatica 2017, Croatia 13 stations + Bosnia/Herzegovina 2 stations (ONE paper) | 15 stations | 359 source original taxa (336 species and 23 subspecies); field survey 2013–14 | Publisher original 33-page PDF SHA256 `90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956`, original rotated native PDF glyph records and LF source resolved for 359 | [v18.3 SOURCE SUCCESS](https://github.com/zuizui0223/tetsu/actions/runs/43723422179), 359×15 = 5,385 presence cells, each source taxon's original station numbers, LF and family; audit JSON |
+| 出典 | 地点・年代 | 真正出現行列 | 検証 |
+|---|---|---|---|
+| Májeková et al. 2016, Thaiszia 26:173–188 | スロバキア2駅、現代2012–13／不完全な歴史1968–74 | Košice現代192種、Spišská Nová Ves現代191種。原表の2亜種を残し、種レベル集計で原著と一致 | [v18.1 原本抽出 SUCCESS](https://github.com/zuizui0223/tetsu/actions/runs/43722187035)、元16頁PDF SHA256 `cd87a16377ef351b6aa1f51a3c9302f060f0f52431c5f8cac14ecfbbb94b19eb` |
+| Jasprica et al. 2017, Natura Croatica 26:271–303 | クロアチア13駅＋ボスニア・ヘルツェゴビナ2駅、2013–14 | 元359分類群×15駅＝5,385出現セル、分類群ごと駅番号・Raunkiaer生活形・科 | [v18.3 359分類群 完全出現表 SOURCE SUCCESS](https://github.com/zuizui0223/tetsu/actions/runs/43723422179)。元33頁PDF SHA256 `90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956` |
 
-Both source PDFs are independently published and attributed; the unpublished raw PDFs are **not committed** in GitHub. Original public source-data rows are regenerated in GitHub Actions artifacts, not mistaken for `tetsu` field sampling. Check artifact retention before citing downloadable derivative CSV; permanent rerunnable code and SHA lock remain in the PR.
+スロバキアとクロアチア・ボスニアは独立した2原著研究。ただしクロアチアとボスニアは**1原著、15駅の擬似反復**であり、国境で独立研究2本に増やさない。原PDFはリポへ転載せず、公開原著の元URLとSHAを記録、元出現表からの再構成CSVはActionsアーティファクト内。
 
-## Source verification beyond number of taxa
+## 原著と機械復元の完全性
 
-**Croatia/Bosnia original paper, Tab 2 and narrative**:
+- Jasprica原著の表2はPDFに縦向きの文字列として保存されており、OCRなしで各分類群の種名・出現駅・科・生活形・頻度の各セルを抽出。原著の359分類群の全てで駅番号・科・生活形を取得し、15駅の分類群数は47〜152、8駅以上に出現する分類群72、全15駅に共通するのは`Chondrilla juncea L.`のみで、原著本文と一致。
+- **原著内の不一致を隠していない**：原表`Canna indica L.`は出現駅12のみ（1/15＝約7%）だが、原著掲載頻度53%。他の358/359分類群は元出現駅リストからの頻度と一致。頻度欄を強制採用して出現駅を捏造しない。
+- 原表の359行では単一駅のみに出現する分類群は**99**、2駅以上出現は260。一方、原著本文は100/259と記載。この本文／原表の差も改変せず、原表を一次ソースとする。勝手に本文の259分類群で実データの希少種を削らない。
+- 359分類群の生活形：一年草型T=183、半地中型H=113、木本P=31、地中型G=17、地表型Ch=15。105駅ペアの分類学的Jaccard類似度は中央値0.250（0.0797–0.5238）。5生活形の構成比の重なり`Σmin(p_i,p_j)`は中央値0.8971（0.6317–0.9735）。これは違う尺度であり数値を直接差し引かない。**機能的均質化の有意な結果という意味ではない**。
 
-- 359 unique taxon names; 359 taxon station-number lists present; 359 life forms and families present; all 15 stations represented; site richness from source counts ranges 47–152. The 15 site counts (code 1 through 15): 129, 128, 87, 93, 152, 136, 127, 85, 151, 129, 114, 71, 62, 58, 47.
-- 72 taxa present in at least 8/15 stations, consistent with publisher original results; the sole taxon present at all 15 stations was `Chondrilla juncea L.` also consistent.
-- **Two conflicts remain ON THE PUBLISHER'S PRINTED PAGE** and are retained transparently:
-  1. Table 2 `Canna indica L.`: explicit station `12` (1/15, frequency should round to 7%), but printed frequency `53%`; 358/359 frequency entries agree with exact station lists. DO NOT silently change station numbers to match publisher percentage.
-  2. The full printed 359 named-taxon×station lists have 99 taxa occurring at exactly one station and 260 other taxa; prose states 100/259. The original 359 list is **NOT** filtered or altered to force agreement. The published 259-taxon analysis is distinguished from our all-359 taxon descriptive matrix.
-- Comparison among 15 stations: 105 pairwise taxonomic Jaccard similarities from the FULL 359 list have min=0.0797, median=0.2500, max=0.5238. Functional life-form profile overlap `sum_g min(p_{ig},p_{jg})` across exactly the same pairs has min=0.6317, median=0.8971, max=0.9735.
-- Full source life form category totals: T (therophyte) 183, H (hemicryptophyte) 113, P (phanerophyte) 31, G (geophyte) 17, Ch (chamaephyte) 15. A high five-class overlap is **not** cross-country functional homogenization or necessarily above chance; observed taxonomic Jaccard and functional proportional-overlap scales must not be directly compared or differenced into an 'effect size'.
+## 一般生態学に向けた観測単位と制約
 
-**Scientific sample cautions**: The 15 stations were sampled in 2013–14 in one original paper (Croatia/Bosnia not two independent meta analytic studies); sites span macroclimates and urban-rural gradients, plots 200–800 m² and generally operating tracks/platforms. Most visited spring–autumn; 4 southern stations surveyed only summer/autumn. This uneven detection effort biases comparisons. Site/area effects and local natural habitat availability (Tab 1 distance to nearby natural/semi-natural vegetation) are available but are **NOT** yet a standardized habitat-analogue or a matched regional species pool. Source floristic species, microhabitat, openness and rare-sampling must remain separate.
+中心問い「反復される人工生息地は地域種プールを上書きするか」。理論の要点は分類群の同質化と機能形質の同質化を別々に検定すること。
 
-## Hypothesis and precommitment
+Jasprica原著の15駅は稼働線路／プラットフォームを含む駅構内の調査で、現地調査2013–14、plot面積200–800㎡。多くは春〜秋に調査した一方、南部4駅は夏〜秋のみ。鉄道バラストが全球で完全同一という仮定を置かず、異なる調査面積・管理・季節・地域生息地を統制する必要がある。原表にある近傍自然・半自然植生までの距離は、自然アナログ生息地の種類／種プールの豊富さとは別概念であり代用せず、将来検証で使う。
 
-**Can replicated anthropogenic habitats override regional species pools?** A railway site array can be climate/context-stratified but is not experimental standard substrate. Outcome axes:
-- Species identity similarity or phylogenetic/generic overlap (species Jaccard distant biomes saturates near zero);
-- Trait/functional composition: compare group proportions or ecological distance with adequate trait coverage, not only five lifeform classes;
-- Independent regional pools (GIFT regional lists potentially too coarse; vegetation plots / habitat-specific local flora if available) sampled to match survey time, size, plot area and source effort;
-- A station pair is not an independent unit; use original paper/climate region/habitat blocks and leave-original-study-out validation.
+**重要：現時点で非鉄道の地域種プールからの期待群集を構築していない。** 単一原著内で生活形構成比の類似度が高いことだけから、鉄道による選別・収束・列車種子散布・草刈り適応・全球普遍性は認定できない。
 
-A **within-railway fixed-row/column randomization** is an important sanity check, but only asks whether site-level functional similarity exceeds what the observed RAILWAY taxon pool and occupancy margins predict. It is **NOT** a natural-regional-pool null and cannot show railway-generated functional convergence.
+## v18.4 の設計と最終の本解析
 
-### Next execution priorities
-1. Create a validated original Tab 1 15-station macroclimate/landscape context registry; test within-paper fixed margins while retaining climate-group permutation as a conservative sensitivity.
-2. Extract source-native site×taxon from Italy Parma (28 stations), Austria East Tyrol (6), CZ and SI original study site data into a harmonized data dictionary; keep exact name, species rank, native/cultivated and sampling unit semantics.
-3. Build matched natural habitat **independent** regional pools, estimate observed vs expected taxonomic/functional differences, first Europe and India, before any global claim. Do not interpret a 2-paper source dataset as global independent replication.
+v18.4は原著359×15を固定して、2×2交換による次の2種の帰無モデルで生活形の「観測された高い重なり」が期待値からどれほど離れるかを調べる。
+1. 全15駅を1つの層として、**各駅の分類群数と各分類群の全駅出現頻度**を固定。
+2. 元原著表1の気候群（TWS/TSS/MED）内でのみ入れ替え、上記に加え**各気候群内の分類群頻度**を固定。
 
-Primary paper links: [Croatia/Bosnia original PDF](https://hrcak.srce.hr/file/282429); [Slovakia original PDF](https://www.upjs.sk/app/uploads/sites/15/2022/10/173-188_Majekova_et_al-upr.pdf); [regional sources register](../data/literature/global_rail_flora_source_registry_v180.csv).
+どちらの帰無も「**元の鉄道植物相から再配置**」である。**自然生息地由来の独立種プールから期待される収束**ではないので、成功・不成功を鉄道特異的な生態選択の証拠として報告しない。モンテカルロのペア・連鎖を独立標本に偽装せず、複数チェーンと受理率を残す。
+
+最終のマクロ解析には、(a) チェコ39駅・スロベニア89地点を含む国別原著の地点×分類群行列と共通学名対応、(b) サイトのバラスト／肩／法面などのマイクロハビタット、(c) 努力・地点面積・生物地理帯、(d) **独立の地域自然植生データ**が必要。地域プール条件付き分類／機能β多様性はこの後にのみ推定する。
+
+元資料：[クロアチア・ボスニア2017年原著](https://hrcak.srce.hr/file/282429) ・ [スロバキア2016年原著](https://www.upjs.sk/app/uploads/sites/15/2022/10/173-188_Majekova_et_al-upr.pdf) ・ [国別採録台帳](../data/literature/global_rail_flora_source_registry_v180.csv)。
