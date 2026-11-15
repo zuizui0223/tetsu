@@ -1,0 +1,72 @@
+name: "v15.4 REAL Czech author 35 original railway stations geographic species-sharing falsification"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_Czech_2024_real_35station_centroid_geography_identity_v154.py'
+      - 'tests/test_Czech_2024_centroid_geographic_identity_v154.py'
+      - '.github/workflows/Czech-35author-real-centroid-spatial-jaccard-v154.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v154-real-Czech39-35-physical-2026-station-centroids-guild-distance
+  cancel-in-progress: true
+jobs:
+  real-genuine-Czech-2024-flora-versus-independent-station-geo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 36
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Read-only official plant author source files
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test frozen source geography matching and species occupancy preserving margins
+        run: |
+          python -m unittest discover -s tests -p 'test_Czech_2024_centroid_geographic_identity_v154.py' -v
+          python -m unittest discover -s tests -p 'test_Czech_2024_S2_to_SR70_station_points_v153.py' -v
+      - name: Retrieve publisher-original Czech 2020-2022 botanical data plus Pladias source traits
+        run: |
+          set -euo pipefail
+          mkdir -p source/CZE154
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE154/S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE154/S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE154/diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE154/lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/CZE154/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/CZE154/S2.xlsx | sha256sum --check
+      - name: Retrieve exact SR70 author-independent station point source 2026 derivative
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE154/SR70.csv \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv'
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' source/CZE154/SR70.csv | sha256sum --check
+      - name: Reanalyse genuine 35 geolocated station site floras; no fake plant rows or point GPS as exact plot
+        run: |
+          python -u scripts/analyze_Czech_2024_real_35station_centroid_geography_identity_v154.py \
+            --s1 source/CZE154/S1.xlsx \
+            --s2 source/CZE154/S2.xlsx \
+            --pladias-diaspore source/CZE154/diaspore.xlsx \
+            --pladias-lifeform source/CZE154/lifeform.xlsx \
+            --sr70 source/CZE154/SR70.csv \
+            --output results/audit/Czech_2024_real_35_station_geographical_matched_Jaccard_v154.json
+      - name: Archive source-provenance original plant pair statistics and model limits, no raw publisher XLSX
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Czech-original-35station-centroid-geography-v154
+          path: results/audit/Czech_2024_real_35_station_geographical_matched_Jaccard_v154.json
+          if-no-files-found: warn
