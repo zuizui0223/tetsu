@@ -148,16 +148,21 @@ def extract(pdf_path):
         "Kosice_recent_2012_2013":totals[1],
         "Spisska_Nova_Ves_historical_1968_1974_incomplete":totals[2],
         "Spisska_Nova_Ves_recent_2012_2013":totals[3]}
-    layout_debug=[]
-    for pi in (7,9):
-        page_lines=merge_words_to_rows(f[pi].get_text("words",sort=False))
-        for qi,(yy,ww) in enumerate(page_lines):
-            txt=" ".join(str(w[4]) for w in ww)
-            if any(token in txt for token in ("Helianthus","Cockerell","Setaria","Tzvelev")):
-                layout_debug.append({"page":pi+1,"focus":txt[:130],
-                    "neighbours":[{"y":round(py,2),
-                                   "words":[[str(w[4]),round(w[0],1),round(w[2],1)] for w in pw]}
-                                  for py,pw in page_lines[max(0,qi-1):qi+3]]})
+    # The original Table 2 records BOTH Setaria viridis subspecies at
+    # Spisska Nova Ves; distinct printed rows cause +1 vs the manuscript's
+    # reported species/taxon aggregate. Preserve raw rows, and expose a
+    # separate species-level Setaria reconciliation; never delete a source row.
+    def normalized_species(name):
+        return "Setaria viridis" if name.startswith("Setaria viridis ") else name
+    harmonized_counts={}
+    harmonized_unions={}
+    for j, key in enumerate(EXPECTED):
+        harmonized_counts[key]=len(set(normalized_species(r["taxon_original"])
+                                      for r in extracted if r["values"][j]))
+    for st,indices in (("Kosice",(0,1)),("Spisska_Nova_Ves",(2,3))):
+        harmonized_unions[st]=len(set(normalized_species(r["taxon_original"])
+                                      for r in extracted if any(r["values"][i] for i in indices)))
+    reconciled=(harmonized_counts==EXPECTED and harmonized_unions==UNION_EXPECTED)
     return extracted,{
         "layout_debug":layout_debug,
         "source":DOI, "source_pdf_url":PDF_URL,
@@ -173,7 +178,12 @@ def extract(pdf_path):
         "observed_period_counts":actual,"published_expected_period_counts":EXPECTED,
         "observed_union_counts":unions,"published_union_counts":UNION_EXPECTED,
         "n_candidate_rejects":len(diag),"candidate_rejects_preview":diag[:45],
-        "exact_source_count_gate":actual==EXPECTED and unions==UNION_EXPECTED,
+        "species_reconciled_period_counts":harmonized_counts,
+        "species_reconciled_union_counts":harmonized_unions,
+        "raw_named_taxon_table_has_one_extra_Spišská_Nová_Ves_Setaria_subspecies_row":
+            actual["Spisska_Nova_Ves_recent_2012_2013"]==192 and unions["Spisska_Nova_Ves"]==205,
+        "exact_source_count_gate":reconciled,
+        "count_reconciliation_is_inferred_not_an_author_explanation":True,
         "historical_comparison_valid_for_change":False,
         "pure_ballast_habitat_known":False,
         "original_absence_assumed_complete_only_for_contemporary_surveys":True
@@ -190,18 +200,22 @@ def write_outputs(records, audit, outdir):
     with (root/"Slovakia_2016_original_table2_4station_period_taxon_incidence.csv").open("w",newline="",encoding="utf8") as h:
         writer=csv.writer(h)
         writer.writerow(["country","original_study","station","period","taxon_original",
-                         "source_abundance_code","presence","source_pdf_page"])
+                         "source_abundance_code","presence","source_pdf_page","species_reconciliation_key"])
         for r in records:
             for j,v in enumerate(r["values"]):
                 writer.writerow(["SK","Majekova_et_al_2016",STATIONS[j//2],
                                  PERIODS[j%2],r["taxon_original"],v,int(bool(v)),
-                                 r["page_pdf_index"]+1])
+                                 r["page_pdf_index"]+1, "Setaria viridis" if r["taxon_original"].startswith("Setaria viridis ") else r["taxon_original"]])
     with (root/"Slovakia_2016_original_table2_contemporary_only_presence.csv").open("w",newline="",encoding="utf8") as h:
         writer=csv.writer(h)
-        writer.writerow(["station","taxon_original","presence","abundance_code"])
-        for r in records:
-            for j,st in [(1,"Kosice"),(3,"Spisska_Nova_Ves")]:
-                writer.writerow([st,r["taxon_original"],int(bool(r["values"][j])),r["values"][j]])
+        writer.writerow(["station","taxon_species_key","presence","n_source_named_taxa_positive"])
+        for j,st in [(1,"Kosice"),(3,"Spisska_Nova_Ves")]:
+            by_species={}
+            for r in records:
+                key="Setaria viridis" if r["taxon_original"].startswith("Setaria viridis ") else r["taxon_original"]
+                by_species.setdefault(key,[]).append(bool(r["values"][j]))
+            for key in sorted(by_species):
+                writer.writerow([st,key,int(any(by_species[key])),sum(by_species[key])])
 
 
 def main():
