@@ -35,8 +35,8 @@ N_CANDIDATE=20
 # SECTION, not a species; never take its first two words as a binomial.
 NON_SPECIES_EPITHETS={"sect","section","agg","aggregate","sp","spp",
     "subsp","var","cf","aff","group","complex","s","spec","species"}
-SPECIES_RE=re.compile(r"^[A-Z][a-zA-Z-]+ (?!"+
-    "|".join(sorted(NON_SPECIES_EPITHETS))+r"(?=$|\\b))[a-z][a-zA-Z-]+$")
+SPECIES_RE=re.compile(r"^[A-Z][a-zA-Z-]+ (?!(?:"+
+    "|".join(sorted(NON_SPECIES_EPITHETS))+r")$)[a-z][a-zA-Z-]+$")
 
 def rank_observed_source_floras(site_sets):
     source=Counter()
