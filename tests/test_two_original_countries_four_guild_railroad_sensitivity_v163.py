@@ -93,7 +93,7 @@ class TwoSource4GuildAuditMathTests(unittest.TestCase):
     def test_score_fold_mean_must_equal_aggregate_MSE_gain(self):
         fake=source_fake("CZ")
         cv=fake["original_source_fully_known_4guild_partition"]["annual_wind"]["richness_source_sensitivity"]["guild_specific_log1p"]["original_source_heldout_rail_vs_road_prediction"]
-        cv["original_source_section_holdout_MSE_M2_road_and_rail"]=.8
+        cv["source_original_section_holdout_MSE_M2_road_and_rail"]=.8
         with self.assertRaisesRegex(ValueError,"inconsistent"):
             evaluate_cv(cv,5)
 
