@@ -52,6 +52,12 @@ class TrueOriginalCzechVegStudyPlotGrainSafety(unittest.TestCase):
         self.assertEqual(support["n_original_source_field_studies"],2)
         self.assertEqual(obj["Poa annua"]["CzechVeg_same_study_source_N_distinct_publications_with_taxon"],2)
         self.assertTrue(obj["Poa annua"]["station_occurrence_ratio_NOT_a_genuine_rail_affinity_effect"])
+        self.assertEqual(obj["Poa annua"]["CzechVeg_all_original_source_AUTHOR_STUDY_scored_loo_full_source_studies"],2)
+        self.assertEqual(obj["Poa annua"]["CzechVeg_original_AUTHOR_STUDY_scored_loo_N_with_positive_rail_minus_road"],1)
+        self.assertAlmostEqual(obj["Poa annua"]["CzechVeg_original_AUTHOR_STUDY_scored_loo_min_delta"],-.5)
+        self.assertAlmostEqual(obj["Poa annua"]["CzechVeg_original_AUTHOR_STUDY_scored_loo_max_delta"],1.)
+        self.assertFalse(obj["Poa annua"]["CzechVeg_original_AUTHOR_STUDY_scored_loo_POSITIVE_for_ALL_eligible_omissions"])
+        self.assertTrue(obj["Poa annua"]["CzechVeg_source_loo_deletes_entire_original_publication_relevés_not_station_cohort"])
 
     def test_source_candidate_does_not_depend_on_photo_or_station_prevalence_ratio(self):
         blocks,names,stations,background=toy_plot()
