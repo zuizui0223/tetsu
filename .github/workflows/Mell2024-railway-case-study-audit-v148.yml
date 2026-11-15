@@ -1,0 +1,51 @@
+name: "v14.8 REAL original Mell railway meta cases 3 from 2 studies and Penone bias"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_Mell2024_verified_railway_meta_cases_v148.py'
+      - 'tests/test_Mell2024_verified_railway_meta_v148.py'
+      - '.github/workflows/Mell2024-railway-case-study-audit-v148.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-original-Mell2024-rail-case-study-dedupe-v148
+  cancel-in-progress: true
+jobs:
+  pinned-publisher-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source arithmetic integrity tests, including exact n studies vs n cases
+        run: python -m unittest discover -s tests -p 'test_Mell2024_verified_railway_meta_v148.py' -v
+      - name: Fetch the original Springer 2024 supplementary datasets and verify immutable SHA digests
+        run: |
+          set -euo pipefail
+          mkdir -p source/mell148
+          curl --fail --location --silent --show-error --retry 4 --retry-all-errors --max-time 120 \
+            --output source/mell148/appendix5.xlsx \
+            'https://static-content.springer.com/esm/art%3A10.1186%2Fs13750-024-00328-3/MediaObjects/13750_2024_328_MOESM5_ESM.xlsx'
+          curl --fail --location --silent --show-error --retry 4 --retry-all-errors --max-time 120 \
+            --output source/mell148/appendix8.xlsx \
+            'https://static-content.springer.com/esm/art%3A10.1186%2Fs13750-024-00328-3/MediaObjects/13750_2024_328_MOESM8_ESM.xlsx'
+          printf '%s  %s\n' \
+            '85042f37984a6f8f316f1f578e7f3093334ded057ebdc0c72437ac8b34579c90' source/mell148/appendix5.xlsx \
+            '0fd8ff9922c1138d5abd5289e743058b10be3b52c73d4d338cc9b9d2505def17' source/mell148/appendix8.xlsx | sha256sum --check --status
+      - name: Verify 205 cases - 3 railway cases from only 2 independent source studies, original review Penone risk
+        run: |
+          python -u scripts/analyze_Mell2024_verified_railway_meta_cases_v148.py \
+            --study-metadata-5 source/mell148/appendix5.xlsx \
+            --effect-cases-8 source/mell148/appendix8.xlsx \
+            --output results/audit/Mell2024_original_verified_railway_3_cases_2_studies_v148.json
+      - name: Archive only source SHA and short original cohort case and reviewer details
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-Mell2024-original-rail-3-cases-2-studies-v148
+          path: results/audit/Mell2024_original_verified_railway_3_cases_2_studies_v148.json
+          if-no-files-found: warn
