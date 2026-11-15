@@ -106,10 +106,13 @@ def source_sites_and_guilds(original):
         })
     if len(sites)!=89 or len({x["section"] for x in sites})!=15:
         raise ValueError("Original Slovenian real 89-source-site, 15 rail-section cohort changed")
-    if len(known)!=261:
-        # Exact source-known population must be logged, not silently
-        # weakened to a more favorable posthoc functional sample.
-        raise ValueError("Original Slovenian dual-known source functional taxa !=261")
+    observed_known_union=set().union(*(x["known"] for x in sites))
+    if len(observed_known_union)!=261:
+        # The original workbook can contain dual-known taxa observed
+        # in SZ/IA only, but 261 enter actual matched BS/BT field sites.
+        # Check observed union instead of assuming every taxon in the
+        # original traits table is seen in matched ballast pairs.
+        raise ValueError("Original observed BS/BT site-union dual-known source taxa !=261")
     if not all(len(x["known"])>=1 for x in sites):
         raise ValueError("An original site has no jointly strategy/lifespan-known observed taxa")
     return sites, known, {
@@ -118,7 +121,8 @@ def source_sites_and_guilds(original):
         "original_sampled_locations":len(sites),
         "original_route_sections":15,
         "original_matched_side_BS_BT_pairs":sum(s["n_original_matched_track_sides"] for s in sites),
-        "original_strategy_lifespan_known_taxa":len(known),
+        "original_strategy_lifespan_known_taxa_present_in_matched_sites":len(observed_known_union),
+        "original_strategy_lifespan_known_taxa_in_all_source_traits":len(known),
         "all_published_source_trait_taxa":len(traits),
         "original_qualifying_site_taxa_observations":sum(len(x["known"]) for x in sites),
         "original_all_site_taxa_observations_deduplicated_per_location":sum(
