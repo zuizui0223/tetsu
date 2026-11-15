@@ -1,5 +1,11 @@
 name: "v15.6 ORIGINAL Czech 35 Preslia stations: historic ROAD-versus-rail network heldout ecology"
 on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_Czech_2023_true_rail_road_heldout_taxon_identity_v156.py'
+      - 'tests/test_Czech_2023_real_road_rail_heldout_identity_v156.py'
+      - '.github/workflows/Czech-2023-real-rail-road-heldout-v156.yml'
   workflow_dispatch:
 concurrency:
   group: tetsu-v156-czech2023-real-road-adjusted-ecological-source
@@ -58,7 +64,9 @@ jobs:
         run: |
           set -euo pipefail
           test "$(stat --format=%s source/CZE155/czech-republic-230101.osm.pbf)" = "816159635"
-          sha256sum source/CZE155/czech-republic-230101.osm.pbf
+          printf '%s  %s\n' \
+            '26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747' \
+            'source/CZE155/czech-republic-230101.osm.pbf' | sha256sum --check
       - name: Fit 35 genuine station botanically measured assemblages with 5 original stretches held out
         run: |
           python -u scripts/analyze_Czech_2023_true_rail_road_heldout_taxon_identity_v156.py \
