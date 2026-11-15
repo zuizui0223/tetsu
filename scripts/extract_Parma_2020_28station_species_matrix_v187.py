@@ -11,6 +11,8 @@ from __future__ import annotations
 import argparse,csv,hashlib,json,re
 from collections import Counter
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from audit_Parma_2020_28rail_station_flora_original_v186 import (
     STATION_CODES, ORIGINAL_URL, ORIGINAL_BIBLIO, EXCLUDED_UNSURVEYED_STATION)
 START="Abies alba Mill."
