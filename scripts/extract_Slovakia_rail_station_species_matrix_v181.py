@@ -64,52 +64,51 @@ def parse_table_page(page, centres):
     lines = merge_words_to_rows(page.get_text("words", sort=False))
     out, diagnostics = [], []
     if not centres:
-        return out, [{"error":"missing original source header centres"}]
-    first_center = centres[0]
-    name_end = first_center - 20
-    pending_name = None
+        return out,[{"error":"missing header centres"}]
+    name_end=centres[0]-20
+    pending=None
+    def finish_pending():
+        nonlocal pending
+        if pending and any(pending["values"]):
+            out.append(pending)
+            diagnostics.append({"page":page.number+1,"joined_multiline_taxon":pending["taxon_original"]})
+        pending=None
     for ym, words in lines:
-        left = [w for w in words if (w[0]+w[2])/2 < name_end]
-        vals = [w for w in words if (w[0]+w[2])/2 >= name_end]
-        if not left:
-            continue
-        parts = [str(w[4]).strip() for w in left]
-        is_taxon = (len(parts) >= 2 and bool(GENUS.fullmatch(parts[0]))
-                    and bool(SPECIES.fullmatch(parts[1])))
-        name = " ".join(parts).strip()
-        slots = ["","","",""]
+        left=[w for w in words if (w[0]+w[2])/2 < name_end]
+        vals=[w for w in words if (w[0]+w[2])/2 >= name_end]
+        parts=[str(w[4]).strip() for w in left]
+        is_taxon=(len(parts)>=2 and bool(GENUS.fullmatch(parts[0]))
+                  and bool(SPECIES.fullmatch(parts[1])))
+        name=" ".join(parts).strip()
+        slots=["","","",""]
         for w in vals:
-            token = str(w[4]).strip().replace("–","-")
-            if not ABUNDANCE.fullmatch(token):
-                continue
+            tok=str(w[4]).strip().replace("–","-")
+            if not ABUNDANCE.fullmatch(tok): continue
             xc=(w[0]+w[2])/2
             k=min(range(4),key=lambda i:abs(centres[i]-xc))
-            if abs(xc-centres[k])>27:
-                diagnostics.append({"page":page.number+1,"taxon":name,
-                                    "ambiguous_token":token,"x":round(xc,1)})
-                continue
-            if slots[k] and slots[k]!=token:
-                diagnostics.append({"page":page.number+1,"taxon":name,
-                                    "conflicting_abundance":[slots[k],token]})
-            slots[k]=token
-        if is_taxon and len(name)<190 and not name.lower().startswith(("tab.","railway","thaiszia")):
+            if abs(xc-centres[k])<=27:
+                if slots[k] and slots[k]!=tok:
+                    diagnostics.append({"page":page.number+1,"conflict":[slots[k],tok]})
+                slots[k]=tok
+        if is_taxon:
+            finish_pending()
             if any(slots):
-                out.append({"taxon_original":name,"page_pdf_index":page.number,
-                            "values":slots})
-                pending_name = None
-            else:
-                # Original author names wrap, e.g. Helianthus ... (DC.) /
-                # Cockerell, and Setaria ... (Steud.) / Tzvelev. Await one line.
-                pending_name = name if (" subsp." in name or " var." in name) else None
-                diagnostics.append({"page":page.number+1,"candidate_without_presence":name[:90]})
-        elif pending_name and any(slots) and len(parts)<=5:
-            out.append({"taxon_original":pending_name+" "+name,
-                        "page_pdf_index":page.number,"values":slots})
-            diagnostics.append({"page":page.number+1,"rejoined_wrapped_taxon":
-                                pending_name+" "+name})
-            pending_name = None
-        elif is_taxon:
-            pending_name = None
+                out.append({"taxon_original":name,"page_pdf_index":page.number,"values":slots})
+            elif " var." in name or " subsp." in name:
+                pending={"taxon_original":name,"page_pdf_index":page.number,
+                         "values":["","","",""]}
+        elif pending:
+            # Publisher's two long scientific names wrap over three visual
+            # lines: name at y, bare abundance glyphs at y+4, authority at y+9.
+            if any(slots) and not left:
+                for i,v in enumerate(slots):
+                    if v: pending["values"][i]=v
+            elif left and len(parts)<=3 and not any(slots):
+                pending["taxon_original"]+=" "+name
+                finish_pending()
+            elif left or (not any(slots) and ym>10):
+                finish_pending()
+    finish_pending()
     return out, diagnostics
 
 
