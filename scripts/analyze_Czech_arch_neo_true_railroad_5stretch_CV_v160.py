@@ -85,7 +85,7 @@ def reassign_original_source_class_outcome(original_pair_records,source_sites,or
     """
     if richness_mode not in RICHNESS_MODES:
         raise ValueError("Undeclared original richness sensitivity")
-    if len(original_class_sets)!=len(source_sites)!=N_STATIONS:
+    if len(original_class_sets)!=N_STATIONS or len(source_sites)!=N_STATIONS:
         raise ValueError("Original SR70 exact station count differs from 35")
     if any(not original_class_sets[i] for i in range(len(source_sites))):
         raise ValueError("Explicit original subgroup absent in actual source station; shared source support would drift")
