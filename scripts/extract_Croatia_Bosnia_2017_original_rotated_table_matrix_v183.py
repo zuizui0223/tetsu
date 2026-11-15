@@ -73,6 +73,7 @@ def rows_from_original(pdf):
        "n_frequency_disagreements":sum(o["frequency_percent_source"] is not None
              and round(len(o["source_station_numbers"])*100/15)!=o["frequency_percent_source"]
              for o in out),
+       "frequency_disagreements_detail":[{"taxon":o["taxon_original"],"page":o["page"],"printed_station_codes":o["source_station_numbers"],"printed_frequency":o["frequency_percent_source"],"calculated_frequency":round(len(o["source_station_numbers"])*100/15)} for o in out if o["frequency_percent_source"] is not None and round(len(o["source_station_numbers"])*100/15)!=o["frequency_percent_source"]],
        "malformed_station_ids":[{"taxon":o["taxon_original"],"records":o["source_station_numbers"]}
               for o in out if any(v<1 or v>15 for v in o["source_station_numbers"])][:15],
        "taxa_missing_station_preview":[{"taxon":o["taxon_original"],"page":o["page"],"x":o["source_row_x"]}
