@@ -130,7 +130,7 @@ def author_source_rows(original):
        "n_actual_taxa_with_both_author_lifespan_and_diaspore_source_codes":N_JOINT_TRAIT_OBSERVED_TAXA,
        "n_actual_original_site_taxon_presence_records":len(records),
        "n_source_taxon_name_mapped_to_explicit_binomial":sum(
-          x["source_taxon_EPPO"] in code_to_name for x in prior_taxa),
+          x["taxon_code"] in code_to_name for x in prior_taxa),
        "original_author_species_codebook_QA":cb_quality,
        "n_original_BS_only_taxon_site_events":sum(x["observed_original_microhabitat_state"]=="BS_only" for x in records),
        "n_original_BT_only_taxon_site_events":sum(x["observed_original_microhabitat_state"]=="BT_only" for x in records),
