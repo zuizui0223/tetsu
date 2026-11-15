@@ -105,9 +105,16 @@ def rows_from_original(pdf):
     metadata["n_taxa_in_published_259_only_analysis"]=len(out)-singletons
     metadata["n_taxa_occurring_over_half_15_stations"]=abundant
     metadata["universal_station_taxa"]=universal
-    metadata["independent_publisher_100_singletons_72_frequent_Chondrilla_gate"]=(
-        singletons==100 and len(out)-singletons==259 and abundant==72
-        and universal == ["Chondrilla juncea L."])
+    # The publisher's prose says 100 taxa in one station / 259 elsewhere,
+    # but its fully extracted table of 359 taxa has 99 / 260. Never modify
+    # original station lists to force agreement with inconsistent prose.
+    metadata["publisher_text_singletons_claim"]=100
+    metadata["publisher_text_multisite_analysis_claim"]=259
+    metadata["publisher_table_singletons_prose_discrepancy"]=(
+        singletons==99 and len(out)-singletons==260)
+    metadata["independent_publisher_crosscheck_72_frequent_Chondrilla_and_99_table_singletons"]=(
+        metadata["publisher_table_singletons_prose_discrepancy"]
+        and abundant==72 and universal == ["Chondrilla juncea L."])
     station_taxa={i:sum(i in rr["source_station_numbers"] for rr in out) for i in range(1,16)}
     form_taxa={}
     for rr in out:
@@ -129,7 +136,7 @@ def rows_from_original(pdf):
          and metadata["n_station_lists_nonempty"]==359
          and metadata["n_life_form_nonempty"]==359
          and metadata["site_frequency_agreement_other_358_taxa"]
-         and metadata["independent_publisher_100_singletons_72_frequent_Chondrilla_gate"]
+         and metadata["independent_publisher_crosscheck_72_frequent_Chondrilla_and_99_table_singletons"]
          and not metadata["malformed_station_ids"])
     return out,metadata
 
