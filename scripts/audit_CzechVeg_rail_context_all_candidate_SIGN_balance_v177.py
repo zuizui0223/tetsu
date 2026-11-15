@@ -53,6 +53,11 @@ def audit_panel(panel, modern, strict, ranked_names):
     for species, row in sorted(panel.items()):
         if not eligible_without_q_sign(row):
             continue
+        # Fail closed: the first v17.4 run did not yet have the original
+        # publication-deletion recomputation, which was added in v17.4b.
+        # Absent LOO fields mean UNKNOWN, never "zero species robust".
+        if any(row.get(k) is None for k in (LLO, LHI, LOO_N)):
+            raise ValueError("Original v17.4b publication-deletion source fields missing; do not treat unknown LOO as fragile effects")
         q = row[Q]
         m = modern.get(species, {}).get(Q)
         s = strict.get(species, {}).get(Q)
@@ -165,7 +170,7 @@ def audit(report):
         raise ValueError("Prespecified Echium original same-study q missing/drifted")
     info = {
         "complete": True, "version": VERSION,
-        "source_genuine_v174_prior_successful_run_ID": 43700792828,
+        "source_genuine_v174_prior_successful_run_ID": 43701358353,
         "source_input_source_MD5s_preserved_from_original_v174_report": {
             "CzechVeg_headers": report["CzechVeg_full_original_source_HEADER_MD5_verified"],
             "CzechVeg_species": report["CzechVeg_full_original_source_2510340_species_MD5_verified"]
