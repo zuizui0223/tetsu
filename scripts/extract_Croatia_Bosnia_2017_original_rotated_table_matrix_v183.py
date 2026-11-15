@@ -21,7 +21,7 @@ def rows_from_original(pdf):
     doc=fitz.open(stream=raw,filetype="pdf")
     if len(doc)!=33:raise ValueError("Publisher PDF page count changed")
     out=[];page_reports=[]
-    for pi in range(6,31):
+    for pi in range(6,24):
         page=doc[pi]
         lines=[]
         for block in page.get_text("dict")["blocks"]:
@@ -31,7 +31,7 @@ def rows_from_original(pdf):
                 txt="".join(sp.get("text","") for sp in line.get("spans",[])).strip()
                 if not txt: continue
                 x0,y0,x1,y1=line["bbox"]
-                if x0<140 or x0>440:continue
+                if x0<102 or x0>440:continue
                 lines.append(dict(text=txt,x=(x0+x1)/2,y0=y0,y1=y1,x0=x0))
         taxon_anchors=[l for l in lines if l["y1"]>=560 and SPECIES_RE.match(l["text"])]
         page_reports.append({"page":pi+1,"n_taxon_anchor":len(taxon_anchors),
@@ -67,6 +67,7 @@ def rows_from_original(pdf):
        "n_life_form_nonempty":sum(bool(o["life_form"]) for o in out),
        "n_family_nonempty":sum(bool(o["family"]) for o in out),
        "n_frequency_nonempty":sum(o["frequency_percent_source"] is not None for o in out),
+       "first_source_row_geometry":[{"text":l["text"],"x":round(l["x"],1),"y0":round(l["y0"],1),"y1":round(l["y1"],1)} for l in lines if abs(l["x"]-taxon_anchors[0]["x"])<5][:18] if taxon_anchors else [],
        "n_frequency_disagreements":sum(o["frequency_percent_source"] is not None
              and round(len(o["source_station_numbers"])*100/15)!=o["frequency_percent_source"]
              for o in out),
