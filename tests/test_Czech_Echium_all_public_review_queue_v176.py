@@ -18,11 +18,11 @@ class FakeOriginalRailwayPolyline:
 
 def full_fake():
     rows=[]
-    rows.extend(synthetic_record(i,lon=13.11,accuracy=5,annotation=13 if i%2 else None) for i in range(178))
-    rows.extend(synthetic_record(178+i,lon=13.25,accuracy=5,annotation=21 if i%3 else None) for i in range(725))
-    rows.extend(synthetic_record(903+i,lon=14,accuracy=5) for i in range(3273))
+    rows.extend(synthetic_record(i+1,lon=13.11,accuracy=5,annotation=13 if i%2 else None) for i in range(178))
+    rows.extend(synthetic_record(179+i,lon=13.25,accuracy=5,annotation=21 if i%3 else None) for i in range(725))
+    rows.extend(synthetic_record(904+i,lon=14,accuracy=5) for i in range(3273))
     for i in range(59):
-        o=synthetic_record(4176+i,lon=14,accuracy=5)
+        o=synthetic_record(4177+i,lon=14,accuracy=5)
         o["geoprivacy"]="private"
         rows.append(o)
     assert len(rows)==4235
