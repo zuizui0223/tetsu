@@ -109,8 +109,8 @@ class RailwayPolylineSource:
                 for n in w.nodes:
                     if n.location.valid():
                         a=float(n.lon);b=float(n.lat)
-                        if math.isfinite(a) and math.isfinite(b) and
-                           -180<=a<=180 and -90<=b<=90:
+                        if (math.isfinite(a) and math.isfinite(b) and
+                                -180<=a<=180 and -90<=b<=90):
                             raw.append((a,b))
                 if len(raw)<2:return
                 x,y=projection.transform([x for x,_ in raw],[y for _,y in raw])
