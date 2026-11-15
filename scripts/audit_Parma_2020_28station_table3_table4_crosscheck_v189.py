@@ -48,6 +48,13 @@ assert len(TABLE3)==28 and set(TABLE3)==set(STATION_CODES)
 assert len(TABLE4)==27
 
 def taxon_key(name):
+    # Original publisher distinguishes S. italica subspecies; Table 4
+    # explicitly refers to subsp. viridis. Preserve other subspecies in
+    # full matrix, never collapse this reference into species-wide frequency.
+    if name.startswith("Setaria italica ") and "subsp. viridis" in name:
+        return "Setaria italica"
+    if name.startswith("Setaria italica "):
+        return "Setaria italica non-viridis"
     if name.startswith("Taraxacum ") and "sect. Taraxacum" in name:
         return "Taraxacum sect. Taraxacum"
     m=re.match(r"^([A-Z][a-zA-ZÀ-ž-]+)\s+([a-z][a-zA-ZÀ-ž-]+)",name)
