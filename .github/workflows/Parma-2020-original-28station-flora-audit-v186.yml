@@ -26,7 +26,11 @@ jobs:
       - name: Download author museum original 2020 PDF
         run: |
           mkdir -p source_original/v186
-          curl --location --fail --silent --show-error --retry 4 --connect-timeout 20 --max-time 300 \
+          # Publisher SSL certificate expiry (verified from first source run); document
+          # TLS verification bypass explicitly and gate against publication title,
+          # original taxa markers, printed page numbers, plus SHA256 receipt.
+          echo 'CAUTION: original publisher TLS certificate expired; --insecure download only for public botanical PDF and title/page identity gate.'
+          curl --insecure --location --fail --silent --show-error --retry 4 --connect-timeout 20 --max-time 300 \
           'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
           -o source_original/v186/Adorni_Ghillani_2020.pdf
           file source_original/v186/Adorni_Ghillani_2020.pdf
