@@ -19,7 +19,7 @@
 
 [**v16.7元写真の撮影月分布・任意Flowers注釈の真正源監査SUCCESS #43694215159**](https://github.com/zuizui0223/tetsu/actions/runs/43694215159)。画像レビューの追加CC/位置誤差/3か月の写真条件を満たす被子植物は**CZ10種**。このうち花の明示的写真注釈が5件以上の4種は*Echium vulgare*（30m内178件、花タグ21）、*Geranium robertianum*（88件、7）、*Linaria vulgaris*（81件、7）、*Erigeron annuus*（77件、5）。他の被子植物も含む陽性Flowers注釈は総計60件で、未注釈写真は花無しの実測ではない。**草丈写真の尺度・初花日・遺伝適応は現時点では未測定**。
 
-これら4種の次の元API再取得は、同じ2023CZ原OSM線路Polylineから**座標不確実性を含め≤30mのCC写真**と、同じ種の**100–1000m離れたCC写真**を、**同じ年・月かつ地理10km以内・重複しない写真1対1**で何ペア作れるかの判定。観察者が異なる対と同じ観察者も許す対は別集計。GitHub [v16.8 SOURCE workflow](.github/workflows/Czech-4flower-original-local-photo-matched-v168.yml) の成功ログまで、その**真の対数は未確定**。成功しても地理的近さは真の鉄道敷地内・実草刈り・列車風の証拠ではない。元写真画素・実個体の草丈測定はまだない。2国群集に近い形質軸で種内変化まで言うには、元道路・鉄道の同じ努力の現地植物個体の反復形質と独立の種平均referenceが要る。[v16.4〜v16.8原著証拠と未識別限界](Czech_original_flower_photo_same_month_local_control_v167_v168_ja.md)。
+これら4種の次の元API再取得は、同じ2023CZ原OSM線路Polylineから**座標不確実性を含め≤30mのCC写真**と、同じ種の**100–1000m離れたCC写真**を、**同じ年・月かつ地理10km以内・重複しない写真1対1**で何ペア作れるかの判定。観察者が異なる対と同じ観察者も許す対は別集計。[**v16.8 実CZ2023 OSM線形＋iNaturalist4種全件再取得・元v16.6/v16.7出典監査SUCCESS #43695087773**](https://github.com/zuizui0223/tetsu/actions/runs/43695087773)。線路30mの公開座標誤差円全体が範囲内＋CC写真あり、線路100–1000mの同種CC写真と**同じ年・月、地理10km以内、異なる撮影者、重複なしの一対一**にすると、*Echium vulgare*29組、*Geranium robertianum*17組、*Erigeron annuus*11組、*Linaria vulgaris*5組、**合計62組**の写真比較機会を真正取得。真に線路近接側でFlowersの明示注釈があったのは4組（全てEchium）しかなく、未注釈58組を「非開花」と扱えない。**現場の実花期や絶対草丈、草刈り/風曝露や遺伝的適応は未測定**。[詳細と真正ソース監査](Czech_original_flower_photo_same_month_local_control_v167_v168_ja.md)。成功しても地理的近さは真の鉄道敷地内・実草刈り・列車風の証拠ではない。元写真画素・実個体の草丈測定はまだない。2国群集に近い形質軸で種内変化まで言うには、元道路・鉄道の同じ努力の現地植物個体の反復形質と独立の種平均referenceが要る。[v16.4〜v16.8原著証拠と未識別限界](Czech_original_flower_photo_same_month_local_control_v167_v168_ja.md)。
 
 ---
 
