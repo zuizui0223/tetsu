@@ -20,7 +20,7 @@ def rows_from_original(pdf):
     if not raw.startswith(b"%PDF-"):raise ValueError("Not a PDF")
     doc=fitz.open(stream=raw,filetype="pdf")
     if len(doc)!=33:raise ValueError("Publisher PDF page count changed")
-    out=[];page_reports=[]
+    out=[];page_reports=[];discarded=[]
     for pi in range(6,24):
         page=doc[pi]
         lines=[]
@@ -48,10 +48,10 @@ def rows_from_original(pdf):
                 rawstations=rawstations.replace(", ",",").replace(" ,",",").strip(",")
             vals=[int(v) for v in re.findall(r"\d{1,2}",rawstations)] if rawstations else []
             life=[l["text"] for l in same if 306<=l["y0"]<=333 and l["text"] in LF]
-            family=[l["text"] for l in same if 344<=l["y0"]<=412 and re.fullmatch(r"[A-Za-z]+aceae",l["text"])]
-            frequency=[int(l["text"]) for l in same if 100<=l["y0"]<=185 and l["text"].isdigit()
+            family=[l["text"] for l in same if 344<=l["y0"]<=412 and re.fullmatch(r"[A-Za-z]+",l["text"])]
+            frequency=[int(l["text"]) for l in same if 70<=l["y0"]<=110 and l["text"].isdigit()
                        and int(l["text"]) in FREQUENCIES]
-            out.append({"taxon_original":species,"page":pi+1,
+            (out if vals and life else discarded).append({"taxon_original":species,"page":pi+1,
                         "source_station_numbers":sorted(set(vals)),
                         "source_station_list_text":rawstations,
                         "life_form":life[0] if life else "",
@@ -61,7 +61,9 @@ def rows_from_original(pdf):
     metadata={"original_DOI":"10.20302/NC.2017.26.21","source_pdf_url":PDF_URL,
        "publisher_original_pdf_sha256":hashlib.sha256(raw).hexdigest(),
        "publisher_original_pdf_bytes":len(raw),"source_n_pdf_pages":len(doc),
-       "n_record_taxon_candidates":len(out),
+       "n_record_taxon_candidates":len(out)+len(discarded),
+       "n_discarded_unmatched_table_lines":len(discarded),
+       "discarded_unmatched_table_lines":discarded[:12],
        "n_unique_candidate_taxa":len(set(o["taxon_original"] for o in out)),
        "n_station_lists_nonempty":sum(bool(o["source_station_numbers"]) for o in out),
        "n_life_form_nonempty":sum(bool(o["life_form"]) for o in out),
@@ -81,7 +83,8 @@ def rows_from_original(pdf):
        "full_matrix_verified":False}
     metadata["full_matrix_verified"]=(metadata["source_count_gate"]
          and metadata["n_station_lists_nonempty"]==359
-         and metadata["n_life_form_nonempty"]>=350
+         and metadata["n_life_form_nonempty"]==359
+         and metadata["n_frequency_nonempty"]==359
          and metadata["n_frequency_disagreements"]==0
          and not metadata["malformed_station_ids"])
     return out,metadata
