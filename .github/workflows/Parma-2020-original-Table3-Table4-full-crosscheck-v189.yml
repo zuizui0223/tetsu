@@ -1,0 +1,44 @@
+name: "v18.9 original publisher Parma Table3 all 28 station richness and Table4 all 27 common species full QA"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/audit_Parma_2020_28station_table3_table4_crosscheck_v189.py"
+      - "tests/test_Parma_2020_table3_table4_v189.py"
+      - ".github/workflows/Parma-2020-original-Table3-Table4-full-crosscheck-v189.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v189-parma-source-independent-tables
+  cancel-in-progress: true
+jobs:
+  same-original-publication-independent-tables:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install PDF-native reader
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Validate independent source Table3 and Table4 printed references
+        run: python -m unittest discover -s tests -p 'test_Parma_2020_table3_table4_v189.py' -v
+      - name: Retrieve source exact SHA under expired publisher TLS certificate (warning explicit)
+        run: |
+          mkdir -p source_original/v189
+          echo 'Original public museum SSL cert expired; isolated --insecure fetch with pre-established original SHA gate'
+          curl -kLfsS --retry 3 --connect-timeout 20 --max-time 200 'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+            -o source_original/v189/Adorni_Ghillani_2020.pdf
+          printf 'c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787  source_original/v189/Adorni_Ghillani_2020.pdf\n' | sha256sum -c -
+      - name: Parse all 438 native records and compare every Table3 station and Table4 top-taxon incidence
+        run: |
+          python -u scripts/audit_Parma_2020_28station_table3_table4_crosscheck_v189.py \
+            --original-pdf source_original/v189/Adorni_Ghillani_2020.pdf \
+            --output results/audit/v189/Parma_original_all28_Table3_all27_Table4_QA_v189.json
+      - name: Archive exact source QA only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Italy-Parma-original-Table3-28station-Table4-27taxon-source-QA-v189
+          path: results/audit/v189/
+          if-no-files-found: warn
