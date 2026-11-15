@@ -1,0 +1,70 @@
+name: "v15.8 Czech original archaeophyte-neophyte matched identity paired 5-stretch LOO"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_Czech_arch_neo_5stretch_loo_contrast_v158.py'
+      - 'tests/test_Czech_arch_neo_5stretch_loo_contrast_v158.py'
+      - '.github/workflows/Czech-arch-neo-original-5stretch-contrast-v158.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v158-author-original-czech-arch-neo-paired-contrasts
+  cancel-in-progress: true
+jobs:
+  original-Czech-S1-author-plant-class-pair-contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only publisher Excel parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Check that arch/neo share EXACT same pair matching strata; original route-stretch leaveout
+        run: python -m unittest discover -s tests -p 'test_Czech_arch_neo_5stretch_loo_contrast_v158.py' -v
+      - name: Download pinned original 2024 Czech botanical publisher data and independent original Pladias trait source
+        run: |
+          set -euo pipefail
+          mkdir -p source/CZE158
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE158/S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE158/S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE158/diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE158/lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/CZE158/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/CZE158/S2.xlsx | sha256sum --check
+      - name: Source authenticated 2026 SR70 station point coordinates (NOT original author plot GPS)
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE158/SR70.csv \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv'
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' source/CZE158/SR70.csv | sha256sum --check
+      - name: Source-posthoc arch minus neo on SAME 35 station fixed geography/guild/area matching windows, all 5 original-stretch leaveouts
+        run: |
+          python -u scripts/analyze_Czech_arch_neo_5stretch_loo_contrast_v158.py \
+            --s1 source/CZE158/S1.xlsx \
+            --s2 source/CZE158/S2.xlsx \
+            --pladias-diaspore source/CZE158/diaspore.xlsx \
+            --pladias-lifeform source/CZE158/lifeform.xlsx \
+            --sr70 source/CZE158/SR70.csv \
+            --output results/audit/Czech_original_arch_neo_five_stretch_matched_contrast_v158.json
+      - name: Publish source-provenance and aggregate results ONLY, no original source XLSX or derived CSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Czech-arch-neo-v158-original-five-stretch-comparison
+          path: results/audit/Czech_original_arch_neo_five_stretch_matched_contrast_v158.json
+          if-no-files-found: warn
