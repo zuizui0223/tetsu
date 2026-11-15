@@ -1,0 +1,63 @@
+name: "v17.5 ACTUAL all 4235 Czech Echium photo observation annotations no image rights or pair matching"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Czech_Echium_all_iNat_annotations_no_photo_rights_gate_v175.py'
+      - 'tests/test_Czech_Echium_all_photo_annotations_no_rights_v175.py'
+      - '.github/workflows/Czech-Echium-original-all-4235-photo-annotations-v175.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v175-real-Czech-Echium-full4235-public-iNaturalist-photo-annotations
+  cancel-in-progress: true
+jobs:
+  all-original-public-photo-observation-metadata-no-rights-filter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original Czech 2023 OSM geometry and original iNaturalist public metadata HTTP client
+        run: python -m pip install 'requests==2.32.3' 'shapely==2.1.2' 'pyproj==3.6.1' 'osmium==4.2.0'
+      - name: Run strict source metadata fake-only tests for genuine public source original 4235, correct Flowers vs No Flowers annotation semantics
+        run: |
+          python -m unittest discover -s tests -p 'test_Czech_Echium_all_photo_annotations_no_rights_v175.py' -v
+          python -m unittest discover -s tests -p 'test_inat_rail_top20_actual_polyline_30m_v165.py' -v
+      - name: Download authenticated original source v16.6 20 species 2018-25 photo with rail-to-point true GIS public coord counts
+        uses: actions/download-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          run-id: 43693580409
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v175/original-photo-v166
+      - name: Restore original author-time 2023 Czech Geofabrik OSM country PBF and real railway LINE geometry
+        uses: actions/cache/restore@v4
+        with:
+          path: source/CZE155/czech-republic-230101.osm.pbf
+          key: tetsu-czech-20230101-geofabrik-original-816159635-pbf-source
+          fail-on-cache-miss: true
+      - name: Fixed 2023 Czech OSM file size SHA prevents fabricated railway exposure or modern map substitution
+        run: |
+          set -euo pipefail
+          test "$(stat -c%s source/CZE155/czech-republic-230101.osm.pbf)" = "816159635"
+          printf '%s  %s\n' \
+            '26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747' \
+            source/CZE155/czech-republic-230101.osm.pbf | sha256sum --check
+      - name: Re-query ALL 4235 authentic original Czech Echium photo observations regardless image license, classify official Flowers and No Flowers or Fruits only when explicitly annotated, preserve missing unknown
+        run: |
+          python -u scripts/audit_Czech_Echium_all_iNat_annotations_no_photo_rights_gate_v175.py \
+            --original-v166 source/v175/original-photo-v166/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
+            --czech-2023-OSM source/CZE155/czech-republic-230101.osm.pbf \
+            --output results/audit/Czech_Echium_2018_2025_all_original4235_public_photo_annotations_no_image_rights_v175.json
+      - name: Archive only aggregated source taxon country rail-line-distance x annotation-source counts, no pixels IDs accounts locations or image URLs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Czech-Echium-full4235-public-photo-annotation-source-no-rights-v175
+          path: results/audit/Czech_Echium_2018_2025_all_original4235_public_photo_annotations_no_image_rights_v175.json
+          if-no-files-found: warn
