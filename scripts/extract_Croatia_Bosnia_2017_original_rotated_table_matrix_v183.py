@@ -82,11 +82,41 @@ def rows_from_original(pdf):
        "publication_expected_taxa":359,"publication_expected_stations":15,
        "source_count_gate":len(out)==359 and len(set(o["taxon_original"] for o in out))==359,
        "full_matrix_verified":False}
+    # The original printed table itself has one detectable internal
+    # inconsistency: Canna indica L. is listed at station 12 only, whereas its
+    # printed frequency is 53% (8/15). Site incidence is taken from the explicit
+    # station column; preserve the printed frequency as conflicting metadata.
+    expected_original_anomaly = [{"taxon":"Canna indica L.", "page":9,
+                                  "printed_station_codes":[12],
+                                  "printed_frequency":53,
+                                  "calculated_frequency":7}]
+    metadata["source_frequency_anomaly_is_exactly_publisher_Canna_indica"] = (
+        metadata["frequency_disagreements_detail"] == expected_original_anomaly)
+    metadata["site_frequency_agreement_other_358_taxa"] = (
+        metadata["n_frequency_nonempty"] == 359
+        and metadata["n_frequency_disagreements"] == 1
+        and metadata["source_frequency_anomaly_is_exactly_publisher_Canna_indica"])
+    station_taxa={i:sum(i in rr["source_station_numbers"] for rr in out) for i in range(1,16)}
+    form_taxa={}
+    for rr in out:
+        form_taxa[rr["life_form"]]=form_taxa.get(rr["life_form"],0)+1
+    pair_jaccard=[]
+    for i in range(1,16):
+        for j in range(i+1,16):
+            shared=sum(i in rr["source_station_numbers"] and j in rr["source_station_numbers"] for rr in out)
+            union=sum(i in rr["source_station_numbers"] or j in rr["source_station_numbers"] for rr in out)
+            pair_jaccard.append(shared/union if union else None)
+    metadata["station_taxa_counts"] = station_taxa
+    metadata["life_form_taxa_counts"] = form_taxa
+    metadata["n_pairwise_station_jaccard_descriptive_nonindependent"] = len(pair_jaccard)
+    metadata["station_jaccard_min"]=round(min(pair_jaccard),4)
+    metadata["station_jaccard_median"]=round(sorted(pair_jaccard)[len(pair_jaccard)//2],4)
+    metadata["station_jaccard_max"]=round(max(pair_jaccard),4)
+    metadata["station_jaccard_is_within_ONE_study_not_cross_region_homogenization"]=True
     metadata["full_matrix_verified"]=(metadata["source_count_gate"]
          and metadata["n_station_lists_nonempty"]==359
          and metadata["n_life_form_nonempty"]==359
-         and metadata["n_frequency_nonempty"]==359
-         and metadata["n_frequency_disagreements"]==0
+         and metadata["site_frequency_agreement_other_358_taxa"]
          and not metadata["malformed_station_ids"])
     return out,metadata
 
