@@ -88,7 +88,11 @@ def paired_site_groups(original,height,seed):
         if raw is None or str(raw).strip()=='':
             raise ValueError('v22.7 confirmed every joint-trait species had source lifespan')
         group[t]=int(str(raw).strip().lower()=='annual')
-    source_pairs,qa=create_sites(original,v)
+    source_pairs,original_all_sides=create_sites(original,v)
+    qa={'all_publisher_matched_same_side_pairs':len(original_all_sides),
+        'qualifying_5plus_joint_trait_matched_sides':sum(len(v) for v in source_pairs.values()),
+        'qualifying_original_field_sites':len(source_pairs),
+        'qualifying_original_line_sections':len({p['section'] for v in source_pairs.values() for p in v})}
     source_sites,guild,originalqa=source_sites_and_guilds(original)
     gps,gpsqa=original_gps_coordinates(original,source_sites)
     g={str(s['site']):s for s in gps}
