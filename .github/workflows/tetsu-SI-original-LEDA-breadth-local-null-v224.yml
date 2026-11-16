@@ -1,0 +1,68 @@
+name: "v22.4 true Slovenia paired BS-BT original LEDA height+seed functional-breadth null"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/analyze_Slovenia_original_LEDA_height_seed_breadth_v224.py'
+      - 'tests/test_Slovenia_original_LEDA_breadth_v224.py'
+      - '.github/workflows/tetsu-SI-original-LEDA-breadth-local-null-v224.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v224-original-SI-LEDA-breadth-contrast
+  cancel-in-progress: true
+jobs:
+  source-verified-89-field-location-15-section-breadth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic unit math tests (not real biological estimates)
+        run: python -m unittest discover -s tests -p 'test_Slovenia_original_LEDA_breadth_v224.py' -v
+      - name: Download genuine original Slovenian 2026 species x field-zone and audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v224/Slovenia
+      - name: Authenticate unchanged publisher original 2026 Slovenia XLSX
+        run: |
+          set -euo pipefail
+          F='source/v224/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$F")" = 401279
+          printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum --check
+      - name: Download original university-hosted LEDA height and seed-mass table, checksum-lock same successful v22.0 sources
+        run: |
+          set -euo pipefail
+          mkdir -p source/v224/LEDA
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v224/LEDA/canopy_height.txt
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v224/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v224/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v224/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Actual 89 location BS-BT matched-site functional breadth; 15-section-weighted local species pool null
+        run: |
+          python -u scripts/analyze_Slovenia_original_LEDA_height_seed_breadth_v224.py \
+            --source-xlsx source/v224/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v224/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --height source/v224/LEDA/canopy_height.txt \
+            --seed source/v224/LEDA/seed_mass.txt \
+            --output results/audit/v224_original_SI_BS_BT_logheight_logseed_breadth_localpool.json
+      - name: Archive aggregate summary only (no original species x zone, no exact GPS)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v224-source-true-89site-SI-BS-BT-LEDA-functional-breadth
+          path: results/audit/v224_original_SI_BS_BT_logheight_logseed_breadth_localpool.json
+          if-no-files-found: warn
