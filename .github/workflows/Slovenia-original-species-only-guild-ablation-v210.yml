@@ -1,0 +1,56 @@
+name: "v21.0 REAL Slovenia 15-section species identity vs residual guild ablation"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/analyze_Slovenia_source_identity_guild_ablation_v210.py'
+      - 'tests/test_Slovenia_source_identity_guild_ablation_v210.py'
+      - '.github/workflows/Slovenia-original-species-only-guild-ablation-v210.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v210-true-original-slovenia-identity-guild-ablation
+  cancel-in-progress: true
+jobs:
+  author-original-15section-heldout-ablation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Mathematical regression checks on artificial examples (not biology)
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_source_identity_guild_ablation_v210.py' -v
+          python -m unittest discover -s tests -p 'test_Slovenia_species_vs_guild_section_holdout_v172.py' -v
+      - name: Retrieve already source-verified ORIGINAL author Slovenia XLSX from previous success
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v210/author_original
+      - name: Hard gate on publisher-authored XLSX bytes and SHA256
+        run: |
+          set -euo pipefail
+          SOURCE='source/v210/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SOURCE")" = '401279'
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SOURCE" | sha256sum --check
+      - name: Compare species-only vs species-plus-guild with heldout sections and 63 occupancy-matched trait shuffles
+        run: |
+          python -u scripts/analyze_Slovenia_source_identity_guild_ablation_v210.py \
+            --original-xlsx source/v210/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/v210/author_original/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/Slovenia_original_15section_guild_after_identity_ablation_v210.json
+      - name: Archive source-provenanced results only, not raw publisher data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Slovenia-original-2026-true-15section-identity-vs-guild-ablation-v210
+          path: results/audit/Slovenia_original_15section_guild_after_identity_ablation_v210.json
+          if-no-files-found: warn
