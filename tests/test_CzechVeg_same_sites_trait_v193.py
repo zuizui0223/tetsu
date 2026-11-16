@@ -30,7 +30,7 @@ class TestSameSourceTaxonomicTraitAnalysis(unittest.TestCase):
         taxa={"A a","B b"}
         life={"A a":"T","B b":"T"}
         self.assertEqual(m.profile(taxa,life),{"T":1})
-        self.assertEqual(m.profile_overlap({"T":.6,"H":.4},{"T":.2,"H":.8}),.6)
+        self.assertAlmostEqual(m.profile_overlap({"T":.6,"H":.4},{"T":.2,"H":.8}),.6,places=12)
         self.assertEqual(m.profile_overlap({"T":1},{"H":1}),0)
         self.assertEqual(len(m.FOCUS_KEYS),16)
 
@@ -56,7 +56,7 @@ class TestSameSourceTaxonomicTraitAnalysis(unittest.TestCase):
     def test_common_frame_wont_invent_same_rail_with_mismatched_reference(self):
         frame,plant,life,disp=self.source_fixture()
         all_sites=set(plant)
-        meta={pid:{"region":p.split("_")[1]} for pid in all_sites}
+        meta={pid:{"region":pid.split("_")[1]} for pid in all_sites}
         arms={name:{} for name in m.CATEGORIES}
         for reg,items in frame.items():
             rid,cand=items[0]
