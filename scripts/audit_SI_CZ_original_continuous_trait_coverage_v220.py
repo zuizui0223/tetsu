@@ -41,11 +41,11 @@ def read_leda(path,which):
         except UnicodeDecodeError:continue
     if text is None:raise ValueError('Could not decode original LEDA data')
     lines=text.splitlines()
-    header=next((i for i,s in enumerate(lines[:40]) if 'SBS.name' in s and ';' in s),None)
-    if header is None or header<2:raise ValueError('LEDA SBS.name header not detected; genuine first lines='+repr(lines[:10])[:2500])
+    header=next((i for i,s in enumerate(lines[:40]) if ('SBS.name' in s or 'SBS name' in s) and ';' in s),None)
+    if header is None or header<2:raise ValueError('LEDA header not detected; previews='+repr([(i,len(x),x[:130]) for i,x in enumerate(lines[:15])]))
     reader=csv.DictReader(io.StringIO('\n'.join(lines[header:])),delimiter=';')
     cols=reader.fieldnames or []
-    namecol=next((s for s in cols if 'sbs.name' in s.lower()),None)
+    namecol=next((s for s in cols if 'sbs.name' in s.lower() or 'sbs name' in s.lower()),None)
     valuecol=next((s for s in cols if 'single value' in s.lower() and LEDA[which][1] in s.lower()),None)
     if namecol is None or valuecol is None:
         raise ValueError('LEDA source trait column missing: '+str(cols[:25]))
