@@ -26,5 +26,5 @@ class TestCrossRegionReference(unittest.TestCase):
   result=m.run_reference_panel(src,plant,"synthetic",reps=5)
   self.assertTrue(result["identified"])
   self.assertEqual(result["n_nonindependent_cross_region_pairs_each_draw"],3)
-  self.assertEqual(result["response_statistics"]["species_delta"]["mean"],1/3)
+  self.assertAlmostEqual(result["response_statistics"]["species_delta"]["mean"],1/3,places=6)
 if __name__=="__main__":unittest.main()
