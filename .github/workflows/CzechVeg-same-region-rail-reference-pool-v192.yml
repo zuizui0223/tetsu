@@ -1,0 +1,47 @@
+name: "v19.2 ORIGINAL CzechVeg same-rail same-georegions analogue vs other background pool"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/analyze_CzechVeg_same_rail_sites_analog_vs_background_v192.py"
+      - "tests/test_CzechVeg_same_rail_sites_analog_v192.py"
+      - ".github/workflows/CzechVeg-same-region-rail-reference-pool-v192.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v192-source-same-sites-contrast
+  cancel-in-progress: true
+jobs:
+  source-original-true-reference-matched-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 47
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Purely synthetic multi-reference identical rail site tests
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_same_rail_sites_analog_v192.py' -v
+      - name: Fetch entire authenticated original source for both selected arms
+        run: |
+          mkdir -p source_original/v192
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 850 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v192/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1300 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v192/species.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v192/headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v192/species.csv\n' | md5sum -c -
+      - name: Compare SAME rail sites and SAME regions to dry/pioneer vs other independent study reference sites
+        run: |
+          python -u scripts/analyze_CzechVeg_same_rail_sites_analog_vs_background_v192.py \
+            --headers source_original/v192/headers.csv \
+            --species source_original/v192/species.csv \
+            --out results/audit/v192/CzechVeg_2026_same_regions_analog_vs_other_nontransport_reference_v192.json
+      - name: Archive aggregate ORIGINAL-only evidence not individual plot or original vascular rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-2026-same-rail-sites-dry-analog-vs-general-reference-v192
+          path: results/audit/v192/
+          if-no-files-found: warn
