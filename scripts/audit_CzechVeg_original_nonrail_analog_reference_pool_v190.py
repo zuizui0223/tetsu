@@ -38,6 +38,8 @@ def md5_file(path):
 
 def class_two_char(v):
     val=str(v or "").strip()
+    if val in ("NA","", "N/A","NULL"):
+        return None
     m=re.fullmatch(r"([A-Z]{2})(?:[A-Z]\d{0,3}[a-z]?|)",val)
     return m.group(1) if m else None
 
