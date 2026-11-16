@@ -87,6 +87,14 @@ def original_reference_geo(source_header,meta):
                 qa["source_original_position_precision_missing"]+=1;continue
             if precision>max(PRECISION_GATES):
                 qa["source_original_position_precision_above_1km"]+=1;continue
+            if precision==0:
+                qa["original_position_precision_value_exact_zero_suspicious"]+=1
+                if m["year"]>=2015:
+                    qa["original_precision_zero_in_source_2015_onwards"]+=1
+            elif 0<precision<=250:
+                qa["original_precision_strict_positive_le250m"]+=1
+                if m["year"]>=2015:
+                    qa["original_precision_positive_le250m_2015_onwards"]+=1
             if m["year"]>2023:
                 qa["original_survey_after_field_date_2023"]+=1;continue
             record={
@@ -168,6 +176,8 @@ def run(s1,s2,sr70,headers):
     nontransport,geoqa=original_reference_geo(headers,meta)
     matched=stations["all_39_station_original_source_identity_and_candidate_provenance"]
     opportunities,quality=spatial_opportunity(matched,nontransport)
+    valid_precise={k:v for k,v in nontransport.items() if v["precision_m"]>0}
+    positive_precision_opportunities,positive_qa=spatial_opportunity(matched,valid_precise)
     return {"version":"v23.9",
        "status":"GENUINE_CZECH_35RAIL_STATION_VS_CZECHVEG_INDEPENDENT_LOCAL_NONTRANSPORT_PLOT_OPPORTUNITY",
        "source_Czech_botanical_39stations_DOI":"10.23855/preslia.2024.247",
@@ -180,6 +190,10 @@ def run(s1,s2,sr70,headers):
        "source_original_nontransport_plot_geographic_quality":geoqa,
        "source_exact_name_matched_geographic_station_frame":quality,
        "local_original_nontransport_publication_reference_opportunity":opportunities,
+       "positive_NONZERO_position_precision_source_sensitivity":{
+           "source_nontransport_references_with_strictly_positive_recorded_precision":len(valid_precise),
+           "full_radius_year_source_support":positive_precision_opportunities,
+           "suspect_original_precision_zero_not_silently_included_in_strict_sensitivity":True},
        "source_nontransport_text_unverified_true_natural":True,
        "no_individual_station_plant_or_plot_coordinates_exported":True,
        "interpretation_limits":[
@@ -203,6 +217,7 @@ def main():
       "status":ans["status"],
       "source_exact_name_matched_geographic_station_frame":ans["source_exact_name_matched_geographic_station_frame"],
       "source_original_nontransport_plot_geographic_quality":ans["source_original_nontransport_plot_geographic_quality"],
-      "local_original_nontransport_publication_reference_opportunity":ans["local_original_nontransport_publication_reference_opportunity"]
+      "local_original_nontransport_publication_reference_opportunity":ans["local_original_nontransport_publication_reference_opportunity"],
+      "source_precision_zero_exclusion_sensitivity":ans["positive_NONZERO_position_precision_source_sensitivity"]
     },ensure_ascii=False,separators=(",",":")),flush=True)
 if __name__=="__main__":main()
