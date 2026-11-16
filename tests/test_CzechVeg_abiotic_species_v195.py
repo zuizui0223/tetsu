@@ -43,7 +43,7 @@ class TestAbioticMatchedNoPlantResponseLeakage(unittest.TestCase):
    outcome=m.evaluate(frame,plant,seed=6,draws=7)
    self.assertTrue(outcome["identified"])
    self.assertEqual(outcome["source_region_pairs_nonindependent_per_draw"],6)
-   self.assertEqual(len(outcome["summary"]),12)
+   self.assertEqual(len(outcome["summary"]),15)
    self.assertEqual(outcome["summary"]["species_rail_minus_abiotic"]["mean"],
                     outcome["summary"]["species_rail_minus_all"]["mean"])
  def test_fail_closed_when_no_phyto_regions(self):
