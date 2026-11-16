@@ -1,0 +1,36 @@
+name: MLIT N05 historical opening and terminal event support in three Japan pilot metros
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_n05_event_city_overlap.py'
+      - '.github/workflows/rail-n05-event-metro.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-n05-event-city-overlap
+  cancel-in-progress: true
+jobs:
+  city-source-feasibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install N05 reader with attribution/provenance controls
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3'
+      - name: Audit historical railway event-group geography without botanical selection
+        run: python scripts/audit_n05_event_city_overlap.py --output results/audit/n05_recent_events_metropolitan_overlap.json
+      - name: Unit-test source bbox and no false administrative closure
+        run: python -m unittest discover -s tests -p 'test_n05_event_city_overlap.py' -v
+      - name: Upload only coarse event cohort counts, not N05 licensed geometry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: n05-recent-passenger-event-groups-tokyo-osaka-sendai
+          path: results/audit/n05_recent_events_metropolitan_overlap.json
+          if-no-files-found: warn

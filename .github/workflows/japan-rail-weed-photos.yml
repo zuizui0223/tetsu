@@ -1,0 +1,34 @@
+name: Real modern Japanese rail-weed photographs vs official rail geometry
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_japan_rail_weed_photo_coverage.py'
+      - '.github/workflows/japan-rail-weed-photos.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-japan-rail-weeds-2018-25-coverage
+  cancel-in-progress: true
+jobs:
+  source-coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source API and GIS libraries
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Census prespecified Japanese railway weed photos and QC
+        run: python scripts/audit_japan_rail_weed_photo_coverage.py --output results/audit/japan_rail_herb_photo_coverage.json
+      - name: Retain aggregate source audit only, no source images or raw coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-rail-historic-weed-modern-photo-coverage
+          path: results/audit/japan_rail_herb_photo_coverage.json
+          if-no-files-found: warn

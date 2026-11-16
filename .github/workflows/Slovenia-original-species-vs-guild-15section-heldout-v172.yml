@@ -1,0 +1,55 @@
+name: "v17.2 ORIGINAL Slovenia 89site 261 plant taxa BS-BT guild-vs-species section holdout"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_Slovenia_original_guild_vs_species_microhabitat_15section_predict_v172.py'
+      - 'tests/test_Slovenia_species_vs_guild_section_holdout_v172.py'
+      - '.github/workflows/Slovenia-original-species-vs-guild-15section-heldout-v172.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v172-original-slovenia-15-source-section-guild-vs-species-preference
+  cancel-in-progress: true
+jobs:
+  source-original-slovenia-guild-species-predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic maths 15 original section fold, true site-level source weighting and shrinkage integrity
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_species_vs_guild_section_holdout_v172.py' -v
+          python -m unittest discover -s tests -p 'test_Slovenia_rail_species_occupancy_permutation_v109.py' -v
+      - name: Obtain original Springer author 2026 SLO railway 92 source locations 482 zones 6331 taxon rows and exact SHA receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v172/author_original
+      - name: "Explicit original source byte length and full author XLSX SHA: refuse fake on-the-fly station data"
+        run: |
+          set -euo pipefail
+          test "$(stat -c%s source/v172/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx)" = "401279"
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            source/v172/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx | sha256sum --check
+      - name: Test genuine 261 source author original species trait guild -> heldout 15 section probabilities of BS-only BT-only BOTH (plus exclusive-only sensitivity), no putative nonrail plots
+        run: |
+          python -u scripts/analyze_Slovenia_original_guild_vs_species_microhabitat_15section_predict_v172.py \
+            --original-xlsx source/v172/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/v172/author_original/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/SLO_2026_89sites_261taxa_guild_vs_species_15section_heldout_v172.json
+      - name: Archive only source publisher DOI and SHA verified original-country section-level and taxon frequency derived diagnostic, not original individual location IDs or data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Original-Slovenia-2026-89site-261plant-species-guild-15section-CV-v172
+          path: results/audit/SLO_2026_89sites_261taxa_guild_vs_species_15section_heldout_v172.json
+          if-no-files-found: warn

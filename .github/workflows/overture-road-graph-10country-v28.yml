@@ -1,0 +1,38 @@
+name: v2.8 Overture ROAD physical path length for all 90 ten-country macro source cells
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - '.github/workflows/overture-road-graph-10country-v28.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-overture-road-graph-v28-10country
+  cancel-in-progress: true
+jobs:
+  road-graph-ten-country:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Overture geospatial and graph dependencies
+        run: pip install 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Verify source-connector graph and physical path estimates
+        run: python -m unittest discover -s tests -p 'test_overture_road_network_v28.py' -v
+      - name: Extract actual physical road route distances for ten independent geographic windows
+        run: |
+          python -u scripts/audit_overture_road_network_v28.py \
+            --regions jp_sendai de_leipzig kr_daejeon tw_hsinchu us_madison ca_ottawa gb_york fr_dijon au_canberra nz_hamilton \
+            --output results/audit/overture_road_connector_paths_10country_v28.json
+      - name: Preserve only road-network source-cell path summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overture-road-physical-shortestpath-10country-v28
+          path: results/audit/overture_road_connector_paths_10country_v28.json
+          if-no-files-found: warn

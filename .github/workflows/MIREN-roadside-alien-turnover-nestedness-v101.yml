@@ -1,0 +1,65 @@
+name: "v10.1 REAL MIREN 24-region ROAD Alien incidence Jaccard turnover vs nestedness and Native 2017+ comparator"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_MIREN_road_alien_beta_components_v101.py'
+      - 'tests/test_MIREN_road_alien_beta_components_v101.py'
+      - '.github/workflows/MIREN-roadside-alien-turnover-nestedness-v101.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-MIREN-real-roadside-spatial-alien-beta-Jaccard-v101
+  cancel-in-progress: true
+jobs:
+  genuine-original-MIREN-vegetation-plot-community-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original MIREN field plot matrix scientific data deps
+        run: pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3'
+      - name: Verify source Jaccard turnover-nestedness algebra, taxon identity and independent-site observational supports
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_MIREN_road_alien_beta_components_v101.py' -v
+      - name: Load real Zenodo MD5-authenticated MIREN v3 167804 observations as site-year original plots
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/MIREN98
+      - name: Load real MIREN v9.9 1876 matched site-years and 1005 first unique sites source reference
+        uses: actions/download-artifact@v4
+        with:
+          name: real-global-MIREN-road-edge-alien-flora-matched-plots-v99
+          run-id: 43214312718
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/MIREN99
+      - name: Load real MIREN v10.0 484 repeated road-sites source reference
+        uses: actions/download-artifact@v4
+        with:
+          name: real-MIREN-global-road-verge-alien-repeat-plot-turnover-v100
+          run-id: 43215926370
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/MIREN100
+      - name: Decompose real Alien and native plot-1 roadside versus plot-3 interior same-site-year source beta components with 2017+ protocol and first-site controls
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_MIREN_road_alien_beta_components_v101.py \
+            --original-csv source/MIREN98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --verified99 source/MIREN99/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json \
+            --verified100 source/MIREN100/MIREN_real_original_road_verge_Alien_resurvey_gains_losses_v100.json \
+            --output results/audit/MIREN_original_roadside_Alien_Jaccard_turnover_nestedness_v101.json
+      - name: Preserve all actual species-pool scope, zero-alien cases, region-qualified signs and Native comparison without train seed causal claim
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-global-MIREN-roadside-Alien-Native-beta-components-v101
+          path: results/audit/MIREN_original_roadside_Alien_Jaccard_turnover_nestedness_v101.json
+          if-no-files-found: warn

@@ -1,0 +1,35 @@
+name: Real NPN vs Daymet thermal-season contrast (not railway effect)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/daymet.py'
+      - 'scripts/audit_npn_daymet_climate.py'
+      - '.github/workflows/npn-daymet-audit.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-npn-daymet-v09
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source and geographic dependencies
+        run: pip install 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Audit gridded thermal-time differences before any new flowering model
+        run: python scripts/audit_npn_daymet_climate.py --output results/audit/npn_daymet_gdd_control_v09.json
+      - name: Keep only matched-site climate summaries, no location coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usa-npn-daymet-gdd-climate-control-v09
+          path: results/audit/npn_daymet_gdd_control_v09.json
+          if-no-files-found: warn

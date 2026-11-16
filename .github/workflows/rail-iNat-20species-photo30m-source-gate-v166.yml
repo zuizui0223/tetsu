@@ -1,0 +1,54 @@
+name: "v16.6 SOURCE VERIFIED original railway 20 iNat photo 30m true geom 2country independent observer-cell gate"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_iNat_original20_SI_CZ_30m_source_eligibility_v166.py'
+      - 'tests/test_iNat_original20_SI_CZ_30m_source_eligibility_v166.py'
+      - '.github/workflows/rail-iNat-20species-photo30m-source-gate-v166.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v166-original20-real-source-iNat-SI-CZ-30m-metadata-only
+  cancel-in-progress: true
+jobs:
+  audit-genuine-two-original-country-photo-opportunities:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Strict maths source gate tests — synthetic counts only
+        run: python -m unittest discover -s tests -p 'test_iNat_original20_SI_CZ_30m_source_eligibility_v166.py' -v
+      - name: Retrieve authentic original botanical publisher 20 species selected BEFORE iNaturalist photo coordinates
+        uses: actions/download-artifact@v4
+        with:
+          name: original-SI-CZ-rail-flora-top20-photo-candidates-v164
+          run-id: 43692256719
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v166/source_top20
+      - name: Retrieve all source region actual iNaturalist photographs 30m-line-original-GIS country BMI aggregate metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: original-rail-top20-INat-30m-real-line-SI-CZ-v165
+          run-id: 43692490652
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v166/source_inat_30m
+      - name: Original source 20 taxa x 2 study bbox independent observer and spatial cells + comparison control minimum gate
+        run: |
+          python -u scripts/audit_iNat_original20_SI_CZ_30m_source_eligibility_v166.py \
+            --source-top20-v164 source/v166/source_top20/Real_two_original_rail_botanist_20_taxa_inat_first_proximity_v164.json \
+            --source-photo-v165 source/v166/source_inat_30m/REAL_SI_CZ_original20_iNat_30m_railway_polyline_photo_v165.json \
+            --output results/audit/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
+            --summary-csv results/audit/real_iNaturalist_top20_railway_photo30m_40study_bbox_taxa_v166.csv
+      - name: Publish aggregate source photo species x bbox stats only, NO photo binaries/public fine coordinates/observation ID
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          path: results/audit/real_iNaturalist_top20_railway_photo30m_*
+          if-no-files-found: warn

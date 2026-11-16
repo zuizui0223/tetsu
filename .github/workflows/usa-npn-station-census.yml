@@ -1,0 +1,34 @@
+name: USA-NPN registered station sampling frame vs FRA railway audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_npn_registered_sites_rail.py'
+      - '.github/workflows/usa-npn-station-census.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-usa-npn-station-census
+  cancel-in-progress: true
+jobs:
+  station-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public GIS/NPN clients
+        run: pip install 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Audit all MD and AZ registered sites relative to FRA rail
+        run: python scripts/audit_npn_registered_sites_rail.py --output results/audit/usa_npn_registered_rail_sites.json
+      - name: Save source audit, excluding exact station coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usa-npn-registered-site-rail-sampling-frame
+          path: results/audit/usa_npn_registered_rail_sites.json
+          if-no-files-found: warn

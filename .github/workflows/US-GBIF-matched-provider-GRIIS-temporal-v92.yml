@@ -1,0 +1,57 @@
+name: "v9.2 REAL US8 pre/post GBIF SAME dataset UUID providers x GRIIS late-only recorded species source"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_US_GBIF_matched_provider_temporal_v92.py'
+      - 'tests/test_US_GBIF_matched_provider_temporal_v92.py'
+      - '.github/workflows/US-GBIF-matched-provider-GRIIS-temporal-v92.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US8-GRIIS-prepost-same-GBIF-provider-v92
+  cancel-in-progress: true
+jobs:
+  genuine-GBIF-US8-same-dataset-providers-temporal-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original validated GBIF source facet and Census FIPS dependency chain
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Test same-source provider selection and first-record category noncolonization rules
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_US_GBIF_matched_provider_temporal_v92.py' -v
+      - name: Download the independently validated genuine USA-country GRIIS accepted species-key source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Download independently audited original US51 pre/post year-state GRIIS taxon sources (48 both-period eligible)
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          run-id: 43153476962
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/baseline85
+      - name: Query actual GBIF state facet top100 dataset UUID sources and explicitly same-provider filtered speciesKey categories in both year windows
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_US_GBIF_matched_provider_temporal_v92.py \
+            --griis source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --baseline85 source/baseline85/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json \
+            --output results/audit/US8_GBIF_GRIIS_matched_provider_prepost_source_v92.json
+      - name: Preserve all early/late matched-provider source completeness, taxon and record coverage including null source states
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-US8-GBIF-GRIIS-same-provider-source-audit-v92
+          path: results/audit/US8_GBIF_GRIIS_matched_provider_prepost_source_v92.json
+          if-no-files-found: warn

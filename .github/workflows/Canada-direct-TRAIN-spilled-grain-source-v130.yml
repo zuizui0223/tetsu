@@ -1,0 +1,75 @@
+name: "v13.0 DIRECT TRUE Canadian RAILWAY train grain spillage: published 19-site 1979 sample numeric source"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/Canada_Gangadharan2017_original_train_grain_seasonal_summary_v130.csv'
+      - 'scripts/analyze_Canada_true_train_spilled_grain_2017_v130.py'
+      - 'tests/test_Canada_true_train_spilled_grain_2017_v130.py'
+      - '.github/workflows/Canada-direct-TRAIN-spilled-grain-source-v130.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-CANADA-Gangadharan2017-real-freight-TRAIN-grain-spillage-v130
+  cancel-in-progress: true
+jobs:
+  real-original-author-TRAIN-grain-kernel-deposition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate actual 19 real rail sites, 1979 repeated source samples, source yearly means SD, grain mass class shares and rounded 110t projected amount
+        run: python -m unittest discover -s tests -p 'test_Canada_true_train_spilled_grain_2017_v130.py' -v
+      - name: Check source article online availability but never invent raw site×visit observations
+        run: |
+          mkdir -p results/audit
+          if curl --fail --location --silent --show-error --retry 1 --max-time 60 \
+             -o results/audit/Gangadharan2017_original_publisher_page_unarchived.html \
+             'https://onlinelibrary.wiley.com/doi/10.1111/acv.12336/full'; then
+             python - <<'PY'
+          import pathlib,hashlib,json
+          p=pathlib.Path('results/audit/Gangadharan2017_original_publisher_page_unarchived.html')
+          b=p.read_bytes()
+          valid=(b'10.1111/acv.12336' in b and
+                 b'Grain spilled from moving trains' in b and len(b)>10000)
+          x={"original_publisher_HTML_downloaded":True,
+             "original_article_DOI_title_and_fulltext_confirmed":valid,
+             "original_author_publisher_HTML_sha256":hashlib.sha256(b).hexdigest(),
+             "original_publisher_source_html_bytes":len(b),
+             "original_site_visit_raw_matrix_in_file":False}
+          pathlib.Path('results/audit/CANADA_2017_direct_train_source_online_access_v130.json').write_text(json.dumps(x,indent=2))
+          print(json.dumps(x),flush=True)
+          PY
+          else
+             python - <<'PY'
+          import pathlib,json
+          x={"original_publisher_HTML_downloaded":False,
+             "original_author_article_DOI":"10.1111/acv.12336",
+             "original_publisher_url":"https://onlinelibrary.wiley.com/doi/10.1111/acv.12336/full",
+             "original_site_visit_raw_matrix_acquired":False,
+             "DO_NOT_claim_full_text_publisher_bytes_authenticated":True,
+             "numeric_source":"manually transcribed true original journal published seasonal source mean/SD and model projections"}
+          pathlib.Path('results/audit/CANADA_2017_direct_train_source_online_access_v130.json').write_text(json.dumps(x,indent=2))
+          print(json.dumps(x),flush=True)
+          PY
+          fi
+          rm -f results/audit/Gangadharan2017_original_publisher_page_unarchived.html
+      - name: Analyze original AUTHOR field measured train-spilled grain kernel deposition 2013–2015 by original 19 rail sites, three warm and one winter season summary
+        run: |
+          python -u scripts/analyze_Canada_true_train_spilled_grain_2017_v130.py \
+            --published-2017-season-summary data/Canada_Gangadharan2017_original_train_grain_seasonal_summary_v130.csv \
+            --output results/audit/CANADA_Gangadharan_2017_true_train_grain_2013_2015_deposition_v130.json
+      - name: Archive actual original TRAIN grain deposition publication-level source and transparency on unacquired site visits/seed viability
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-CANADA-2017-TRAIN-grain-deposition-19sites-v130
+          path: |
+            results/audit/CANADA_Gangadharan_2017_true_train_grain_2013_2015_deposition_v130.json
+            results/audit/CANADA_2017_direct_train_source_online_access_v130.json
+          if-no-files-found: warn

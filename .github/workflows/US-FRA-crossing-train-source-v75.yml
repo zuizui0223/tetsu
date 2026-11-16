@@ -1,0 +1,39 @@
+name: "v7.5 FRA 2026 US three-block REAL crossing train-count source-quality audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - scripts/audit_US_FRA_crossing_train_counts_v75.py
+      - tests/test_US_FRA_crossing_train_counts_v75.py
+      - .github/workflows/US-FRA-crossing-train-source-v75.yml
+  workflow_dispatch:
+concurrency:
+  group: tetsu-FRA-3macro-US-crossing-train-traffic-v75
+  cancel-in-progress: true
+jobs:
+  authentic-fra-crossing-train-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independent source 50km geography and FRA ArcGIS client dependencies
+        run: pip install 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'numpy>=1.26,<3'
+      - name: Test frozen 3 US blocks, actual crossing source fields, missingness and noncausal source interpretation
+        run: python -m unittest discover -s tests -p 'test_US_FRA_crossing_train_counts_v75.py' -v
+      - name: Read genuine published FRA Crossing Inventory mirrored 2026, verify metadata/page totals, aggregate only within predeclared US 50km cells
+        run: |
+          python -u scripts/audit_US_FRA_crossing_train_counts_v75.py \
+            --output results/audit/US_FRA_crossing_train_year_source_v75.json
+      - name: Archive only coarse 50km crossing train-count year and coverage diagnostics, no raw crossing IDs or locations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-FRA-US3block-50km-crossing-train-source-v75
+          path: results/audit/US_FRA_crossing_train_year_source_v75.json
+          if-no-files-found: warn

@@ -1,0 +1,61 @@
+name: "v19.9 true Pladias guild ablation and trait label shuffle negative control on unseen original studies"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/validate_CzechVeg_heldout_life_diaspore_trait_label_placebo_v199.py"
+      - "tests/test_CzechVeg_heldout_trait_shuffle_v199.py"
+      - ".github/workflows/CzechVeg-original-guild-ablation-trait-null-v199.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v199-original-study-true-trait-shuffle
+  cancel-in-progress: true
+jobs:
+  source-original-czechveg-pladias-trait-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install source-only original Pladias XLSX and regularized audit model
+        run: python -m pip install 'openpyxl==3.1.5' 'scikit-learn==1.7.2'
+      - name: Test source taxon trait-coverage, source-fold identity and paired shuffled trait-label marginal preservation
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_heldout_trait_shuffle_v199.py' -v
+      - name: Fetch original complete CzechVeg and Pladias data with published Census MD5
+        run: |
+          mkdir -p source_original/v199
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 120 \
+            'https://zenodo.org/api/records/19231152' \
+            -o source_original/v199/zenodo.json
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v199/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v199/species.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v199/headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v199/species.csv\n' | md5sum -c -
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 160 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en' \
+            -o source_original/v199/diaspore.xlsx
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 160 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en' \
+            -o source_original/v199/lifeform.xlsx
+      - name: Original exact 44 blocks and same study fold trait ablation + source occupancy-preserving label placebo
+        run: |
+          python -u scripts/validate_CzechVeg_heldout_life_diaspore_trait_label_placebo_v199.py \
+            --zenodo-record source_original/v199/zenodo.json \
+            --headers source_original/v199/headers.csv \
+            --species source_original/v199/species.csv \
+            --diaspore-xlsx source_original/v199/diaspore.xlsx \
+            --lifeform-xlsx source_original/v199/lifeform.xlsx \
+            --output results/audit/v199/CzechVeg_2026_Pladias_life_diaspore_36study_heldout_trait_occupancy_placebo_v199.json
+      - name: Publish aggregate statistical QA only, not original authors' plant plot rows or trait data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-original-36study-lifeform-diaspore-ablation-shuffle-v199
+          path: results/audit/v199/
+          if-no-files-found: warn

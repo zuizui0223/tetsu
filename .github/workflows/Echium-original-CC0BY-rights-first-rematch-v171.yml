@@ -1,0 +1,69 @@
+name: "v17.1 REAL original Czech Echium iNat CC0 BY rights-FIRST rematch and blind photo contact sheets"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/reselect_Echium_CC0BY_before_photo_pairing_v171.py'
+      - 'tests/test_Echium_CC0BY_before_photo_pairing_v171.py'
+      - '.github/workflows/Echium-original-CC0BY-rights-first-rematch-v171.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v171-source-Echium-real-CC0BY-first-local-rail-photo
+  cancel-in-progress: true
+jobs:
+  licensed-first-Czech-Echium-source-photo-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OSM photo imagery and read only iNaturalist source
+        run: python -m pip install 'requests==2.32.3' 'Pillow==11.3.0' 'shapely==2.1.2' 'pyproj==3.6.1' 'osmium==4.2.0'
+      - name: Synthetic maths test original 29 pairs vs independently new rights FIRST photo-matching source
+        run: python -m unittest discover -s tests -p 'test_Echium_CC0BY_before_photo_pairing_v171.py' -v
+      - name: Retrieve original 29 matched Czech Echium source groups from successful source v16.8
+        uses: actions/download-artifact@v4
+        with:
+          name: Czech-genuine-4flower-local-photo30m-CC-control-pairs-v168
+          run-id: 43695087773
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v171/v168
+      - name: Retrieve original 20 species Czech full photo source records provenance, 2023 PBF fingerprint and CC counts v16.6
+        uses: actions/download-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          run-id: 43693580409
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v171/v166
+      - name: Restore original 2023 Czech Geofabrik physical rail country map 816MB
+        uses: actions/cache/restore@v4
+        with:
+          path: source/CZE155/czech-republic-230101.osm.pbf
+          key: tetsu-czech-20230101-geofabrik-original-816159635-pbf-source
+          fail-on-cache-miss: true
+      - name: Validate genuine 2023 Czech original PBF unchanged before point-to-rail-LINE <=30m
+        run: |
+          set -euo pipefail
+          test "$(stat --format=%s source/CZE155/czech-republic-230101.osm.pbf)" = "816159635"
+          printf '%s  %s\n' \
+            '26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747' \
+            'source/CZE155/czech-republic-230101.osm.pbf' | sha256sum --check
+      - name: Genuine Echium original 4235 public research photos -> original 29 allCC pairs checksum then CC0/BY-first source 1to1 re-matching, actual attributed pixels BLINDED for human review only
+        run: |
+          python -u scripts/reselect_Echium_CC0BY_before_photo_pairing_v171.py \
+            --source-v168 source/v171/v168/Czech_4original_flowering_rail30_local_pairing_photo_source_v168.json \
+            --source-v166 source/v171/v166/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
+            --source-Czech-2023-OSM source/CZE155/czech-republic-230101.osm.pbf \
+            --output-dir results/audit/Echium_Czech_original_CC0BY_rightsfirst_photo_REmatched_v171
+      - name: Publish only ethically CC0 BY attributed true photo pixels and blank blinded human label form in Actions artifact, never source repo, private GPS or original observation IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Czech-Echium-original-CC0BY-first-rematched-image-contact-sheets-v171
+          path: results/audit/Echium_Czech_original_CC0BY_rightsfirst_photo_REmatched_v171/
+          if-no-files-found: warn

@@ -1,0 +1,93 @@
+name: "v12.7 REAL CzechVeg original vegetation CLASS-matched Pladias railway wind traits"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_CzechVeg_original_vegetation_CLASS_wind_source_v127.py'
+      - 'tests/test_CzechVeg_original_vegetation_CLASS_wind_source_v127.py'
+      - '.github/workflows/CzechVeg-original-vegetation-class-wind-v127.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-authentic-CzechVeg-2026-source-CLASS-wind-v127
+  cancel-in-progress: true
+jobs:
+  original-same-publication-class-matched-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source Pladias xlsx read-only parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test original source vegetation CLASS hierarchy and source study-area-year blocking
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_original_vegetation_CLASS_wind_source_v127.py' -v
+      - name: Read fully verified 2.51M botanical records CzechVeg and Pladias taxon traits receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE127/v119
+      - name: Read actual same detailed SYNTAXON original field plant strategy result v12.5
+        uses: actions/download-artifact@v4
+        with:
+          name: original-CzechVeg-Pladias-2026-syntaxon-matched-source-wind-v125
+          run-id: 43585966287
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE127/v125
+      - name: Read corrected real original 35-source-class root hierarchy and source plot common support v12.6
+        uses: actions/download-artifact@v4
+        with:
+          name: original-CzechVeg-source-class-2026-overlap-v126
+          run-id: 43586479719
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE127/v126
+      - name: Download official Zenodo immutable Czech vegetation source metadata and checksums
+        run: |
+          mkdir -p source/CZE127/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/CZE127/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+      - name: Download original full 117739 Czech vegetation plots with source SYNTAXON class hierarchy
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/CZE127/raw/headers.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content'
+      - name: Download original full 2510340 Czech plant × plot records, ephemeral no redistribution
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 1200 \
+            --output source/CZE127/raw/species.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content'
+      - name: Obtain author-original Pladias Sádlo plant dispersal strategies and Czech life forms
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/CZE127/raw/Pladias_diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/CZE127/raw/Pladias_lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+      - name: Test actual original vegetation class wind strategy frequency x RAIL text source, all min1-3 support and source study uncertainty
+        run: |
+          python -u scripts/analyze_CzechVeg_original_vegetation_CLASS_wind_source_v127.py \
+            --zenodo-record source/CZE127/raw/zenodo.json \
+            --header-csv source/CZE127/raw/headers.csv \
+            --species-csv source/CZE127/raw/species.csv \
+            --dispersal-xlsx source/CZE127/raw/Pladias_diaspore.xlsx \
+            --lifeform-xlsx source/CZE127/raw/Pladias_lifeform.xlsx \
+            --verified119 source/CZE127/v119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --verified125 source/CZE127/v125/CzechVeg_2026_v125_original_syntaxon_source_wind_railroad_matched.json \
+            --verified126 source/CZE127/v126/CzechVeg_2026_v126_source_vegetation_class_hierarchy_railroad_overlap.json \
+            --output results/audit/CzechVeg_2026_v127_original_vegetation_class_wind_study_matched.json
+      - name: Preserve only original source-authenticated biological count summaries and sensitivity, no raw external author data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-CzechVeg-source-vegetation-CLASS-Pladias-wind-v127
+          path: results/audit/CzechVeg_2026_v127_original_vegetation_class_wind_study_matched.json
+          if-no-files-found: warn

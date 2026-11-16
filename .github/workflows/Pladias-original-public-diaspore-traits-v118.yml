@@ -1,0 +1,52 @@
+name: "v11.8 REAL public Pladias species diaspore strategy and lifeform source audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_Pladias_public_diaspore_lifeform_v118.py'
+      - 'tests/test_Pladias_public_diaspore_lifeform_v118.py'
+      - '.github/workflows/Pladias-original-public-diaspore-traits-v118.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-public-Pladias-Sadlo-diaspore-lifeform-v118
+  cancel-in-progress: true
+jobs:
+  real-original-Pladias-plant-strategy-traits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source XLSX parser fallback only
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test public trait source gates and reject HTML login pages
+        run: python -m unittest discover -s tests -p 'test_Pladias_public_diaspore_lifeform_v118.py' -v
+      - name: Fetch original public Pladias 2018 Sádlo dispersal strategy and Czech lifeform taxonomy
+        run: |
+          mkdir -p source/Pladias118
+          curl --fail --location --show-error --silent --retry 2 --max-time 120 \
+            --user-agent 'tetsu-academic-source-audit/1.0' \
+            -o source/Pladias118/original_strategy \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --show-error --silent --retry 2 --max-time 120 \
+            --user-agent 'tetsu-academic-source-audit/1.0' \
+            -o source/Pladias118/original_lifeform \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+      - name: Audit exact actual source file hashes schemas and strategy category support, without biological merge
+        run: |
+          python -u scripts/audit_Pladias_public_diaspore_lifeform_v118.py \
+            --dispersal-source source/Pladias118/original_strategy \
+            --life-form-source source/Pladias118/original_lifeform \
+            --output results/audit/Pladias_public_plant_diaspore_lifeform_exact_source_v118.json
+      - name: Archive schema provenance only; raw trait export remains private to original source run
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-public-Pladias-Sadlo-plant-strategy-source-schema-v118
+          path: results/audit/Pladias_public_plant_diaspore_lifeform_exact_source_v118.json
+          if-no-files-found: warn

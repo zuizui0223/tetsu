@@ -1,0 +1,42 @@
+name: Real ESA WorldCover 2021 tree-vs-grass 10m rail candidate source audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/worldcover_landcover.py'
+      - 'scripts/audit_japan_ordinary_rail_worldcover_2021.py'
+      - 'tests/test_ordinary_rail_worldcover_2021.py'
+      - '.github/workflows/ordinary-rail-worldcover-2021.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-ordinary-rail-2021-worldcover-trees-v16
+  cancel-in-progress: true
+jobs:
+  actual-landcover-Cog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install public official GIS and COG-range-read dependencies
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Check exact ESA 3degree tile name, pixel UTM54 transform, class and no-data semantics
+        run: python -m unittest discover -s tests -p 'test_ordinary_rail_worldcover_2021.py' -v
+      - name: Sample real ESA 2021 WorldCover grass/tree/crop/built COG at the ten independently N02-N13 GIS-selected sites
+        env:
+          GDAL_DISABLE_READDIR_ON_OPEN: EMPTY_DIR
+          GDAL_HTTP_MAX_RETRY: "3"
+          GDAL_HTTP_RETRY_DELAY: "2"
+        run: python -u scripts/audit_japan_ordinary_rail_worldcover_2021.py --output results/audit/japan_worldcover_2021_ordinary_rail_landclass_v16.json
+      - name: Save aggregated public source classes only, no raw WorldCover tile or exact railway/road coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-three-regions-10-fixed-ordinary-rail-worldcover2021-classes
+          path: results/audit/japan_worldcover_2021_ordinary_rail_landclass_v16.json
+          if-no-files-found: warn

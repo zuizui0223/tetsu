@@ -1,0 +1,56 @@
+name: "v6.8 Count REAL additional 33 missing France GBIF original A5 Parquet objects versus previous 671528"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_public_GBIF_FR_unread_33_source_files_v68.py'
+      - 'tests/test_public_GBIF_FR_unread_33_source_files_v68.py'
+      - '.github/workflows/public-GBIF-FR-unread-33-source-v68.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-France-GBIF-public-A5-33-previously-unread-source-v68
+  cancel-in-progress: true
+jobs:
+  new-unread-source-Parquet-file-counts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public DuckDB Parquet S3 and geographic source dependencies
+        run: pip install 'duckdb>=1.4,<2' 'boto3>=1.34,<2' 'botocore>=1.34,<2' 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Test strict 81 source-object metadata partition vs previously scanned 48 and unobserved 33 source files
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_FR_unread_33_source_files_v68.py' -v
+      - name: Retrieve original pre-outcome 48 official GBIF source files with independently verified 671528 original records
+        uses: actions/download-artifact@v4
+        with:
+          name: GBIF-Aug26-public-original-FR-Burgundy-bounded-multifile-source-v65
+          run-id: 42959420881
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/original48
+      - name: Retrieve v6.7 complete conservative-union A5 source-file metadata listing of 81 Parquet files
+        uses: actions/download-artifact@v4
+        with:
+          name: GBIF-France-A5-full-50km-polygon-cover-and-unscanned-source-file-metadata-v67
+          run-id: 42961205346
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/all81
+      - name: Query all OTHER 33 public original GBIF Parquet source files, including those >400MB, for real 2018-25 France 200km bounding counts
+        run: |
+          python -u scripts/audit_public_GBIF_FR_unread_33_source_files_v68.py \
+            --old-source-v65 source/original48/GBIF_real_aug2026_FR_Burgundy_bounded_all_source_files_v65.json \
+            --full-metadata-v67 source/all81/GBIF_FR_full_polygon_A5_source_metadata_v67.json \
+            --output results/audit/GBIF_original_FR_added_33_source_file_counts_v68.json
+      - name: Preserve exact raw original source coverage and absent-file QA without individual GBIF IDs or coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-Aug26-FR-original-33-previously-unread-plant-source-file-counts-v68
+          path: results/audit/GBIF_original_FR_added_33_source_file_counts_v68.json
+          if-no-files-found: warn

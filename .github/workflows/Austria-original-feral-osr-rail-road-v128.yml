@@ -1,0 +1,74 @@
+name: "v12.8 REAL Austria 2014-15 60 published railway station vs road feral OSR plant sampling, not cargo seeds"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/austria_pascher_2016_feral_osr_table14_manual_transcription_v128.csv'
+      - 'scripts/analyze_Austria_ferreral_osr_actual_sites_v128.py'
+      - 'tests/test_Austria_ferreral_osr_actual_sites_v128.py'
+      - '.github/workflows/Austria-original-feral-osr-rail-road-v128.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Austria-original-60-feral-Bnapus-plants-v128
+  cancel-in-progress: true
+jobs:
+  original-Austria-published-60-site-2yr-plant-samples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check exact 60 author original table site IDs, 1001+1112 feral plant samples, 44 sites and finite sample randomized diagnostics
+        run: |
+          python -m unittest discover -s tests -p 'test_Austria_ferreral_osr_actual_sites_v128.py' -v
+      - name: Optional government original report public-PDF access probe, store source MEDIA status no false provenance
+        run: |
+          mkdir -p results/audit source_original
+          if curl --fail --location --silent --show-error --retry 1 --max-time 80 \
+            --output source_original/Pascher_2016_Austrian_Gov_original_report.pdf \
+            'https://www.verbrauchergesundheit.gv.at/dam/jcr:e7da8178-d364-4ca4-8e1d-5fa87f4cd1dc/rapsstudie_risk_of_speed_spillage_201707071.pdf'; then
+              python - <<'PY'
+          import pathlib,hashlib,json
+          path=pathlib.Path('source_original/Pascher_2016_Austrian_Gov_original_report.pdf')
+          raw=path.read_bytes()
+          original_pdf_valid=raw[:8].startswith(b'%PDF-') and len(raw)>100000
+          receipt={"original_PDF_download_succeeded":True,
+                   "original_PDF_has_pdf_file_signature_and_positive_length":original_pdf_valid,
+                   "source_bytes":len(raw),
+                   "downloaded_original_PDF_SHA256":hashlib.sha256(raw).hexdigest(),
+                   "not_automatically_parsed_exact_Table14_from_original_pdf":True,
+                   "original_Table14_counts_source":"author original 2016 government PDF table 14, numeric manually transcribed and reconciled to official totals"}
+          pathlib.Path('results/audit/Austria_original_government_report_access_v128.json').write_text(json.dumps(receipt,indent=2))
+          if not original_pdf_valid:raise SystemExit('Original public file bytes are not actually a PDF')
+          print(json.dumps(receipt),flush=True)
+          PY
+          else
+              python - <<'PY'
+          import pathlib,json
+          receipt={"original_PDF_download_succeeded":False,
+                   "NO_claim_original_PDF_file_bytes_were_verified":True,
+                   "original_Table14_counts_source":"manually transcribed original published Table 14, exact 60 site IDs and 1001+1112/44 source totals reconciled",
+                   "original_report_URL":"https://www.verbrauchergesundheit.gv.at/dam/jcr:e7da8178-d364-4ca4-8e1d-5fa87f4cd1dc/rapsstudie_risk_of_speed_spillage_201707071.pdf"}
+          pathlib.Path('results/audit/Austria_original_government_report_access_v128.json').write_text(json.dumps(receipt,indent=2))
+          print(json.dumps(receipt),flush=True)
+          PY
+          fi
+      - name: Compute real Austrian source ordinary station vs road segment site sample detection conditional on cultivation area exact 2 strata, not seed spillage
+        run: |
+          python -u scripts/analyze_Austria_ferreral_osr_actual_sites_v128.py \
+            --original-table14-transcription data/austria_pascher_2016_feral_osr_table14_manual_transcription_v128.csv \
+            --output results/audit/Austria_Pascher2016_original_60_site_2014_2015_feral_OSR_v128.json
+      - name: Archive original publication-derived exact results with site/sample source status, no raw source PDF distribution
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-Austria-2016-60-feral-plant-rail-station-v-road-source-v128
+          path: |
+            results/audit/Austria_Pascher2016_original_60_site_2014_2015_feral_OSR_v128.json
+            results/audit/Austria_original_government_report_access_v128.json
+          if-no-files-found: warn

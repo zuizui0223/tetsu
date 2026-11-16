@@ -1,0 +1,41 @@
+name: "v6.5 Real public GBIF August2026 original Parquet MANY A5 source file scan — France Burgundy"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/probe_public_GBIF_A5_bounded_scan_v65.py'
+      - 'tests/test_public_GBIF_A5_bounded_scan_v65.py'
+      - '.github/workflows/public-GBIF-A5-bounded-source-France-v65.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-public-GBIF-Aug26-France-multi-file-source-v65
+  cancel-in-progress: true
+jobs:
+  frozen-France-Burgundy-all-bounded-source-files:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official experimental public A5 GBIF Parquet and spatial source client
+        run: pip install 'duckdb>=1.4,<2' 'boto3>=1.34,<2' 'botocore>=1.34,<2' 'requests>=2.31,<3' 'numpy>=1.26,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Test unbiased exhaustive selected-file handling beyond the five-zero-file source failure
+        run: python -m unittest discover -s tests -p 'test_public_GBIF_A5_bounded_scan_v65.py' -v
+      - name: Read ALL up to 48 official August2026 public GBIF original Parquet source objects in predefined France Burgundy A5 centroid partitions
+        run: |
+          python -u scripts/probe_public_GBIF_A5_bounded_scan_v65.py \
+            --blocks fr_burgundy \
+            --scan-limit 48 \
+            --output results/audit/GBIF_real_aug2026_FR_Burgundy_bounded_all_source_files_v65.json
+      - name: Preserve actual all-zero-and-positive selected file source counts only (no original raw record IDs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-Aug26-public-original-FR-Burgundy-bounded-multifile-source-v65
+          path: results/audit/GBIF_real_aug2026_FR_Burgundy_bounded_all_source_files_v65.json
+          if-no-files-found: warn

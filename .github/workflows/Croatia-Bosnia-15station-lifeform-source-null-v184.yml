@@ -1,0 +1,44 @@
+name: "v18.4 SOURCE Croatia-Bosnia 15station lifeform fixed-margin railway internal null"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/analyze_Croatia_Bosnia_15station_lifeform_fixedmargin_null_v184.py"
+      - "tests/test_Croatia_Bosnia_15station_fixedmargin_null_v184.py"
+      - ".github/workflows/Croatia-Bosnia-15station-lifeform-source-null-v184.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v184-Croatia-Bosnia-station-source-null
+  cancel-in-progress: true
+jobs:
+  source-2017-fixedmargin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install original rotated PDF source reader
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Require source-margin preservation on synthetic fixture
+        run: python -m unittest discover -s tests -p 'test_Croatia_Bosnia_15station_fixedmargin_null_v184.py' -v
+      - name: Retrieve exact publisher source original SHA from v18.3
+        run: |
+          mkdir -p source_original/v184
+          curl -LfsS --retry 3 --connect-timeout 15 --max-time 120 \
+            'https://hrcak.srce.hr/file/282429' \
+            -o source_original/v184/Jasprica2017_original.pdf
+          printf '90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956  source_original/v184/Jasprica2017_original.pdf\n' | sha256sum -c -
+      - name: Full original 359x15 publisher validation then 2x2 fixed-margin climate sensitivity
+        run: |
+          python -u scripts/analyze_Croatia_Bosnia_15station_lifeform_fixedmargin_null_v184.py \
+            --original-pdf source_original/v184/Jasprica2017_original.pdf \
+            --out results/audit/v184/Croatia_Bosnia_2017_fixedmargin_15station_lifeform_NULL.json
+      - name: Preserve only statistical QA summary, no original PDF or original site-identifiable taxon matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Croatia-Bosnia-2017-15station-internal-pool-fixedmargin-null-v184
+          path: results/audit/v184/
+          if-no-files-found: warn

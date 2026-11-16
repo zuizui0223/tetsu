@@ -1,0 +1,41 @@
+name: "v18.3 reconstruct original Croatia-Bosnia 359taxon x 15stations and life form from rotated source"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/extract_Croatia_Bosnia_2017_original_rotated_table_matrix_v183.py"
+      - ".github/workflows/Croatia-Bosnia-original-15station-matrix-v183.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v183-croatia-bosnia-source-table359
+  cancel-in-progress: true
+jobs:
+  verify-publisher-original-2017-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install 'PyMuPDF==1.24.14'
+      - name: Fetch authenticated ORIGINAL PDF from Croatian repository
+        run: |
+          mkdir -p source_original/v183
+          curl -LfsS --retry 3 --connect-timeout 15 --max-time 120 \
+            'https://hrcak.srce.hr/file/282429' \
+            -o source_original/v183/Jasprica_2017_original.pdf
+          printf '90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956  source_original/v183/Jasprica_2017_original.pdf\n' \
+            | sha256sum -c -
+      - name: Parse taxon-station matrix and lifeform with strict 359/frequency/15 checks
+        run: |
+          python -u scripts/extract_Croatia_Bosnia_2017_original_rotated_table_matrix_v183.py \
+            --original-pdf source_original/v183/Jasprica_2017_original.pdf \
+            --output-dir results/audit/v183
+      - name: Preserve source audit even when parsing gate fails; matrix only if verified
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Croatia-Bosnia-2017-source-15station-359taxon-lifeform-v183
+          path: results/audit/v183/
+          if-no-files-found: warn

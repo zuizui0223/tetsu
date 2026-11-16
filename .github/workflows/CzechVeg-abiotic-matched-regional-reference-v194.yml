@@ -1,0 +1,42 @@
+name: "v19.4 full original CzechVeg abiotic elevation slope rocky habitat independent regional plot source gate"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/audit_CzechVeg_abiotic_regional_reference_opportunity_v194.py"
+      - "tests/test_CzechVeg_abiotic_reference_v194.py"
+      - ".github/workflows/CzechVeg-abiotic-matched-regional-reference-v194.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v194-independent-abiotic-reference
+  cancel-in-progress: true
+jobs:
+  original-publisher-environmental-header:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Validate no species-derived syntaxon used to choose abiotic reference
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_abiotic_reference_v194.py' -v
+      - name: Download original published CzechVeg 117739 actual plot metadata and verify MD5
+        run: |
+          mkdir -p source_original/v194
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v194/CzechVeg_headers.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v194/CzechVeg_headers.csv\n' | md5sum -c -
+      - name: Actual original source rail-text vs nontransport reference with elevation slope and rock-coverage gate
+        run: |
+          python -u scripts/audit_CzechVeg_abiotic_regional_reference_opportunity_v194.py \
+            --original-headers source_original/v194/CzechVeg_headers.csv \
+            --output results/audit/v194/CzechVeg_2026_abiotic_regional_reference_opportunity_v194.json
+      - name: Preserve source quality counts and regional support, never original exact plots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-2026-original-abiotic-reference-plot-opportunity-v194
+          path: results/audit/v194/
+          if-no-files-found: warn

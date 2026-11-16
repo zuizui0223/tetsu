@@ -1,0 +1,77 @@
+name: "v12.3 REAL CzechVeg Pladias SAME original publication rail-road trait common-support audit"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_CzechVeg_rail_road_same_study_trait_v123.py'
+      - 'tests/test_CzechVeg_rail_road_same_study_trait_v123.py'
+      - '.github/workflows/CzechVeg-Pladias-same-original-study-traits-v123.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-CzechVeg-2026-original-same-study-source-v123
+  cancel-in-progress: true
+jobs:
+  published-CzechVeg-study-within-sampling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Pladias source XLSX reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Unit-test original source study title and local-area-year common-support constraints
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_rail_road_same_study_trait_v123.py' -v
+      - name: Read true verified source v11.9 full Czech 2510340 species and original Pladias linked source receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/Czech123/v119
+      - name: Get original source Zenodo publication with original author file MD5s
+        run: |
+          mkdir -p source/Czech123/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/Czech123/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+      - name: Fetch real original source plot metadata including surveyed area year local paper and habitat
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/Czech123/raw/headers.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content'
+      - name: Fetch original Czech 2510340 species×plot source data, no redistribution
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 1200 \
+            --output source/Czech123/raw/species.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content'
+      - name: Fetch original Pladias Sádlo 2018 strategy plus 4599 Czech flora lifeform records
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/Czech123/raw/Pladias_diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/Czech123/raw/Pladias_lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+      - name: Test same PUBLISHED source study rail-road vegetation dispersal guild in six matched designs, report source support loss and all nulls
+        run: |
+          python -u scripts/analyze_CzechVeg_rail_road_same_study_trait_v123.py \
+            --zenodo-record source/Czech123/raw/zenodo.json \
+            --header-csv source/Czech123/raw/headers.csv \
+            --species-csv source/Czech123/raw/species.csv \
+            --dispersal-xlsx source/Czech123/raw/Pladias_diaspore.xlsx \
+            --lifeform-xlsx source/Czech123/raw/Pladias_lifeform.xlsx \
+            --verified119 source/Czech123/v119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --output results/audit/CzechVeg_2026_v123_same_published_study_railroad_diaspore_source.json
+      - name: Archive study-matching summary only with nonestimable true source matches and honest open causal gates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-CzechVeg-Pladias-2026-within-publication-railroad-v123
+          path: results/audit/CzechVeg_2026_v123_same_published_study_railroad_diaspore_source.json
+          if-no-files-found: warn

@@ -1,0 +1,43 @@
+name: "v4.9b Falsify historical 50km GBIF source counts against live geometry and parameter ablations"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/diagnose_historical_GBIF_geometry_v49b.py'
+      - '.github/workflows/gbif-historical-source-drift-v49b.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-historical-geometry-index-drift-v49b
+  cancel-in-progress: true
+jobs:
+  live-historical-index-reconciliation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source macro geography and GBIF query dependency
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Retrieve previous complete 8-country GRIIS 50km source to compare the same original cells
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Verify current GBIF query geometry in exact US and France historical source cells, ablate filters and compare prior counts
+        run: |
+          python -u scripts/diagnose_historical_GBIF_geometry_v49b.py             source/flora/griis_50km_10blocks_country_mask_v36.json
+      - name: Preserve full count-only source contradiction diagnostic (no occurrence rows)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbif-historical-facet-current-search-geometry-critical-mismatch-v49b
+          path: results/audit/GBIF_old_species_facet_current_query_mismatch_v49b.json
+          if-no-files-found: warn

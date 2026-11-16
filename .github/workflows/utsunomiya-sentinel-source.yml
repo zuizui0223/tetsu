@@ -1,0 +1,34 @@
+name: Utsunomiya LRT 2017-25 Sentinel2 satellite imagery availability
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_utsunomiya_sentinel_stac.py'
+      - '.github/workflows/utsunomiya-sentinel-source.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-utsunomiya-sentinel-source
+  cancel-in-progress: true
+jobs:
+  stac-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install public satellite STAC client
+        run: pip install 'requests>=2.31,<3'
+      - name: Audit 2017-25 summer red-nir-cloudmask satellite scenes, not vegetation effects
+        run: python scripts/audit_utsunomiya_sentinel_stac.py --output results/audit/utsunomiya_lrt_sentinel_stac_2017_25.json
+      - name: Archive only source availability metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: utsunomiya-sentinel2-summer-2017-to-2025-source
+          path: results/audit/utsunomiya_lrt_sentinel_stac_2017_25.json
+          if-no-files-found: warn

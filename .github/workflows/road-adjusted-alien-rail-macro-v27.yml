@@ -1,0 +1,65 @@
+name: 9-country introduced plants vs railway connectivity conditional on observed ROAD density v2.7
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_griis_rail_with_road_density_v27.py'
+      - 'tests/test_griis_rail_with_road_density_v27.py'
+      - '.github/workflows/road-adjusted-alien-rail-macro-v27.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-road-adjusted-alien-rail-macro-v27
+  cancel-in-progress: true
+jobs:
+  introduced-plant-railway-road-intensity-contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check 4-source country-bounded introduced flora, road density and match support
+        run: python -m unittest discover -s tests -p 'test_griis_rail_with_road_density_v27.py' -v
+      - name: Retrieve completed 10-country GBIF real speciesKey cell matrices
+        uses: actions/download-artifact@v4
+        with:
+          name: gbif-10country-90cells-two-period-full-facet-matrix-v20
+          run-id: 42728479639
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gbif
+      - name: Retrieve completed Overture railway connector graph
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-real-rail-connectors-10country-v21
+          run-id: 42728551036
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Retrieve source-verified nine-country GRIIS introduced-plant backbone keys
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Retrieve completed Overture actual geodesic road and rail cell-kilometers
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-10country-90cells-transport-road-rail-geodesic-v26
+          run-id: 42731846908
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/transport
+      - name: Run partial road-density-matched GRIIS alien plant community rail connectivity assessment
+        run: |
+          python scripts/analyze_griis_rail_with_road_density_v27.py             --gbif-source source/gbif/gbif_specieskey_10country_90cells_2periods_v20.json             --rail-source source/rail/overture_rail_connectors_10country_v21.json             --griis-source source/griis/griis_9country_alien_backbone_keys_v24.json             --transport-source source/transport/overture_transport_cell_lengths_10country_v26.json             --output results/audit/alien_rail_road_partial_control_v27.json
+      - name: Archive real matched source outcomes with geographic support and no causal p-values
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alien-plant-rail-connectivity-road-density-matched-v27
+          path: results/audit/alien_rail_road_partial_control_v27.json
+          if-no-files-found: warn

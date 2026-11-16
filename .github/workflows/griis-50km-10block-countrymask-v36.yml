@@ -1,0 +1,60 @@
+name: v3.6 GRIIS introduced species full facets for 8 countries x 10 frozen 50km macro blocks
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/harvest_griis_50km_10blocks_v36.py'
+      - 'tests/test_griis_50km_10blocks_v36.py'
+      - '.github/workflows/griis-50km-10block-countrymask-v36.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-griis-10block-50km-countrymasked-v36
+  cancel-in-progress: true
+jobs:
+  ten-macro-region-alien-plant-census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install GBIF and geometric source clients
+        run: pip install 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Test independent source data-quality filter without taxon outcome selection
+        run: python -m unittest discover -s tests -p 'test_griis_50km_10blocks_v36.py' -v
+      - name: Retrieve real 50km GBIF two-period source opportunities across 10 blocks
+        uses: actions/download-artifact@v4
+        with:
+          name: gbif-50km-independent-macro-10block-source-v29
+          run-id: 42738021553
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/coverage
+      - name: Retrieve verified Natural Earth country polygon fraction for 160 cells
+        uses: actions/download-artifact@v4
+        with:
+          name: naturalearth-10country-country-fraction-50km-macro-v35
+          run-id: 42760619186
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/country
+      - name: Retrieve nine country source-verified GRIIS introduced flora taxon backbone keys
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Source real 8-country 10-block GBIF indexed GRIIS-introduced species key counts in 50km cells
+        run: |
+          python -u scripts/harvest_griis_50km_10blocks_v36.py             --gbif-coverage source/coverage/gbif_50km_10macroblocks_source_v29.json             --country-mask source/country/50km_naturalearth_country_fraction_v35.json             --griis-keys source/griis/griis_9country_alien_backbone_keys_v24.json             --output results/audit/griis_50km_10blocks_country_mask_v36.json
+      - name: Retain source-backed speciesKey x 50km cell two period matrix with region quality caveats
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          path: results/audit/griis_50km_10blocks_country_mask_v36.json
+          if-no-files-found: warn

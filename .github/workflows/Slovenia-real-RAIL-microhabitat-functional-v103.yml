@@ -1,0 +1,47 @@
+name: "v10.3 REAL Slovenia RAIL vegetation 92 sites 15 track segments ballast shoulder-toe annual/therophyte/alien trends"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_microhabitats_v103.py'
+      - 'tests/test_Slovenia_rail_microhabitats_v103.py'
+      - '.github/workflows/Slovenia-real-RAIL-microhabitat-functional-v103.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-original-Slovenia-real-RAIL-vegetation-traits-v103
+  cancel-in-progress: true
+jobs:
+  original-Slovenia-RAIL-cross-sectional-plant-functional-zones:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify 92 survey/482 zones/6331 original plant rows/312 trait codes and within-location source composition rules
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_microhabitats_v103.py' -v
+      - name: Download genuine publisher original 2026 Springer Slovenia RAIL vegetation supplementary XLSX and original source SHA256 audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Recompute actual same-site same-side BALLAST SHOULDER versus BALLAST TOE zone plant traits and field cover with railway segment and year sensitivity
+        run: |
+          python -u scripts/analyze_Slovenia_rail_microhabitats_v103.py \
+            --source-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --verified-v102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/Slovenia_2026_original_RAIL_ballast_shoulder_toe_functional_flora_v103.json
+      - name: Preserve original code/trait/provenance verified source field zone contrast, both signed and adverse results without train seed/mowing causality
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-2026-railway-BS-BT-flora-microhabitat-v103
+          path: results/audit/Slovenia_2026_original_RAIL_ballast_shoulder_toe_functional_flora_v103.json
+          if-no-files-found: warn

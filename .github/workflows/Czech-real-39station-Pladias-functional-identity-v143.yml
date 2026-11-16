@@ -1,0 +1,63 @@
+name: "v14.3 REAL Czech 39 station current flora source vs Pladias plant functional identity"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Czech_2024_39station_functional_identity_v143.py'
+      - 'tests/test_Czech_2024_39station_functional_identity_v143.py'
+      - '.github/workflows/Czech-real-39station-Pladias-functional-identity-v143.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Czech-original-Preslia-39station-flora-Pladias-v143
+  cancel-in-progress: true
+jobs:
+  real-original-Czech-Preslia-traits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only original author source XLSX reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test exact Pladias source guilds and 39 station source taxon frequency preserving comparison, no invented raw railway GPS
+        run: python -m unittest discover -s tests -p 'test_Czech_2024_39station_functional_identity_v143.py' -v
+      - name: Download original Czech 2024 Preslia station taxon S1 and corrected erratum S2 read only
+        run: |
+          mkdir -p source/CZE143
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --user-agent 'tetsu-original-botanical-source-2026/1.0' \
+            --output source/CZE143/S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --user-agent 'tetsu-original-botanical-source-2026/1.0' \
+            --output source/CZE143/S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+          sha256sum source/CZE143/S1.xlsx source/CZE143/S2.xlsx
+      - name: Download actual original Pladias Sádlo plant seed dispersion and original Raunkiaer lifeform Excel
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE143/diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --silent --show-error --retry 3 --max-time 120 \
+            --output source/CZE143/lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+      - name: Reanalyze source 6941 real contemporary station×plant incidences Pladias lifeform/dispersal guild identities and five original rail stretches
+        run: |
+          python -u scripts/analyze_Czech_2024_39station_functional_identity_v143.py \
+            --source-s1 source/CZE143/S1.xlsx \
+            --source-s2 source/CZE143/S2.xlsx \
+            --pladias-diaspore source/CZE143/diaspore.xlsx \
+            --pladias-lifeform source/CZE143/lifeform.xlsx \
+            --output results/audit/Czech_2024_v143_original_39_stations_Pladias_identity.json
+      - name: Archive only original-author provenance and new aggregate taxon/functional results, not source XLSX
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-Czech-39station-current-flora-functional-v143
+          path: results/audit/Czech_2024_v143_original_39_stations_Pladias_identity.json
+          if-no-files-found: warn

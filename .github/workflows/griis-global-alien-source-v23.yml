@@ -1,0 +1,37 @@
+name: Verified 196-country GRIIS introduced species compendium source audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_griis_alien_compendium_v23.py'
+      - 'tests/test_griis_alien_compendium_v23.py'
+      - '.github/workflows/griis-global-alien-source-v23.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-griis-alien-country-v23
+  cancel-in-progress: true
+jobs:
+  country-alien-status-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Zenodo metadata and source client
+        run: pip install 'requests>=2.31,<3'
+      - name: Verify checksum, country scope and non-native versus unknown logic offline
+        run: python -m unittest discover -s tests -p 'test_griis_alien_compendium_v23.py' -v
+      - name: Fetch actual Zenodo 196-country compendium and verify versioned CSV checksum
+        run: python -u scripts/audit_griis_alien_compendium_v23.py --output results/audit/griis_country_compendium_schema_v23.json
+      - name: Archive country taxonomy schema and aggregate source counts, not raw 24MB checklist
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: griis-196country-introduced-status-source-schema-v23
+          path: results/audit/griis_country_compendium_schema_v23.json
+          if-no-files-found: warn

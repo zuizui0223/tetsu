@@ -1,0 +1,96 @@
+name: "v11.9 REAL CzechVeg independent rail-road plots and Pladias wind trait join"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_CzechVeg_Pladias_rail_road_diaspore_v119.py'
+      - 'tests/test_CzechVeg_Pladias_rail_road_diaspore_v119.py'
+      - '.github/workflows/CzechVeg-Pladias-real-rail-road-wind-traits-v119.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-CzechVeg-Pladias-real-RAIL-ROAD-original-v119
+  cancel-in-progress: true
+jobs:
+  genuine-Czech-vegetation-rail-vs-road-same-diaspore-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only original Pladias XLSX source reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Check real rail source candidate unit and prevent fuzzy species name matching
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_Pladias_rail_road_diaspore_v119.py' -v
+      - name: Download verified full original CzechVeg 117739 source plot site gate receipt v11.7
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-CzechVeg-2026-railway-habitat-header-audit-v117
+          run-id: 43571062109
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/Czech119/v117
+      - name: Download verified actual original Pladias 2018 source strategy and lifeform metadata v11.8
+        uses: actions/download-artifact@v4
+        with:
+          name: original-public-Pladias-Sadlo-plant-strategy-source-schema-v118
+          run-id: 43571483396
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/Czech119/v118
+      - name: Read official Zenodo CzechVeg v1.1 metadata, exact source file links and independent original checksums
+        run: |
+          mkdir -p source/Czech119/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/Czech119/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+          python - <<'PY'
+          import json,os,sys
+          sys.path.insert(0,'scripts')
+          from audit_CzechVeg_rail_habitat_original_v117 import original_zenodo_entry,HEADERS_NAME
+          from analyze_CzechVeg_Pladias_rail_road_diaspore_v119 import SPECIES_NAME
+          m=json.load(open('source/Czech119/raw/zenodo.json'))
+          a=original_zenodo_entry(m,HEADERS_NAME)
+          b=original_zenodo_entry(m,SPECIES_NAME)
+          with open(os.environ['GITHUB_ENV'],'a') as f:
+              f.write('CZE_HEADERS_URL='+a['official_url']+'\n')
+              f.write('CZE_SPECIES_URL='+b['official_url']+'\n')
+          print(json.dumps({"plot_headers":a,"full_species":b}))
+          PY
+      - name: Fetch original full 117739 plot 2026 CzechVeg source headers with plot geometry and railway habitat
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/Czech119/raw/headers.csv "$CZE_HEADERS_URL"
+      - name: Fetch original full Czech vegetation species-by-plot CSV (ephemeral, original Zenodo MD5 independently verified)
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 1200 \
+            --output source/Czech119/raw/species.csv "$CZE_SPECIES_URL"
+      - name: Fetch actual Sádlo 2018 Pladias species strategy archetypes and Czech lifeform original XLSX
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            -o source/Czech119/raw/Pladias_diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            -o source/Czech119/raw/Pladias_lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+      - name: Audit exact real source species-to-trait match and exploratory independent Czech rail-vs-road candidate prevalence contrast
+        run: |
+          python -u scripts/analyze_CzechVeg_Pladias_rail_road_diaspore_v119.py \
+            --zenodo-record source/Czech119/raw/zenodo.json \
+            --header-csv source/Czech119/raw/headers.csv \
+            --species-csv source/Czech119/raw/species.csv \
+            --dispersal-xlsx source/Czech119/raw/Pladias_diaspore.xlsx \
+            --lifeform-xlsx source/Czech119/raw/Pladias_lifeform.xlsx \
+            --verified117 source/Czech119/v117/CzechVeg_2026_v11_rail_site_117739_original_headers_v117.json \
+            --verified118 source/Czech119/v118/Pladias_public_plant_diaspore_lifeform_exact_source_v118.json \
+            --output results/audit/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json
+      - name: Archive full audit statistics but DO NOT redistribute original huge species and Pladias raw source datasets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          path: results/audit/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json
+          if-no-files-found: warn

@@ -1,0 +1,21 @@
+original_species_name,original_seed_morphology,vehicle_passes,mean_longitudinal_displacement_m,sd_longitudinal_displacement_m,median_longitudinal_displacement_m,p99_longitudinal_displacement_m
+Ailanthus altissima,wind_morphology,1,5.14,3.07,5,15
+Ailanthus altissima,wind_morphology,10,9.85,7.97,8,40
+Ailanthus altissima,wind_morphology,20,9.95,7.84,8,40
+Ailanthus altissima,wind_morphology,40,10.33,7.96,8,40
+Ailanthus altissima,wind_morphology,80,10.83,8.11,8,40
+Clematis vitalba,wind_morphology,1,4.95,3.43,4,15
+Clematis vitalba,wind_morphology,10,9.19,7.52,7,35
+Clematis vitalba,wind_morphology,20,9.94,7.93,8,40
+Clematis vitalba,wind_morphology,40,10.08,8.03,8,40
+Clematis vitalba,wind_morphology,80,10.46,8.00,8,40
+Brassica napus,no_wind_morphology,1,0.98,1.12,0.5,4
+Brassica napus,no_wind_morphology,10,1.26,1.88,0.5,8
+Brassica napus,no_wind_morphology,20,1.60,2.62,0.5,12
+Brassica napus,no_wind_morphology,40,1.59,2.66,0.5,10
+Brassica napus,no_wind_morphology,80,1.71,2.87,1,15
+Ambrosia artemisiifolia,no_wind_morphology,1,1.04,1.07,0.5,5
+Ambrosia artemisiifolia,no_wind_morphology,10,1.38,1.85,0.5,9
+Ambrosia artemisiifolia,no_wind_morphology,20,1.51,1.92,1,9
+Ambrosia artemisiifolia,no_wind_morphology,40,1.64,2.03,1,9
+Ambrosia artemisiifolia,no_wind_morphology,80,1.59,2.05,1,10

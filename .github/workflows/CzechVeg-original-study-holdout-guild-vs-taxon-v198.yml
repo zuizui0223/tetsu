@@ -1,0 +1,61 @@
+name: "v19.8 CzechVeg original 36 publication holdout guild vs taxon vs effort railway plot transfer"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/validate_CzechVeg_source_publication_holdout_guild_vs_taxon_v198.py"
+      - "tests/test_CzechVeg_holdout_guild_taxon_v198.py"
+      - ".github/workflows/CzechVeg-original-study-holdout-guild-vs-taxon-v198.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v198-original-study-guild-taxon-transfer
+  cancel-in-progress: true
+jobs:
+  original-author-study-heldout-guild-vs-species:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install original Pladias worksheet reader and transparent regularized classifier
+        run: python -m pip install 'openpyxl==3.1.5' 'scikit-learn==1.7.2'
+      - name: Test true whole publication holdout, guild/taxon features and label-permutation controls
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_holdout_guild_taxon_v198.py' -v
+      - name: Download exact published full CzechVeg plant+plot originals and Pladias 2018 original trait tables
+        run: |
+          mkdir -p source_original/v198
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 120 \
+            'https://zenodo.org/api/records/19231152' \
+            -o source_original/v198/zenodo.json
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v198/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v198/species.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v198/headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v198/species.csv\n' | md5sum -c -
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 160 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en' \
+            -o source_original/v198/diaspore.xlsx
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 160 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en' \
+            -o source_original/v198/lifeform.xlsx
+      - name: Reconstruct 44 published original study plot blocks and score heldout paper pairwise AUC
+        run: |
+          python -u scripts/validate_CzechVeg_source_publication_holdout_guild_vs_taxon_v198.py \
+            --zenodo-record source_original/v198/zenodo.json \
+            --source-headers source_original/v198/headers.csv \
+            --source-species source_original/v198/species.csv \
+            --source-diaspore-xlsx source_original/v198/diaspore.xlsx \
+            --source-lifeform-xlsx source_original/v198/lifeform.xlsx \
+            --output results/audit/v198/CzechVeg_36study_4fold_true_holdout_guild_vs_taxon_v198.json
+      - name: Upload source aggregate and publication holdout prediction diagnostics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-original-36publication-4fold-guild-vs-taxon-heldout-v198
+          path: results/audit/v198/
+          if-no-files-found: warn

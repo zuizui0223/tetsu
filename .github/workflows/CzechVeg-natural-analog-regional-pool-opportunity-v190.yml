@@ -1,0 +1,42 @@
+name: "v19.0 original Czech 117739 natural analogue reference vegetation plot opportunity"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/audit_CzechVeg_original_nonrail_analog_reference_pool_v190.py"
+      - "tests/test_CzechVeg_original_analog_pool_v190.py"
+      - ".github/workflows/CzechVeg-natural-analog-regional-pool-opportunity-v190.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v190-real-czechveg-natural-analog
+  cancel-in-progress: true
+jobs:
+  publisher-original-plot-reference-availability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Synthetic method tests only, original read separately
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_original_analog_pool_v190.py' -v
+      - name: Original author CzechVeg 2026 117739 header source download
+        run: |
+          mkdir -p source_original/v190
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 900 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v190/CzechVeg_headers.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v190/CzechVeg_headers.csv\n' | md5sum -c -
+      - name: Test actual matched railway-source vs independent nontransport / natural-analog botanical source availability
+        run: |
+          python -u scripts/audit_CzechVeg_original_nonrail_analog_reference_pool_v190.py \
+            --source-headers source_original/v190/CzechVeg_headers.csv \
+            --out results/audit/v190/CzechVeg_original_2026_railway_analog_nontransport_pool_opportunity_v190.json
+      - name: Artifact only aggregated original study-region-year-area support, no original botanical plot records or locations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-2026-original-independent-reference-pool-source-opportunity-v190
+          path: results/audit/v190/
+          if-no-files-found: warn

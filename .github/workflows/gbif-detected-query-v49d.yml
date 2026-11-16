@@ -1,0 +1,34 @@
+name: "v4.9d Official GBIF detected-status API search contract and indexed occurrence row schema"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/diagnose_GBIF_detected_query_v49d.py'
+      - '.github/workflows/gbif-detected-query-v49d.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-detected-status-source-v49d
+  cancel-in-progress: true
+jobs:
+  current-detection-enumeration-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official GBIF source and macro cell geography dependencies
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Test DETECTED and NOT_DETECTED filters against source reference counts and indexed row field names
+        run: python -u scripts/diagnose_GBIF_detected_query_v49d.py
+      - name: Archive privacy-safe source status contract, not original occurrence rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-detected-filter-source-and-row-schema-contract-v49d
+          path: results/audit/gbif_DETECTED_search_filter_support_v49d.json
+          if-no-files-found: warn

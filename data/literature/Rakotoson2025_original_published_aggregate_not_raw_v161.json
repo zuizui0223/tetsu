@@ -1,0 +1,64 @@
+{
+  "version": "v16.1_FR_RATP_author_original_published_AGGREGATES_only",
+  "source_title": "Plant communities responses and effects in railway environment",
+  "source_authors": "Rakotoson, Valantin-Morison, Meynard and Mediene",
+  "original_author_DOI": "10.1111/wre.70025",
+  "original_author_publisher_full_article_url": "https://onlinelibrary.wiley.com/doi/full/10.1111/wre.70025",
+  "publisher_date": "2025-06-19",
+  "field_author_samples_2021": {
+    "fixed_area_m2_per_vegetation_survey": 2,
+    "embankment_n_surveys": 266,
+    "track_n_surveys": 128,
+    "total_n_surveys": 394,
+    "distinct_species_reported": 255,
+    "independent_pairing_IDs_NOT_published": true,
+    "original_plot_by_taxon_presence_matrix_NOT_acquired": true,
+    "original_plot_coordinates_NOT_acquired": true
+  },
+  "railway_management_alerts": {
+    "source_time_window": "2020-2022",
+    "source_weeding_alert_events": 170,
+    "source_alert_definition": "Located complaint/request from railway operator staff triggering weed-control review; NOT proven cutting performed on a surveyed plot",
+    "paper_weed_alert_proximity_threshold_m": 200,
+    "source_original_200m_radius_chosen_to_represent_fraction_of_alerts_approx": 0.8,
+    "source_nearest_station_distance_half_of_alerts_below_m": 235,
+    "year_2019_herbicide_policy_change_NO_before_after_plot_cohort": true,
+    "source_2021_plant_inventories_AND_2020_22_alerts_NOT_identical_grain": true
+  },
+  "original_author_published_zone_average": {
+    "mean_species_richness": {
+      "embankment": 7,
+      "track": 2.4,
+      "publisher_p_model_comparison": "p<0.001"
+    },
+    "mean_original_abundance_sum_scale": {
+      "embankment": 52.6,
+      "track": 5,
+      "publisher_p_model_comparison": "p<0.001",
+      "NOT_plant_biomass": true
+    },
+    "mean_shannon": {
+      "embankment": 1.55,
+      "track": 0.88,
+      "publisher_p_model_comparison": "p<0.001"
+    },
+    "mean_pielou": {
+      "embankment": 0.57,
+      "track": 0.61,
+      "publisher_p_model_comparison": "p=0.67"
+    }
+  },
+  "authors_original_observational_functional_conclusion": "Railway track samples have more ruderal and annual species than adjacent embankment samples (not evidence of genetic adaptation or of actual repeated mowing exposure).",
+  "authors_original_descriptive_species_overlap": {
+    "reported_fraction_with_at_least_one_shared_species": 0.8,
+    "mean_copresence_shared_species_percent": 12.8,
+    "paired_plot_by_species_matrix_NOT_obtained": true,
+    "species_overlap_NOT_direct_seed_flow": true
+  },
+  "author_data_availability_statement": "Data will be made available on request.",
+  "new_plant_field_observations_collected_by_tetsu": false,
+  "394_surveys_are_NOT_394_distinct_railway_network_corridors": true,
+  "170_alerts_NOT_independent_mowing_treatments": true,
+  "no_original_SD_or_plot_heterogeneity_for_Hedges_g": true,
+  "original_citation_checked_by_web_at_2026_11_15": true
+}

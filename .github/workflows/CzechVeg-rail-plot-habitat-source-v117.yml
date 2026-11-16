@@ -1,0 +1,62 @@
+name: "v11.7 original CzechVeg 117739 vegetation plot railway source metadata and habitat gate"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_CzechVeg_rail_habitat_original_v117.py'
+      - 'tests/test_CzechVeg_rail_habitat_original_v117.py'
+      - '.github/workflows/CzechVeg-rail-plot-habitat-source-v117.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-CzechVeg-RAIL-original-header-117739-v117
+  cancel-in-progress: true
+jobs:
+  original-authentic-czech-vegetation-railway-habitat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test Zenodo true-source provenance and strict original railway plot site labeling
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_rail_habitat_original_v117.py' -v
+      - name: Read genuine publisher Zenodo version 1.1 immutable file listing and original signed metadata
+        run: |
+          mkdir -p source/CzechVeg117
+          curl --fail --show-error --silent --location --retry 3 --max-time 90 \
+            --output source/CzechVeg117/zenodo_record.json \
+            'https://zenodo.org/api/records/19231152'
+          python - <<'PY'
+          import json,os
+          m=json.load(open('source/CzechVeg117/zenodo_record.json'))
+          from pathlib import Path
+          from sys import path
+          path.insert(0,'scripts')
+          from audit_CzechVeg_rail_habitat_original_v117 import original_zenodo_entry
+          source=original_zenodo_entry(m)
+          with open(os.environ['GITHUB_ENV'],'a') as f:
+              f.write('ZENO_ORIGINAL_HEADERS_URL='+source['official_url']+'\n')
+          print(json.dumps(source))
+          PY
+      - name: Obtain author-published full 2026 Czech vegetation original 117739 plot header table (ephemeral)
+        run: |
+          curl --fail --show-error --silent --location --retry 3 --max-time 300 \
+            --output source/CzechVeg117/original_headers.csv \
+            "$ZENO_ORIGINAL_HEADERS_URL"
+      - name: Audit all original plot IDs original railway site descriptions actual plot areas and source strata, NO ecological model yet
+        run: |
+          python -u scripts/audit_CzechVeg_rail_habitat_original_v117.py \
+            --zenodo-record source/CzechVeg117/zenodo_record.json \
+            --source-headers source/CzechVeg117/original_headers.csv \
+            --output results/audit/CzechVeg_2026_v11_rail_site_117739_original_headers_v117.json
+      - name: Preserve count-level source audit and source file digests, NOT full original CSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genuine-CzechVeg-2026-railway-habitat-header-audit-v117
+          path: results/audit/CzechVeg_2026_v11_rail_site_117739_original_headers_v117.json
+          if-no-files-found: warn

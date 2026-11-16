@@ -1,0 +1,55 @@
+name: "v11.5 REAL Slovenia railway 89-site original side aggregation and 32768 section label flips"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_side_aggregation_section_flip_v115.py'
+      - 'tests/test_Slovenia_rail_side_aggregation_section_flip_v115.py'
+      - '.github/workflows/Slovenia-RAIL-side-section-exact-null-v115.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-real-source-side-32768-section-v115
+  cancel-in-progress: true
+jobs:
+  genuine-original-site-side-swap-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate original site-side score, frequency weighting root and exact 32768 section permutations
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_side_aggregation_section_flip_v115.py' -v
+      - name: Download authenticated original 2026 Slovenian railway botanical XLSX with locked SHA provenance
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Download authenticated source 261 taxon v11.0 reference result
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-RAIL-species-frequency-estimand-reversal-v110
+          run-id: 43567285954
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO110
+      - name: Compute actual 89-site 173 matched-side union-vs-paired correction and exact 15-section null
+        run: |
+          python -u scripts/analyze_Slovenia_rail_side_aggregation_section_flip_v115.py \
+            --original-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --verified110 source/SLO110/SLO_RAIL_2026_v110_species_equal_vs_occ_frequency_weighted_wind.json \
+            --output results/audit/SLO_RAIL_2026_v115_site_side_section_label_null.json
+      - name: Archive both positive and negative original source and matched-side alternatives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-RAIL-site-side-32768-section-exact-null-v115
+          path: results/audit/SLO_RAIL_2026_v115_site_side_section_label_null.json
+          if-no-files-found: warn

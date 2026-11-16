@@ -1,0 +1,50 @@
+name: "v9.9 REAL MIREN 26 source regions: matched roadside vs 52-102m interior alien plant richness, first visit and 5-year resurvey controls"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_MIREN_standardized_road_edge_vegetation_v99.py'
+      - 'tests/test_MIREN_standardized_road_edge_vegetation_v99.py'
+      - '.github/workflows/MIREN-global-roadside-vegetation-macro-v99.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-MIREN-original-macro-road-verge-alien-vegetation-v99
+  cancel-in-progress: true
+jobs:
+  independently-surveyed-real-global-MIREN-ROADside-macro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install real original vegetation survey frame with pandas/numpy
+        run: pip install 'numpy>=1.26,<3' 'pandas>=2.2,<3'
+      - name: Test source plot area/matched site-year, exact species uniqueness, nativity conflicts, source hash and survey-year dependence guards
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_MIREN_standardized_road_edge_vegetation_v99.py' -v
+      - name: Download independently MD5-audited ORIGINAL 17.9MB global MIREN roadside vegetation source CSV, 2007-2023
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/miren98
+      - name: Estimate original 100m² matched 1/2/3 ROAD plot alien richness and 24-region regional signs, dedup and resurvey sensitivities
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_MIREN_standardized_road_edge_vegetation_v99.py \
+            --source-csv source/miren98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --source-audit-v98 source/miren98/results/audit/MIREN_original_standardized_roadside_vegetation_source_v98.json \
+            --output results/audit/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json
+      - name: Archive original-source-backed region-equal positive road edge results AND all nonestimable regions/years with no RAIL effects
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-global-MIREN-road-edge-alien-flora-matched-plots-v99
+          path: results/audit/MIREN_global_mountain_road_100m2_alien_richness_macro_v99.json
+          if-no-files-found: warn

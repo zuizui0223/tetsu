@@ -1,0 +1,55 @@
+name: "v11.6 REAL Slovenian RAIL original eight dispersal strategy placebo checks"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_Slovenia_rail_dispersal_class_placebo_v116.py'
+      - 'tests/test_Slovenia_rail_dispersal_class_placebo_v116.py'
+      - '.github/workflows/Slovenia-RAIL-diaspore-placebo-classes-v116.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Slovenia-real-source-strategy-placebo-v116
+  cancel-in-progress: true
+jobs:
+  authentic-original-railway-diaspore-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test all original source dispersal strategies and missing-lifespan guardrails
+        run: python -m unittest discover -s tests -p 'test_Slovenia_rail_dispersal_class_placebo_v116.py' -v
+      - name: Retrieve original provenance-verified Šabić et al. 2026 railway 92 site botanical supplement
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Retrieve verified original 89 site 173 matched side exact null v11.5
+        uses: actions/download-artifact@v4
+        with:
+          name: real-Slovenia-RAIL-site-side-32768-section-exact-null-v115
+          run-id: 43570032263
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO115
+      - name: Test all source strategy classes with 32768 exact rail-section label swap null and family correction
+        run: |
+          python -u scripts/analyze_Slovenia_rail_dispersal_class_placebo_v116.py \
+            --original-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --verified115 source/SLO115/SLO_RAIL_2026_v115_site_side_section_label_null.json \
+            --output results/audit/SLO_RAIL_2026_v116_original_all_strategies_placebo.json
+      - name: Archive every estimable and nonestimable source guild including opposite signs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Slovenia-RAIL-8-strategy-all-guild-placebo-v116
+          path: results/audit/SLO_RAIL_2026_v116_original_all_strategies_placebo.json
+          if-no-files-found: warn

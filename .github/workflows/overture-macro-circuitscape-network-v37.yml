@@ -1,0 +1,41 @@
+name: v3.7 Source Overture physical railway NETWORK circuit resistance vs shortest-path redundancy
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/circuit_graph.py'
+      - 'scripts/audit_overture_50km_circuit_v37.py'
+      - 'tests/test_circuit_network_v37.py'
+      - '.github/workflows/overture-macro-circuitscape-network-v37.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-railway-network-circuit-v37
+  cancel-in-progress: true
+jobs:
+  three-block-actual-network-effective-resistance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install sparse circuit solver and original Overture source geodesic tools
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Verify exact physical resistor network math against triangle diamond tree and parallel track examples
+        run: python -m unittest discover -s tests -p 'test_circuit_network_v37.py' -v
+      - name: Compute actual physical RAIL resistor network effective resistance and compare Dijkstra in three frozen macro blocks
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_overture_50km_circuit_v37.py \
+            --blocks jp_tohoku us_midwest fr_burgundy \
+            --output results/audit/50km_rail_circuit_resistance_v37.json
+      - name: Archive only 50km-graph circuit redundancy source aggregates and pairs (no licensed source track geometry)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 50km-rail-physical-circuit-effective-resistance-v37
+          path: results/audit/50km_rail_circuit_resistance_v37.json
+          if-no-files-found: warn

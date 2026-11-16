@@ -1,0 +1,49 @@
+name: "v9.1 REAL US48 GBIF source recording-effort growth 2018-21 to 2023-25 vs apparent first GRIIS taxa"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_US_GRIIS_firstrecord_observation_effort_v91.py'
+      - 'tests/test_US_GRIIS_firstrecord_observation_effort_v91.py'
+      - '.github/workflows/US-GRIIS-GBIF-firstrecord-observation-effort-v91.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US48-GBIF-GRIIS-recorded-source-growth-v91
+  cancel-in-progress: true
+jobs:
+  actual-US48-temporal-GBIF-first-recording-effort-QA:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install audit source data dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Test recorded source year-window lengths and non-colonization inference bounds
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -m unittest discover -s tests -p 'test_US_GRIIS_firstrecord_observation_effort_v91.py' -v
+      - name: Download independently completed original GBIF 51-state source 2018-21 and 2023-25 indexed counts
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          run-id: 43153476962
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/GBIF85
+      - name: Quantify fixed 48-state annualized ALL-PLANT and country-listed GRIIS indexed-record reporting shifts and source first-record rates
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/audit_US_GRIIS_firstrecord_observation_effort_v91.py \
+            --temporal85 source/GBIF85/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json \
+            --output results/audit/US48_GBIF_GRIIS_year_source_firstrecord_effort_v91.json
+      - name: Archive only source-process state aggregates, not inferred seed introductions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US48-GBIF-GRIIS-firstrecord-source-effort-v91
+          path: results/audit/US48_GBIF_GRIIS_year_source_firstrecord_effort_v91.json
+          if-no-files-found: warn

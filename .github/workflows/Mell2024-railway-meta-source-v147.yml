@@ -1,0 +1,62 @@
+name: "v14.7 REAL Springer Mell 2024 systematic review railway meta source audit"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Mell2024_supplementary_railway_meta_v147.py'
+      - 'tests/test_Mell2024_supplementary_railway_meta_v147.py'
+      - '.github/workflows/Mell2024-railway-meta-source-v147.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-mell2024-real-review-supplements-v147
+  cancel-in-progress: true
+jobs:
+  original-publisher-meta-rail-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit tests for source-safe XLSX parser and nonidentification boundary
+        run: python -m unittest discover -s tests -p 'test_Mell2024_supplementary_railway_meta_v147.py' -v
+      - name: Download public CC BY original Springer systematic-review source spreadsheets 5 and 8
+        run: |
+          set -euo pipefail
+          mkdir -p source/Mell147
+          curl --fail --location --silent --show-error --retry 4 --retry-all-errors --max-time 120 \
+            --output source/Mell147/supp5.xlsx \
+            'https://static-content.springer.com/esm/art%3A10.1186%2Fs13750-024-00328-3/MediaObjects/13750_2024_328_MOESM5_ESM.xlsx'
+          curl --fail --location --silent --show-error --retry 4 --retry-all-errors --max-time 120 \
+            --output source/Mell147/supp8.xlsx \
+            'https://static-content.springer.com/esm/art%3A10.1186%2Fs13750-024-00328-3/MediaObjects/13750_2024_328_MOESM8_ESM.xlsx'
+          sha256sum source/Mell147/supp5.xlsx source/Mell147/supp8.xlsx
+      - name: Read ORIGINAL supplementary sheet headers and source railway rows (candidate only; not rail effect estimates)
+        run: |
+          python -u scripts/audit_Mell2024_supplementary_railway_meta_v147.py \
+            --study-metadata-5 source/Mell147/supp5.xlsx \
+            --effect-cases-8 source/Mell147/supp8.xlsx \
+            --output results/audit/Mell2024_original_review_rail_cases_v147.json \
+            > results_mell147_console.txt
+          python - <<'PY'
+          import json
+          d=json.load(open('results/audit/Mell2024_original_review_rail_cases_v147.json'))
+          for x in d['source_supplements']:
+              print('ORIGINAL',x['supplement_kind'],x['source_SHA256'],x['source_download_bytes'])
+              for s in x['source_sheets']:
+                  print('SHEET',s['publisher_sheet'],'rows',s['total_original_nonempty_or_empty_rows'],'rail keyword candidate rows',s['raw_rail_keyword_row_candidates_shown'])
+                  for p in s['first_8_nonempty_source_rows'][:4]:print('HEADER',p)
+                  for p in s['candidate_rail_rows_for_manual_column_validation'][:12]:print('RAIL SOURCE ROW',p)
+          print('NOTE keyword matches are NOT pooled effect sizes, distinct studies, or evidence of actual train seed dispersal')
+          PY
+      - name: Archive provenance and compact original-study railway-case audit, not Springer Excel
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mell2024-original-Springer-railway-meta-audit-v147
+          path: |
+            results/audit/Mell2024_original_review_rail_cases_v147.json
+          if-no-files-found: warn

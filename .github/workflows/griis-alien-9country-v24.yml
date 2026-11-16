@@ -1,0 +1,38 @@
+name: Nine country GRIIS alien vascular plant backbone source keys for real macro comparison
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - '.github/workflows/griis-alien-9country-v24.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-9country-GRIIS-alien-nub-v24
+  cancel-in-progress: true
+jobs:
+  nine-country-source-checklist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public source client
+        run: pip install 'requests>=2.31,<3'
+      - name: Check strict country GRIIS aliases, taxonomy keys, missing-status protection
+        run: python -m unittest discover -s tests -p 'test_griis_country_backbone_keys_v24.py' -v
+      - name: Fetch GBIF official GRIIS source taxonomy and direct Plantae backbone key maps
+        run: |
+          python -u scripts/audit_griis_country_backbone_keys_v24.py \
+            --countries JP KR US CA GB DE FR AU NZ \
+            --output results/audit/griis_9country_alien_backbone_keys_v24.json
+      - name: Store only documented country-specific introduced plant backbone key sets
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          path: results/audit/griis_9country_alien_backbone_keys_v24.json
+          if-no-files-found: warn

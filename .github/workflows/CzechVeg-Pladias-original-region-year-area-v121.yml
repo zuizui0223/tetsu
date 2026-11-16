@@ -1,0 +1,88 @@
+name: "v12.1 REAL CzechVeg RAIL-ROAD original region year plot-area common-support trait contrasts"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_CzechVeg_rail_road_region_year_area_overlap_v121.py'
+      - 'tests/test_CzechVeg_rail_road_region_year_area_overlap_v121.py'
+      - '.github/workflows/CzechVeg-Pladias-original-region-year-area-v121.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-authentic-CzechVeg-Pladias-area-year-region-v121
+  cancel-in-progress: true
+jobs:
+  original-CzechVeg-plant-source-common-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only Pladias original XLSX parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Verify original botanical region survey year plot-area grouping arithmetic and fail-closed source checks
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_rail_road_region_year_area_overlap_v121.py' -v
+      - name: Download existing verified full original CzechVeg and Pladias linked source receipt without raw source redistribution
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/Czech121/v119
+      - name: Resolve original immutable Zenodo species and header files with publisher MD5
+        run: |
+          mkdir -p source/Czech121/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/Czech121/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+          python - <<'PY'
+          import json,os,sys
+          sys.path.insert(0,'scripts')
+          from audit_CzechVeg_rail_habitat_original_v117 import original_zenodo_entry,HEADERS_NAME
+          from analyze_CzechVeg_Pladias_rail_road_diaspore_v119 import SPECIES_NAME
+          m=json.load(open('source/Czech121/raw/zenodo.json'))
+          a=original_zenodo_entry(m,HEADERS_NAME)
+          b=original_zenodo_entry(m,SPECIES_NAME)
+          with open(os.environ['GITHUB_ENV'],'a') as f:
+              f.write('CZE_HEADERS_URL='+a['official_url']+'\n')
+              f.write('CZE_SPECIES_URL='+b['official_url']+'\n')
+          print(json.dumps({"original_header_MD5":a['checksum'],"original_species_MD5":b['checksum'],"original_full_species_bytes":b['source_bytes']}))
+          PY
+      - name: Fetch original CzechVeg v1.1 all 117739 vegetation plot headers
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/Czech121/raw/headers.csv "$CZE_HEADERS_URL"
+      - name: Fetch original CzechVeg 2510340 species-by-plot published observations, ephemeral
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 1200 \
+            --output source/Czech121/raw/species.csv "$CZE_SPECIES_URL"
+      - name: Fetch on-demand Pladias original species Sádlo strategy and life form XLSX
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/Czech121/raw/Pladias_diaspore.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en'
+          curl --fail --location --show-error --silent --retry 3 --max-time 120 \
+            --output source/Czech121/raw/Pladias_lifeform.xlsx \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en'
+      - name: Run all six original Czech source region-decade-area overlap scenarios and report null/unsupported source cases
+        run: |
+          python -u scripts/analyze_CzechVeg_rail_road_region_year_area_overlap_v121.py \
+            --zenodo-record source/Czech121/raw/zenodo.json \
+            --header-csv source/Czech121/raw/headers.csv \
+            --species-csv source/Czech121/raw/species.csv \
+            --dispersal-xlsx source/Czech121/raw/Pladias_diaspore.xlsx \
+            --lifeform-xlsx source/Czech121/raw/Pladias_lifeform.xlsx \
+            --verified119 source/Czech121/v119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --output results/audit/CzechVeg_2026_v121_original_region_decade_plot_area_matched_wind_guild.json
+      - name: Preserve count-level official original source matching and six source scenario results without redistributing authors raw data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-CzechVeg-Pladias-region-year-area-common-support-v121
+          path: results/audit/CzechVeg_2026_v121_original_region_decade_plot_area_matched_wind_guild.json
+          if-no-files-found: warn

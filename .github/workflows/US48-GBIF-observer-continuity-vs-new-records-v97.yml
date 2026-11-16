@@ -1,0 +1,56 @@
+name: "v9.7 REAL US48 observer/site overlap vs late-only country-GRIIS recorded-source taxa with GBIF effort controls"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_US48_GBIF_firstrecord_observer_site_v97.py'
+      - 'tests/test_US48_GBIF_firstrecord_observer_site_v97.py'
+      - '.github/workflows/US48-GBIF-observer-continuity-vs-new-records-v97.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US48-GBIF-observer-and-site-continuity-lateonly-source-v97
+  cancel-in-progress: true
+jobs:
+  independent-original-GBIF-source-observer-site-first-record-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numpy and validated original GBIF source analysis packages
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Validate full exploratory metric matrix, common 48-state provenance and no individual observer identifiers
+        run: python -m unittest discover -s tests -p 'test_US48_GBIF_firstrecord_observer_site_v97.py' -v
+      - name: Download authentic v9.5 GBIF iNaturalist 48-state deidentified original observer and 10/50km site source quality aggregates
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US48-iNat-original-observer-site-deidentified-source-v95
+          run-id: 43203802514
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/observer95
+      - name: Download independently verified original US48 post-before GBIF GRIIS recording effort and late-only recorded taxonomy source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US48-GBIF-GRIIS-firstrecord-source-effort-v91
+          run-id: 43162581367
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/records91
+      - name: Compute all 7 by 2 posthoc observer/10km/50km source overlap versus late-only taxa source associations under fixed 48-state recording-effort controls
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_US48_GBIF_firstrecord_observer_site_v97.py \
+            --original95 source/observer95/US48_iNat_GBIF_original_observer_site_10km50km_v95.json \
+            --source91 source/records91/US48_GBIF_GRIIS_year_source_firstrecord_effort_v91.json \
+            --output results/audit/US48_GBIF_iNat_observer_site_vs_lateonly_GRIIS_source_v97.json
+      - name: Preserve complete matrix including contrary signs, source quality and no ecological causal claims
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US48-GBIF-observer-site-lateonly-source-associations-v97
+          path: results/audit/US48_GBIF_iNat_observer_site_vs_lateonly_GRIIS_source_v97.json
+          if-no-files-found: warn

@@ -1,0 +1,92 @@
+name: "v5.2 Six-country fixed-K80 botanical cohort K20-80 with independent GBIF dataset source overlap adjustment"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_joint_rarefaction_dataset_overlaps_v52.py'
+      - 'tests/test_joint_rarefaction_dataset_overlaps_v52.py'
+      - '.github/workflows/joint-recording-depth-datasets-v52.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-country-record-depth-and-dataset-adjusted-v52
+  cancel-in-progress: true
+jobs:
+  true-source-joint-recording-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source rarefaction and rank residualization dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify constant true botanical source cohort across all record rarefaction depths
+        run: python -m unittest discover -s tests -p 'test_joint_rarefaction_dataset_overlaps_v52.py' -v
+      - name: Fetch official 8-country complete GRIIS introduced species source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/plants
+      - name: Fetch actual complete same-source GBIF datasetKey observation distribution across all six countries
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-GBIF-50km-dataset-composition-*-v50'
+          run-id: 42796286437
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/datasets
+          merge-multiple: false
+      - name: Fetch original US FR railway physical shortest path source
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_old
+      - name: Fetch original US FR road physical shortest path source
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_old
+      - name: Fetch four additional RAIL physical shortest-path source country blocks
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-rail-physical-paths-*-v43'
+          run-id: 42780398147
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_new
+          merge-multiple: false
+      - name: Fetch four additional ROAD physical shortest-path source country blocks
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-road-physical-paths-*-v43'
+          run-id: 42781107642
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_new
+          merge-multiple: false
+      - name: Keep same six country block source and same >=K80 study cells when adjusting all-plants dataset overlap
+        run: |
+          test "$(find source/datasets -name '*.json' | wc -l)" -eq 6
+          test "$(find source/rail_new -name '*.json' | wc -l)" -eq 4
+          test "$(find source/road_new -name '*.json' | wc -l)" -eq 4
+          python -u scripts/analyze_joint_rarefaction_dataset_overlaps_v52.py \
+            --flora source/plants/griis_50km_10blocks_country_mask_v36.json \
+            --rail-sources source/rail_old/overture_50km_continuous_rail_routes_v32.json source/rail_new/*/*.json \
+            --road-sources source/road_old/overture_50km_macro_road_paths_v33.json source/road_new/*/*.json \
+            --dataset-sources source/datasets/*/*.json \
+            --output results/audit/fixed80_dataset_source_rarefaction_6country_v52.json
+      - name: Archive all 6 country outcomes, both periods, both source anchors and exact K20 K40 K80 same-cell comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: six-country-GRIIS-fixed80-record-depth-plus-dataset-overlap-v52
+          path: results/audit/fixed80_dataset_source_rarefaction_6country_v52.json
+          if-no-files-found: warn

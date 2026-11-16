@@ -1,0 +1,72 @@
+name: "v5.3b Frozen US Southeast out-of-analysis-region K80 GRIIS flora versus physical RAIL and ROAD"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/evaluate_us_southeast_geographic_holdout_v53.py'
+      - 'tests/test_us_southeast_geographic_holdout_v53.py'
+      - '.github/workflows/us-southeast-holdout-evaluate-v53.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-frozen-geographic-US-Southeast-K80-source-holdout-v53
+  cancel-in-progress: true
+jobs:
+  prospective-untouched-geography-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install numerical and regional GBIF/Overture source dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Test frozen pre-source US Southeast sample and non-estimable support logic
+        run: python -m unittest discover -s tests -p 'test_us_southeast_geographic_holdout_v53.py' -v
+      - name: Retrieve original historically fixed source US Southeast GRIIS introduced flora from pre-analysis geography
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Retrieve separately succeeded US Southeast Overture physical RAIL source paths
+        uses: actions/download-artifact@v4
+        with:
+          name: holdout-US-Southeast-50km-physical-rail-routes-v53
+          run-id: 42798094566
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Retrieve separately succeeded US Southeast Overture physical ROAD source paths
+        uses: actions/download-artifact@v4
+        with:
+          name: holdout-US-Southeast-50km-physical-road-routes-v53
+          run-id: 42798094566
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road
+      - name: Retrieve separately succeeded US Southeast full GBIF datasetKey observation source
+        uses: actions/download-artifact@v4
+        with:
+          name: holdout-US-Southeast-50km-full-GBIF-dataset-source-v53
+          run-id: 42798094566
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/dataset
+      - name: Evaluate the precommitted K80 dataset-overlap-adjusted US Southeast sign, or return NOT ESTIMABLE
+        run: |
+          python -u scripts/evaluate_us_southeast_geographic_holdout_v53.py \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --rail source/rail/holdout_US_Southeast_rail_source_v53.json \
+            --road source/road/holdout_US_Southeast_road_source_v53.json \
+            --dataset source/dataset/holdout_US_Southeast_dataset_source_v53.json \
+            --output results/audit/holdout_US_southeast_GRIIS_K80_route_v53.json
+      - name: Preserve precommitted holdout primary and every unfavourable/unsupported secondary result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-US-Southeast-50km-K80-rail-road-GRIIS-source-holdout-v53
+          path: results/audit/holdout_US_southeast_GRIIS_K80_route_v53.json
+          if-no-files-found: warn

@@ -1,0 +1,100 @@
+name: "v7.2 REAL six-country GIFT herbaceous woody x GBIF dominant dataset exclusion x RAIL ROAD"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_growthform_source_leaveout_v72.py'
+      - 'tests/test_growthform_source_leaveout_v72.py'
+      - '.github/workflows/GIFT-growthform-provider-leaveout-v72.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-sixcountry-growthform-real-provider-leaveout-v72
+  cancel-in-progress: true
+jobs:
+  matched-original-source-trait-group-provider-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-analysis scientific dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Run synthetic strict source-provider and both-trait gate tests
+        run: python -m unittest discover -s tests -p 'test_growthform_source_leaveout_v72.py' -v
+      - name: Download REAL GIFT 1.2.1 source mapped to current GRIIS GBIF keys
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-real-GIFT-growthform-railroad-macro-v71
+          run-id: 42980383943
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gift
+      - name: Download original six-country 50km GBIF-GRIIS flora source
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Download six real independently audited GRIIS source dataset partitions
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-GRIIS-50km-dominant-dataset-vs-other-*-v56'
+          run-id: 42831989148
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/dataset
+          merge-multiple: false
+      - name: Download original mapped US France railway paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_old
+      - name: Download original mapped US France road paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_old
+      - name: Download extra four country physical rail shortest routes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-rail-physical-paths-*-v43'
+          run-id: 42780398147
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail_new
+          merge-multiple: false
+      - name: Download extra four country physical road shortest routes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: 'tetsu-50km-road-physical-paths-*-v43'
+          run-id: 42781107642
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road_new
+          merge-multiple: false
+      - name: Execute sixcountry SAME 50km pair both-trait full versus top-dataset source-exclusion
+        run: |
+          test "$(find source/dataset -name '*.json' | wc -l)" -eq 6
+          test "$(find source/rail_new -name '*.json' | wc -l)" -eq 4
+          test "$(find source/road_new -name '*.json' | wc -l)" -eq 4
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_growthform_source_leaveout_v72.py \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --gift source/gift/sixcountry_GIFT_growth_form_source_v70.json \
+            --split-sources source/dataset/*/*.json \
+            --rail-sources source/rail_old/overture_50km_continuous_rail_routes_v32.json source/rail_new/*/*.json \
+            --road-sources source/road_old/overture_50km_macro_road_paths_v33.json source/road_new/*/*.json \
+            --output results/audit/sixcountry_GIFT_growthform_provider_leaveout_macro_v72.json
+      - name: Preserve ALL real source signed trait-group country coefficients and missingness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-6country-GIFT-growthform-RAIL-ROAD-provider-leaveout-v72
+          path: results/audit/sixcountry_GIFT_growthform_provider_leaveout_macro_v72.json
+          if-no-files-found: warn

@@ -1,0 +1,49 @@
+name: "v13.4 Swiss imported wheat viable seed germination and genotype source audit"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_Swiss_wheat_viable_seeds_v134.py'
+      - 'tests/test_Swiss_wheat_viable_seeds_v134.py'
+      - 'data/Swiss_Schulze2015_imported_wheat_germination_v134.csv'
+      - '.github/workflows/Swiss-wheat-viable-seed-source-v134.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-swiss-wheat-viable-seeds-v134
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  original-source-and-cohort-analysis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test cohort arithmetic and denominator safeguards
+        run: python -m unittest discover -s tests -p 'test_Swiss_wheat_viable_seeds_v134.py' -v
+      - name: Download original article from university-hosted public source
+        run: |
+          mkdir -p source/Swiss134 results/audit
+          curl --fail --location --show-error --silent --retry 1 --max-time 100 \
+            --output source/Swiss134/Schulze2015.pdf \
+            'https://www.cb.iee.unibe.ch/e58878/e337393/e337414/e483217/e615152/Schultzeetal2015_eng.pdf'
+          if ! command -v pdftotext >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          pdfinfo source/Swiss134/Schulze2015.pdf | head -16
+      - name: Verify source numerical rows and compute paired germination-genotype yields
+        run: |
+          python scripts/analyze_Swiss_wheat_viable_seeds_v134.py \
+            --csv data/Swiss_Schulze2015_imported_wheat_germination_v134.csv \
+            --pdf source/Swiss134/Schulze2015.pdf \
+            --output results/audit/Swiss_wheat_viable_seeds_v134.json
+      - name: Save numerical source audit without redistributing article PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: Swiss-wheat-viable-seeds-v134
+          path: results/audit/Swiss_wheat_viable_seeds_v134.json
+          if-no-files-found: error

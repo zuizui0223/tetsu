@@ -1,0 +1,34 @@
+name: USA-NPN 2023-25 rail near-vs-far site-level Open flowers species coverage
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_npn_site_phenometrics_rail.py'
+      - '.github/workflows/npn-site-pheno-rail.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-npn-2023-25-site-phenometrics
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public NPN and FRA GIS clients
+        run: pip install 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Annual Open flowers site phenometrics by taxon, independent of outcome direction
+        run: python scripts/audit_npn_site_phenometrics_rail.py --output results/audit/npn_site_phenometrics_rail_2023_25.json
+      - name: Keep only aggregate eligibility evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usa-npn-2023-2025-site-openflowers-rail-eligibility
+          path: results/audit/npn_site_phenometrics_rail_2023_25.json
+          if-no-files-found: warn

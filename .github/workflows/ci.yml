@@ -1,0 +1,23 @@
+name: tetsu descriptive pilot checks
+on:
+  pull_request:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install mask geometry test dependencies
+        run: pip install 'Pillow>=10,<13' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'pyshp>=2.3,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'pandas>=2.2,<3'
+      - name: Run input validation tests
+        run: python -m unittest discover -s tests -v
+      - name: Run synthetic example (not real analysis)
+        run: |
+          python scripts/run_pairwise.py --incidence examples/synthetic_incidence.csv --pairs examples/synthetic_pairs.csv --output results/synthetic
+          test -s results/synthetic/summary.json

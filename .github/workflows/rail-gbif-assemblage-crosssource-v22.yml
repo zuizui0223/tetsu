@@ -1,0 +1,51 @@
+name: Explore 10-country GBIF observed species composition vs Overture railway-cell topology v2.2
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_macro_rail_assemblages_v22.py'
+      - 'tests/test_macro_rail_assemblages_v22.py'
+      - '.github/workflows/rail-gbif-assemblage-crosssource-v22.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-exploratory-rail-gbif-assemblage-v22
+  cancel-in-progress: true
+jobs:
+  species-composition-versus-rail-connectivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate record rarefaction and connector-vs-disconnected species-cell logic
+        run: python -m unittest discover -s tests -p 'test_macro_rail_assemblages_v22.py' -v
+      - name: Download real GBIF 10country 90cell two-period source from SUCCESS run 42728479639
+        uses: actions/download-artifact@v4
+        with:
+          name: gbif-10country-90cells-two-period-full-facet-matrix-v20
+          run-id: 42728479639
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gbif
+      - name: Download Overture physical rail-connector source from SUCCESS run 42728551036
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-real-rail-connectors-10country-v21
+          run-id: 42728551036
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Audit completed source join and compute noncausal species-rail comparisons
+        run: |
+          python scripts/analyze_macro_rail_assemblages_v22.py             --gbif-source source/gbif/gbif_specieskey_10country_90cells_2periods_v20.json             --rail-source source/rail/overture_rail_connectors_10country_v21.json             --output results/audit/rail_gbif_observed_composition_joint_v22.json
+      - name: Archive per-city ecological source association diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macro-10country-observed-plants-vs-rail-connectivity-source-v22
+          path: results/audit/rail_gbif_observed_composition_joint_v22.json
+          if-no-files-found: warn

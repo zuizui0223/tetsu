@@ -1,0 +1,37 @@
+name: "v11.1 REAL Kashmir Himalaya 2014/2017 rail Dryad DOI source discovery"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_Kashmir_2021_rail_Dryad_source_v111.py'
+      - 'tests/test_Kashmir_2021_rail_Dryad_source_v111.py'
+      - '.github/workflows/Kashmir-RAIL-Dryad-original-metadata-v111.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-Kashmir-Dryad-original-railway-v111
+  cancel-in-progress: true
+jobs:
+  independent-original-Himalayan-railway-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test repaired NLM Dryad DOI URL and no unverified original sample data
+        run: python -m unittest discover -s tests -p 'test_Kashmir_2021_rail_Dryad_source_v111.py' -v
+      - name: Query real Dryad v2 public metadata and file IDs for original Kashmir rail vegetation 2014 and 2017
+        run: |
+          python -u scripts/audit_Kashmir_2021_rail_Dryad_source_v111.py \
+            --output results/audit/Kashmir_2021_Rashid_rail_2014_2017_Dryad_real_original_source_v111.json
+      - name: Archive publisher metadata and correct catalog DOI, even on access failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Kashmir-Himalaya-rail-Dryad-source-v111
+          path: results/audit/Kashmir_2021_Rashid_rail_2014_2017_Dryad_real_original_source_v111.json
+          if-no-files-found: warn

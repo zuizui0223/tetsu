@@ -1,0 +1,71 @@
+name: "v17.0 ACTUAL Czech Echium source CC0 CC-BY photo PIXELS and blinded 29-pair contact sheet"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/build_Echium_29_railphoto_blinded_CC_contact_sheets_v170.py'
+      - 'tests/test_Echium_original_licensed_pixel_review_v170.py'
+      - '.github/workflows/Echium-actual-29-photo-pair-CC-review-v170.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v170-Echium-original29-pairs-blinded-licensed-photo-review
+  cancel-in-progress: true
+jobs:
+  genuine-actual-photo-contact-review-cohort:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install actual image decoding, real geo polyline and original iNaturalist API dependencies
+        run: python -m pip install 'requests==2.32.3' 'Pillow==11.3.0' 'shapely==2.1.2' 'pyproj==3.6.1' 'osmium==4.2.0'
+      - name: Synthetic-only pixel license, photo attribution, public HTTPS whitelist, blind A/B, original 29 pair and no GPS/ID output integrity tests
+        run: python -m unittest discover -s tests -p 'test_Echium_original_licensed_pixel_review_v170.py' -v
+      - name: Retrieve original Czech v16.8 true 29 local iNaturalist photo matches aggregate and source covariates audit
+        uses: actions/download-artifact@v4
+        with:
+          name: Czech-genuine-4flower-local-photo30m-CC-control-pairs-v168
+          run-id: 43695087773
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE170/real-v168
+      - name: Retrieve independently authenticated original iNaturalist photo census Czech+Slovenia v16.6 counts
+        uses: actions/download-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          run-id: 43693580409
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE170/real-v166
+      - name: Restore fixed actual original Geofabrik 2023 Czech railway graph source 816 MB
+        uses: actions/cache/restore@v4
+        with:
+          path: source/CZE155/czech-republic-230101.osm.pbf
+          key: tetsu-czech-20230101-geofabrik-original-816159635-pbf-source
+          fail-on-cache-miss: true
+      - name: SHA-verify full genuine original 2023 OSM source before constructing nearest polyline
+        run: |
+          set -euo pipefail
+          test "$(stat --format=%s source/CZE155/czech-republic-230101.osm.pbf)" = "816159635"
+          printf '%s  %s\n' \
+            '26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747' \
+            'source/CZE155/czech-republic-230101.osm.pbf' | sha256sum --check
+      - name: Source verify exact true Echium 29 Czech month+10km unique-observer match pairs; download actual CC0/BY attributed public image bytes, create BLINDED A/B review sheets only
+        run: |
+          python -u scripts/build_Echium_29_railphoto_blinded_CC_contact_sheets_v170.py \
+            --source-v168 source/CZE170/real-v168/Czech_4original_flowering_rail30_local_pairing_photo_source_v168.json \
+            --source-v166 source/CZE170/real-v166/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
+            --original-Czech-2023-osm source/CZE155/czech-republic-230101.osm.pbf \
+            --out results/audit/Czech_Echium_original29_genuine_photo_blind_v170 \
+            --max-pairs 29
+      - name: Publish properly attributed CC0 CC-BY actual public photo contact sheets and blank human reviewer form ONLY to ephemeral workflow artifact, never commit images, coordinates or iNaturalist observation IDs to repository
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-Czech-Echium-paired-CC-photo-PIXELS-blind-human-review-v170
+          path: results/audit/Czech_Echium_original29_genuine_photo_blind_v170/
+          compression-level: 5
+          if-no-files-found: warn

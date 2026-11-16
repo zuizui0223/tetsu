@@ -1,0 +1,55 @@
+name: "v17.3 VERIFIED Slovenian 89-site 261 taxon common-species removal and 15-section validation"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Slovenia_species_guild_rare_common_15section_CV_v173.py'
+      - 'tests/test_Slovenia_species_guild_common_taxa_leaveout_v173.py'
+      - '.github/workflows/Slovenia-source-rare-common-species-heldout-v173.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v173-real-Slovenia-v172-taxon-frequent-species-holdout-sensitivity
+  cancel-in-progress: true
+jobs:
+  true-original-field-source-rare-common-retraining:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Strict synthetic source-probabilities tests for common taxon drop and original fifteen fold preservation
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_species_guild_common_taxa_leaveout_v173.py' -v
+          python -m unittest discover -s tests -p 'test_Slovenia_species_vs_guild_section_holdout_v172.py' -v
+      - name: Download ORIGINAL genuine 2026 Slovenian railway field XLSX, publisher original 92 locations and DOI audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v173/author_original
+      - name: Fixed original Slovenian real publisher workbook SHA256 and source-byte-count fail-closed
+        run: |
+          set -euo pipefail
+          test "$(stat -c%s source/v173/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx)" = "401279"
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            source/v173/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx | sha256sum --check
+      - name: Require exact genuine v17.2 M0 M1 M2 BS BT BOTH source-section holdout logloss before re-training after top10 taxon removal and shrinkage sensitivity
+        run: |
+          python -u scripts/audit_Slovenia_species_guild_rare_common_15section_CV_v173.py \
+            --source-SI-original-XLSX source/v173/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --original-author-audit-v102 source/v173/author_original/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/Slovenia_original_89site_15section_species_guild_frequency_shrinkage_v173.json
+      - name: Archive only source study DOI SHA and true original railway section model sensitivity aggregate derived from publisher material, no original locations or photographic GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Original-Slovenia-2026-guild-vs-species-source-frequency-15section-v173
+          path: results/audit/Slovenia_original_89site_15section_species_guild_frequency_shrinkage_v173.json
+          if-no-files-found: warn

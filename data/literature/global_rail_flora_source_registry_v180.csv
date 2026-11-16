@@ -1,0 +1,24 @@
+country,source,reported_taxa,list_structure,tier,publication_url,limitations
+CZ,Kutlvasr et al. (2024) 39 stations,761,station x taxon,A,https://doi.org/10.23855/preslia.2024.247,"mixed railway station habitats; 39 sites, previous source-verified"
+SI,Sabic et al. (2026) Slovenia railway microhabitats,312,site x taxon,A,https://doi.org/10.1007/s44473-026-00155-z,92 original sites; 89 QC sites in tetsu; microhabitats distinct
+HR;BA,Jasprica et al. (2017) Mediterranean railway stations,359,15 station x taxon,A,https://doi.org/10.20302/NC.2017.26.21,13 HR + 2 BA sites from ONE study
+IT,Adorni and Ghillani (2020) Parma,438,28 station x taxon,A,https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf,"study-local coded station list, mixed habitats"
+AT,Stoehr and Brandes (2014) East Tyrol,398,6 station x taxon,A,https://www.zobodat.at/pdf/CAR_204_124_0631-0670.pdf,full table includes outside-district Oberdrauburg separately
+SK,Majekova et al. (2016) East Slovakia stations,207 Košice; 204 Spišská Nová Ves,2 station x taxon by historical or recent,A,https://www.upjs.sk/app/uploads/sites/15/2022/10/173-188_Majekova_et_al-upr.pdf,historic and contemporary effort not comparable
+IN,Rashid et al. (2021) Kashmir railway,unverified,31 transects x taxon in Dryad XLSX,A,https://doi.org/10.5061/dryad.0p2ngf20h,"transects perpendicular to rail, 2014 and 2017"
+IT,Filibeck et al. (2012) Lazio embankment,287,pooled taxon list,B,https://hrcak.srce.hr/file/130139,one 4.5km high-speed rail embankment
+PL,Warcholinska and Suwara-Szmigielska (2008) Lask,369,town-level pooled taxon list,B,https://czasopisma.uni.lodz.pl/biologica/article/view/18835,historic and 2003-04 source mixed
+PL,Warcholinska and Suwara-Szmigielska (2009) Pabianice,382,town-level pooled taxon list,B,https://czasopisma.uni.lodz.pl/biologica/article/view/7479,site incidence absent from abstract
+FR,Hoff Strasbourg rail habitat Annex 12,unverified,rail habitat taxon names,B,https://www.societe-botanique-alsace.org/wp-content/uploads/2023/12/Annexe-a-la-flore-et-a-la-vegetation-de-Strasbourg.pdf,check dating and recording effort
+TR,Altay et al. (2015) Haydarpasa-Gebze line,194,published species appendices,B,https://www.jeb.co.in/journal_issues/201501_jan15_supp/paper_21.pdf,174 spontaneous and 20 exotic/cultivated; corridor 50km
+DE,Winkler (2026) Stuttgart railway track,68,taxon list with frequencies,B,https://www.mdpi.com/2673-4133/7/2/52,track identities not available
+AT,Leonhartsberger and Poeltl (2019) Graz stations,177 vascular,taxon list with restricted station flags,B,https://www.zobodat.at/pdf/JoanBot_16_0031-0046.pdf,station by taxon blanks must not be inferred
+IT;AT,Bertolli et al. (2023) Verona-Innsbruck atlas,1177,"reported 107 stations, 21301 archive records",C,https://doi.org/10.53135/ANNMUSCIVROV20233903,full 1177x107 matrix not retrieved from journal article
+NL,Koster (1987) Netherlands railway flora,~1032,292p historical regional survey,C,https://edepot.wur.nl/390615,explicit selection of which common species are reported
+UA;PL,Denisow et al. (2017) Lviv and Lublin,509 all taxa combined; 70 invasive named,invasive subset with per-city frequency,C,https://doi.org/10.5586/aa.1727,only 70 invasive taxa published with identities in table
+UA,Dziuba et al. (2022) Kyiv,unverified,379 relevés aggregated in syntaxa tables,C,https://doi.org/10.1007/s11756-021-00961-0,raw relevé matrix not obtained
+CH,Tinner and Schumacher (2004) NE Switzerland,509,4 stations complete list claimed in abstract,C,https://doi.org/10.1007/s00035-004-0703-6,full species list not retrieved
+BR,Mendes (2023) Sao Paulo railway flora,unverified,thesis on four active sections and reference habitats,C,https://repositorio.ufscar.br/items/accded14-c5d2-4269-b357-a5874ad0d384,100 species discussed in chapter 5 not guaranteed full list
+JP,Abe et al. (2012) railway weed survey,62 taxa reported; top 20 published,partial ranking from 109 sections,C,https://www.jstage.jst.go.jp/article/weed/57/4/57_159/_pdf,full list of 62 taxa not verified
+GB,Sargent (1984) national railway land flora,1632 secondarily reported,original checklist not retrieved,C,https://hrcak.srce.hr/file/130139,figure only verified as citation within Filibeck 2012
+AU,Western Australia Donnybrook-Katanning rail reserve,154 selected dominants,natural reserve floristic list,EXCLUDE,https://library.dbca.wa.gov.au/FullTextFiles/021122.pdf,"woodland not ballast, not comparable"

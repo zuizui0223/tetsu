@@ -1,0 +1,39 @@
+name: "v7.9 REAL US BTS FAF6 2022 state crop-associated RAIL vs TRUCK OD tonnage source"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - scripts/audit_BTS_FAF6_2022_agricultural_rail_freight_v79.py
+      - tests/test_BTS_FAF6_2022_agricultural_rail_freight_v79.py
+      - .github/workflows/BTS-FAF6-agricultural-rail-freight-v79.yml
+  workflow_dispatch:
+concurrency:
+  group: tetsu-BTS-FAF6-2022-crop-rail-vs-truck-v79
+  cancel-in-progress: true
+jobs:
+  authentic-bts-faf6-state-od-commodity-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original BTS FAF6 2022 public freight source client
+        run: pip install 'requests>=2.31,<3'
+      - name: Validate official state-origin OD/commodity CSV format, units and source integrity
+        run: python -m unittest discover -s tests -p test_BTS_FAF6_2022_agricultural_rail_freight_v79.py -v
+      - name: Retrieve authentic official public FAF6.0 State 2022 CSV ZIP and audit SCTG02/03 RAIL versus TRUCK freight flows
+        run: |
+          python -u scripts/audit_BTS_FAF6_2022_agricultural_rail_freight_v79.py \
+            --output results/audit/BTS_FAF6_2022_rail_truck_crop_OD_v79.json
+      - name: Preserve only aggregated state code x domestic freight mode crop-source audit, never assign to specific rail lines
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US-BTS-FAF6-state-2022-rail-truck-crop-freight-v79
+          path: results/audit/BTS_FAF6_2022_rail_truck_crop_OD_v79.json
+          if-no-files-found: warn

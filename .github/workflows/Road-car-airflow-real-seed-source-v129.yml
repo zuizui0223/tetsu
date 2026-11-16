@@ -1,0 +1,73 @@
+name: "v12.9 TRUE 2013 four-species seed dispersal by CAR airflow numeric original PLOS source, ROAD not RAIL"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/road_car_airflow_vonderlippe2013_original_table2_numeric_v129.csv'
+      - 'scripts/analyze_road_car_airflow_original_seed_morphology_v129.py'
+      - 'tests/test_road_car_airflow_original_seed_morphology_v129.py'
+      - '.github/workflows/Road-car-airflow-real-seed-source-v129.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-actual-PLOS-2013-CAR-not-rail-diaspore-v129
+  cancel-in-progress: true
+jobs:
+  author-original-road-car-seed-physical-dispersal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate original peer-reviewed PLOS Table2 physical seed displacement for 4 actual taxa and 5 cumulative passes
+        run: python -m unittest discover -s tests -p 'test_road_car_airflow_original_seed_morphology_v129.py' -v
+      - name: Probe publisher original full-text PLOS article provenance without copying protected raw tables into repository
+        run: |
+          mkdir -p source/PLOS129 results/audit
+          if curl --fail --location --silent --show-error --retry 1 --max-time 55 \
+            -o source/PLOS129/article-original-publisher.html \
+            'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0052733'; then
+              python - <<'PY'
+          import pathlib,hashlib,json
+          b=pathlib.Path('source/PLOS129/article-original-publisher.html').read_bytes()
+          title=b'Human-Mediated Dispersal of Seeds by the Airflow of Vehicles'
+          doi=b'10.1371/journal.pone.0052733'
+          good=title in b and doi in b and len(b)>15000
+          receipt={"PLOS_original_fulltext_HTML_downloaded":True,
+                   "published_article_title_DOI_and_meaningful_content_confirmed":good,
+                   "original_PLOS_source_HTML_sha256":hashlib.sha256(b).hexdigest(),
+                   "source_bytes":len(b),
+                   "not_manually_fabricated_unpublished_seed_replicates":True,
+                   "numeric_table_20_rows_still_manually_transcribed_original_Table2":True}
+          pathlib.Path('results/audit/PLOS2013_original_article_source_media_v129.json').write_text(json.dumps(receipt,indent=2))
+          print(json.dumps(receipt),flush=True)
+          if not good:raise SystemExit('Downloaded page is not real original peer-reviewed PLOS fulltext')
+          PY
+          else
+              python - <<'PY'
+          import pathlib,json
+          receipt={"PLOS_original_fulltext_HTML_downloaded":False,
+                   "NO_claim_original_PLOS_HTML_bytes_verified":True,
+                   "original_source_Table2":"von der Lippe et al. (2013) PLOS ONE e52733 Table 2, 4 real taxa × 5 car-pass levels manually transcribed and exact original endpoint numeric anchors tested"}
+          pathlib.Path('results/audit/PLOS2013_original_article_source_media_v129.json').write_text(json.dumps(receipt,indent=2))
+          print(json.dumps(receipt),flush=True)
+          PY
+          fi
+      - name: Quantify actual PLOS 2013 original CAR seed airflow dispersal morphology and 1–80 cumulative pass lengths, no train extrapolation
+        run: |
+          python -u scripts/analyze_road_car_airflow_original_seed_morphology_v129.py \
+            --source-table2-transcription data/road_car_airflow_vonderlippe2013_original_table2_numeric_v129.csv \
+            --output results/audit/PLOS2013_original_car_airflow_four_seed_species_dispersion_v129.json
+      - name: Archive original-source physical seed displacement descriptive outputs and source provenance, not false railway experiment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-PLOS2013-4seed-ROAD-car-airflow-morphology-v129
+          path: |
+            results/audit/PLOS2013_original_car_airflow_four_seed_species_dispersion_v129.json
+            results/audit/PLOS2013_original_article_source_media_v129.json
+          if-no-files-found: warn

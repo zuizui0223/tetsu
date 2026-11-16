@@ -1,0 +1,48 @@
+name: "v8.1 REAL Census FIPS x GBIF GRIIS-state plant source feasibility 8 pre-frozen US states"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/harvest_US_state_GRIIS_GBIF_plant_source_v81.py'
+      - 'tests/test_US_state_GRIIS_GBIF_plant_source_v81.py'
+      - '.github/workflows/US-state-GBIF-GRIIS-plant-source-pilot-v81.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-US-state-pilot-GBIF-GRIIS-Census-FIPS-v81
+  cancel-in-progress: true
+jobs:
+  original-eight-US-state-plant-source-feasibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public Census FIPS, GBIF plant species and 2023 GRIIS taxon clients
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4' 'scipy>=1.12,<2'
+      - name: Test Census 51-state FIPS code join, GBIF source status, species facets and missingness gates
+        run: python -m unittest discover -s tests -p 'test_US_state_GRIIS_GBIF_plant_source_v81.py' -v
+      - name: Download independently sourced 9-country accepted GRIIS species key source list
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-9country-real-introduced-plants-backbone-nub-v24
+          run-id: 42730506112
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/griis
+      - name: Read actual Census 51-state code names then GBIF 2010-17 and 2018-25 speciesKey facets for 8 frozen US state sources
+        run: |
+          python -u scripts/harvest_US_state_GRIIS_GBIF_plant_source_v81.py \
+            --griis source/griis/griis_9country_alien_backbone_keys_v24.json \
+            --output results/audit/US_eight_state_GRIIS_GBIF_indexed_flora_source_v81.json
+      - name: Preserve state-level original recording source quality and taxon matrices, no freight or ecological effect claims
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US8state-Census-GBIF-GRIIS-plant-source-v81
+          path: results/audit/US_eight_state_GRIIS_GBIF_indexed_flora_source_v81.json
+          if-no-files-found: warn

@@ -1,0 +1,70 @@
+name: "v16.8 ORIGINAL Czech 4 flowering taxa same-month local 30m near vs off-rail CC photos"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py'
+      - 'tests/test_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py'
+      - '.github/workflows/Czech-4flower-original-local-photo-matched-v168.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v168-source-CZ4-angiosperm-near30-control-photo-monthly-local
+  cancel-in-progress: true
+jobs:
+  original-Czech-2023-OSM-near-rail-photo-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned public source OSM, pyproj and iNaturalist read-only API
+        run: python -m pip install 'requests==2.32.3' 'shapely==2.1.2' 'pyproj==3.6.1' 'osmium==4.2.0'
+      - name: Synthetic-only 1to1 exact year/month + 10km geographical photo-pair source and strict CC/site privacy tests
+        run: python -m unittest discover -s tests -p 'test_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py' -v
+      - name: Restore original v16.7 verified flowering-photo priority and original botanical taxon selection
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-source-rail-photo30m-Flower-annotation-review-v167
+          run-id: 43694215159
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE168/original-v167
+      - name: Download original v16.6 FULL Czech20 photo source original iNaturalist API counts and source verification
+        uses: actions/download-artifact@v4
+        with:
+          name: original-two-country-rail-photo30m-20taxa-verified-eligibility-v166
+          run-id: 43693580409
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/CZE168/original-v166
+      - name: Restore existing original CZ 2023 historical 816MB rail PBF source, no latest 2026 rail map substitution
+        uses: actions/cache/restore@v4
+        with:
+          path: source/CZE155/czech-republic-230101.osm.pbf
+          key: tetsu-czech-20230101-geofabrik-original-816159635-pbf-source
+          fail-on-cache-miss: true
+      - name: Verify original geographical source exact SHA and size before photo-rail proximity
+        run: |
+          set -euo pipefail
+          test "$(stat -c%s source/CZE155/czech-republic-230101.osm.pbf)" = "816159635"
+          printf '%s  %s\n' \
+            '26ff09ded5fa72dc9556b543b532d7df011f2e3c08af461ea2f537a9b0b42747' \
+            'source/CZE155/czech-republic-230101.osm.pbf' | sha256sum --check
+      - name: Original four species source complete iNat photo re-census, strict CC + guaranteed near30 vs 100-1000m distant photo, same calendar year-month 10km distinct observer 1to1
+        run: |
+          python -u scripts/audit_Czech_four_flower_taxa_local_near30_vs_control_photo_pairs_v168.py \
+            --verified-v167 source/CZE168/original-v167/tetsu_v167_source20_rail_photo30m_real_Flowers_annotation_review_gate.json \
+            --verified-v166 source/CZE168/original-v166/real_iNaturalist_top20_railway_photo30m_complete_source_geo_gate_v166.json \
+            --czech-original-osm source/CZE155/czech-republic-230101.osm.pbf \
+            --output results/audit/Czech_4original_flowering_rail30_local_pairing_photo_source_v168.json \
+            --api-delay 1.10
+      - name: Archive only aggregate matched photo opportunities; no observation IDs, usernames, image pixels or precise lat lon
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Czech-genuine-4flower-local-photo30m-CC-control-pairs-v168
+          path: results/audit/Czech_4original_flowering_rail30_local_pairing_photo_source_v168.json
+          if-no-files-found: warn

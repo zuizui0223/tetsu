@@ -1,0 +1,14 @@
+photo_no,scope_review,whole_individual_visible,flower_visible,active_track_visible,quality_comment
+1,multi_individual_patch,no,yes,no,clover patch with numerous flowers; no single target individual isolatable
+2,flower_closeup,no,yes,no,one flower head and partial leaves; no full clover
+3,multi_individual_patch,no,yes,no,mixed clover cover and ground; stem boundaries uncertain
+4,ambiguous_full_plant,uncertain,yes,no,tall goldenrod with visible base and tip but merges with surrounding stems
+5,handled_fragment,no,yes,no,stem/inflorescence held by hand; not intact whole plant in situ
+6,partial_shoot,no,uncertain,no,flowering shoot only; base omitted and phase unclear at this resolution
+7,multi_individual_patch,no,yes,no,many goldenrod shoots; individual assignment uncertain
+8,partial_shoot,no,yes,no,branch with flower heads; no visible entire plant
+9,partial_shoot,no,uncertain,no,goldenrod shoots partly cropped; likely buds or senescing florets
+10,multi_individual_patch,no,yes,no,many clover ramets and heads; no isolated individual
+11,multi_individual_patch,no,yes,no,clover vegetation patch with partial plant context
+12,multi_individual_patch,no,yes,no,clover field with multiple heads and stems
+13,multi_individual_patch,no,yes,no,mixed clover mat; target individual indeterminate

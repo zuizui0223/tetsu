@@ -1,0 +1,45 @@
+name: "v18.8 ORIGINAL Italy Parma 28 stations independently replicate joint taxonomy and lifeform fixed-margin null"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/analyze_Parma_2020_joint_taxonomic_lifeform_null_v188.py"
+      - "tests/test_Parma_2020_joint_null_v188.py"
+      - ".github/workflows/Parma-2020-joint-functional-taxonomic-null-v188.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v188-parma-28-independent-original
+  cancel-in-progress: true
+jobs:
+  source-2020-parma28:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install publisher PDF native reader, no OCR
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Test lifeform and taxon null preservation on synthetic fixtures only
+        run: python -m unittest discover -s tests -p 'test_Parma_2020_joint_null_v188.py' -v
+      - name: Re-fetch exact museum 2020 original (expired cert explicitly logged; original SHA locked)
+        run: |
+          mkdir -p source_original/v188
+          echo 'Publisher TLS certificate expired; --insecure for public PDF only with immutable published source SHA256 validation'
+          curl --insecure -LfsS --retry 3 --connect-timeout 20 --max-time 200 \
+          'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+          -o source_original/v188/Adorni_Ghillani_2020_original.pdf
+          printf 'c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787  source_original/v188/Adorni_Ghillani_2020_original.pdf\n' | sha256sum -c -
+      - name: Original-source reparse 438 taxa and 28 stations, then true fixed-margin permutation comparisons
+        run: |
+          python -u scripts/analyze_Parma_2020_joint_taxonomic_lifeform_null_v188.py \
+            --original-pdf source_original/v188/Adorni_Ghillani_2020_original.pdf \
+            --output results/audit/v188/Italy_Parma_2020_taxonomic_lifeform_internal_null_28station_v188.json
+      - name: Archive only source-derived aggregate diagnostic no original PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Italy-Parma-2020-original-28station-joint-tax-lifeform-internal-null-v188
+          path: results/audit/v188/
+          if-no-files-found: warn

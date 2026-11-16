@@ -1,0 +1,59 @@
+name: "v12.2 source-authenticated CzechVeg 117739 plot same-publication rail-road reference overlap"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_CzechVeg_shared_railroad_reference_studies_v122.py'
+      - 'tests/test_CzechVeg_shared_railroad_reference_studies_v122.py'
+      - '.github/workflows/CzechVeg-original-same-study-railroad-v122.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-CzechVeg-original-same-publication-railroad-v122
+  cancel-in-progress: true
+jobs:
+  original-study-biological-comparability-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test missing study provenance versus true rail-road co-observed original study
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_shared_railroad_reference_studies_v122.py' -v
+      - name: Download published CzechVeg 2026 full-source 117739 plot original lineage+Pladias v11.9 verified receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/Czech122/v119
+      - name: Read official original Zenodo plot header provenance
+        run: |
+          mkdir -p source/Czech122/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/Czech122/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+      - name: Download official original 117739 Czech vegetation plot header table (bibliography and actual localities)
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/Czech122/raw/headers.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content'
+      - name: Measure same original study railway-and-road vegetation plots under region/decade/area matching, no biological effect
+        run: |
+          python -u scripts/audit_CzechVeg_shared_railroad_reference_studies_v122.py \
+            --zenodo-record source/Czech122/raw/zenodo.json \
+            --source-headers source/Czech122/raw/headers.csv \
+            --verified119 source/Czech122/v119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --output results/audit/CzechVeg_2026_v122_shared_study_rail_road_field_site_source.json
+      - name: Preserve source bibliography and study sampling comparability summary but not raw original data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-CzechVeg-2026-railroad-shared-study-provenance-v122
+          path: results/audit/CzechVeg_2026_v122_shared_study_rail_road_field_site_source.json
+          if-no-files-found: warn

@@ -1,0 +1,70 @@
+name: "v17.4 FULL CzechVeg 2.51M original plants: independent same-study railway-road plot background for 39 Preslia stations"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/analyze_original_CzechVeg_independent_railroad_plot_baseline_39rail_stations_v174.py'
+      - 'tests/test_original_CzechVeg_independent_baseline_39Preslia_taxa_v174.py'
+      - '.github/workflows/CzechVeg-full-background-39station-source-v174.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v174-czechveg-2510340-source-study-vs-real-preslia39
+  cancel-in-progress: true
+jobs:
+  full-original-CzechVeg-Czech-railway-taxa-independent-background:
+    runs-on: ubuntu-latest
+    timeout-minutes: 44
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Source exact taxonomy/relevé matching and no pseudo rail-affinity tests, synthetic fixtures only
+        run: python -m unittest discover -s tests -p 'test_original_CzechVeg_independent_baseline_39Preslia_taxa_v174.py' -v
+      - name: Install read-only author Czech railway S1 S2 original XLSX reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Fetch FULL original 2026 CzechVeg Zenodo publication JSON original publisher checksum source
+        run: |
+          mkdir -p source/v174/author
+          curl --fail --location --silent --show-error --retry 3 --max-time 90 \
+            --output source/v174/author/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+      - name: Obtain entire REAL original 117739 Czech phytosociology headers with study and plot area region/year 
+        run: |
+          curl --fail --location --silent --show-error --retry 4 --max-time 600 \
+            --output source/v174/author/CzechVeg_headers.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content'
+      - name: Obtain FULL ORIGINAL Czech 2510340 plant occurrences from real 2026 published source, no mocked small sample
+        run: |
+          curl --fail --location --silent --show-error --retry 4 --max-time 1300 \
+            --output source/v174/author/CzechVeg_species.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content'
+      - name: Fetch original Kutlvasr 2024 Preslia S1 contemporary 39 station floras and S2 corrected original station metadata
+        run: |
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 \
+            --output source/v174/author/Preslia_S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --location --silent --show-error --retry 3 --max-time 180 \
+            --output source/v174/author/Preslia_S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v174/author/Preslia_S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v174/author/Preslia_S2.xlsx | sha256sum --check
+      - name: Explicit independent FULL 117739 + 2510340 CzechVeg MD5 publisher validation before original S2 44 matched same-study blocks and strict S2 20 rail 25 road
+        run: |
+          python -u scripts/analyze_original_CzechVeg_independent_railroad_plot_baseline_39rail_stations_v174.py \
+            --zenodo-record source/v174/author/zenodo.json \
+            --source-CzechVeg-headers source/v174/author/CzechVeg_headers.csv \
+            --source-CzechVeg-species source/v174/author/CzechVeg_species.csv \
+            --Preslia-original-S1 source/v174/author/Preslia_S1.xlsx \
+            --Preslia-original-S2 source/v174/author/Preslia_S2.xlsx \
+            --output results/audit/CzechVeg_original_independent_railroad_plot_39station_exact_taxa_v174.json
+      - name: Archive only exact provenance and taxon-level comparable plot prevalence effects/eligibility (no publisher original files or geolocations)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-Preslia39-original-taxa-2point51M-independent-plot-background-v174
+          path: results/audit/CzechVeg_original_independent_railroad_plot_39station_exact_taxa_v174.json
+          if-no-files-found: warn

@@ -1,0 +1,35 @@
+name: Real Tokyo plant observation vs rail AND road proximity (exploratory)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_rail_vs_road_inat.py'
+      - 'src/tetsu/transport_overlap.py'
+      - '.github/workflows/tokyo-rail-road-pilot.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-tokyo-rail-road
+  cancel-in-progress: true
+jobs:
+  rail-road:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install geospatial and API dependencies
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Recompute Japan Tokyo plant-photo / official road / passenger rail audit
+        run: python scripts/audit_rail_vs_road_inat.py --output results/railroad/tokyo_rail_vs_road_photo_availability.json
+      - name: Retain only aggregates with sources and explicit uncertainty
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tokyo-rail-road-plant-photo-observation-contrast
+          path: results/railroad/tokyo_rail_vs_road_photo_availability.json
+          if-no-files-found: warn

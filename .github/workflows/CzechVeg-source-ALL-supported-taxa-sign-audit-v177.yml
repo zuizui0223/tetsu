@@ -1,0 +1,48 @@
+name: "v17.7 ORIGINAL CzechVeg all taxon source-sign balanced macro screening, no q>0 selection artifact"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_CzechVeg_rail_context_all_candidate_SIGN_balance_v177.py'
+      - 'tests/test_CzechVeg_rail_context_all_candidate_SIGN_balance_v177.py'
+      - '.github/workflows/CzechVeg-source-ALL-supported-taxa-sign-audit-v177.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v177-true-source-v174-all-signs-denominator
+  cancel-in-progress: true
+jobs:
+  source-original-all-supported-taxa-sign-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic-only arithmetic tests cannot be reported as original botanical effects
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_rail_context_all_candidate_SIGN_balance_v177.py' -v
+      - name: Obtain original FULL 2,510,340-plant-row, 117739 source plot, genuine Preslia 39 railway station VERIFIED report from independently authenticated successful v17.4 run, no raw data copied
+        uses: actions/download-artifact@v4
+        with:
+          name: CzechVeg-Preslia39-original-taxa-2point51M-independent-plot-background-v174
+          run-id: 43701358353
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v177/verified_v174
+      - name: Independent sign-unfiltered denominator and strict/recent sparsity; all 761 original taxon effects, never selected only positives
+        run: |
+          python -u scripts/audit_CzechVeg_rail_context_all_candidate_SIGN_balance_v177.py \
+            --source-v174 source/v177/verified_v174/CzechVeg_original_independent_railroad_plot_39station_exact_taxa_v174.json \
+            --output-json results/audit/CzechVeg_39station_SIGNUNFILTERED_all_supported_taxa_real_v177.json \
+            --output-csv results/audit/CzechVeg_39station_SIGNUNFILTERED_source_taxa_with_support_v177.csv
+      - name: Save ONLY original taxon-level signed source diagnostics, no source media/coordinates/original botanical reprints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-39station-original-ALLeligible-sign-unfiltered-diagnostic-v177
+          path: |
+            results/audit/CzechVeg_39station_SIGNUNFILTERED_all_supported_taxa_real_v177.json
+            results/audit/CzechVeg_39station_SIGNUNFILTERED_source_taxa_with_support_v177.csv
+          if-no-files-found: warn

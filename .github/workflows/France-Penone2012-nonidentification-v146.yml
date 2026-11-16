@@ -1,0 +1,34 @@
+name: "v14.6 Penone authentic marginal nonidentification exact constructive proof"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/prove_France_Penone2012_marginal_nonidentification_v146.py'
+      - 'tests/test_France_Penone2012_marginal_nonidentification_v146.py'
+      - '.github/workflows/France-Penone2012-nonidentification-v146.yml'
+      - 'data/literature/France_Penone2012_thesis_six_v145.csv'
+  workflow_dispatch:
+jobs:
+  source-marginal-math-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify two explicit synthetic opposite-sign witness matrices share authentic source species margins
+        run: python -m unittest discover -s tests -p 'test_France_Penone2012_marginal_nonidentification_v146.py' -v
+      - name: Compute exact feasible bounds with original six species observations under conditional site unit
+        run: |
+          python scripts/prove_France_Penone2012_marginal_nonidentification_v146.py --six-csv data/literature/France_Penone2012_thesis_six_v145.csv --output results/audit/France_Penone2012_v146_nonidentified_partitions.json
+      - name: Archive conditional proof (not observed French rail contrast)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-france-thesis-opposite-sign-groups-proof-v146
+          path: results/audit/France_Penone2012_v146_nonidentified_partitions.json
+          if-no-files-found: warn

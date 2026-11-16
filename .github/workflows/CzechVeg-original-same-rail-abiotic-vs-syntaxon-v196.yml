@@ -1,0 +1,47 @@
+name: "v19.6 original CzechVeg same RAIL sites habitat-SYNTAXON versus elevation independent reference"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/analyze_CzechVeg_same_rail_abiotic_vs_syntaxon_v196.py"
+      - "tests/test_CzechVeg_same_rail_reference_v196.py"
+      - ".github/workflows/CzechVeg-original-same-rail-abiotic-vs-syntaxon-v196.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v196-source-CzechVeg-abiotic-syntaxon-same-rail
+  cancel-in-progress: true
+jobs:
+  same-source-rail-reference-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 46
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Source same rail site and cross-reference support tests
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_same_rail_reference_v196.py' -v
+      - name: Download exact original 2026 117739 and 2510340 CzechVeg tables (MD5 anchored)
+        run: |
+          mkdir -p source_original/v196
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v196/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v196/species.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v196/headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v196/species.csv\n' | md5sum -c -
+      - name: Original fixed geographic-source railway plots and four distinct reference definitions taxon/genus test
+        run: |
+          python -u scripts/analyze_CzechVeg_same_rail_abiotic_vs_syntaxon_v196.py \
+            --original-headers source_original/v196/headers.csv \
+            --original-species source_original/v196/species.csv \
+            --output results/audit/v196/CzechVeg_source_original_same_rail_syntaxon_abiotic_nonanalog_reference_v196.json
+      - name: Publish only reproducible aggregate QA, no original vegetation relevés or location identifiers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-source-original-same-rail-abiotic-vs-syntaxon-reference-v196
+          path: results/audit/v196/
+          if-no-files-found: warn

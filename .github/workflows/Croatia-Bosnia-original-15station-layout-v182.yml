@@ -1,0 +1,37 @@
+name: "v18.2 source ORIGINAL 2017 Croatian/Bosnian 15-station taxon-table layout QA"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/audit_Croatia_Bosnia_original_15station_table_layout_v182.py"
+      - ".github/workflows/Croatia-Bosnia-original-15station-layout-v182.yml"
+  workflow_dispatch:
+jobs:
+  source-2017-rotated-publisher-table-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install 'PyMuPDF==1.24.14'
+      - name: Fetch ORIGINAL public 33-page peer-reviewed paper, no OCR
+        run: |
+          mkdir -p source_original/v182
+          curl -LfsS --retry 3 --connect-timeout 15 --max-time 90 \
+            'https://hrcak.srce.hr/file/282429' \
+            -o source_original/v182/Jasprica_2017_original.pdf
+          file source_original/v182/Jasprica_2017_original.pdf
+      - name: Check text vector orientation and page bounds, do not yet infer 359x15
+        run: |
+          python -u scripts/audit_Croatia_Bosnia_original_15station_table_layout_v182.py \
+            --pdf source_original/v182/Jasprica_2017_original.pdf \
+            --output results/audit/v182/Croatia_Bosnia_original_pdf_vector_table_layout.json
+      - name: Retain audit only, not publisher original copyrighted PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Croatia-Bosnia-2017-original-15station-vector-table-layout-v182
+          path: results/audit/v182/
+          if-no-files-found: warn

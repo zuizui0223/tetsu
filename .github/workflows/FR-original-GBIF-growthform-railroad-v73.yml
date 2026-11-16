@@ -1,0 +1,88 @@
+name: "v7.3 REAL France original 81-file GBIF event growth form vs indexed source rail/road macro"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_fr_original_event_vs_facet_macro_v73.py'
+      - 'tests/test_fr_original_event_vs_facet_macro_v73.py'
+      - '.github/workflows/FR-original-GBIF-growthform-railroad-v73.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-original-France-GRIIS-GIFT-railroad-source-v73
+  cancel-in-progress: true
+jobs:
+  frozen-fr-original-vs-indexed-railroad:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install reproducible 50km country flora and network-analysis dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3'
+      - name: Test original-event taxon and unknown-form source conservation
+        run: python -m unittest discover -s tests -p 'test_fr_original_event_vs_facet_macro_v73.py' -v
+      - name: Read real 81-file 2018-2025 Burgundy original GBIF interpreted event aggregates
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-GBIF-Aug26-FR-Burgundy-81file-GRIIS-original-event-source-v69
+          run-id: 42978217481
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/original
+      - name: Read real frozen six-country legacy GRIIS GBIF to COL26.5 accepted species bridge
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-GRIIS-2023GBIF-to-COL26XR-corrected-taxonomy-key-bridge-v63
+          run-id: 42844630098
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/taxonomy
+      - name: Read real 6-country GIFT source species growth forms
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-real-GIFT-growthform-railroad-macro-v71
+          run-id: 42980383943
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/traits
+      - name: Read original GBIF country GRIIS indexed 50km plant species facets
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Read original 2026 Overture rail physical shortest paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-rail-physical-paths-threeblocks-v32
+          run-id: 42759357722
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rail
+      - name: Read original same-cell ROAD physical shortest paths
+        uses: actions/download-artifact@v4
+        with:
+          name: overture-50km-continuous-road-physical-paths-us-fr-v33
+          run-id: 42759664602
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/road
+      - name: Compare original and indexed grass/woody source taxa across identical RAIL/ROAD geographic pairs
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_fr_original_event_vs_facet_macro_v73.py \
+            --events source/original/GBIF_FR_Burgundy_original_81file_GRIIS_COL_v69.json \
+            --crosswalk source/taxonomy/sixcountry_GRIIS_GBIF_to_COL_XR_crosswalk_v63.json \
+            --gift source/traits/sixcountry_GIFT_growth_form_source_v70.json \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --rail source/rail/overture_50km_continuous_rail_routes_v32.json \
+            --road source/road/overture_50km_macro_road_paths_v33.json \
+            --output results/audit/FR_original_event_vs_indexed_GIFT_railroad_macro_v73.json
+      - name: Preserve genuine original-event trait cover and all source-dependent signs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-FR-original-GBIF-GIFT-trait-RAIL-ROAD-source-macro-v73
+          path: results/audit/FR_original_event_vs_indexed_GIFT_railroad_macro_v73.json
+          if-no-files-found: warn

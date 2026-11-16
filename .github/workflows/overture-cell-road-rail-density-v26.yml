@@ -1,0 +1,40 @@
+name: Overture geodesic rail and road kilometers in 90 international macro cells v2.6
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_overture_transport_cells_v26.py'
+      - 'tests/test_overture_transport_cells_v26.py'
+      - '.github/workflows/overture-cell-road-rail-density-v26.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-overture-cell-transport-density-v26
+  cancel-in-progress: true
+jobs:
+  source-backed-road-rail-cell-kilometers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Overture Parquet and GIS geodesic clipping clients
+        run: pip install 'duckdb>=1.3,<2' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'requests>=2.31,<3'
+      - name: Test exact 3x3 geographic clipping and road vs rail source-class schema
+        run: python -m unittest discover -s tests -p 'test_overture_transport_cells_v26.py' -v
+      - name: Compute real 2026 Overture clipped rail and road segment kilometers within each of ten cities' 3x3 source grids
+        run: |
+          python -u scripts/audit_overture_transport_cells_v26.py \
+            --regions jp_sendai de_leipzig kr_daejeon tw_hsinchu us_madison ca_ottawa gb_york fr_dijon au_canberra nz_hamilton \
+            --output results/audit/overture_transport_cell_lengths_10country_v26.json
+      - name: Preserve geodesic per-city transport exposure and source completeness audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overture-10country-90cells-transport-road-rail-geodesic-v26
+          path: results/audit/overture_transport_cell_lengths_10country_v26.json
+          if-no-files-found: warn

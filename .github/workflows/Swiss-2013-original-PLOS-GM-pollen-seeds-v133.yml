@@ -1,0 +1,56 @@
+name: "v13.3 REAL 2013 Swiss PLOS GT73 feral leaf samples and 2 of 48 original pollen-transferred seed pods"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/Swiss_Schulze2014_PLOS_2013_rail_port_GM_OSR_leaf_samples_v133.csv'
+      - 'scripts/analyze_Swiss_2013_original_PLOS_GM_OSR_pollen_v133.py'
+      - 'tests/test_Swiss_2013_original_PLOS_GM_OSR_pollen_v133.py'
+      - '.github/workflows/Swiss-2013-original-PLOS-GM-pollen-seeds-v133.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-SWISS-original-PLOS-2014-2013-GT73-seed-pollen-source-v133
+  cancel-in-progress: true
+jobs:
+  original-PLOS-Swiss-GM-2013-reproduction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check genuine source journal author GT73 64 of 279 rail station and 106 of 2291 port, other gene and maternal seed source audit
+        run: python -m unittest discover -s tests -p 'test_Swiss_2013_original_PLOS_GM_OSR_pollen_v133.py' -v
+      - name: Fetch original independently verified 2020 government Canton Basel overlapping 2013-2020 monitoring receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: original-SWISS-Basel-2013-2020-freight-station-GM-OSR-v131
+          run-id: 43592152232
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/Swiss133/officialGov
+      - name: Download open CC BY 2014 original PLOS ONE manuscript full HTML and source DOI title
+        run: |
+          mkdir -p source/Swiss133/primary
+          curl --fail --location --silent --show-error --retry 2 --max-time 90 \
+            --output source/Swiss133/primary/Schulze2014_original_PLOS.html \
+            'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114477'
+          sha256sum source/Swiss133/primary/Schulze2014_original_PLOS.html
+      - name: Verify original publisher PLOS primary source genetic sample fractions, original maternal pods and nonpooling 2020 government frames
+        run: |
+          python -u scripts/analyze_Swiss_2013_original_PLOS_GM_OSR_pollen_v133.py \
+            --author-PLOS-2014-original-html source/Swiss133/primary/Schulze2014_original_PLOS.html \
+            --original-2013-leaf-samples-csv data/Swiss_Schulze2014_PLOS_2013_rail_port_GM_OSR_leaf_samples_v133.csv \
+            --verified131 source/Swiss133/officialGov/Swiss_Basel_2020_author_2013_2020_feral_GM_OSR_8yr_v131.json \
+            --output results/audit/Swiss_2013_Schulze2014_PLOS_site_GT73_and_nonGM_maternal_seed_2of48_v133.json
+      - name: Preserve actual original journal source numerical genetics stage separation without republishing copyrighted source manuscript
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-Swiss-2013-GT73-port-railway-plant-and-pollen-seeds-v133
+          path: results/audit/Swiss_2013_Schulze2014_PLOS_site_GT73_and_nonGM_maternal_seed_2of48_v133.json
+          if-no-files-found: warn

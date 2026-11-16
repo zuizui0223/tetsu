@@ -1,0 +1,38 @@
+name: Real 20-35m rail-verge pixel, S2 vegetation vs current road source quality
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'src/tetsu/rail_verge_pixel_eligibility.py'
+      - 'scripts/audit_lrt_true_centerline_20_35m.py'
+      - 'tests/test_lrt_rail_centerline_pixel_eligibility.py'
+      - '.github/workflows/lrt-20-35m-rail-verge-v14.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-20m-35m-true-rail-verge-v14
+  cancel-in-progress: true
+jobs:
+  source-and-pixel-eligibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install approved road, rail history and satellite COG clients
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Test 20/35m perpendicular offsets, SCL classification, 2024 road and no-effect inference
+        run: python -m unittest discover -s tests -p 'test_lrt_rail_centerline_pixel_eligibility.py' -v
+      - name: Measure real 2017 and 2024-25 20m/35m rail-adjacent pixels versus 2024 MLIT N13 roads
+        run: python -u scripts/audit_lrt_true_centerline_20_35m.py --output results/satellite/lrt_rail_centerline_20m_35m_road_scl_v14.json
+      - name: Save only aggregated source QA, no N05 historical licensed lines or photos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lrt-true-20m-35m-trackcenter-N13-road-pre2017SCL-v14
+          path: results/satellite/lrt_rail_centerline_20m_35m_road_scl_v14.json
+          if-no-files-found: warn

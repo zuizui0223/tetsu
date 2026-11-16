@@ -1,0 +1,72 @@
+name: "v8.7 REAL US 2022 FAF6 origin-destination versus temporally separated GBIF GRIIS K10-K160 sensitivity"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/analyze_US_FAF6_temporal_rarefaction_sensitivity_v87.py'
+      - 'tests/test_US_FAF6_temporal_rarefaction_sensitivity_v87.py'
+      - '.github/workflows/US-FAF6-temporal-rarefaction-v87.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-prepostFAF-2022-K10-K160-v87
+  cancel-in-progress: true
+jobs:
+  genuine-GBIF-indexed-record-rarefaction-depth-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install same Census GBIF GRIIS source mathematical dependency versions
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Test exact source candidate cohort, frozen record-depths, reversed source direction
+        run: python -m unittest discover -s tests -p 'test_US_FAF6_temporal_rarefaction_sensitivity_v87.py' -v
+      - name: Get original successful 2022 FAF6 crop directed RAIL vs TRUCK OD source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-2022-FAF6-RAIL-TRUCK-crop-state-OD-network-v80
+          run-id: 43142647675
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/faf80
+      - name: Get original Census 51-state 2018-2025 GBIF country GRIIS source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-all51-state-GRIIS-GBIF-2018-25-v82
+          run-id: 43144396513
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora82
+      - name: Get independent 2018-2021 and 2023-2025 GBIF 51-state temporal source
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US51-state-GRIIS-GBIF-before-after-FAF2022-v85
+          run-id: 43153476962
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/temporal85
+      - name: Get prior genuine directional K20 source coefficient baseline v8.6
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US-FAF6-2022-directional-recorded-source-taxa-v86
+          run-id: 43154108559
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/base86
+      - name: Calculate verified same-48-state K10 K20 K40 K80 K160 and reversed RAIL OD original-source sensitivity
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_US_FAF6_temporal_rarefaction_sensitivity_v87.py \
+            --temporal source/temporal85/US_51_state_GRIIS_GBIF_pre2018_21_post2023_25_v85.json \
+            --freight source/faf80/BTS_FAF6_2022_crop_OD_RAIL_vs_TRUCK_network_v80.json \
+            --flora82 source/flora82/US_all51_state_GRIIS_GBIF_2018_25_source_v82.json \
+            --original86 source/base86/US_FA6_2022_directional_source_recorded_taxa_v86.json \
+            --output results/audit/US_48state_source_year_firstrecord_FA6_rarefaction_K10_K160_v87.json
+      - name: Retain all K-depths and unfavorable directions as source-only transport diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US-FAF6-GBIF-directional-2022-record-K-depths-v87
+          path: results/audit/US_48state_source_year_firstrecord_FA6_rarefaction_K10_K160_v87.json
+          if-no-files-found: warn

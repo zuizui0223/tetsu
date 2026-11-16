@@ -1,0 +1,34 @@
+name: Exploratory LRT 48-transect cloud-coverage sensitivity (NOT independent rail replication)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/measure_lrt_2017_pixel_clear_composite.py'
+      - '.github/workflows/lrt-2017-clear-sensitivity48.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-2017-LRT-48-transect-sensitivity
+  cancel-in-progress: true
+jobs:
+  density-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public COG range-read and source GIS dependencies
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Posthoc source-coverage robustness only, 48 transects in one corridor
+        run: python -u scripts/measure_lrt_2017_pixel_clear_composite.py --anchors 48 --output results/satellite/utsunomiya_2017_clear_composite_C1_NDVI_48anchors.json
+      - name: Store aggregate result only, preserving posthoc exploratory label
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: utsunomiya-LRT-48-transect-posthoc-satellite-source-sensitivity
+          path: results/satellite/utsunomiya_2017_clear_composite_C1_NDVI_48anchors.json
+          if-no-files-found: warn

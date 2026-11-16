@@ -1,0 +1,72 @@
+name: "v7.8 REAL FRA trains vs GRIIS woody flora with all-Plantae and closed-crossing comparators"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - scripts/analyze_FRA_train_plant_negative_controls_v78.py
+      - tests/test_FRA_train_plant_negative_controls_v78.py
+      - .github/workflows/US-FRA-traffic-plant-source-controls-v78.yml
+  workflow_dispatch:
+concurrency:
+  group: tetsu-FRA-US2block-train-plant-controls-v78
+  cancel-in-progress: true
+jobs:
+  real-two-region-source-falsification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original GBIF-GRIIS-GIFT-FRA reproducible model dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Run source source-cohort and negative-control quality tests
+        run: python -m unittest discover -s tests -p test_FRA_train_plant_negative_controls_v78.py -v
+      - name: Download verified TRUE FRA OPEN-crossing 3-block 50km traffic summary
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-FRA-US3block-50km-crossing-train-source-v75
+          run-id: 43048727413
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/fra
+      - name: Download original two-US-region GRIIS source 2010-2025
+        uses: actions/download-artifact@v4
+        with:
+          name: griis-50km-10block-8country-introduced-species-source-v36
+          run-id: 42761140912
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/flora
+      - name: Download verified six-country GIFT 1.2.1 growth form mapping
+        uses: actions/download-artifact@v4
+        with:
+          name: sixcountry-real-GIFT-growthform-railroad-macro-v71
+          run-id: 42980383943
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/gift
+      - name: Download independently successful v7.6 original train-woody source baseline for exact reproduction
+        uses: actions/download-artifact@v4
+        with:
+          name: real-US2block-FRA-GBIF-GRIIS-GIFT-traffic-traits-source-v76
+          run-id: 43051783705
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/baseline
+      - name: Execute exact-cohort all-Plantae recording comparator and closed-crossing infrastructure comparator
+        run: |
+          OPENBLAS_NUM_THREADS=1 python -u scripts/analyze_FRA_train_plant_negative_controls_v78.py \
+            --flora source/flora/griis_50km_10blocks_country_mask_v36.json \
+            --fra source/fra/US_FRA_crossing_train_year_source_v75.json \
+            --gift source/gift/sixcountry_GIFT_growth_form_source_v70.json \
+            --baseline source/baseline/US_FRA_train_count_vs_GRIIS_growthform_source_v76.json \
+            --output results/audit/US_FRA_train_vs_plant_source_controls_v78.json
+      - name: Preserve source-supported geographical group comparison and all negative/control signs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-US2block-FRA-GBIF-plant-controls-v78
+          path: results/audit/US_FRA_train_vs_plant_source_controls_v78.json
+          if-no-files-found: warn

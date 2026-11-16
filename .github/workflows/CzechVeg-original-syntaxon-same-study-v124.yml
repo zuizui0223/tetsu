@@ -1,0 +1,59 @@
+name: "v12.4 REAL CzechVeg original syntaxon community matched within-published-study RAIL-ROAD source"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_CzechVeg_syntaxon_same_study_source_v124.py'
+      - 'tests/test_CzechVeg_syntaxon_same_study_source_v124.py'
+      - '.github/workflows/CzechVeg-original-syntaxon-same-study-v124.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-actual-CzechVeg-2026-syntaxon-habitat-source-v124
+  cancel-in-progress: true
+jobs:
+  source-published-syntaxon-vegetation-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate original published vegetation syntaxon source unit and missingness test
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_syntaxon_same_study_source_v124.py' -v
+      - name: Download original checksum-verified full CzechVeg+Pladias v11.9 source analysis receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-CzechVeg-Pladias-2026-rail-road-same-wind-source-v119
+          run-id: 43572450061
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/Czech124/v119
+      - name: Download actual Zenodo original header provenance from publishing site
+        run: |
+          mkdir -p source/Czech124/raw
+          curl --fail --location --show-error --silent --retry 3 --max-time 90 \
+            --output source/Czech124/raw/zenodo.json \
+            'https://zenodo.org/api/records/19231152'
+      - name: Fetch all 117739 original CzechVeg plots and author-original vegetation class strings
+        run: |
+          curl --fail --location --show-error --silent --retry 3 --max-time 600 \
+            --output source/Czech124/raw/headers.csv \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content'
+      - name: Audit source actual SYNTAXON and vegetation label matching under same original paper region decade area
+        run: |
+          python -u scripts/audit_CzechVeg_syntaxon_same_study_source_v124.py \
+            --zenodo-record source/Czech124/raw/zenodo.json \
+            --source-headers source/Czech124/raw/headers.csv \
+            --verified119 source/Czech124/v119/CzechVeg_2026_railroad_Pladias_same_diaspore_strategy_source_v119.json \
+            --output results/audit/CzechVeg_2026_v124_same_study_syntaxon_source_overlap.json
+      - name: Preserve source-verified original syntaxon/plot counts without redistribution of raw author's data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-CzechVeg-same-study-source-vegetation-syntaxon-v124
+          path: results/audit/CzechVeg_2026_v124_same_study_syntaxon_source_overlap.json
+          if-no-files-found: warn

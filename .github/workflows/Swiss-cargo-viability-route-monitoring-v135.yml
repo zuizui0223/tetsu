@@ -1,0 +1,55 @@
+name: "v13.5 Swiss cargo viability and route monitoring, distinct source frames"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/audit_Swiss_route_supply_v135.py'
+      - 'tests/test_Swiss_route_supply_v135.py'
+      - '.github/workflows/Swiss-cargo-viability-route-monitoring-v135.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tetsu-swiss-cargo-route-v135
+  cancel-in-progress: true
+jobs:
+  primary-government-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test germination cohorts and route sampling denominators
+        run: |
+          python -m unittest discover -s tests -p 'test_Swiss_wheat_viable_seeds_v134.py' -v
+          python -m unittest discover -s tests -p 'test_Swiss_route_supply_v135.py' -v
+      - name: Calculate published Table 2 transcription without claiming unavailable PDF-byte audit
+        run: |
+          python scripts/analyze_Swiss_wheat_viable_seeds_v134.py \
+            --csv data/Swiss_Schulze2015_imported_wheat_germination_v134.csv \
+            --output results/audit/Swiss_wheat_viable_seeds_v134.json
+      - name: Download original annual report from Canton Basel official source
+        run: |
+          mkdir -p source/Swiss135
+          curl --fail --location --show-error --silent --retry 1 --max-time 180 \
+            --output source/Swiss135/Basel2015.pdf \
+            'https://media.bs.ch/original_file/0d096108b159f34916e7b5203adfab20e885ac1a/jahresbericht2015.pdf'
+          if ! command -v pdftotext >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y poppler-utils
+          fi
+          pdfinfo source/Swiss135/Basel2015.pdf | head -16
+      - name: Verify targeted-route negatives and same-study laboratory corroboration
+        run: |
+          python scripts/audit_Swiss_route_supply_v135.py \
+            --government-pdf source/Swiss135/Basel2015.pdf \
+            --output results/audit/Swiss_route_supply_v135.json
+      - name: Archive verified outcomes and explicit source-verification status only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Swiss-cargo-viability-route-v135
+          path: results/audit/Swiss_*v13*.json
+          if-no-files-found: warn

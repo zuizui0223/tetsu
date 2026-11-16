@@ -1,0 +1,59 @@
+name: "v19.3 CzechVeg–Pladias original matched rail vs regional reference lifeform and diaspore convergence"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/analyze_CzechVeg_same_sites_regional_trait_convergence_v193.py"
+      - "tests/test_CzechVeg_same_sites_trait_v193.py"
+      - ".github/workflows/CzechVeg-original-rail-reference-functional-v193.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v193-czechveg-same-rail-reference-traits
+  cancel-in-progress: true
+jobs:
+  full_original_reference_source_and_pladias:
+    runs-on: ubuntu-latest
+    timeout-minutes: 46
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install actual Pladias XLSX original reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test same-region/site and exact no-imputation source design
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_same_sites_trait_v193.py' -v
+      - name: Fetch source-original full CzechVeg plant and site tables, with published MD5 gate
+        run: |
+          mkdir -p source_original/v193
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v193/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v193/species.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v193/headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v193/species.csv\n' | md5sum -c -
+      - name: Original public Pladias 2018 nine diaspore strategy and Raunkiaer lifeforms
+        run: |
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 150 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en' \
+            -o source_original/v193/Pladias_original_diaspore.xlsx
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 150 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en' \
+            -o source_original/v193/Pladias_original_lifeform.xlsx
+      - name: Full source-verified identical site taxonomic versus measured functional and dispersal strategy
+        run: |
+          python -u scripts/analyze_CzechVeg_same_sites_regional_trait_convergence_v193.py \
+            --headers source_original/v193/headers.csv \
+            --species source_original/v193/species.csv \
+            --lifeform-xlsx source_original/v193/Pladias_original_lifeform.xlsx \
+            --diaspore-xlsx source_original/v193/Pladias_original_diaspore.xlsx \
+            --output results/audit/v193/CzechVeg_Pladias_2026_same_regions_taxonomy_lifeform_diaspore_analogs.json
+      - name: Archive aggregate evidence and source QA only; never redistribute original plots or Pladias trait tables
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-Pladias-original-same-sites-functional-regional-pools-v193
+          path: results/audit/v193/
+          if-no-files-found: warn

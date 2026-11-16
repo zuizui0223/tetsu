@@ -1,0 +1,38 @@
+name: Exploratory ESA 2021 WorldCover class screen for original 370 rail and road normal sites
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_japan_ordinary_rail_road_separation.py'
+      - 'scripts/audit_japan_ordinary_rail_worldcover_expanded.py'
+      - 'tests/test_ordinary_rail_worldcover_expanded.py'
+      - '.github/workflows/ordinary-rail-worldcover-expanded.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-370-ordinary-rail-WorldCover-2021-v16
+  cancel-in-progress: true
+jobs:
+  road-landcover-opportunity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install official Japanese GIS and public ESA S3 COG source clients
+        run: pip install 'requests>=2.31,<3' 'pyshp>=2.3,<3' 'pyproj>=3.5,<4' 'shapely>=2,<3' 'rasterio>=1.4,<2' 'numpy>=1.26,<3'
+      - name: Validate posthoc GIS threshold sensitivity and original 10-of-370 source cohort integrity
+        run: python -m unittest discover -s tests -p 'test_ordinary_rail_worldcover_expanded.py' -v
+      - name: Read actual 2021 ESA WorldCover raster for all original 370 normal rail-road source opportunities
+        run: python -u scripts/audit_japan_ordinary_rail_worldcover_expanded.py --output results/audit/japan_370_rail_normal_worldcover_2021_posthoc_v16.json
+      - name: Archive aggregated route class and posthoc threshold diagnostics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-370-rail-road-normal-worldcover-2021-posthoc-grass-source
+          path: results/audit/japan_370_rail_normal_worldcover_2021_posthoc_v16.json
+          if-no-files-found: warn

@@ -1,0 +1,63 @@
+name: "v16.4 AUTHENTIC SI+CZ rail vegetation top20 original plant species selection before iNaturalist photos"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - 'scripts/select_two_original_rail_20_species_for_inat_v164.py'
+      - 'tests/test_select_original_rail_20_species_inat_v164.py'
+      - '.github/workflows/rail-original-20species-inat-feasibility-v164.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v164-source-selected-20-authentic-original-botanist-rail-taxa
+  cancel-in-progress: true
+jobs:
+  original-2-country-rail-species-candidates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only exact original author xlsx dependency
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Test fixed exact name source site incidence ranking BEFORE querying citizen photo data
+        run: python -m unittest discover -s tests -p 'test_select_original_rail_20_species_inat_v164.py' -v
+      - name: Retrieve original Slovenian botanical author survey source and SHA provenance manifest from publisher study source CI
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO164/authentic
+      - name: Fetch original author Czech 2020-2022 Preslia railway station S1 and corrected original S2
+        run: |
+          set -euo pipefail
+          mkdir -p source/CZE164
+          curl --fail --silent --show-error --location --retry 3 --max-time 180 \
+            --output source/CZE164/S1.xlsx \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx'
+          curl --fail --silent --show-error --location --retry 3 --max-time 180 \
+            --output source/CZE164/S2.xlsx \
+            'https://preslia.cz/appendix/file?id=540'
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/CZE164/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/CZE164/S2.xlsx | sha256sum --check
+      - name: Lock original observed 20 separate true binomial taxa selected by source site frequency, NOT calculated railway AFFINITY
+        run: |
+          python -u scripts/select_two_original_rail_20_species_for_inat_v164.py \
+            --si-xlsx source/SLO164/authentic/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --si-audit source/SLO164/authentic/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --cz-s1 source/CZE164/S1.xlsx \
+            --cz-s2 source/CZE164/S2.xlsx \
+            --output results/audit/Real_two_original_rail_botanist_20_taxa_inat_first_proximity_v164.json
+      - name: Publish original plant author source top20 taxa selection provenance only; never original XLSX/observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-SI-CZ-rail-flora-top20-photo-candidates-v164
+          path: results/audit/Real_two_original_rail_botanist_20_taxa_inat_first_proximity_v164.json
+          if-no-files-found: warn

@@ -1,0 +1,34 @@
+name: USA-NPN real phenophase status feasibility (not railway effect)
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_usa_npn_status.py'
+      - '.github/workflows/usa-npn-status-audit.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-usa-npn-source-audit
+  cancel-in-progress: true
+jobs:
+  source-availability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install requests
+        run: pip install 'requests>=2.31,<3'
+      - name: Query bounded USA-NPN annual single species/site status data
+        run: python scripts/audit_usa_npn_status.py --output results/audit/usa_npn_status_feasibility.json
+      - name: Store aggregate field-quality audit without geoprivate coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: usa-npn-2024-phenophase-source-feasibility
+          path: results/audit/usa_npn_status_feasibility.json
+          if-no-files-found: warn

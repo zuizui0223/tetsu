@@ -1,0 +1,37 @@
+name: "v14.5 Penone original thesis six verified observations conditional pair counts"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'data/literature/France_Penone2012_thesis_six_v145.csv'
+      - 'scripts/analyze_France_Penone2012_thesis_occupancy_v145.py'
+      - 'tests/test_France_Penone2012_thesis_occupancy_v145.py'
+      - '.github/workflows/France-Penone2012-thesis-source-frequency-v145.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-france-thesis-six-real-counts-v145
+  cancel-in-progress: true
+jobs:
+  source-conditional-moments:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check author-original six observations and mathematical eligibility
+        run: python -m unittest discover -s tests -p 'test_France_Penone2012_thesis_occupancy_v145.py' -v
+      - name: Generate conditional six-source summary without inventing site matrix
+        run: |
+          python scripts/analyze_France_Penone2012_thesis_occupancy_v145.py --source-csv data/literature/France_Penone2012_thesis_six_v145.csv --output results/audit/France_Penone2012_six_source_conditional_moments_v145.json
+      - name: Archive the conditional summary and explicit unverified observation unit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: france-penone-thesis-original-six-conditional-v145
+          path: results/audit/France_Penone2012_six_source_conditional_moments_v145.json
+          if-no-files-found: warn

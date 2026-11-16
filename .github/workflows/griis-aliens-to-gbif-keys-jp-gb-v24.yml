@@ -1,0 +1,40 @@
+name: Verify GRIIS Japan and Britain alien species to GBIF backbone key census
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_griis_country_backbone_keys_v24.py'
+      - 'tests/test_griis_country_backbone_keys_v24.py'
+      - '.github/workflows/griis-aliens-to-gbif-keys-jp-gb-v24.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-griis-country-nub-keys-jp-gb-v24
+  cancel-in-progress: true
+jobs:
+  introduced-backbone-source-key-census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official GBIF checklist API client
+        run: pip install 'requests>=2.31,<3'
+      - name: Check country-list taxonomy, source provenance, key aliases and no-native-imputation
+        run: python -m unittest discover -s tests -p 'test_griis_country_backbone_keys_v24.py' -v
+      - name: Fetch real source-country GRIIS Japan and Great Britain backbone plant species IDs
+        run: |
+          python -u scripts/audit_griis_country_backbone_keys_v24.py \
+            --countries JP GB \
+            --output results/audit/griis_jp_gb_alien_backbone_keys_v24.json
+      - name: Archive source-verified country introduced-plant key sets only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: griis-jp-gb-introduced-plant-backbone-nub-keys-v24
+          path: results/audit/griis_jp_gb_alien_backbone_keys_v24.json
+          if-no-files-found: warn

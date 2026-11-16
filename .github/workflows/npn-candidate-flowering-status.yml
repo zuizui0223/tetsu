@@ -1,0 +1,34 @@
+name: NPN Open flowers geographic control + real individual 0/1 eligibility audit
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/audit_npn_candidate_flowering_status.py'
+      - '.github/workflows/npn-candidate-flowering-status.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-npn-candidate-individual-status
+  cancel-in-progress: true
+jobs:
+  individual-status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official API and railway geography helpers
+        run: pip install 'requests>=2.31,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify taxon-blind site metrics then actual 0/1 flowering series
+        run: python scripts/audit_npn_candidate_flowering_status.py --output results/audit/npn_candidate_flowering_verification.json
+      - name: Keep aggregate outcome-independent eligibility and failure diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npn-2023-2025-common-taxon-open-flowers-individual-status-check
+          path: results/audit/npn_candidate_flowering_verification.json
+          if-no-files-found: warn

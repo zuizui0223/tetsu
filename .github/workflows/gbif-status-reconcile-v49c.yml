@@ -1,0 +1,34 @@
+name: "v4.9c GBIF occurrenceStatus API facet vs filter vs raw indexed row reconciliation"
+on:
+  push:
+    branches:
+      - research/railway-seed-dispersal-v01
+    paths:
+      - 'scripts/diagnose_GBIF_occurrence_status_v49c.py'
+      - '.github/workflows/gbif-status-reconcile-v49c.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-GBIF-occurrence-status-v49c
+  cancel-in-progress: true
+jobs:
+  presence-status-semantic-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source GBIF API and 50km macro geography clients
+        run: pip install 'requests>=2.31,<3' 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.5,<4'
+      - name: Verify real 2018 to 2025 indexed original status facet and 300-row status against official enum status filters
+        run: python -u scripts/diagnose_GBIF_occurrence_status_v49c.py
+      - name: Archive privacy-safe count-only status contract diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GBIF-50km-occurrence-status-facet-versus-filter-contract-v49c
+          path: results/audit/gbif_occurrence_status_API_contract_v49c.json
+          if-no-files-found: warn
