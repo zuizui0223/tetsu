@@ -2,7 +2,7 @@ import math,sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent.parent/'scripts'))
 from audit_SI_2023_official_station_chainage_2020_eurostat_v231 import (
-    normalize,rows_from_text,segment_route_station_join,assign_segment
+    normalize,rows_from_text,segment_route_station_join,assign_segment,collapse_exact_reverse_direction_segments
 )
 class TestAuthoritativeStationSourceJoin(unittest.TestCase):
     def test_parse_publisher_station_km_not_raw_track_data(self):
@@ -36,6 +36,34 @@ class TestAuthoritativeStationSourceJoin(unittest.TestCase):
         self.assertEqual(len(assigned),1)
         self.assertEqual(assigned[0]['source_site'],'siteA')
         self.assertEqual(coverage['unmapped_genuine_site_reasons']['no_segment_contains_original_site_midpoint'],1)
+    def test_verified_two_directions_are_one_physical_segment_not_two_samples(self):
+        a={'national_line':'10','start_normalized':'dobova','end_normalized':'sevnica',
+           'start_km':453.5,'end_km':485.78,
+           'source_network_segment_code':'SIS10002_TEN',
+           'source_original_label':'Dobova - Sevnica',
+           'actual_2020_freight_trains_per_year':4304,
+           'actual_2020_passenger_trains_per_year':5926}
+        b={**a,'start_normalized':'sevnica','end_normalized':'dobova',
+           'start_km':485.78,'end_km':453.5,
+           'source_network_segment_code':'SIS20002_TEN',
+           'source_original_label':'Sevnica - Dobova',
+           'actual_2020_freight_trains_per_year':4245,
+           'actual_2020_passenger_trains_per_year':6001}
+        both,qa=collapse_exact_reverse_direction_segments([a,b])
+        self.assertEqual(len(both),1)
+        self.assertEqual(qa['complete_true_undirected_physical_segments'],1)
+        self.assertEqual(both[0]['actual_2020_freight_trains_per_year'],8549)
+        self.assertEqual(both[0]['actual_2020_passenger_trains_per_year'],11927)
+    def test_one_way_missing_not_doubled(self):
+        a={'national_line':'10','start_normalized':'dobova','end_normalized':'sevnica',
+           'start_km':453.5,'end_km':485.78,
+           'source_network_segment_code':'SIS10002_TEN',
+           'source_original_label':'Dobova - Sevnica',
+           'actual_2020_freight_trains_per_year':4304,
+           'actual_2020_passenger_trains_per_year':5926}
+        good,qa=collapse_exact_reverse_direction_segments([a])
+        self.assertEqual(len(good),0)
+        self.assertEqual(qa['incomplete_or_nonopposite_endpoints']['no_exactly_two_reported_directions'],1)
     def test_crosswalk_refuses_ambiguous_multi_line_same_station_names(self):
         stations=[]
         for line in ('10','20'):
