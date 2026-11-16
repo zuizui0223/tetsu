@@ -63,6 +63,48 @@ def classify_cell_row(row,current):
             'station_start_km':lo,'station_end_km':hi,
             'station_midpoint_km':(lo+hi)/2},current,"strict_official_station_table_row"
 
+def classify_fragmented_vector_row(row,current):
+    """Actual PDF page 3 onward has partially split LINE GRID columns:
+    a single station is often laid out as a 30-column vector grid,
+    e.g. index 1='Kranj', 4='594.126', later='595.188', later='1063'.
+    Require exact source km-km-length arithmetic to avoid track rows.
+    """
+    if current is None:return None,current,"fragmented_no_line"
+    parts=[(i,text_value(v)) for i,v in enumerate(row) if text_value(v)]
+    if len(parts)<4:return None,current,"fragmented_few_cells"
+    # The two genuine station chainage values have three decimal places.
+    floats=[(i,float(v)) for i,v in parts if RE_FLOAT3.fullmatch(v)]
+    if len(floats)<2:return None,current,"fragmented_no_two_station_kms"
+    candidates=[]
+    for ix,(col_lo,lo) in enumerate(floats[:-1]):
+        for col_hi,hi in floats[ix+1:]:
+            if not (0<=lo<hi<1000):continue
+            expect=1000*(hi-lo)
+            if expect<20 or expect>50000:continue
+            len_cells=[(k,int(v)) for k,v in parts if
+                 k>col_hi and RE_INT.fullmatch(v.replace(" ","")) and
+                 20<=int(v)<=50000 and abs(int(v)-expect)<=15]
+            if not len_cells:continue
+            names=[v for k,v in parts if k<col_lo and
+                   re.search(r"[A-Za-zČčĆćŠšŽžĐđ]",v) and
+                   not re.search(r"\b(STATION|INITIAL|FINAL|LENGTH|EQUIPMENT|NETWORK|PLATFORMS|LINE)\b",v,re.I) and
+                   len(v)<80]
+            if not names:continue
+            # Original cell text can be split by column dividers,
+            # concatenate only name cells LEFT of genuine start km.
+            name=" ".join(names)
+            if len(name)>90:continue
+            candidates.append((name,lo,hi,len_cells[0][1]))
+    if len(candidates)!=1:
+        return None,current,("fragmented_no_verified_station" if not candidates
+                              else "fragmented_ambiguous_station_length_km")
+    name,lo,hi,ln=candidates[0]
+    return {'national_line':current,'name':name,
+           'name_normalized':normalize(name),
+           'station_start_km':lo,'station_end_km':hi,
+           'station_midpoint_km':(lo+hi)/2},current,"fragmented_verified_station_source_cells"
+
+
 def pdf_station_tables(pdfpath):
     import pdfplumber
     data=[];sections={};page_qa=[];confusions=Counter()
@@ -89,6 +131,12 @@ def pdf_station_tables(pdfpath):
                          [text_value(q)[:100] for q in row[:6]] for row in cells[:4]]})
                 for row in cells:
                     station,current,why=classify_cell_row(row,current)
+                    if station is None and why not in ("source_line_heading","no_source_national_line"):
+                        station2,line2,why2=classify_fragmented_vector_row(row,current)
+                        if station2 is not None:
+                            station,current,why=station2,line2,why2
+                        else:
+                            confusions[why2]+=1
                     confusions[why]+=1
                     if station is None:continue
                     station['source_pdf_page_zero_index']=n
