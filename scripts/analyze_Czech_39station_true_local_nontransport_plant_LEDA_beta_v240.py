@@ -209,10 +209,22 @@ def source_valid_local_control_plots(stations,sourceplants,geo,traits):
 
 def sample_local_plots(station,rng):
     candidates=station['control_options']
-    for trial in range(100):
-        selected=rng.sample(candidates,5)
-        if len({p['study'] for p in selected})>=2:return selected
-    raise ValueError('Local reference 5 independently sampled plant plots cannot span two original source publications')
+    papers=defaultdict(list)
+    for row in candidates:papers[row['study']].append(row)
+    if len(candidates)<5 or len(papers)<2:
+        raise ValueError('Source local plot reference must contain 5 distinct field plots and at least 2 original publications')
+    # Force two different source publications BEFORE inspecting selected
+    # source species; choose 3 others from the remaining true plot IDs.
+    selected_papers=rng.sample(sorted(papers),2)
+    chosen=[rng.choice(papers[paper]) for paper in selected_papers]
+    first_ids={x['id'] for x in chosen}
+    remainder=[x for x in candidates if x['id'] not in first_ids]
+    if len(remainder)<3:
+        raise ValueError('Original five-plot control without reuse impossible')
+    selected=chosen+rng.sample(remainder,3)
+    if len({x['id'] for x in selected})!=5 or len({x['study'] for x in selected})<2:
+        raise AssertionError('Fixed original publication or unique control plot selection failed')
+    return selected
 
 def source_profile(codes,traits):
     d=components(codes,traits)
