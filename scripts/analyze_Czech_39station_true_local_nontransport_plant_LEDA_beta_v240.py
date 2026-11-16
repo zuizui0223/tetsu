@@ -158,7 +158,8 @@ def source_station_and_reference_coords(s1,s2,sr70,headers):
 
 def source_species_to_traits(stations,original_plants,height,seed):
     station_names=set().union(*(s['original_taxa'] for s in stations))
-    ref_names=set().union(*(a for x in original_plants.values() for a in x)) if original_plants else set()
+    ref_names={name for true_plot_species_set in original_plants.values()
+               for name in true_plot_species_set}
     universe=station_names|ref_names
     joined={}
     for name in universe:
@@ -166,6 +167,14 @@ def source_species_to_traits(stations,original_plants,height,seed):
         if b and b in height and b in seed:
             joined[name]=(math.log(height[b]),math.log(seed[b]))
     if len(joined)<100:raise ValueError('Original station and ref plot joint exact LEDA trait universe too small')
+    n_rail_matched=len(station_names&set(joined))
+    n_nontransport_matched=len(ref_names&set(joined))
+    # CRITICAL: a reference plot taxon is a WHOLE name string, never a
+    # sequence of characters from accidentally unioning strings.
+    if len(ref_names)<100 or n_nontransport_matched<70:
+        raise ValueError(f'Original independently published nontransport taxon union malformed or not trait-covered: raw={len(ref_names)}, joined={n_nontransport_matched}')
+    if n_rail_matched<100:
+        raise ValueError(f'Original railway station taxa unexpectedly too few LEDA matches: {n_rail_matched}')
     mu=[mean(v[j] for v in joined.values()) for j in (0,1)]
     sd=[math.sqrt(mean((v[j]-mu[j])**2 for v in joined.values())) for j in (0,1)]
     if min(sd)<=0:raise ValueError('One original source standardized trait has zero variance')
@@ -173,8 +182,10 @@ def source_species_to_traits(stations,original_plants,height,seed):
     return traits,{
        'unique_original_source_taxa_rail_station_and_local_ref_combined':len(universe),
        'unique_unambiguous_taxa_joined_source_LEDA_height_seed':len(traits),
-       'n_original_study_station_taxa_matched_trait':len(station_names&set(traits)),
-       'n_original_independent_nontransport_reference_taxa_matched_trait':len(ref_names&set(traits)),
+       'n_original_study_station_taxa_matched_trait':n_rail_matched,
+       'n_original_independent_nontransport_reference_taxa_matched_trait':n_nontransport_matched,
+       'n_original_independent_nontransport_reference_taxa_all':len(ref_names),
+       'ref_name_union_verified_whole_Latin_taxon_strings_not_individual_characters':True,
        'trait_standardization_z_from_union_unique_taxa_not_group_specific':True}
 
 def source_valid_local_control_plots(stations,sourceplants,geo,traits):
