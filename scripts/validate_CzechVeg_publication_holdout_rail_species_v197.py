@@ -22,8 +22,10 @@ import hashlib
 import json
 import math
 import statistics
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from analyze_CzechVeg_Pladias_rail_road_diaspore_v119 import (
     verify_file, plot_labels, HEADERS_NAME, SPECIES_NAME,
