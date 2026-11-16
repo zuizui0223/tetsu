@@ -88,7 +88,11 @@ def paired_site_groups(original,height,seed,minimum=5):
         if raw is None or str(raw).strip()=='':
             raise ValueError('v22.7 confirmed every joint-trait species had source lifespan')
         group[t]=int(str(raw).strip().lower()=='annual')
-    source_pairs,original_all_sides=create_sites(original,v,min_taxa=minimum)
+    source_pairs,original_all_sides=create_sites(original,v,min_taxa=5)
+    if minimum>5:
+        source_pairs={site:[p for p in rows if p['nBS']>=minimum and p['nBT']>=minimum]
+                      for site,rows in source_pairs.items()}
+        source_pairs={site:rows for site,rows in source_pairs.items() if rows}
     qa={'all_publisher_matched_same_side_pairs':len(original_all_sides),
         'minimum_joint_trait_species_per_original_same_side_zone':minimum,
         'qualifying_joint_trait_matched_sides':sum(len(v) for v in source_pairs.values()),
