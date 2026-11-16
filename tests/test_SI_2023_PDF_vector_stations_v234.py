@@ -2,7 +2,7 @@ import sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent.parent/'scripts'))
 from audit_SI_2023_PDF_vector_station_table_traffic_v234 import (
- classify_cell_row,merge_old_new
+ classify_cell_row,classify_fragmented_vector_row,merge_old_new
 )
 class TestOriginalSourcePDFFirstFourColumns(unittest.TestCase):
     def test_exact_2023_station_first_four_real_table_columns(self):
@@ -28,6 +28,22 @@ class TestOriginalSourcePDFFirstFourColumns(unittest.TestCase):
         got,qa=merge_old_new(base,truth)
         self.assertEqual(len(got),0)
         self.assertEqual(qa['conflicted_source_table_text_label_excluded'],1)
+    def test_fragmented_original_pdf_30_column_station_vector_row(self):
+        row=["","Kranj","","","594.126","", "", "595.188", "", "1063"]+[None]*20
+        a,line,reason=classify_fragmented_vector_row(row,"20")
+        self.assertEqual(reason,"fragmented_verified_station_source_cells")
+        self.assertEqual(a["name_normalized"],"kranj")
+        self.assertAlmostEqual(a["station_midpoint_km"],594.657)
+    def test_fragmented_two_km_without_matching_length_rejected(self):
+        row=["","Kranj","","","594.126","","","595.188","","215"]+[None]*20
+        a,line,reason=classify_fragmented_vector_row(row,"20")
+        self.assertIsNone(a)
+    def test_fragmented_two_candidate_km_pairs_rejected_as_ambiguous(self):
+        row=["","Kranj","","","594.126","","","595.188","","1063",
+             "600.000","601.000","1000"]+[None]*17
+        a,line,reason=classify_fragmented_vector_row(row,"20")
+        self.assertIsNone(a)
+        self.assertEqual(reason,"fragmented_ambiguous_station_length_km")
     def test_same_station_with_wrap_is_repaired_not_duplicated(self):
         base=[{'national_line':'10','name':'Zalog','name_normalized':'zalog',
                'station_start_km':557.052,'station_end_km':561.047}]
