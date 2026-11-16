@@ -161,7 +161,7 @@ def evaluate(original,raw_height,raw_seed,draws=PRIMARY_DRAWS,raredraws=RARE_DRA
     n=all_original_matched_taxa(zone,sp)
     exact={t:binomial(names.get(t)) for t in n}
     values,transform=ztransform(exact,raw_height,raw_seed)
-    if len(values)!=224 or source_qc["joint_height_seed_mass"]["n_source_taxa_joined"]!=224:
+    if len(values)!=224 or source_qc["joint_joined_n"]!=224:
         raise ValueError("v22.0 genuine 224 source taxa LEDA original-breadth support failed")
     sites,pairs=create_sites(original,values)
     actual=site_effects(sites,values)
