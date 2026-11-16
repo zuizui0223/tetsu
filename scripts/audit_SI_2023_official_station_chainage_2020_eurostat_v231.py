@@ -110,9 +110,15 @@ def extract_authoritative_stations(pdfpath):
             stations.extend(these)
             page_qc.append({'page_zero_based':n,'found_source_station_km_records':len(these),
                             'source_original_heading_count':len(RE_LINE.findall(text))})
-            if n in (2,3,4):preview.append({'page':n,'first_lines':text.splitlines()[:18],
+            if n in (2,3,4,5):preview.append({'page':n,'first_lines':text.splitlines()[:18],
                                       'station_labels_first':[(q['national_line'],q['name'],q['station_midpoint_km'])
-                                                              for q in these[:10]]})
+                                                              for q in these[:10]],
+                                      'source_reference_km_lines':[(i,z) for i,z in enumerate(text.splitlines())
+                                          if any(x in z for x in ('557.052','566.359','12.907','574.853','626.'))][:12],
+                                      'source_reference_km_context':[
+                                          text.splitlines()[max(i-2,0):i+2]
+                                          for i,z in enumerate(text.splitlines())
+                                          if any(x in z for x in ('557.052','566.359','12.907','574.853','626.'))][:12]})
     # Failing to parse major stations must halt, rather than silently report
     # zero mapped botanical sites as evidence of no exposure.
     if len(stations)<75:raise ValueError('Only %d parsed station positions; source parser too incomplete' % len(stations))
@@ -128,6 +134,10 @@ def extract_authoritative_stations(pdfpath):
         'source_survey_line_coverage':sorted(src_lines & ORIGINAL_SECTIONS,key=int),
         'duplicate_national_line_and_normalized_station_name':duplicates,
         'n_parsed_stations_by_national_line':dict(Counter(q['national_line'] for q in stations)),
+        'original_official_station_labels_km_by_national_line':{
+           line:[{'station':q['name'],'km_mid':round(q['station_midpoint_km'],3)}
+                 for q in stations if q['national_line']==line]
+           for line in sorted(src_lines & ORIGINAL_SECTIONS,key=int)},
         'page_QA':page_qc,
         'first_pages_parser_examples':preview}
     return stations,qa
@@ -179,6 +189,14 @@ def segment_route_station_join(stations,segments):
                      'unresolved_reasons':dict(reasons),
                      'examples_25_unresolved':examples,
                      'n_national_lines_matched':len({x['national_line'] for x in resolved}),
+                     'exact_matched_source_segments_km':[
+                       {'network_code':q['source_network_segment_code'],
+                        'endpoint_label':q['source_original_label'],
+                        'national_line':q['national_line'],
+                        'initial_km':round(q['start_km'],3),
+                        'final_km':round(q['end_km'],3),
+                        'freight_2020':q['actual_2020_freight_trains_per_year']}
+                       for q in resolved],
                      'matched_by_source_national_line':dict(Counter(x['national_line'] for x in resolved))}
 
 def source_vegetation_sites(original):
@@ -219,7 +237,11 @@ def assign_segment(sites,matched,margin_km=0.05):
          'source_line_counts':dict(Counter(x['national_line'] for x in out)),
          'n_unique_2020_traffic_segments_mapped':len({x['eurostat_segment_code'] for x in out}),
          'unmapped_genuine_site_reasons':dict(reason),
-         'mapped_genuine_sources_not_zero_imputed':True}
+         'mapped_genuine_sources_not_zero_imputed':True,
+         'original_field_chainage_minmax_by_national_route':{
+            line:[min(q['mid_source_route_chainage_km'] for q in sites if q['section']==line),
+                  max(q['mid_source_route_chainage_km'] for q in sites if q['section']==line)]
+            for line in sorted({q['section'] for q in sites},key=int)}}
     # No source site coordinates/taxon-by-site assemblage is exported.
     return out,cov
 
