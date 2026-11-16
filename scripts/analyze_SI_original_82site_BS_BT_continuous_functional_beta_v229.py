@@ -75,7 +75,7 @@ def zone_pair_stat(one,two):
        'annual_share_absolute_difference':abs(one['annual_share']-two['annual_share']),
        'taxon_Jaccard_dissimilarity':1-jaccard(one['species'],two['species'])}
 
-def paired_site_groups(original,height,seed):
+def paired_site_groups(original,height,seed,minimum=5):
     locs,zones,sp,traits,cb,qc=validate_original_keys(original)
     names,nameqa=original_slovenian_EPPO_codebook_binomial_mapping(original)
     orig_universe=all_original_matched_taxa(zones,sp)
@@ -88,9 +88,10 @@ def paired_site_groups(original,height,seed):
         if raw is None or str(raw).strip()=='':
             raise ValueError('v22.7 confirmed every joint-trait species had source lifespan')
         group[t]=int(str(raw).strip().lower()=='annual')
-    source_pairs,original_all_sides=create_sites(original,v)
+    source_pairs,original_all_sides=create_sites(original,v,min_taxa=minimum)
     qa={'all_publisher_matched_same_side_pairs':len(original_all_sides),
-        'qualifying_5plus_joint_trait_matched_sides':sum(len(v) for v in source_pairs.values()),
+        'minimum_joint_trait_species_per_original_same_side_zone':minimum,
+        'qualifying_joint_trait_matched_sides':sum(len(v) for v in source_pairs.values()),
         'qualifying_original_field_sites':len(source_pairs),
         'qualifying_original_line_sections':len({p['section'] for v in source_pairs.values() for p in v})}
     source_sites,guild,originalqa=source_sites_and_guilds(original)
@@ -109,8 +110,10 @@ def paired_site_groups(original,height,seed):
             'lat':field['lat'],'lon':field['lon'],
             'BS':site_zone(A,v,group),'BT':site_zone(B,v,group),
             'source_same_side_pairs':len(prs)})
-    if len(arr)!=82 or len({s['section'] for s in arr})!=15:
-        raise ValueError('v22.4 real 82 site 15 line support mismatch')
+    expect={5:(82,15,139),10:(40,14,56)}
+    if minimum in expect and (len(arr),len({s['section'] for s in arr}),
+                              qa['qualifying_joint_trait_matched_sides'])!=expect[minimum]:
+        raise ValueError('Author original matched sites/sections/side count drift under trait support threshold')
     return arr,qa,v,group
 
 def all_site_pairs(sites):
@@ -130,7 +133,8 @@ def all_site_pairs(sites):
                     'section_pair':secpair,'same_section':a['section']==b['section'],
                     'km':dist,'band':band,'normals':{m:bb[m]-tt[m] for m in METRICS},
                     'crosses':{m:bt[m]-tb[m] for m in METRICS}})
-    if len(out)!=82*81//2:raise ValueError('Original independent 82 locations pair count mismatch')
+    if len(out)!=len(sites)*(len(sites)-1)//2:
+        raise ValueError('Original independent locations pair count mismatch')
     return out
 
 def pair_stat_value(pair,metric,flip_i=False,flip_j=False):
@@ -190,18 +194,18 @@ def rarefy_site_once(source,vals,groups,rng):
     return new
 
 def difference_for_existing_pairs(rarefied,original_pairs):
-    d={}
-    for p in original_pairs:
-        a=rarefied[p['i']];b=rarefied[p['j']]
-        d[(p['i'],p['j'])]={
-            'functional_centroid_euclidean':
-                zone_pair_stat(a['BS'],b['BS'])['functional_centroid_euclidean']-
-                zone_pair_stat(a['BT'],b['BT'])['functional_centroid_euclidean']}
-    cross=defaultdict(list)
+    # All three beta metrics must be recomputed from exactly the same
+    # rarefied original plant sets, not just continuous functional CWM.
+    by={met:defaultdict(list) for met in METRICS}
     for p in original_pairs:
         if p['same_section']:continue
-        cross[p['section_pair']].append(d[p['i'],p['j']]['functional_centroid_euclidean'])
-    return mean(mean(x) for x in cross.values())
+        a=rarefied[p['i']];b=rarefied[p['j']]
+        bb=zone_pair_stat(a['BS'],b['BS'])
+        tt=zone_pair_stat(a['BT'],b['BT'])
+        for met in METRICS:
+            by[met][p['section_pair']].append(bb[met]-tt[met])
+    return {met:mean(mean(values) for values in by[met].values()) for met in METRICS}
+
 
 def analyze(original,height,seed,draws=DRAWS,raredraws=RARE_DRAWS):
     sites,source_support,vals,groups=paired_site_groups(original,height,seed)
@@ -234,20 +238,31 @@ def analyze(original,height,seed,draws=DRAWS,raredraws=RARE_DRAWS):
                (1+sum(v<=score for v in vals_null))/(draws+1)}
         res['responses'][met]=obs
     rg=random.Random(SEED+33)
-    xs=[]
+    rare_d={m:[] for m in METRICS}
     for _ in range(raredraws):
         rar=rarefy_site_once(sites,vals,groups,rg)
-        xs.append(difference_for_existing_pairs(rar,pairs))
-    res['sitewise_species_richness_equalized_CWM_beta']={
-        'n_draws':raredraws,
-        'mean_cross_sectionpair_delta':mean(xs),
-        'q025':quart(xs,.025),'q975':quart(xs,.975),
-        'all_source_locations_same_sampled_min_size':True}
+        scores=difference_for_existing_pairs(rar,pairs)
+        for met in METRICS:rare_d[met].append(scores[met])
+    res['sitewise_species_richness_equalized_all_beta']={
+       met:{'technical_draws':raredraws,'mean_cross_sectionpair_delta':mean(v),
+            'q025':quart(v,.025),'q975':quart(v,.975),
+            'same_site_BS_BT_richness_equalized':True}
+       for met,v in rare_d.items()}
+    stricter,support10,unused1,unused2=paired_site_groups(original,height,seed,minimum=10)
+    strictpairs=all_site_pairs(stricter)
+    res['strict_both_zones_ge10_trait_species_source_sensitivity']={
+       'source_support':support10,
+       'mean_equal_cross_sectionpair_delta_by_metric':{
+          met:summary_by_independent_sections(strictpairs,met)['mean_equal_cross_sectionpair_delta']
+          for met in METRICS},
+       'n_qualifying_locations':len(stricter),
+       'n_source_sections':len({r['section'] for r in stricter})}
     res['interpretation_limits']=[
         'CWM centroid distance is not total functional beta hypervolume; within-site FDis/variance is separate',
         'Each BS-BT pair uses the same site GPS and rail section, so physical separation is exactly paired, but habitat sampling area remains potentially unequal',
         '15 original route sections and 105 overlapping section pairs are not 105 independent studies or field experiments',
         'Full-site zone label flips are a technical null and do not randomize field treatments',
+        'Stricter >=10-species panels select a different 40-site community subset and are a sensitivity, not independent replication',
         'Rarefaction draws are technical site species sample resamplings, not sample-level confidence intervals',
         'LEDA traits are source species medians, not local individual acclimation or evolved phenotypes',
         'No freight or passenger train rate, departure count, historical operating service, direct dispersal or management pressure measured',
@@ -274,6 +289,7 @@ def main():
              'source_locations_with_mapped_trait_beta':ans['source_locations_with_mapped_trait_beta'],
              'original_species_annual_proportions_zone_means':ans['original_species_annual_proportions_zone_means'],
              'responses':ans['responses'],
-             'sitewise_species_richness_equalized_CWM_beta':ans['sitewise_species_richness_equalized_CWM_beta']}
+             'sitewise_species_richness_equalized_all_beta':ans['sitewise_species_richness_equalized_all_beta'],
+             'strict_both_zones_ge10_trait_species_source_sensitivity':ans['strict_both_zones_ge10_trait_species_source_sensitivity']}
     print('V229_REAL_CONTINUOUS_FUNCTIONAL_BETA='+json.dumps(summary,ensure_ascii=False,separators=(',',':')),flush=True)
 if __name__=='__main__':main()
