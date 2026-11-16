@@ -1,0 +1,64 @@
+name: "v23.5 actual 2015 vs 2020 historical source freight rank robustness under same genuine Slovenia railway flora"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/validate_SI_historical_2015_2020_train_traffic_vs_flora_v235.py'
+      - 'tests/test_SI_historical_2015_2020_freight_plants_v235.py'
+      - '.github/workflows/tetsu-SI-historical-2015-2020-freight-temporal-v235.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v235-SI-true-2015-2020-freight-temporal-beta-cv
+  cancel-in-progress: true
+jobs:
+  four-source-original-2015-vs-2020-freight-same-botanical-response:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install genuine PDF text-table decoder, never OCR fabricated records
+        run: python -m pip install 'pdfplumber==0.11.7' 'numpy==2.1.3'
+      - name: Test source-verified named-station numeric chainage parsing and strict network-code-to-author-line non-substitution
+        run: python -m unittest discover -s tests -p 'test_SI_2020_freight_network_beta_holdout_v233.py' -v
+      - name: Get genuine publisher original 2022-23 Slovenia vegetation 92-site supplement with original km records
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v235/Slovenia
+      - name: Verify exact immutable authentic source publisher XLSX
+        run: |
+          set -euo pipefail
+          F='source/v235/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$F")" = 401279
+          printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum --check
+      - name: Fetch ORIGINAL 2023 official Slovenian infrastructure station chainage annex from its source, never current historical hindsight
+        run: |
+          set -euo pipefail
+          mkdir -p source/v235/official
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 120 \
+            --user-agent 'tetsu-original-operator-railways-2023-station-statements-source/1.0' \
+            'https://infrastruktura.sz.si/wp-content/uploads/2023/02/NS_2023_1.2_Annex_2B_Stations.pdf' \
+            -o source/v235/official/NS_2023_1.2_Annex_2B_Stations.pdf
+          test "$(stat -c%s source/v235/official/NS_2023_1.2_Annex_2B_Stations.pdf)" -gt 50000
+          sha256sum source/v235/official/NS_2023_1.2_Annex_2B_Stations.pdf
+      - name: Compare 2015 and 2020 real historic freight and passenger source code-matched numbers vs unchanged 27 botanical sites; 9-segment holdout
+        run: |
+          python -u scripts/validate_SI_historical_2015_2020_train_traffic_vs_flora_v235.py \
+            --official-station-pdf source/v235/official/NS_2023_1.2_Annex_2B_Stations.pdf \
+            --original-xlsx source/v235/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v235/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v235_SI_genuine_2015_2020_traffic_temporal_vs_same_2022_23_flora_holdout.json
+      - name: Archive ONLY aggregate source SHA and original mapped count not original site species coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v235-SI-2015-and-2020-real-freight-versus-same-authentic-rail-plants-predictor-QA
+          path: results/audit/v235_SI_genuine_2015_2020_traffic_temporal_vs_same_2022_23_flora_holdout.json
+          if-no-files-found: warn
