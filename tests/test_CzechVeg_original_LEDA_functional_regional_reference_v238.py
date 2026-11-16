@@ -7,7 +7,7 @@ from analyze_CzechVeg_original_LEDA_rail_text_vs_abiotic_reference_functional_v2
 )
 class TestOriginalCzechVegExternalReferenceV238(unittest.TestCase):
     def setUp(self):
-        self.h={f"Genus taxon{i}":float(i+1) for i in range(120)}
+        self.h={f"Genus taxa{chr(97+i//26)}{chr(97+i%26)}":float(i+1) for i in range(120)}
         self.s={f"Genus taxon{i}":float((i+1)**2) for i in range(120)}
         self.val,_=trait_db(self.h,self.s,set(self.h))
         self.plants={
