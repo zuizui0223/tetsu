@@ -166,6 +166,16 @@ def analysis(pdfpath,original):
     if lost:
         raise ValueError('Source vector table changed an already verified true station-to-traffic link; no silent replacement: '+str(len(lost)))
     if len(table)<80:
+        # Recoverable implementation diagnostic only; DO NOT claim biology
+        # or silently allow the source extraction to pass.
+        print('V234_PDF_ORIGINAL_VECTOR_LAYOUT_SOURCE_QA='+json.dumps({
+           'true_vector_rows_found':len(table),
+           'source_2023_pdf_table_rejection_counts':tableqa['vector_cells_parse_rejection_reason_counts'],
+           'source_original_pages_first_four':tableqa['original_page_vector_cell_QA'][:4],
+           'source_old_and_new_merged_unique_station_count':len(combined),
+           'source_old_27_real_sites_baseline':basecoverage['mapped_to_unique_2020_segment_n'],
+           'source_new_sites_provisional_before_quality_gate':newcoverage['mapped_to_unique_2020_segment_n']
+        },ensure_ascii=False,separators=(',',':')),flush=True)
         raise ValueError('2023 PDF vector table parsed fewer than 80 authentic named stations')
     return {'version':'v23.4',
       'status':'SOURCE_AUTHENTICATED_2023_STATION_PDF_VECTOR_TABLE_RECOVERY',
