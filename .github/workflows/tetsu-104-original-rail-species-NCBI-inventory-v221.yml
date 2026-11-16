@@ -1,0 +1,53 @@
+name: "v22.1 original 104 Czech rail-context taxa NCBI genome/TSA/WGS inventory"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_rail_context_104_species_NCBI_sequence_inventory_v221.py'
+      - '.github/workflows/tetsu-104-original-rail-species-NCBI-inventory-v221.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v221-genuine-v177-104-NCBI-three-stream-inventory
+  cancel-in-progress: true
+jobs:
+  source-104-plant-species-availability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reuse authentic SOURCE 39-station/2.51m-plant-row report from v17.4b verified run
+        uses: actions/download-artifact@v4
+        with:
+          name: CzechVeg-Preslia39-original-taxa-2point51M-independent-plot-background-v174
+          run-id: 43701358353
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v221/v174
+      - name: Reconstruct ALL supported positive+negative taxa using original source v17.7 audit (no q-sign selection bias)
+        run: |
+          python -u scripts/audit_CzechVeg_rail_context_all_candidate_SIGN_balance_v177.py \
+            --source-v174 source/v221/v174/CzechVeg_original_independent_railroad_plot_39station_exact_taxa_v174.json \
+            --output-json results/audit/v221_source_signed_all_eligible.json \
+            --output-csv results/audit/v221_source_signed_all_eligible.csv
+      - name: Query live NCBI Assembly, assembled transcriptome TSA master, WGS SRA lead for 104 source-positive taxa
+        run: |
+          python -u scripts/audit_rail_context_104_species_NCBI_sequence_inventory_v221.py \
+            --source-v177 results/audit/v221_source_signed_all_eligible.csv \
+            --output-csv results/audit/v221_Czech_104_taxa_NCBI_genome_TSA_WGS_inventory.csv \
+            --output-json results/audit/v221_Czech_104_taxa_NCBI_genome_TSA_WGS_summary.json \
+            --max 104
+      - name: Preserve derived name+query inventory and original-source signed cohort QA (no raw reads/coordinates)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v221_source-original-104-taxa-20261116-NCBI-genome-TSA-population-leads
+          path: |
+            results/audit/v221_Czech_104_taxa_NCBI_genome_TSA_WGS_inventory.csv
+            results/audit/v221_Czech_104_taxa_NCBI_genome_TSA_WGS_summary.json
+            results/audit/v221_source_signed_all_eligible.json
+          if-no-files-found: warn
