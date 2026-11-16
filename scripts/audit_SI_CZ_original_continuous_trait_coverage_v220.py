@@ -42,7 +42,7 @@ def read_leda(path,which):
     if text is None:raise ValueError('Could not decode original LEDA data')
     lines=text.splitlines()
     header=next((i for i,s in enumerate(lines[:40]) if 'SBS.name' in s and ';' in s),None)
-    if header is None or header<2:raise ValueError('LEDA SBS.name header not detected: no invented column mapping')
+    if header is None or header<2:raise ValueError('LEDA SBS.name header not detected; genuine first lines='+repr(lines[:10])[:2500])
     reader=csv.DictReader(io.StringIO('\n'.join(lines[header:])),delimiter=';')
     cols=reader.fieldnames or []
     namecol=next((s for s in cols if 'sbs.name' in s.lower()),None)
