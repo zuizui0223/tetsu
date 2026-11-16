@@ -1,0 +1,68 @@
+name: "v23.8 ORIGINAL CzechVeg 2.51M plant records RAIL-text vs region year area altitude matched references 2D LEDA beta"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/analyze_CzechVeg_original_LEDA_rail_text_vs_abiotic_reference_functional_v238.py'
+      - 'tests/test_CzechVeg_original_LEDA_functional_regional_reference_v238.py'
+      - '.github/workflows/tetsu-CzechVeg-original-2D-functional-abiotic-external-reference-v238.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v238-true-CzechVeg-regional-abiotic-LEDA
+  cancel-in-progress: true
+jobs:
+  source-authenticated-CzechVeg-reference-functional-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 46
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check source traits, natural-control opportunity and functional beta math with synthetic test only
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_original_LEDA_functional_regional_reference_v238.py' -v
+      - name: Fetch complete original published CzechVeg 117739 headers and 2510340 species x plot records
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v238/CzechVeg
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v238/CzechVeg/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v238/CzechVeg/species.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' source_original/v238/CzechVeg/headers.csv \
+            'b296e5e19f03fb3bad0a8347c317f8a3' source_original/v238/CzechVeg/species.csv \
+            | md5sum --check
+      - name: Download source-verified original LEDA canopy height and seed mass (strict SHA)
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v238/LEDA
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v238/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v238/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v238/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v238/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: True observed source external regional functional convergence vs abiotic controls, 399 resamples
+        run: |
+          python -u scripts/analyze_CzechVeg_original_LEDA_rail_text_vs_abiotic_reference_functional_v238.py \
+            --headers source_original/v238/CzechVeg/headers.csv \
+            --species source_original/v238/CzechVeg/species.csv \
+            --height source_original/v238/LEDA/canopy_height.txt \
+            --seed source_original/v238/LEDA/seed_mass.txt \
+            --output results/audit/v238_CzechVeg_original_rail_text_vs_regional_altitude_reference_LEDA_continuous_functional_beta.json
+      - name: Archive true source aggregate only, no original site x species, exact source GPS or original raw 400MB dataset
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v238-true-CzechVeg-rail-text-vs-independent-abiotic-regional-reference-2D-height-seed-functional
+          path: results/audit/v238_CzechVeg_original_rail_text_vs_regional_altitude_reference_LEDA_continuous_functional_beta.json
+          if-no-files-found: warn
