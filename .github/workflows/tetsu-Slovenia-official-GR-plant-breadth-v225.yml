@@ -1,0 +1,67 @@
+name: "v22.5 government G/R line type source-verified Slovenian railway trait breadth and identity"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/analyze_Slovenia_gov_official_main_regional_traits_v225.py'
+      - 'tests/test_Slovenia_gov_main_regional_v225.py'
+      - '.github/workflows/tetsu-Slovenia-official-GR-plant-breadth-v225.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v225-SI-official-gov-GR-LEDA
+  cancel-in-progress: true
+jobs:
+  authentic-2022-23-slovenian-author-plants-official-government-route-category:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Mathematical and national line category source mapping unit tests (synthetic only)
+        run: python -m unittest discover -s tests -p 'test_Slovenia_gov_main_regional_v225.py' -v
+      - name: Retrieve original 2026 Slovenian railway published vegetation supplement, SHA-audited original source
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v225/Slovenia
+      - name: Authenticate exactly the original published 2026 XLSX source
+        run: |
+          set -euo pipefail
+          F='source/v225/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$F")" = 401279
+          printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum --check
+      - name: Download unchanged verified original LEDA canopy height and seed mass reference values
+        run: |
+          set -euo pipefail
+          mkdir -p source/v225/LEDA
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v225/LEDA/canopy_height.txt
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v225/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v225/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v225/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Original source 89 locations vs official 2024 main/regional line categories (no PBF / no frequency inference)
+        run: |
+          python -u scripts/analyze_Slovenia_gov_official_main_regional_traits_v225.py \
+            --source-xlsx source/v225/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v225/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --height source/v225/LEDA/canopy_height.txt \
+            --seed source/v225/LEDA/seed_mass.txt \
+            --output results/audit/v225_genuine_SI_official_G_R_main_regional_plant_traits.json
+      - name: Archive original-source aggregated estimates only (no proprietary original individual sample data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v225-authentic-government-line-GR-original-slovenia-flora
+          path: results/audit/v225_genuine_SI_official_G_R_main_regional_plant_traits.json
+          if-no-files-found: warn
