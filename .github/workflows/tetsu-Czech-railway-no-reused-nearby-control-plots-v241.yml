@@ -24,7 +24,7 @@ jobs:
       - name: Install exact original Preslia publisher XLSX reader
         run: python -m pip install 'openpyxl==3.1.5'
       - name: Unit tests for source station-vs-independent-reference 5 unique plots, >=2 papers and sitewise dual-richness equalization
-        run: python -m unittest discover -s tests -p 'test_Czech_rail_station_nearby_CzechVeg_pool_breadth_v240.py' -v
+        run: python -m unittest discover -s tests -p 'test_Czech_local_reference_unique_control_plots_v241.py' -v
       - name: Download publisher genuine original Czech 2020-22 39 station floras and corrected geographic survey metadata
         run: |
           set -euo pipefail
@@ -74,7 +74,7 @@ jobs:
             'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v241/LEDA/canopy_height.txt \
             '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v241/LEDA/seed_mass.txt \
             | sha256sum --check
-      - name: Strict global plot-exclusive source matching: five different local reference field plots per rail station, two source publications, zero reuse across all stations
+      - name: "Strict global source plot exclusivity: 5 local field plots per station with no reuse"
         run: |
           python -u scripts/validate_Czech_rail_station_local_reference_no_plot_reuse_v241.py \
             --s1 source_original/v241/Preslia/S1.xlsx \
