@@ -1,0 +1,47 @@
+name: "v19.1 true CzechVeg 2.51M botanical source regional nonrail/analog taxonomic comparison"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/analyze_CzechVeg_original_independent_reference_taxonomic_v191.py"
+      - "tests/test_CzechVeg_original_reference_taxonomic_v191.py"
+      - ".github/workflows/CzechVeg-source-independent-reference-taxonomic-v191.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v191-original-czechveg-2510340
+  cancel-in-progress: true
+jobs:
+  actual-original-author-regional-pool-taxon-incidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 47
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Synthetic-only design tests for cross region independent-pool contrasts
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_original_reference_taxonomic_v191.py' -v
+      - name: Download original publisher CzechVeg 117739 headers plus 2510340 species-by-plot
+        run: |
+          mkdir -p source_original/v191
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v191/CzechVeg_headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1300 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v191/CzechVeg_species.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v191/CzechVeg_headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v191/CzechVeg_species.csv\n' | md5sum -c -
+      - name: Original plant plot taxonomy and independent reference study region/year/area conditional plot comparison
+        run: |
+          python -u scripts/analyze_CzechVeg_original_independent_reference_taxonomic_v191.py \
+            --headers source_original/v191/CzechVeg_headers.csv \
+            --species source_original/v191/CzechVeg_species.csv \
+            --output results/audit/v191/CzechVeg_2026_RAIL_vs_independent_nontransport_analog_plot_taxonomic_v191.json
+      - name: Store only aggregate ecological evidence and no original survey plot/taxon rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-2026-original-2point51M-rail-vs-nonrail-analog-source-taxonomic-v191
+          path: results/audit/v191/
+          if-no-files-found: warn
