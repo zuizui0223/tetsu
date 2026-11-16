@@ -22,6 +22,24 @@ class TestTrueCzechLocalRailVsNontrafficExternalPools(unittest.TestCase):
                 'stretch':f'rail_{i%4}',
                 'rail_source_trait_taxa':set(names[(i*9)%90:(i*9)%90+35]),
                 'control_options':controls})
+    def test_true_nontransport_taxa_join_as_whole_names_not_string_characters(self):
+        names=list(self.v)
+        h={n:float(i+1) for i,n in enumerate(names)}
+        seed={n:float((i+1)**2) for i,n in enumerate(names)}
+        source=[{'original_taxa':set(names[:120])}]
+        controls={'plot_A':set(names[25:85]),'plot_B':set(names[65:125]),
+                  'plot_C':set(names[95:150])}
+        values,qa=source_species_to_traits(source,controls,h,seed)
+        self.assertGreaterEqual(qa['n_original_independent_nontransport_reference_taxa_matched_trait'],100)
+        self.assertTrue(qa['ref_name_union_verified_whole_Latin_taxon_strings_not_individual_characters'])
+        self.assertGreaterEqual(len(values),120)
+    def test_empty_source_reference_taxa_is_not_manufactured_by_rail_only(self):
+        names=list(self.v)
+        h={n:float(i+1) for i,n in enumerate(names)}
+        seed={n:float((i+1)**2) for i,n in enumerate(names)}
+        with self.assertRaises(ValueError):
+            source_species_to_traits([{'original_taxa':set(names[:120])}],
+                                    {'empty':set()},h,seed)
     def test_five_unique_real_control_ids_and_two_studies(self):
         s=sample_local_plots(self.station[0],random.Random(12))
         self.assertEqual(len(s),5)
