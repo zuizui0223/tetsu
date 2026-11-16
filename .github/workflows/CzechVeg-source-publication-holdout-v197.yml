@@ -1,0 +1,64 @@
+name: "v19.7 source-original 36-publication holdout positive-plant railway filter validation"
+on:
+  push:
+    branches: [research/railway-seed-dispersal-v01]
+    paths:
+      - "scripts/validate_CzechVeg_publication_holdout_rail_species_v197.py"
+      - "tests/test_CzechVeg_publication_holdout_v197.py"
+      - ".github/workflows/CzechVeg-source-publication-holdout-v197.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v197-source-CzechVeg-publication-holdout
+  cancel-in-progress: true
+jobs:
+  source-36-publication-heldout-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 52
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Verify synthetic no-publication-leak and missing-heldout-source behaviors
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_publication_holdout_v197.py' -v
+      - name: Install original Kutlvasr Preslia 2024 publisher XLSX reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Download true publisher-fixed original source records and metadata
+        run: |
+          mkdir -p source_original/v197
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 90 \
+            'https://zenodo.org/api/records/19231152' \
+            -o source_original/v197/zenodo.json
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v197/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v197/species.csv
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source_original/v197/preslia_s1.xlsx
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source_original/v197/preslia_s2.xlsx
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v197/headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v197/species.csv\n' | md5sum -c -
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source_original/v197/preslia_s1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source_original/v197/preslia_s2.xlsx | sha256sum -c
+      - name: Real full 2.51m original source species, 36 distinct-publisher heldout filters
+        run: |
+          python -u scripts/validate_CzechVeg_publication_holdout_rail_species_v197.py \
+            --zenodo-record source_original/v197/zenodo.json \
+            --source-CzechVeg-headers source_original/v197/headers.csv \
+            --source-CzechVeg-species source_original/v197/species.csv \
+            --Preslia-original-S1 source_original/v197/preslia_s1.xlsx \
+            --Preslia-original-S2 source_original/v197/preslia_s2.xlsx \
+            --output results/audit/v197/CzechVeg_36_study_4fold_heldout_rail_filter_v197.json
+      - name: Publish only aggregate heldout results, no plot IDs, coordinates or copied original species rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-source-original-36publication-4fold-rail-filter-validation-v197
+          path: results/audit/v197/
+          if-no-files-found: warn
