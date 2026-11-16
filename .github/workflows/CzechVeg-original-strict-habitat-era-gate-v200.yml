@@ -1,0 +1,61 @@
+name: "v20 original CzechVeg strict HABITAT and survey-era publication holdout"
+on:
+  push:
+    branches: [research/tetsu-label-era-validation-v200-20261116]
+    paths:
+      - "scripts/validate_CzechVeg_strict_habitat_era_holdout_v200.py"
+      - "tests/test_CzechVeg_strict_habitat_era_holdout_v200.py"
+      - ".github/workflows/CzechVeg-original-strict-habitat-era-gate-v200.yml"
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v200-original-strict-habitat-era
+  cancel-in-progress: true
+jobs:
+  source-original-czechveg-habitat-precision-era:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install exact original Pladias reader and study-heldout models
+        run: python -m pip install 'openpyxl==3.1.5' 'scikit-learn==1.7.2'
+      - name: Test strict label, original survey year, frozen frame, and underpowered null reporting
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_strict_habitat_era_holdout_v200.py' -v
+      - name: Download actual complete original CzechVeg and Pladias source tables
+        run: |
+          mkdir -p source_original/v200
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 120 \
+            'https://zenodo.org/api/records/19231152' \
+            -o source_original/v200/zenodo.json
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v200/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v200/species.csv
+          printf '0bc920462d1f9eac473e7b2a231e6782  source_original/v200/headers.csv\n' | md5sum -c -
+          printf 'b296e5e19f03fb3bad0a8347c317f8a3  source_original/v200/species.csv\n' | md5sum -c -
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 160 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en' \
+            -o source_original/v200/diaspore.xlsx
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 160 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en' \
+            -o source_original/v200/lifeform.xlsx
+      - name: Strict HABITAT vs broad LOCALITY label and original year cohort source heldout
+        run: |
+          python -u scripts/validate_CzechVeg_strict_habitat_era_holdout_v200.py \
+            --zenodo-record source_original/v200/zenodo.json \
+            --headers source_original/v200/headers.csv \
+            --species source_original/v200/species.csv \
+            --diaspore-xlsx source_original/v200/diaspore.xlsx \
+            --lifeform-xlsx source_original/v200/lifeform.xlsx \
+            --output results/audit/v200/CzechVeg_original_strict_HABITAT_survey_era_paper_heldout_v200.json
+      - name: Publish aggregate diagnostics ONLY, no source plot species rows or raw Pladias traits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CzechVeg-original-HABITAT-vs-LOCALITY-era-study-holdout-v200
+          path: results/audit/v200/
+          if-no-files-found: warn
