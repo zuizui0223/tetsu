@@ -36,6 +36,18 @@ class TestOriginalCzechVegExternalReferenceV238(unittest.TestCase):
                "B":[("rail_B",{"altitude":["ctrl_3"]*5,"all":["ctrl_4"]*5})]}
         answer=eval_panel(frame,p,seed=2,draws=5)
         self.assertFalse(answer["identified"])
+    def test_small_strict_HABITAT_cohort_is_not_automatically_identified(self):
+        prof,_=profile_plots(self.plants,self.val)
+        # Three fake source regions with 5 genuine original RAIL units
+        # must not pass the predeclared MIN=20 source field plot gate.
+        f={"A":[("rail_A",{"altitude":["ctrl_1"]*5,"all":["ctrl_2"]*5})]*2,
+           "B":[("rail_B",{"altitude":["ctrl_3"]*5,"all":["ctrl_4"]*5})]*2,
+           "C":[("rail_C",{"altitude":["ctrl_3"]*5,"all":["ctrl_5"]*5})]}
+        out=eval_panel(f,prof,seed=10,draws=10,
+                       minimum_original_regions=5,minimum_original_rail_plots=20)
+        self.assertFalse(out["identified"])
+        self.assertEqual(out["n_original_source_rail_text_plots"],5)
+        self.assertEqual(out["n_phyto_regions"],3)
     def test_CWM_euclidean_nonnegative_and_Jaccard_bounded(self):
         p,_=profile_plots(self.plants,self.val)
         a=[p["rail_A"],p["rail_B"],p["rail_C"]]
