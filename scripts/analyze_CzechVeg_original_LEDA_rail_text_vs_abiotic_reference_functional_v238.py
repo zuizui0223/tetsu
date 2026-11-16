@@ -160,8 +160,15 @@ def candidate_arms(meta,preselected,profiles,panel):
             continue
         selected[meta[rid]["region"]].append((rid,controls))
         qa["rail_text_plot_has_both_true_control_types"]+=1
+    source_rail_ids=[rid for x in selected.values() for rid,refs in x]
+    studies=Counter(meta[rid]["study"] for rid in source_rail_ids)
+    years=[meta[rid]["year"] for rid in source_rail_ids]
     return dict(selected),{
-        "panel":panel,"source_rail_text_plots_matched_to_two_types":qa["rail_text_plot_has_both_true_control_types"],
+        "panel":panel,
+        "n_original_source_rail_plot_studies":len(studies),
+        "source_rail_text_plots_in_largest_original_study":max(studies.values()) if studies else 0,
+        "source_original_rail_plot_observation_year_range":[min(years),max(years)] if years else None,
+        "original_rail_text_plot_surveyed_2010plus":sum(y>=2010 for y in years),"source_rail_text_plots_matched_to_two_types":qa["rail_text_plot_has_both_true_control_types"],
         "source_phyto_regions_supported":len(selected),
         "source_original_rail_text_plots_qualifying_before_characteristic_filter":len(set(allarm)&set(abiotic)),
         "original_phyto_region_source_plots_no_ID":{
@@ -212,11 +219,17 @@ def summarize(v):
       "n_source_technical_draws":len(v),
       "negative_draw_fraction":sum(x<0 for x in v)/len(v)}
 
-def eval_panel(frame,profiles,seed,draws=N_DRAWS):
+def eval_panel(frame,profiles,seed,draws=N_DRAWS,
+               minimum_original_regions=3,minimum_original_rail_plots=20):
     regions=sorted(frame)
-    if len(regions)<3:
-        return {"identified":False,"n_phyto_regions":len(regions),
-                "reason":"Fewer than three actual original source regions after true trait and control gates",
+    n_rail=sum(len(v) for v in frame.values())
+    if len(regions)<minimum_original_regions or n_rail<minimum_original_rail_plots:
+        return {"identified":False,
+                "n_phyto_regions":len(regions),
+                "n_original_source_rail_text_plots":n_rail,
+                "preregistered_minimum_independent_original_regions":minimum_original_regions,
+                "preregistered_minimum_original_rail_text_plots":minimum_original_rail_plots,
+                "reason":"Insufficient independent regional / plot support for a controlled functional convergence test",
                 "underpowered_rail_vs_regional_control_not_zero_effect":True}
     rng=random.Random(seed)
     samples=[one_draw(frame,profiles,regions,rng) for _ in range(draws)]
@@ -257,7 +270,10 @@ def run(headers,species,height,seed,draws=N_DRAWS):
         frame,q=candidate_arms(source_meta,arms,profiles,panel)
         panels[panel]={
             "original_source_plot_support":q,
-            "statistical_functional_result":eval_panel(frame,profiles,SEED+137*i,draws=draws)}
+            "statistical_functional_result":eval_panel(
+                frame,profiles,SEED+137*i,draws=draws,
+                minimum_original_regions=5 if panel=="strict_original_HABITAT_rail_only" else 3,
+                minimum_original_rail_plots=20)}
     return {
       "version":"v23.8",
       "status":"SOURCE_VERIFIED_CZECHVEG_RAIL_TEXT_VS_INDEPENDENT_NONTRANSPORT_FUNCTIONAL_REFS",
