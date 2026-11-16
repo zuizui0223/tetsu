@@ -38,12 +38,14 @@ jobs:
           F='source/v223/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
           test "$(stat -c%s "$F")" = '401279'
           printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum -c -
-      - name: Restore actual historic 2024 Geofabrik national OSM PBF from successful previous study
-        uses: actions/cache/restore@v4
-        with:
-          path: source/SLO151/osm/slovenia-240101.osm.pbf
-          key: tetsu-Geofabrik-Slovenia-20240101-source-file-280842431-bytes-v1
-          fail-on-cache-miss: true
+      - name: Download genuine 2024-01-01 Geofabrik historic source PBF directly (branch cache unavailable)
+        run: |
+          set -euo pipefail
+          mkdir -p source/SLO151/osm
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors --max-time 600 \
+            --user-agent 'tetsu-v223-historical-source/1.0' \
+            --output source/SLO151/osm/slovenia-240101.osm.pbf \
+            'https://download.geofabrik.de/europe/slovenia-240101.osm.pbf'
       - name: Hard original-publisher PBF SHA / size check
         run: |
           set -euo pipefail
