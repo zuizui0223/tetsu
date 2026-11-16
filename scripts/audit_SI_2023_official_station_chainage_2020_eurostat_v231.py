@@ -208,6 +208,63 @@ def source_vegetation_sites(original):
         raise ValueError('Original real railway route kilometrics not present, cannot map sites')
     return withgps,qa
 
+def collapse_exact_reverse_direction_segments(resolved):
+    """Undirected physical interval from exactly two true named opposite directions.
+
+    e.g. Dobova–Sevnica SIS10002 and Sevnica–Dobova SIS20002:
+    add annual movements to get all through traffic on the track,
+    not two independent intervals. One-direction only is reported as
+    incomplete, NOT silently doubled or assigned a false two-way count.
+    """
+    groups=defaultdict(list)
+    for s in resolved:
+        if s['start_normalized']==s['end_normalized']:
+            continue
+        key=(s['national_line'],tuple(sorted((s['start_normalized'],s['end_normalized']))))
+        groups[key].append(s)
+    good=[];bad=Counter();examples=[]
+    for (line,stops),items in sorted(groups.items()):
+        if len(items)!=2:
+            bad['no_exactly_two_reported_directions']+=1
+            if len(examples)<12:examples.append({'national_line':line,'station_pair':list(stops),
+                                    'original_network_directional_records':len(items)})
+            continue
+        x,y=items
+        if not (x['start_normalized']==y['end_normalized'] and
+                x['end_normalized']==y['start_normalized']):
+            bad['two_segments_not_opposite_named_endpoints']+=1
+            continue
+        if not math.isclose(x['start_km'],y['end_km'],abs_tol=0.02) or not math.isclose(x['end_km'],y['start_km'],abs_tol=0.02):
+            bad['source_2023_reverse_kilometrage_not_equal']+=1
+            continue
+        freight=x['actual_2020_freight_trains_per_year']+y['actual_2020_freight_trains_per_year']
+        pass1=x.get('actual_2020_passenger_trains_per_year')
+        pass2=y.get('actual_2020_passenger_trains_per_year')
+        good.append({'national_line':line,
+             'start_km':min(x['start_km'],x['end_km']),
+             'end_km':max(x['start_km'],x['end_km']),
+             'source_original_label':" / ".join(sorted((x['source_original_label'],y['source_original_label']))),
+             'source_network_segment_code':" + ".join(sorted((x['source_network_segment_code'],y['source_network_segment_code']))),
+             'actual_2020_freight_trains_per_year':freight,
+             'actual_2020_passenger_trains_per_year':pass1+pass2 if pass1 is not None and pass2 is not None else None,
+             'both_directions_source_network_segment_count':2,
+             'true_2020_annual_traffic_is_sum_of_both_reported_directions':True})
+    qa={'source_directional_endpoint_interval_rows':len(resolved),
+        'complete_true_undirected_physical_segments':len(good),
+        'source_directional_records_used_for_physical_segments':2*len(good),
+        'incomplete_or_nonopposite_endpoints':dict(bad),
+        'n_original_national_lines_with_complete_undirected_segment':len({x['national_line'] for x in good}),
+        'original_government_line_codes_with_complete_reverse_endpoints':dict(Counter(x['national_line'] for x in good)),
+        'examples_incomplete':examples,
+        'complete_undirected_source_endpoints_and_true_total_traffic':[
+           {'source_2020_direction_codes':x['source_network_segment_code'],
+            'source_national_line':x['national_line'],
+            'station_km_start':x['start_km'],'station_km_end':x['end_km'],
+            'total_2020_goods_both_directions':x['actual_2020_freight_trains_per_year'],
+            'total_2020_passenger_both_directions':x['actual_2020_passenger_trains_per_year']}
+           for x in good]}
+    return good,qa
+
 def assign_segment(sites,matched,margin_km=0.05):
     byline=defaultdict(list)
     for x in matched:byline[x['national_line']].append(x)
@@ -257,7 +314,8 @@ def main():
     sites,gps=source_vegetation_sites(original)
     euro,eq=eurostat_2020_segments()
     matches,mq=segment_route_station_join(stations,euro)
-    mapped,coverage=assign_segment(sites,matches)
+    physical,pqa=collapse_exact_reverse_direction_segments(matches)
+    mapped,coverage=assign_segment(sites,physical)
     result={'version':'v23.1','status':'AUTHENTIC_SOURCE_CROSSWALK_FEASIBILITY_ONLY',
        '2023_rail_operator_station_km_source':stationqa,
        'original_2022_2023_vegetation_geographical_source':gps,
@@ -265,6 +323,7 @@ def main():
        '2020_historical_eurostat_traffic_source':eq,
        'national_route_code_not_assumed_equal_eurostat_segment_code':True,
        '2020_eurostat_named_endpoints_matched_to_authoritative_station_positions':mq,
+       '2020_directional_source_records_collapsed_to_true_two_way_physical_segments':pqa,
        'real_original_vegetation_site_to_historical_traffic_coverage':coverage,
        'mapped_goods_2020_summary':{
            'min':min((x['historical_2020_goods_trains_per_year'] for x in mapped),default=None),
