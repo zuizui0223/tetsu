@@ -33,7 +33,7 @@ def read_leda(path,which):
     raw=Path(path).read_bytes()
     if len(raw)<50000:raise ValueError('LEDA source suspiciously small')
     text=None;enc=None
-    for e in ('utf-8-sig','utf-16','cp1252','latin-1'):
+    for e in (('utf-16',) if raw.startswith((b'\\xff\\xfe',b'\\xfe\\xff')) else ('utf-8-sig','cp1252','latin-1')):
         try:
             candidate=raw.decode(e)
             if '\x00' not in candidate:
