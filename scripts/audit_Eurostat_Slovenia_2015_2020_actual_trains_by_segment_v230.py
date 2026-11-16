@@ -19,7 +19,7 @@ if demonstrably identical source ID (not re-labeled geography).
 Full original JSON not republished, only SHA and bounded provenance.
 """
 from __future__ import annotations
-import argparse,hashlib,json,re,time,urllib.error,urllib.request
+import argparse,hashlib,json,math,re,time,urllib.error,urllib.request
 from collections import Counter,defaultdict
 from datetime import datetime,timezone
 from pathlib import Path
@@ -136,19 +136,80 @@ def summarized(rows):
       "unique_nonnull_source_segments":len(bysegment),
       "source_train_types_counts":{t:len(v) for t,v in sorted(bytype.items())},
       "source_train_types_min_median_max":{t:[min(v),median(v),max(v)] for t,v in bytype.items()},
-      "source_segment_label_preview_for_metadata_qa":[
+      "source_all_observed_segment_label_and_traffic_metadata":[
            {"segment_code":k[0],"source_label":k[1],
             "actual_original_source_observed_traffic_types":
               [{"train_code":r["train"]["code"],
                 "train_label":r["train"]["label"],
                 "unit":r["unit"]["label"] if "unit" in r else None,
                 "value":r["value"]} for r in v][:5]}
-             for k,v in sample[:40]],
+             for k,v in sample],
       "n_source_segment_labels_containing_human_named_route":sum(
          any(x in k[1].lower() for x in ("ljubljana","maribor","hodoš","zidani","koper","divača","dobova","jesenice"))
          for k in bysegment),
       "n_segment_codes_resembling_official_2digit_national_routes":sum(
            bool(re.fullmatch("[0-9]{1,2}",k[0])) for k in bysegment)}
+
+def source_segment_count_rows(original_rows):
+    """Source identifies endpoint-labelled physical segments, NOT national line codes."""
+    arr=defaultdict(dict)
+    for x in original_rows:
+        key=(x['net_seg20']['code'] if 'net_seg20' in x else x['net_seg15']['code'],
+             x['net_seg20']['label'] if 'net_seg20' in x else x['net_seg15']['label'])
+        typ=x['train']['code']
+        if typ in arr[key]:raise ValueError('Duplicated original Eurostat segment×train')
+        arr[key][typ]=x['value']
+    return arr
+
+def spearman_ties_pairs(pairs):
+    """Average rank on original segment observations, ties averaged."""
+    if len(pairs)<8:return None
+    def rank(v):
+        perm=sorted(range(len(v)),key=lambda i:v[i])
+        result=[0.]*len(v)
+        lo=0
+        while lo<len(v):
+            hi=lo+1
+            while hi<len(v) and v[perm[hi]]==v[perm[lo]]:hi+=1
+            avg=0.5*(lo+hi-1)+1.
+            for i in perm[lo:hi]:result[i]=avg
+            lo=hi
+        return result
+    x=rank([a for a,b in pairs]);y=rank([b for a,b in pairs])
+    mx=sum(x)/len(x);my=sum(y)/len(y)
+    cov=sum((a-mx)*(b-my) for a,b in zip(x,y))
+    den=math.sqrt(sum((a-mx)**2 for a in x)*sum((b-my)**2 for b in y))
+    return cov/den if den else None
+
+def exact_same_segment_year_comparison(year2020,year2015):
+    a=source_segment_count_rows(year2020)
+    b=source_segment_count_rows(year2015)
+    common=set(a)&set(b)
+    diff_label={k for k in set(k[0] for k in a)&set(k[0] for k in b)
+                if k not in {x[0] for x in common}}
+    if len(common)<15:
+        raise ValueError('Fewer than 15 identical codes AND labels between Eurostat original years')
+    out={'source_2015_nonmissing_segments':len(b),
+         'source_2020_nonmissing_segments':len(a),
+         'source_identical_endpoint_and_segment_code_in_both_years':len(common),
+         'source_code_present_both_years_but_endpoint_label_different_n':len(diff_label),
+         'not_assume_same_named_segment_has_unchanged_railway_geometry':True,
+         'null_and_implicit_missing_not_zero_filled':True,
+         'per_train_type':{}}
+    for typ in ('TRN_GD','TRN_PAS'):
+        pairs=[(b[k][typ],a[k][typ]) for k in common if typ in a[k] and typ in b[k]]
+        med2015=median(x for x,y in pairs) if pairs else None
+        med2020=median(y for x,y in pairs) if pairs else None
+        ratios=[y/x for x,y in pairs if x>0]
+        out['per_train_type'][typ]={
+           'n_same_source_segment_code_label_with_both_numbers':len(pairs),
+           'spearman_observed_2015_to_2020_frequency_rank':spearman_ties_pairs(pairs),
+           'median_2015_annual_trains_on_matched_segments':med2015,
+           'median_2020_annual_trains_on_matched_segments':med2020,
+           'median_of_individual_2020_2015_ratio_excluding_2015zero':median(ratios) if ratios else None,
+           'n_original_2015_true_zero':sum(x==0 for x,y in pairs),
+           'n_original_2020_true_zero':sum(y==0 for x,y in pairs)}
+    return out
 
 def main():
     p=argparse.ArgumentParser()
@@ -159,10 +220,12 @@ def main():
          "legal_provenance":"EU Regulation 2018/643 Annex V network-segment G1/G2",
          "interpretation_warning":"2020 COVID-affected observed railway traffic; not 2022–2023 field year. 2015 optional for pre-COVID rank. Network coverage may be only TEN-T.",
          "country":"Slovenia","series":{}}
+    raw_rows={}
     for code,year in (("rail_tf_ns20_si","2020"),("rail_tf_ns15_si","2015")):
         try:
             data,provenance=query_series(code)
             rows,qa=unpack_jsonstat(data,year)
+            raw_rows[year]=rows
             if not rows:raise ValueError("Genuine source lacks nonmissing source train counts")
             out["series"][code]={"status":"VERIFIED_SOURCE","source":provenance,
                                  "dimension_QA":qa,"content_AUDIT":summarized(rows)}
@@ -173,10 +236,13 @@ def main():
     twenty=out["series"]["rail_tf_ns20_si"]
     if twenty["dimension_QA"]["nonnull_train_values_for_year"]<6:
         raise ValueError("Source 2020 has insufficient segment observations")
-    years=out["series"]
-    out["common_nonmissing_eurostat_segment_codes_2020_2015"] = None
-    # Deliberately do not map 2015 segment IDs across year without the official
-    # Eurostat release metadata establishing stable GIS segment boundaries.
+    if "2015" in raw_rows:
+        out["same_original_segment_code_and_identical_name_2015_2020_comparison"]=(
+            exact_same_segment_year_comparison(raw_rows["2020"],raw_rows["2015"]))
+    else:
+        out["same_original_segment_code_and_identical_name_2015_2020_comparison"]=None
+    # Exact code and endpoint labels do not guarantee physically unmodified
+    # railway segment geometry through time.
     out["original_plant_site_network_crosswalk"]="NOT_YET_VERIFIED"
     out["genuine_2022_2023_train_counts_status"]="NOT_AVAILABLE_FROM_2020_EUROSTAT"
     out["no_fitted_ecological_effect_claimed"]=True
