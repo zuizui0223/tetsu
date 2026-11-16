@@ -1,0 +1,35 @@
+name: "v23.0 source verified Eurostat Slovenia 2020 2015 real train traffic on rail network segments"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_Eurostat_Slovenia_2015_2020_actual_trains_by_segment_v230.py'
+      - 'tests/test_Eurostat_SI_2015_2020_actual_traffic_v230.py'
+      - '.github/workflows/tetsu-EUROSTAT-SI-real-rail-segment-traffic-2015-2020-v230.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v230-original-eurostat-si-2020
+  cancel-in-progress: true
+jobs:
+  real-eurostat-2020-2015-network-traffic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Test genuine JSON-stat parser on synthetic dimension indexing (not biological estimates)
+        run: python -m unittest discover -s tests -p 'test_Eurostat_SI_2015_2020_actual_traffic_v230.py' -v
+      - name: Fetch EUROSTAT FIRST PARTY real 2020 and 2015 Slovenian train counts by source network segment
+        run: |
+          python -u scripts/audit_Eurostat_Slovenia_2015_2020_actual_trains_by_segment_v230.py \
+            --output results/audit/tetsu_v230_genuine_2015_2020_eurostat_SI_source_actual_segment_traffic.json
+      - name: Archive only aggregate source metadata, bounded 40-segment previews and SHA, not whole Eurostat raw
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v230-first-party-Eurostat-SI-observed-2015-2020-network-traffic-source-audit
+          path: results/audit/tetsu_v230_genuine_2015_2020_eurostat_SI_source_actual_segment_traffic.json
+          if-no-files-found: warn
