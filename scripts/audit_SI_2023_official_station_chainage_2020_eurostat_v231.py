@@ -229,6 +229,8 @@ def main():
         p.add_argument('--'+a.replace('_','-'),required=True)
     a=p.parse_args()
     stations,stationqa=extract_authoritative_stations(a.official_station_pdf)
+    if stationqa['sha256_original_pdf_source']!='83f12dfdb91784a653b9a39a8d927a027e7eeb5d8af18ce17b850b5318796425':
+        raise ValueError('2023 genuine station source PDF SHA changed: stop')
     original=extract_original_xlsx(a.original_xlsx,a.source_audit)
     sites,gps=source_vegetation_sites(original)
     euro,eq=eurostat_2020_segments()
@@ -237,13 +239,14 @@ def main():
     result={'version':'v23.1','status':'AUTHENTIC_SOURCE_CROSSWALK_FEASIBILITY_ONLY',
        '2023_rail_operator_station_km_source':stationqa,
        'original_2022_2023_vegetation_geographical_source':gps,
+       '2023_official_station_pdf_EXPECTED_sha256':'83f12dfdb91784a653b9a39a8d927a027e7eeb5d8af18ce17b850b5318796425',
        '2020_historical_eurostat_traffic_source':eq,
        'national_route_code_not_assumed_equal_eurostat_segment_code':True,
        '2020_eurostat_named_endpoints_matched_to_authoritative_station_positions':mq,
        'real_original_vegetation_site_to_historical_traffic_coverage':coverage,
        'mapped_goods_2020_summary':{
            'min':min((x['historical_2020_goods_trains_per_year'] for x in mapped),default=None),
-           'median':median((x['historical_2020_goods_trains_per_year'] for x in mapped),default=None),
+           'median':median([x['historical_2020_goods_trains_per_year'] for x in mapped]) if mapped else None,
            'max':max((x['historical_2020_goods_trains_per_year'] for x in mapped),default=None)},
        'censoring_and_causality_cautions':[
            '2020 COVID-affected actual train counts are not 2022/23 field-year freight volumes',
