@@ -82,7 +82,7 @@ def classify_fragmented_vector_row(row,current):
             expect=1000*(hi-lo)
             if expect<20 or expect>50000:continue
             len_cells=[(k,int(v)) for k,v in parts if
-                 k>col_hi and RE_INT.fullmatch(v.replace(" ","")) and
+                 k>col_hi and RE_INT.fullmatch(v) and
                  20<=int(v)<=50000 and abs(int(v)-expect)<=15]
             if not len_cells:continue
             names=[v for k,v in parts if k<col_lo and
