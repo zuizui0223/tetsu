@@ -1,0 +1,64 @@
+name: "v23.4 exact vector-table station recovery: true 2023 rail operator PDF × 2020 train segments × source 89 railway plant sites"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_SI_2023_PDF_vector_station_table_traffic_v234.py'
+      - 'tests/test_SI_2023_PDF_vector_stations_v234.py'
+      - '.github/workflows/tetsu-SI-2023-PDF-true-station-vector-table-crosswalk-v234.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v234-station-PDF-vector-geometry-train-crosswalk
+  cancel-in-progress: true
+jobs:
+  three-source-original-2023-station-PDF-vector-table-2020-trains-flora:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install genuine PDF text-table decoder, never OCR fabricated records
+        run: python -m pip install 'pdfplumber==0.11.7'
+      - name: Test source-verified named-station numeric chainage parsing and strict network-code-to-author-line non-substitution
+        run: python -m unittest discover -s tests -p 'test_SI_official_station_chainage_traffic_v231.py' -v
+      - name: Get genuine publisher original 2022-23 Slovenia vegetation 92-site supplement with original km records
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v234/Slovenia
+      - name: Verify exact immutable authentic source publisher XLSX
+        run: |
+          set -euo pipefail
+          F='source/v234/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$F")" = 401279
+          printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum --check
+      - name: Fetch ORIGINAL 2023 official Slovenian infrastructure station chainage annex from its source, never current historical hindsight
+        run: |
+          set -euo pipefail
+          mkdir -p source/v234/official
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 120 \
+            --user-agent 'tetsu-original-operator-railways-2023-station-statements-source/1.0' \
+            'https://infrastruktura.sz.si/wp-content/uploads/2023/02/NS_2023_1.2_Annex_2B_Stations.pdf' \
+            -o source/v234/official/NS_2023_1.2_Annex_2B_Stations.pdf
+          test "$(stat -c%s source/v234/official/NS_2023_1.2_Annex_2B_Stations.pdf)" -gt 50000
+          sha256sum source/v234/official/NS_2023_1.2_Annex_2B_Stations.pdf
+      - name: Repair station names using official PDF vector-cell table geometry; audit exact 2020 rail segment × original plant links
+        run: |
+          python -u scripts/audit_SI_2023_PDF_vector_station_table_traffic_v234.py \
+            --official-station-pdf source/v234/official/NS_2023_1.2_Annex_2B_Stations.pdf \
+            --original-xlsx source/v234/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v234/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v234_SI_2023_original_station_PDF_vector_table_real_2020_segment_coverage.json
+      - name: Archive ONLY aggregate source SHA and original mapped count not original site species coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v234-SI-2023-original-station-PDF-layout-authenticated-2020-true-rail-plant-coverage
+          path: results/audit/v234_SI_2023_original_station_PDF_vector_table_real_2020_segment_coverage.json
+          if-no-files-found: warn
