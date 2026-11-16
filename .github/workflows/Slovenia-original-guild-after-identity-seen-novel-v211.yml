@@ -1,0 +1,55 @@
+name: "v21.1 TRUE Slovenia source previously-seen vs unseen rail plant identity"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/analyze_Slovenia_guild_after_identity_seen_novel_v211.py'
+      - 'tests/test_Slovenia_guild_after_identity_seen_novel_v211.py'
+      - '.github/workflows/Slovenia-original-guild-after-identity-seen-novel-v211.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v211-source-original-seen-vs-novel-holdout
+  cancel-in-progress: true
+jobs:
+  original-slovenia-section-strata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run synthetic math tests only; source data must be real downstream
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_guild_after_identity_seen_novel_v211.py' -v
+      - name: Retrieve previously publisher-SHA-verified ORIGINAL 2026 Slovenia rail source
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v211/author_original
+      - name: Strict original-author workbook content QA
+        run: |
+          set -euo pipefail
+          SRC='source/v211/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = '401279'
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SRC" | sha256sum --check
+      - name: Run source-original 15 section seen vs novel test with prior v21.0 scores locked
+        run: |
+          python -u scripts/analyze_Slovenia_guild_after_identity_seen_novel_v211.py \
+            --original-xlsx source/v211/author_original/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit102 source/v211/author_original/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/Slovenia_original_15section_seen_novel_guild_after_identity_v211.json
+      - name: Archive derived source counts and section diagnostics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Slovenia-2026-true-rail-sections-seen-novel-guild-residual-v211
+          path: results/audit/Slovenia_original_15section_seen_novel_guild_after_identity_v211.json
+          if-no-files-found: warn
