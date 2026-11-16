@@ -45,6 +45,15 @@ class TestCzechStationSourcePrecisionOpportunity(unittest.TestCase):
         scores,qa=spatial_opportunity(station,plots)
         self.assertEqual(scores["year_since_2015_precision_1000m_radius_25km"][
            "original_stations_ge5_local_reference_plots_from_ge2_publications"],0)
+    def test_true_suspicious_zero_metres_precision_is_excluded_only_in_sensitivity(self):
+        station,plots=self.synthetic()
+        for p in plots.values():p["precision_m"]=0
+        raw,qa=spatial_opportunity(station,plots)
+        self.assertEqual(raw["year_since_2015_precision_250m_radius_5km"][
+            "original_stations_ge5_local_reference_plots_from_ge2_publications"],35)
+        strict,qa=spatial_opportunity(station,{k:v for k,v in plots.items() if v["precision_m"]>0})
+        self.assertEqual(strict["year_since_2015_precision_250m_radius_5km"][
+            "original_stations_ge5_local_reference_plots_from_ge2_publications"],0)
     def test_true_original_source_year_gate_excludes_historic(self):
         station,plots=self.synthetic()
         for p in plots.values():p["year"]=1977
