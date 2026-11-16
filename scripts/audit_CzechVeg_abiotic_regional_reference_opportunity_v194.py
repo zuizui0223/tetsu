@@ -133,7 +133,13 @@ def audit(meta,blocks,measured):
         counts=stats[typ]
         n_regions=sum(x["rail_plots_min5"]>0 for x in by_region[typ].values())
         summary[typ]={
-            **dict(counts),"original_phyto_regions_supported_min5":n_regions,
+            **{name:counts[name] for name in ("rail_plots_scanned",
+                "total_source_paired_control_opportunities",
+                "rail_plots_with_at_least_one_reference",
+                "rail_plots_with_min5_references",
+                "source_five_reference_sites_from_distinct_papers",
+                "source_analog_class_reference_opportunities")},
+            "original_phyto_regions_supported_min5":n_regions,
             "min_reference_opportunity":MIN_REF,
             "rail_sites_are_original_text_not_verified_right_of_way":True,
             "source_environmental_match_independent_of_taxon_or_syntaxon":True,
