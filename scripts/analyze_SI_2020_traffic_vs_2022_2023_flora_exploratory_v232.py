@@ -51,8 +51,27 @@ N_TRAFFIC=9
 N_ORIGINAL_LINES=5
 
 def rank(x,y):
+    """Descriptive ties-aware Spearman for >=4 original physical segment units.
+
+    Small-sample coefficients are NOT significance estimates. No p-values.
+    """
     if len(x)!=len(y) or len(x)<4:return None
-    return spearman_ties_pairs(list(zip(x,y)))
+    def ranks(arr):
+        indices=sorted(range(len(arr)),key=lambda i:arr[i])
+        out=[0.]*len(arr);start=0
+        while start<len(indices):
+            stop=start+1
+            while stop<len(indices) and arr[indices[stop]]==arr[indices[start]]:
+                stop+=1
+            average=.5*(start+stop-1)+1
+            for i in indices[start:stop]:out[i]=average
+            start=stop
+        return out
+    rx=ranks(x);ry=ranks(y)
+    ma=mean(rx);mb=mean(ry)
+    top=sum((a-ma)*(b-mb) for a,b in zip(rx,ry))
+    bottom=math.sqrt(sum((a-ma)**2 for a in rx)*sum((b-mb)**2 for b in ry))
+    return top/bottom if bottom else None
 
 def segment_traffic_sites(original,mapped):
     base,groups,meta=source_sites_and_guilds(original)
