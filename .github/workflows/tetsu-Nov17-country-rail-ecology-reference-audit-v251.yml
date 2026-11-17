@@ -1,0 +1,37 @@
+name: "v25.1 source-pinned November 17 country held-out rail-vs-domestic ecology reference robustness audit"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_Nov17_country_rail_vs_domestic_reference_robustness_v251.py'
+      - 'tests/test_Nov17_rail_country_reference_robustness_v251.py'
+      - '.github/workflows/tetsu-Nov17-country-rail-ecology-reference-audit-v251.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v251-NOV17-country-railway-domestic-reference
+  cancel-in-progress: true
+jobs:
+  audit-actual-2026-Nov17-rail-country-validation-results:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source rank versus absolute error discordance and genuine Git blob provenance
+        run: python -m unittest discover -s tests -p 'test_Nov17_rail_country_reference_robustness_v251.py' -v
+      - name: Verify all five source Git-blobs and audit exact latest country transfer vs domestic road urban reference comparison
+        run: |
+          python -u scripts/audit_Nov17_country_rail_vs_domestic_reference_robustness_v251.py \
+            --sources research/validation_20261117 \
+            --output results/audit/v251_Nov17_verified_country_reference_rail_vs_domestic_multi_metric_evidence.json
+      - name: Archive source-audited aggregate evidence only, not station×species incidence matrices
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v251-reproducible-Nov17-country-heldout-rail-vs-domestic-reference-robustness
+          path: results/audit/v251_Nov17_verified_country_reference_rail_vs_domestic_multi_metric_evidence.json
+          if-no-files-found: warn
