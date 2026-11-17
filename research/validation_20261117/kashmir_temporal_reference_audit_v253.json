@@ -1,0 +1,108 @@
+{
+  "method": "descriptive difference of preaggregated source-site Jaccard distance contrasts",
+  "input_is_derived_not_original_field_matrix": true,
+  "different_year_site_membership_not_verified_from_aggregate": true,
+  "paired_site_level_temporal_change_identified": false,
+  "traffic_or_genetic_causal_effect_identified": false,
+  "strata": [
+    {
+      "group": "station",
+      "rail_zone": "Track",
+      "reference_zone": "Interior Plot 2",
+      "site_count_2014": 16,
+      "site_count_2017": 16,
+      "raw_delta_2014": -0.005117928679698958,
+      "raw_delta_2017": -0.04721378420198086,
+      "raw_temporal_change": -0.0420958555222819,
+      "equalized_delta_2014": -0.05813470015930169,
+      "equalized_delta_2017": -0.13205930445880207,
+      "equalized_temporal_change": -0.07392460429950037
+    },
+    {
+      "group": "station",
+      "rail_zone": "Track",
+      "reference_zone": "Interior Plot 1",
+      "site_count_2014": 15,
+      "site_count_2017": 15,
+      "raw_delta_2014": 0.01444906786705591,
+      "raw_delta_2017": 0.1293320737692697,
+      "raw_temporal_change": 0.11488300590221379,
+      "equalized_delta_2014": -0.09607767536774028,
+      "equalized_delta_2017": -0.09319591153044142,
+      "equalized_temporal_change": 0.0028817638372988647
+    },
+    {
+      "group": "station",
+      "rail_zone": "Embankment",
+      "reference_zone": "Interior Plot 2",
+      "site_count_2014": 16,
+      "site_count_2017": 16,
+      "raw_delta_2014": -0.21700829798832177,
+      "raw_delta_2017": -0.1554510024989818,
+      "raw_temporal_change": 0.06155729548933997,
+      "equalized_delta_2014": 0.11796796318256965,
+      "equalized_delta_2017": -0.013414462839514746,
+      "equalized_temporal_change": -0.1313824260220844
+    },
+    {
+      "group": "between",
+      "rail_zone": "Track",
+      "reference_zone": "Interior Plot 2",
+      "site_count_2014": 12,
+      "site_count_2017": 12,
+      "raw_delta_2014": -0.09737794471317152,
+      "raw_delta_2017": -0.006587497161966049,
+      "raw_temporal_change": 0.09079044755120547,
+      "equalized_delta_2014": -0.23363386799316438,
+      "equalized_delta_2017": -0.19377315872290757,
+      "equalized_temporal_change": 0.03986070927025681
+    },
+    {
+      "group": "between",
+      "rail_zone": "Track",
+      "reference_zone": "Interior Plot 1",
+      "site_count_2014": 15,
+      "site_count_2017": 15,
+      "raw_delta_2014": -0.09864143894081423,
+      "raw_delta_2017": -0.0745067588643441,
+      "raw_temporal_change": 0.024134680076470127,
+      "equalized_delta_2014": -0.23047723672992887,
+      "equalized_delta_2017": -0.26730540457388996,
+      "equalized_temporal_change": -0.03682816784396109
+    },
+    {
+      "group": "between",
+      "rail_zone": "Embankment",
+      "reference_zone": "Interior Plot 2",
+      "site_count_2014": 12,
+      "site_count_2017": 12,
+      "raw_delta_2014": -0.16475007474385928,
+      "raw_delta_2017": -0.05430393810225931,
+      "raw_temporal_change": 0.11044613664159997,
+      "equalized_delta_2014": -0.008293492768327162,
+      "equalized_delta_2017": 0.02390683884611345,
+      "equalized_temporal_change": 0.03220033161444061
+    }
+  ],
+  "reference_sensitivity": [
+    {
+      "rail_zone": "Track",
+      "reference_zone": "Interior Plot 2",
+      "raw_station_minus_between_temporal_change": -0.13288630307348737,
+      "equalized_station_minus_between_temporal_change": -0.11378531356975718
+    },
+    {
+      "rail_zone": "Track",
+      "reference_zone": "Interior Plot 1",
+      "raw_station_minus_between_temporal_change": 0.09074832582574366,
+      "equalized_station_minus_between_temporal_change": 0.039709931681259955
+    },
+    {
+      "rail_zone": "Embankment",
+      "reference_zone": "Interior Plot 2",
+      "raw_station_minus_between_temporal_change": -0.04888884115226,
+      "equalized_station_minus_between_temporal_change": -0.163582757636525
+    }
+  ],
+  "source_git_blob_sha1": "75dd78dd2b66a67543c248ff686c3a9dc016ea73"
+}
