@@ -1,0 +1,75 @@
+name: "v24.6 authentic 4th Slovenian original 89 100m ballast sites vs European 82-station trait axis"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/validate_SI_89_original_track_sites_Europe82_trait_axis_v246.py'
+      - 'tests/test_SI_89_track_sites_Europe_trait_axis_v246.py'
+      - '.github/workflows/tetsu-Europe-fourth-independent-SI-89-track-sites-v246.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v246-real-fourth-Slovenia-study-source-continuous-CWM
+  cancel-in-progress: true
+jobs:
+  true-SI-89-independent-100m-route-sections-fourth-study:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Validate 4th genuinely distinct study grain, fixed European 2D trait scaling and route margins on synthetic examples
+        run: python -m unittest discover -s tests -p 'test_SI_89_track_sites_Europe_trait_axis_v246.py' -v
+      - name: Download REAL author Slovenia original 2022–2023 ballast BS BT field vegetation data from source-authenticated success
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source_original/v246/SI
+      - name: Authenticate exactly original publisher Slovenian field records
+        run: |
+          set -euo pipefail
+          F='source_original/v246/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$F")" = 401279
+          printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum --check
+      - name: Retrieve PRE-VERIFIED Europe 82station 3 original studies actual source-derived fixed 2D trait axes
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v245-genuine-Czech39-Italy28-CroatiaBosnia15-stations-shared-LEDA-2D-source-null
+          run-id: 44010794675
+          github-token: GITHUB_TOKEN_PLACEHOLDER
+          path: source_original/v246/Europe_reference
+      - name: Download authentic Oldenburg original LEDA canopy height and seed mass reference tables
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v246/LEDA
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v246/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v246/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v246/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v246/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: "Run original Slovenia 89 source 100m locations with same frozen European 82station LEDA reference axes and stratified site margin null"
+        run: |
+          python -u scripts/validate_SI_89_original_track_sites_Europe82_trait_axis_v246.py \
+            --source-xlsx source_original/v246/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source_original/v246/SI/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --v245-audit source_original/v246/Europe_reference/results/audit/v245_Europe_3_real_rail_flora_studies_82stations_same_2D_LEDA_beta_source_null.json \
+            --height source_original/v246/LEDA/canopy_height.txt \
+            --seed source_original/v246/LEDA/seed_mass.txt \
+            --output results/audit/v246_fourth_independent_Slovenia_89_author_rail_track_locations_European_frozen_trait_axes.json
+      - name: Archive only aggregate original-author audit, no site/taxon data or precise vegetation coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v246-SI-fourth-independent-author-89-track-locations-Europe-frozen-LEDA-2D-study-comparison
+          path: results/audit/v246_fourth_independent_Slovenia_89_author_rail_track_locations_European_frozen_trait_axes.json
+          if-no-files-found: warn
