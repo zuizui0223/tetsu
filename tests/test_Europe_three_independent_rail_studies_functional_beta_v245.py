@@ -6,7 +6,7 @@ from validate_Europe_3studies_82stations_original_LEDA_2D_trait_beta_v245 import
 )
 class TestIndependentThreeStudyRailSources(unittest.TestCase):
     def setup_data(self):
-        names=[f"Genus spec{chr(97+i//26)}{chr(97+i%26)}" for i in range(150)]
+        names=[f"Genus spec{chr(97+i//26)}{chr(97+i%26)}" for i in range(400)]
         h={n:1+i*.08 for i,n in enumerate(names)}
         se={n:1+2*i*.3 for i,n in enumerate(names)}
         rng=random.Random(20261117)
@@ -22,8 +22,8 @@ class TestIndependentThreeStudyRailSources(unittest.TestCase):
     def test_common_pooled_joint_height_seed_axes(self):
         studies,h,se=self.setup_data()
         value,q=traits_join(studies,h,se)
-        self.assertEqual(len(value),150)
-        self.assertEqual(q['source_original_LEDA_both_canopy_height_seed_mass_species_n'],150)
+        self.assertEqual(len(value),400)
+        self.assertEqual(q['source_original_LEDA_both_canopy_height_seed_mass_species_n'],400)
         self.assertTrue(all(len(x)==2 for x in value.values()))
     def test_true_82_stations_in_three_original_studies(self):
         studies,h,se=self.setup_data()
