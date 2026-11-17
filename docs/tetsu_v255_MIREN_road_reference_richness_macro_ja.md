@@ -1,6 +1,6 @@
 # tetsu v25.5 — 基準選択に依存する交通回廊の「群集収斂」を全球道路で診断（MIREN、鉄道ではない）
 
-2026-11-17。**MIRENは山岳道路を現地調査した公開データであり、鉄道の群集として扱わない**。既存 `research/validation_20261117/global_corridors.json`（真のMIREN original CSV由来、Git blob SHA1 `895fd24d2176ef1f19df9ba9eaab34f8326b7f7f`）をそのまま使い、元original road×site×yearで共通の *Plot1道路際・Plot2中間・Plot3内陸* に対する「参照選択」と「同じ地点の種数希薄化」の頑健性を評価する。raw観測地点を新規再取込していない派生データの再集約であり、元source SHA/MIREN DOI https://doi.org/10.5281/zenodo.15749536 に対する2014/2017鉄道の独立再現ではない。
+2026-11-17。真正集約データ監査 **[GitHub Actions SUCCESS #44105033177](https://github.com/zuizui0223/tetsu/actions/runs/44105033177)**、数学テスト3/3成功。元資料のSHAと各panel/regionの公表済み平均値を1e−11以内で復元し、17地域・50道路・822地点、6地域機能群集、厳格4地域の支持を確認。実元MIREN原CSVを再取得したsource試験ではなく**既存source認証済み集約JSONの二次解析**。**MIRENは山岳道路を現地調査した公開データであり、鉄道の群集として扱わない**。既存 `research/validation_20261117/global_corridors.json`（真のMIREN original CSV由来、Git blob SHA1 `895fd24d2176ef1f19df9ba9eaab34f8326b7f7f`）をそのまま使い、元original road×site×yearで共通の *Plot1道路際・Plot2中間・Plot3内陸* に対する「参照選択」と「同じ地点の種数希薄化」の頑健性を評価する。raw観測地点を新規再取込していない派生データの再集約であり、元source SHA/MIREN DOI https://doi.org/10.5281/zenodo.15749536 に対する2014/2017鉄道の独立再現ではない。
 
 ## 評価の仕組み
 
@@ -12,7 +12,7 @@
 
 負なら道路際の方が地点間で植物種構成が近い。差をとったときPlot1は厳密に相殺される。異なる参照に対する推定差を、道路自体の効果と読み替えない。種数等化は元計算で同じSite×Yearの三ゾーンを同時に希薄化した派生系列。
 
-## source集約からの新しい同一基準比較（現時点では追加source監査予定）
+## source集約からの新しい同一基準比較（SOURCE-AGGREGATE VERIFIED）
 
 |元統一二名法の全分類群出現（MIREN 17地域・50道路・822地点）|道路際−中間 D12|道路際−内陸 D13|中間−内陸 D13−D12|
 |---|---:|---:|---:|
@@ -30,3 +30,6 @@
 Kashmir原生物データでは線路vs内陸1/2の **時間的変化** が参照で変わった。MIREN道路では同一年内の **空間的3ゾーン間β** が参照と種数で変わる。両者は同じ生態効果量のメタ解析ではない。共通して重要なのは **「人工回廊で地点間機能や種が似る」という主張の成立が、どの周辺植生を参照にするか・種数をどう標準化したかに依存する** こと。これは広域的な解析設計上の結論であって、鉄道による種子輸送、風圧、草刈り、遺伝的適応の機構同定ではない。
 
 本v25.5は元MIREN原行列を再配布せず、予め元sourceから計算されたRegion×Road統計の照合のみ。各パネルの元meanを全て誤差1e−11以内で再現しなければ失敗させる。GitHub code `scripts/audit_MIREN_road_reference_scale_v255.py`、synthetic tests `tests/test_MIREN_road_reference_scale_v255.py`、workflow `.github/workflows/tetsu-v255-MIREN-reference-vs-richness-source-audit.yml`。
+
+
+派生数値結果は `data/derived/tetsu_MIREN_road_reference_v255_summary.json` に固定（国や道路の生観測表は再配布しない）。[Results artifact #14338935482](https://github.com/zuizui0223/tetsu/actions/runs/44105033177/artifacts/14338935482)。
