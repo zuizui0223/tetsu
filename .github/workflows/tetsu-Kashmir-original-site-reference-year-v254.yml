@@ -1,0 +1,59 @@
+name: "v25.4 original Kashmir same-site reference sensitivity and turnover"
+on:
+  push:
+    branches: [research/tetsu-kashmir-temporal-reference-v253-20261117]
+    paths:
+      - 'scripts/analyze_Kashmir_same_sites_reference_year_v254.py'
+      - 'tests/test_Kashmir_same_site_reference_v254.py'
+      - '.github/workflows/tetsu-Kashmir-original-site-reference-year-v254.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-kashmir-2014-2017-paired-site-v254
+  cancel-in-progress: true
+permissions: {contents: read}
+jobs:
+  original-source-2014-2017-paired-sites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Synthetic pair/cancellation/turnover tests before original data
+        run: python -m unittest discover -s tests -p 'test_Kashmir_same_site_reference_v254.py' -v
+      - name: Download authentic public Dryad version archive and validate publisher checksum
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v254/India results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source_original/v254/India/dryad_version_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,shutil
+          archive=Path('source_original/v254/India/dryad_version_99735.zip')
+          with zipfile.ZipFile(archive) as z:
+              candidates=[f for f in z.infolist() if not f.is_dir() and
+                          f.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(candidates)!=1:
+                  raise ValueError('Dryad official version archive must contain exactly one original Matrix_plot.xlsx')
+              with z.open(candidates[0]) as stream, open('source_original/v254/India/Matrix_plot.xlsx','wb') as out:
+                  shutil.copyfileobj(stream,out)
+          PY
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source_original/v254/India/Matrix_plot.xlsx | sha256sum --check
+      - name: Verify 12 existing source metrics exactly and run common-site three-zone original-data analysis
+        run: |
+          python -u scripts/analyze_Kashmir_same_sites_reference_year_v254.py \
+            --source source_original/v254/India/Matrix_plot.xlsx \
+            --prior-aggregate research/validation_20261117/kashmir_results.json \
+            --output results/audit/v254_Kashmir_original_common_sites_year_reference_turnover.json \
+            --bootstrap 1999 --rarefaction 199
+      - name: Archive only scientific summary, never the original plant-by-site workbook
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v254-genuine-Dryad-same-sites-reference-and-turnover-summary-only
+          path: results/audit/v254_Kashmir_original_common_sites_year_reference_turnover.json
+          if-no-files-found: warn

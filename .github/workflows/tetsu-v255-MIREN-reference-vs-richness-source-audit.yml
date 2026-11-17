@@ -1,0 +1,31 @@
+name: "v25.5 MIREN road reference and richness audit from source-frozen 17-region data"
+on:
+  push:
+    branches: [research/tetsu-kashmir-temporal-reference-v253-20261117]
+    paths:
+      - 'scripts/audit_MIREN_road_reference_scale_v255.py'
+      - 'tests/test_MIREN_road_reference_scale_v255.py'
+      - '.github/workflows/tetsu-v255-MIREN-reference-vs-richness-source-audit.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  audit-original-aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Run synthetic source-aggregate consistency tests
+        run: python -m unittest discover -s tests -p 'test_MIREN_road_reference_scale_v255.py' -v
+      - name: Hard-gate original source-derived JSON SHA and reproduce all recorded regional means
+        run: |
+          python scripts/audit_MIREN_road_reference_scale_v255.py \
+            --source research/validation_20261117/global_corridors.json \
+            --output results/audit/v255_MIREN_17region_reference_richness_road_only.json
+      - name: Archive derived region summary only, no original MIREN raw field observations
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v255-MIREN-17region-ROAD-reference-choice-summary-only
+          path: results/audit/v255_MIREN_17region_reference_richness_road_only.json
+          if-no-files-found: error

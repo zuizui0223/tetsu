@@ -1,0 +1,402 @@
+{
+  "version": "v25.4",
+  "source": {
+    "original_file_sha256": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474",
+    "original_file_size": 122187,
+    "all_spatial_sites": 31,
+    "station_sites_in_source": 16,
+    "between_sites_in_source": 15,
+    "plot_year_zone_rows": 248,
+    "source_taxon_columns": 123,
+    "source_missing_species_cells": 4,
+    "original_sheet": "Sheet1"
+  },
+  "prior_derived_aggregate_git_blob_sha1": "75dd78dd2b66a67543c248ff686c3a9dc016ea73",
+  "source_reproduction": {
+    "twelve_source_aggregates_reproduced": 12,
+    "all_passed_1e_minus_10": true,
+    "same_original_sites_used_in_both_years_by_construction": true,
+    "strata": [
+      {
+        "group": "station",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 2",
+        "year": 2014,
+        "source_site_count": 16,
+        "nonrarefied_delta_exactly_reproduced": -0.0051179286796987356
+      },
+      {
+        "group": "station",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 2",
+        "year": 2017,
+        "source_site_count": 16,
+        "nonrarefied_delta_exactly_reproduced": -0.047213784201980635
+      },
+      {
+        "group": "station",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 1",
+        "year": 2014,
+        "source_site_count": 15,
+        "nonrarefied_delta_exactly_reproduced": 0.014449067867056242
+      },
+      {
+        "group": "station",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 1",
+        "year": 2017,
+        "source_site_count": 15,
+        "nonrarefied_delta_exactly_reproduced": 0.12933207376926958
+      },
+      {
+        "group": "station",
+        "rail_zone": "Embankment",
+        "reference_zone": "Interior Plot 2",
+        "year": 2014,
+        "source_site_count": 16,
+        "nonrarefied_delta_exactly_reproduced": -0.21700829798832122
+      },
+      {
+        "group": "station",
+        "rail_zone": "Embankment",
+        "reference_zone": "Interior Plot 2",
+        "year": 2017,
+        "source_site_count": 16,
+        "nonrarefied_delta_exactly_reproduced": -0.15545100249898058
+      },
+      {
+        "group": "between",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 2",
+        "year": 2014,
+        "source_site_count": 12,
+        "nonrarefied_delta_exactly_reproduced": -0.09737794471317152
+      },
+      {
+        "group": "between",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 2",
+        "year": 2017,
+        "source_site_count": 12,
+        "nonrarefied_delta_exactly_reproduced": -0.00658749716196616
+      },
+      {
+        "group": "between",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 1",
+        "year": 2014,
+        "source_site_count": 15,
+        "nonrarefied_delta_exactly_reproduced": -0.09864143894081479
+      },
+      {
+        "group": "between",
+        "rail_zone": "Track",
+        "reference_zone": "Interior Plot 1",
+        "year": 2017,
+        "source_site_count": 15,
+        "nonrarefied_delta_exactly_reproduced": -0.07450675886434355
+      },
+      {
+        "group": "between",
+        "rail_zone": "Embankment",
+        "reference_zone": "Interior Plot 2",
+        "year": 2014,
+        "source_site_count": 12,
+        "nonrarefied_delta_exactly_reproduced": -0.16475007474385905
+      },
+      {
+        "group": "between",
+        "rail_zone": "Embankment",
+        "reference_zone": "Interior Plot 2",
+        "year": 2017,
+        "source_site_count": 12,
+        "nonrarefied_delta_exactly_reproduced": -0.05430393810225964
+      }
+    ]
+  },
+  "same_site_common_3_zone_cohort": {
+    "station": 15,
+    "between": 12
+  },
+  "sampling_unit": "original spatial site; same retained site IDs in 2014 and 2017, across Track and both Interiors",
+  "nonrarefied": {
+    "means": {
+      "station": {
+        "2014": {
+          "Track": 0.7724293912142208,
+          "Interior Plot 1": 0.7579803233471646,
+          "Interior Plot 2": 0.7722711778576942
+        },
+        "2017": {
+          "Track": 0.8109977324263037,
+          "Interior Plot 1": 0.6816656586570341,
+          "Interior Plot 2": 0.8687905774913729
+        }
+      },
+      "between": {
+        "2014": {
+          "Track": 0.707617845117845,
+          "Interior Plot 1": 0.7979177805681286,
+          "Interior Plot 2": 0.8049957898310165
+        },
+        "2017": {
+          "Track": 0.7331168831168831,
+          "Interior Plot 1": 0.7210622397559495,
+          "Interior Plot 2": 0.7397043802788492
+        }
+      }
+    },
+    "by_reference": {
+      "Interior Plot 1": {
+        "station_change": 0.11488300590221334,
+        "between_change": 0.10235457881121712,
+        "station_minus_between_change": 0.01252842709099622
+      },
+      "Interior Plot 2": {
+        "station_change": -0.05795105842159587,
+        "between_change": 0.09079044755120536,
+        "station_minus_between_change": -0.14874150597280122
+      }
+    },
+    "reference_sensitivity_station_minus_between": 0.16126993306379744,
+    "track_cancels_in_reference_sensitivity": true
+  },
+  "rarefaction": "all three zones within each site-year independently rarefied to minimum within-site-year richness; 199 draw pairwise distances averaged; same sites & cohorts",
+  "rarefied": {
+    "means": {
+      "station": {
+        "2014": {
+          "Track": 0.7828779741436289,
+          "Interior Plot 1": 0.8753826071158536,
+          "Interior Plot 2": 0.8385775551634033
+        },
+        "2017": {
+          "Track": 0.8069223669367255,
+          "Interior Plot 1": 0.9042862840278505,
+          "Interior Plot 2": 0.9425997333606831
+        }
+      },
+      "between": {
+        "2014": {
+          "Track": 0.7040619765494127,
+          "Interior Plot 1": 0.9376777768109447,
+          "Interior Plot 2": 0.9373259394616195
+        },
+        "2017": {
+          "Track": 0.7294328786791107,
+          "Interior Plot 1": 0.9232835352810244,
+          "Interior Plot 2": 0.9256962119399321
+        }
+      }
+    },
+    "by_reference": {
+      "Interior Plot 1": {
+        "station_change": -0.004859284118900353,
+        "between_change": 0.03976514365961825,
+        "station_minus_between_change": -0.044624427778518605
+      },
+      "Interior Plot 2": {
+        "station_change": -0.07997778540418332,
+        "between_change": 0.037000629651385286,
+        "station_minus_between_change": -0.11697841505556861
+      }
+    },
+    "reference_sensitivity_station_minus_between": 0.07235398727705,
+    "track_cancels_in_reference_sensitivity": true
+  },
+  "cluster_bootstrap_raw": {
+    "method": "site-cluster multiplier bootstrap: spatial sites resampled as paired multi-zone multiyear clusters; same-site pairs excluded by U-statistic weighting",
+    "bootstrap_requested": 1999,
+    "bootstrap_skipped_degenerate": 0,
+    "by_reference": {
+      "Interior Plot 1": {
+        "draws": 1999,
+        "percentile_025_technical_not_field_CI": -0.15512538905156648,
+        "percentile_975_technical_not_field_CI": 0.17337070598437038,
+        "fraction_negative": 0.4452226113056528
+      },
+      "Interior Plot 2": {
+        "draws": 1999,
+        "percentile_025_technical_not_field_CI": -0.3187009078551584,
+        "percentile_975_technical_not_field_CI": 0.028374614941338337,
+        "fraction_negative": 0.9484742371185593
+      }
+    },
+    "reference_sensitivity": {
+      "draws": 1999,
+      "percentile_025_technical_not_field_CI": 0.07144324967586674,
+      "percentile_975_technical_not_field_CI": 0.2548993605233526,
+      "fraction_negative": 0.0
+    },
+    "leave_one_original_site_out_by_group": {
+      "station": {
+        "Interior Plot 1": {
+          "min": -0.011216598497194807,
+          "max": 0.03832247807754208
+        },
+        "Interior Plot 2": {
+          "min": -0.1828582185121913,
+          "max": -0.11289994302453821
+        }
+      },
+      "between": {
+        "Interior Plot 1": {
+          "min": -0.02283391939916124,
+          "max": 0.03952604620230726
+        },
+        "Interior Plot 2": {
+          "min": -0.1799706627298827,
+          "max": -0.12518886974855836
+        }
+      }
+    },
+    "percentiles_are_technical_site_resampling_not_randomized_field_CI": true
+  },
+  "cluster_bootstrap_rarefied": {
+    "method": "site-cluster multiplier bootstrap: spatial sites resampled as paired multi-zone multiyear clusters; same-site pairs excluded by U-statistic weighting",
+    "bootstrap_requested": 1999,
+    "bootstrap_skipped_degenerate": 0,
+    "by_reference": {
+      "Interior Plot 1": {
+        "draws": 1999,
+        "percentile_025_technical_not_field_CI": -0.19302538493135138,
+        "percentile_975_technical_not_field_CI": 0.11767993174821095,
+        "fraction_negative": 0.7108554277138569
+      },
+      "Interior Plot 2": {
+        "draws": 1999,
+        "percentile_025_technical_not_field_CI": -0.26515814273857086,
+        "percentile_975_technical_not_field_CI": 0.039828791129114506,
+        "fraction_negative": 0.9224612306153076
+      }
+    },
+    "reference_sensitivity": {
+      "draws": 1999,
+      "percentile_025_technical_not_field_CI": 0.029288752742716046,
+      "percentile_975_technical_not_field_CI": 0.11909704124574405,
+      "fraction_negative": 0.0
+    },
+    "leave_one_original_site_out_by_group": {
+      "station": {
+        "Interior Plot 1": {
+          "min": -0.06455173813212933,
+          "max": -0.019947639812089246
+        },
+        "Interior Plot 2": {
+          "min": -0.1364515004077984,
+          "max": -0.08917969718441299
+        }
+      },
+      "between": {
+        "Interior Plot 1": {
+          "min": -0.08641308486868282,
+          "max": -0.018109372946879976
+        },
+        "Interior Plot 2": {
+          "min": -0.15379615575521888,
+          "max": -0.09082480549743599
+        }
+      }
+    },
+    "percentiles_are_technical_site_resampling_not_randomized_field_CI": true
+  },
+  "within_site_taxonomic_turnover_2014_to_2017": {
+    "interpretation": "Within-site Jaccard dissimilarity between original 2014 and 2017 surveys, unlike between-site beta convergence",
+    "rarefaction": "all six site-year-zone species sets rarefied to minimum richness within that site; 199 independently sampled draws",
+    "not_traffic_or_heritable_adaptation": true,
+    "results": {
+      "raw": {
+        "observation": {
+          "by_group_zone": {
+            "station": {
+              "Track": 0.8262813112813113,
+              "Interior Plot 1": 0.867241865125497,
+              "Interior Plot 2": 0.8732479814330993
+            },
+            "between": {
+              "Track": 0.7118055555555555,
+              "Interior Plot 1": 0.7874912715928112,
+              "Interior Plot 2": 0.7847843404016005
+            }
+          },
+          "by_reference": {
+            "Interior Plot 1": {
+              "station_track_minus_reference": -0.04096055384418562,
+              "between_track_minus_reference": -0.07568571603725571,
+              "station_minus_between_track_reference_turnover_difference": 0.03472516219307009
+            },
+            "Interior Plot 2": {
+              "station_track_minus_reference": -0.046966670151788015,
+              "between_track_minus_reference": -0.07297878484604503,
+              "station_minus_between_track_reference_turnover_difference": 0.026012114694257016
+            }
+          }
+        },
+        "site_bootstrap_technical": {
+          "Interior Plot 1": {
+            "draws": 1999,
+            "q025_not_field_CI": -0.08689046225582105,
+            "q975_not_field_CI": 0.16142731028652252,
+            "fraction_negative": 0.2961480740370185
+          },
+          "Interior Plot 2": {
+            "draws": 1999,
+            "q025_not_field_CI": -0.07342044681868003,
+            "q975_not_field_CI": 0.12557720742792972,
+            "fraction_negative": 0.3016508254127064
+          }
+        }
+      },
+      "rarefied": {
+        "observation": {
+          "by_group_zone": {
+            "station": {
+              "Track": 0.8712036372337885,
+              "Interior Plot 1": 0.9646996889207966,
+              "Interior Plot 2": 0.9529185610592665
+            },
+            "between": {
+              "Track": 0.755955039749009,
+              "Interior Plot 1": 0.9480607402089835,
+              "Interior Plot 2": 0.9493655446544912
+            }
+          },
+          "by_reference": {
+            "Interior Plot 1": {
+              "station_track_minus_reference": -0.09349605168700814,
+              "between_track_minus_reference": -0.19210570045997444,
+              "station_minus_between_track_reference_turnover_difference": 0.0986096487729663
+            },
+            "Interior Plot 2": {
+              "station_track_minus_reference": -0.08171492382547807,
+              "between_track_minus_reference": -0.19341050490548217,
+              "station_minus_between_track_reference_turnover_difference": 0.1116955810800041
+            }
+          }
+        },
+        "site_bootstrap_technical": {
+          "Interior Plot 1": {
+            "draws": 1999,
+            "q025_not_field_CI": 0.021309430751642443,
+            "q975_not_field_CI": 0.17277440775305264,
+            "fraction_negative": 0.005502751375687844
+          },
+          "Interior Plot 2": {
+            "draws": 1999,
+            "q025_not_field_CI": 0.04175734824918275,
+            "q975_not_field_CI": 0.17930416965781418,
+            "fraction_negative": 0.0005002501250625312
+          }
+        }
+      }
+    }
+  },
+  "key_causal_limits": [
+    "rail traffic exposure not observed",
+    "station/between not randomized",
+    "sites may vary in management, region and climate",
+    "technical bootstrap is not field experiment",
+    "source XLSX/plot identities intentionally not republished"
+  ]
+}
