@@ -71,7 +71,7 @@ jobs:
             'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v245/LEDA/canopy_height.txt \
             '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v245/LEDA/seed_mass.txt \
             | sha256sum --check
-      - name: Source-original 82 stations: CZ IT HR-BA shared LEDA axes and geography group fixed incidence 2D beta null
+      - name: "Real 82 stations with shared LEDA axes and region-fixed functional null"
         run: |
           python -u scripts/validate_Europe_3studies_82stations_original_LEDA_2D_trait_beta_v245.py \
             --cz-s1 source_original/v245/CZ/S1.xlsx \
