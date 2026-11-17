@@ -1,0 +1,559 @@
+{
+  "version": "v25.5",
+  "source_git_blob_sha1": "895fd24d2176ef1f19df9ba9eaab34f8326b7f7f",
+  "source_kind": "original-source-verified MIREN ROAD aggregated regional pairwise distances",
+  "railway_direct_effect_identified": false,
+  "distinguish_road_from_railway": true,
+  "not_original_source_reingestion": true,
+  "results": {
+    "all_binomials": {
+      "raw": {
+        "regional_mean_roadside_minus_middle": -0.027924710614190003,
+        "regional_mean_roadside_minus_interior": -0.04143919554965015,
+        "regional_mean_reference_only_middle_minus_interior": -0.013514484935460147,
+        "negative_roadside_minus_middle_regions": 14,
+        "negative_roadside_minus_interior_regions": 16,
+        "reference_sign_flip_regions": [
+          "ARC",
+          "ESP"
+        ],
+        "strictly_monotone_regions": 10
+      },
+      "equal": {
+        "regional_mean_roadside_minus_middle": -0.02422388427816089,
+        "regional_mean_roadside_minus_interior": -0.013754621528395194,
+        "regional_mean_reference_only_middle_minus_interior": 0.0104692627497657,
+        "negative_roadside_minus_middle_regions": 13,
+        "negative_roadside_minus_interior_regions": 11,
+        "reference_sign_flip_regions": [
+          "CNN",
+          "ORE"
+        ],
+        "strictly_monotone_regions": 6
+      },
+      "n_regions": 17,
+      "n_roads": 50,
+      "n_original_sites": 822,
+      "region_sign_change_rarefaction_roadside_vs_interior": [
+        "CNN",
+        "ESL",
+        "ESP",
+        "NOR",
+        "ORE"
+      ],
+      "by_region": [
+        {
+          "region": "ARC",
+          "source_roads": 3,
+          "source_sites": 60,
+          "raw": {
+            "roadside_minus_middle": 0.004212499650731116,
+            "roadside_minus_interior": -0.01761119517155285,
+            "middle_minus_interior": -0.021823694822283968,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.02842992856945392,
+            "roadside_minus_interior": -0.030674701950034855,
+            "middle_minus_interior": -0.0022447733805809333,
+            "strictly_monotone": true
+          }
+        },
+        {
+          "region": "ARS",
+          "source_roads": 3,
+          "source_sites": 59,
+          "raw": {
+            "roadside_minus_middle": 0.03618821841821507,
+            "roadside_minus_interior": 0.04479441180859034,
+            "middle_minus_interior": 0.008606193390375272,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": 0.03326208793591645,
+            "roadside_minus_interior": 0.08653550691639256,
+            "middle_minus_interior": 0.053273418980476106,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "AUN",
+          "source_roads": 3,
+          "source_sites": 60,
+          "raw": {
+            "roadside_minus_middle": -0.058341754965595904,
+            "roadside_minus_interior": -0.08363561831573196,
+            "middle_minus_interior": -0.02529386335013606,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.08327679396039134,
+            "roadside_minus_interior": -0.08122694417444976,
+            "middle_minus_interior": 0.002049849785941582,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "AUT",
+          "source_roads": 2,
+          "source_sites": 40,
+          "raw": {
+            "roadside_minus_middle": -0.031012377448708772,
+            "roadside_minus_interior": -0.01735591483190191,
+            "middle_minus_interior": 0.013656462616806864,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.042602778802620755,
+            "roadside_minus_interior": -0.015567109902371312,
+            "middle_minus_interior": 0.027035668900249443,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "CHE",
+          "source_roads": 3,
+          "source_sites": 26,
+          "raw": {
+            "roadside_minus_middle": -0.05618708242303083,
+            "roadside_minus_interior": -0.06508253156409194,
+            "middle_minus_interior": -0.008895449141061107,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.02334258692973279,
+            "roadside_minus_interior": -0.01556881610889116,
+            "middle_minus_interior": 0.00777377082084163,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "CLA",
+          "source_roads": 3,
+          "source_sites": 43,
+          "raw": {
+            "roadside_minus_middle": -0.036139838946942504,
+            "roadside_minus_interior": -0.08045274080476206,
+            "middle_minus_interior": -0.04431290185781955,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.045476477604672216,
+            "roadside_minus_interior": -0.03798246184863219,
+            "middle_minus_interior": 0.007494015756040029,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "CLC",
+          "source_roads": 3,
+          "source_sites": 30,
+          "raw": {
+            "roadside_minus_middle": -0.0058396891175471755,
+            "roadside_minus_interior": -0.003916341133240908,
+            "middle_minus_interior": 0.0019233479843062673,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.07992212583850389,
+            "roadside_minus_interior": -0.0847252621757214,
+            "middle_minus_interior": -0.004803136337217517,
+            "strictly_monotone": true
+          }
+        },
+        {
+          "region": "CLM",
+          "source_roads": 3,
+          "source_sites": 43,
+          "raw": {
+            "roadside_minus_middle": -0.014648973627374495,
+            "roadside_minus_interior": -0.03889770046339813,
+            "middle_minus_interior": -0.024248726836023637,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.022305263344802206,
+            "roadside_minus_interior": -0.02948756682663023,
+            "middle_minus_interior": -0.007182303481828023,
+            "strictly_monotone": true
+          }
+        },
+        {
+          "region": "CLP",
+          "source_roads": 3,
+          "source_sites": 58,
+          "raw": {
+            "roadside_minus_middle": -0.06234603379293957,
+            "roadside_minus_interior": -0.1257283074297728,
+            "middle_minus_interior": -0.06338227363683324,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.08680461998921207,
+            "roadside_minus_interior": -0.11448095114201084,
+            "middle_minus_interior": -0.027676331152798772,
+            "strictly_monotone": true
+          }
+        },
+        {
+          "region": "CLS",
+          "source_roads": 4,
+          "source_sites": 73,
+          "raw": {
+            "roadside_minus_middle": -0.04322295088287864,
+            "roadside_minus_interior": -0.07433298593352555,
+            "middle_minus_interior": -0.03111003505064691,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.03450524459939441,
+            "roadside_minus_interior": -0.03761577334914801,
+            "middle_minus_interior": -0.003110528749753594,
+            "strictly_monotone": true
+          }
+        },
+        {
+          "region": "CNN",
+          "source_roads": 3,
+          "source_sites": 39,
+          "raw": {
+            "roadside_minus_middle": -0.04886893614754706,
+            "roadside_minus_interior": -0.04841253753315111,
+            "middle_minus_interior": 0.00045639861439594753,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.018494390352118084,
+            "roadside_minus_interior": 0.0004262814182338648,
+            "middle_minus_interior": 0.01892067177035195,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "ESL",
+          "source_roads": 2,
+          "source_sites": 32,
+          "raw": {
+            "roadside_minus_middle": -0.026285305216362964,
+            "roadside_minus_interior": -0.03732375024701606,
+            "middle_minus_interior": -0.011038445030653099,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": 0.016047560798143845,
+            "roadside_minus_interior": 0.03853152701656892,
+            "middle_minus_interior": 0.022483966218425078,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "ESP",
+          "source_roads": 3,
+          "source_sites": 51,
+          "raw": {
+            "roadside_minus_middle": 0.002558888748720234,
+            "roadside_minus_interior": -0.0021271122603332415,
+            "middle_minus_interior": -0.004686001009053475,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": 0.0030400667352646904,
+            "roadside_minus_interior": 0.006644667926031467,
+            "middle_minus_interior": 0.0036046011907667763,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "IND",
+          "source_roads": 3,
+          "source_sites": 28,
+          "raw": {
+            "roadside_minus_middle": -0.029442851472693543,
+            "roadside_minus_interior": -0.044136003660682266,
+            "middle_minus_interior": -0.014693152187988723,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.007620795261643165,
+            "roadside_minus_interior": -0.026508068945593877,
+            "middle_minus_interior": -0.01888727368395071,
+            "strictly_monotone": true
+          }
+        },
+        {
+          "region": "MTN",
+          "source_roads": 3,
+          "source_sites": 60,
+          "raw": {
+            "roadside_minus_middle": -0.06605394725300717,
+            "roadside_minus_interior": -0.07681650712764876,
+            "middle_minus_interior": -0.010762559874641586,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.026356412917863614,
+            "roadside_minus_interior": -0.004906338548456679,
+            "middle_minus_interior": 0.021450074369406935,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "NOR",
+          "source_roads": 3,
+          "source_sites": 60,
+          "raw": {
+            "roadside_minus_middle": -0.017203047064865085,
+            "roadside_minus_interior": -0.005119760051911948,
+            "middle_minus_interior": 0.012083287012953137,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": 0.035808350009447265,
+            "roadside_minus_interior": 0.10443114158603395,
+            "middle_minus_interior": 0.06862279157658668,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "ORE",
+          "source_roads": 3,
+          "source_sites": 60,
+          "raw": {
+            "roadside_minus_middle": -0.02208689889940274,
+            "roadside_minus_interior": -0.028311729623921367,
+            "middle_minus_interior": -0.006224830724518626,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.0008266800370989591,
+            "roadside_minus_interior": 0.008346304125961268,
+            "middle_minus_interior": 0.009172984163060227,
+            "strictly_monotone": false
+          }
+        }
+      ]
+    },
+    "traits": {
+      "raw": {
+        "regional_mean_roadside_minus_middle": -0.07321745773526557,
+        "regional_mean_roadside_minus_interior": -0.0774737513686433,
+        "regional_mean_reference_only_middle_minus_interior": -0.004256293633377738,
+        "negative_roadside_minus_middle_regions": 5,
+        "negative_roadside_minus_interior_regions": 5,
+        "reference_sign_flip_regions": [],
+        "strictly_monotone_regions": 2
+      },
+      "equal": {
+        "regional_mean_roadside_minus_middle": -0.053842249785989164,
+        "regional_mean_roadside_minus_interior": -0.033893800133464914,
+        "regional_mean_reference_only_middle_minus_interior": 0.019948449652524246,
+        "negative_roadside_minus_middle_regions": 5,
+        "negative_roadside_minus_interior_regions": 5,
+        "reference_sign_flip_regions": [],
+        "strictly_monotone_regions": 1
+      },
+      "n_regions": 6,
+      "n_roads": 17,
+      "n_original_sites": 186,
+      "region_sign_change_rarefaction_roadside_vs_interior": [],
+      "by_region": [
+        {
+          "region": "AUT",
+          "source_roads": 2,
+          "source_sites": 40,
+          "raw": {
+            "roadside_minus_middle": -0.1462680850581738,
+            "roadside_minus_interior": -0.1331200392823596,
+            "middle_minus_interior": 0.013148045775814188,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.17408388679349346,
+            "roadside_minus_interior": -0.14680865909725477,
+            "middle_minus_interior": 0.02727522769623869,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "CHE",
+          "source_roads": 3,
+          "source_sites": 26,
+          "raw": {
+            "roadside_minus_middle": -0.10976272899414291,
+            "roadside_minus_interior": -0.04920775810066441,
+            "middle_minus_interior": 0.0605549708934785,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.09147055616177946,
+            "roadside_minus_interior": -0.01615249681345171,
+            "middle_minus_interior": 0.07531805934832775,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "CLA",
+          "source_roads": 3,
+          "source_sites": 12,
+          "raw": {
+            "roadside_minus_middle": -0.04654871765722485,
+            "roadside_minus_interior": -0.17913791167466747,
+            "middle_minus_interior": -0.13258919401744262,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.012140391482849788,
+            "roadside_minus_interior": -0.08807928080143662,
+            "middle_minus_interior": -0.07593888931858683,
+            "strictly_monotone": true
+          }
+        },
+        {
+          "region": "CLS",
+          "source_roads": 3,
+          "source_sites": 23,
+          "raw": {
+            "roadside_minus_middle": -0.05427307745496657,
+            "roadside_minus_interior": -0.08607733872204387,
+            "middle_minus_interior": -0.031804261267077305,
+            "strictly_monotone": true
+          },
+          "equal": {
+            "roadside_minus_middle": -0.025505214805202736,
+            "roadside_minus_interior": -0.02219792276166399,
+            "middle_minus_interior": 0.0033072920435387454,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "IND",
+          "source_roads": 3,
+          "source_sites": 25,
+          "raw": {
+            "roadside_minus_middle": 0.03307166387186339,
+            "roadside_minus_interior": 0.09184826076014305,
+            "middle_minus_interior": 0.05877659688827966,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": 0.05359064197475655,
+            "roadside_minus_interior": 0.10019217837463551,
+            "middle_minus_interior": 0.04660153639987896,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "NOR",
+          "source_roads": 3,
+          "source_sites": 60,
+          "raw": {
+            "roadside_minus_middle": -0.11552380111894867,
+            "roadside_minus_interior": -0.10914772119226751,
+            "middle_minus_interior": 0.006376079926681155,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.07344409144736608,
+            "roadside_minus_interior": -0.03031661970161792,
+            "middle_minus_interior": 0.04312747174574816,
+            "strictly_monotone": false
+          }
+        }
+      ]
+    },
+    "strict_traits": {
+      "raw": {
+        "regional_mean_roadside_minus_middle": -0.09048531570315096,
+        "regional_mean_roadside_minus_interior": -0.06726837446497938,
+        "regional_mean_reference_only_middle_minus_interior": 0.023216941238171585,
+        "negative_roadside_minus_middle_regions": 3,
+        "negative_roadside_minus_interior_regions": 3,
+        "reference_sign_flip_regions": [],
+        "strictly_monotone_regions": 0
+      },
+      "equal": {
+        "regional_mean_roadside_minus_middle": -0.0746948147191906,
+        "regional_mean_roadside_minus_interior": -0.037034373845198365,
+        "regional_mean_reference_only_middle_minus_interior": 0.03766044087399223,
+        "negative_roadside_minus_middle_regions": 3,
+        "negative_roadside_minus_interior_regions": 3,
+        "reference_sign_flip_regions": [],
+        "strictly_monotone_regions": 0
+      },
+      "n_regions": 4,
+      "n_roads": 10,
+      "n_original_sites": 136,
+      "region_sign_change_rarefaction_roadside_vs_interior": [],
+      "by_region": [
+        {
+          "region": "AUT",
+          "source_roads": 2,
+          "source_sites": 40,
+          "raw": {
+            "roadside_minus_middle": -0.1462680850581738,
+            "roadside_minus_interior": -0.1331200392823596,
+            "middle_minus_interior": 0.013148045775814188,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.17408388679349346,
+            "roadside_minus_interior": -0.14680865909725477,
+            "middle_minus_interior": 0.02727522769623869,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "CHE",
+          "source_roads": 3,
+          "source_sites": 26,
+          "raw": {
+            "roadside_minus_middle": -0.10976272899414291,
+            "roadside_minus_interior": -0.04920775810066441,
+            "middle_minus_interior": 0.0605549708934785,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.09147055616177946,
+            "roadside_minus_interior": -0.01615249681345171,
+            "middle_minus_interior": 0.07531805934832775,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "IND",
+          "source_roads": 2,
+          "source_sites": 12,
+          "raw": {
+            "roadside_minus_middle": 0.007315856651105068,
+            "roadside_minus_interior": 0.007482751186699554,
+            "middle_minus_interior": 0.0001668945355944862,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": 0.035480357760214354,
+            "roadside_minus_interior": 0.034617348145041804,
+            "middle_minus_interior": -0.0008630096151725497,
+            "strictly_monotone": false
+          }
+        },
+        {
+          "region": "NOR",
+          "source_roads": 3,
+          "source_sites": 58,
+          "raw": {
+            "roadside_minus_middle": -0.11322630541139223,
+            "roadside_minus_interior": -0.09422845166359306,
+            "middle_minus_interior": 0.018997853747799165,
+            "strictly_monotone": false
+          },
+          "equal": {
+            "roadside_minus_middle": -0.06870517368170381,
+            "roadside_minus_interior": -0.019793687615128785,
+            "middle_minus_interior": 0.04891148606657503,
+            "strictly_monotone": false
+          }
+        }
+      ]
+    }
+  }
+}
