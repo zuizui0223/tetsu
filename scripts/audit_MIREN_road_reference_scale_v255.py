@@ -13,8 +13,8 @@ from pathlib import Path
 
 SHA = '895fd24d2176ef1f19df9ba9eaab34f8326b7f7f'
 PANELS = {'all_binomials': (0, 'jaccard'),
-          'traits': (1, 'cwm_2d'),
-          'strict_traits': (1, 'cwm_2d')}
+          'traits': (1, 'cwm'),
+          'strict_traits': (1, 'cwm')}
 
 
 def blob_sha(raw: bytes) -> str:
