@@ -1,0 +1,574 @@
+{
+  "source_taxa": 123,
+  "both_traits": 76,
+  "source_spatial_sites": 31,
+  "missing_cells": 4,
+  "matched_both_years": [
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        5,
+        0.25
+      ],
+      "single_year": {
+        "2014": {
+          "n": 12,
+          "rail": 0.3238670946697754,
+          "reference": 0.2731200896813593,
+          "delta": 0.05074700498841617,
+          "leave_one_site_out": [
+            0.01741955116024833,
+            0.09037957472145605
+          ],
+          "richness_equalized_mean_delta": -0.017287488398886754,
+          "species_Jaccard_dissimilarity_delta": -0.018256290639476647
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        10,
+        0.5
+      ],
+      "single_year": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "minimum": [
+        5,
+        0.25
+      ],
+      "single_year": {
+        "2014": {
+          "n": 13,
+          "rail": 0.3182056130451877,
+          "reference": 0.19650590468548418,
+          "delta": 0.12169970835970349,
+          "leave_one_site_out": [
+            0.08947497672066658,
+            0.15155991815388672
+          ],
+          "richness_equalized_mean_delta": -0.02603665145693417,
+          "species_Jaccard_dissimilarity_delta": 0.009062185144046442
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "minimum": [
+        10,
+        0.5
+      ],
+      "single_year": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        5,
+        0.25
+      ],
+      "single_year": {
+        "2014": {
+          "n": 15,
+          "rail": 0.133412896692085,
+          "reference": 0.32480069764369496,
+          "delta": -0.19138780095160998,
+          "leave_one_site_out": [
+            -0.22084396300042997,
+            -0.1719880754914655
+          ],
+          "richness_equalized_mean_delta": 0.03292066344816696,
+          "species_Jaccard_dissimilarity_delta": -0.22081371320249132
+        },
+        "2017": {
+          "n": 9,
+          "rail": 0.25328523993061713,
+          "reference": 0.3084176608500855,
+          "delta": -0.055132420919468364,
+          "leave_one_site_out": [
+            -0.11024456083563082,
+            -0.020820939711282255
+          ],
+          "richness_equalized_mean_delta": 0.01563605938973768,
+          "species_Jaccard_dissimilarity_delta": -0.12493677942201742
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 8,
+          "rail": 0.14878342420553592,
+          "reference": 0.2980340813608772,
+          "delta": -0.1492506571553414,
+          "leave_one_site_out": [
+            -0.18226840546725948,
+            -0.11197096965510271
+          ],
+          "richness_equalized_mean_delta": 0.07130614115076529,
+          "species_Jaccard_dissimilarity_delta": -0.21933716308253504
+        },
+        "2017": {
+          "n": 8,
+          "rail": 0.2479648357065684,
+          "reference": 0.32989091723752184,
+          "delta": -0.08192608153095346,
+          "leave_one_site_out": [
+            -0.13869121051141398,
+            -0.04661733363424359
+          ],
+          "richness_equalized_mean_delta": -0.00478433758361721,
+          "species_Jaccard_dissimilarity_delta": -0.14816097382902427
+        }
+      }
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        10,
+        0.5
+      ],
+      "single_year": {
+        "2014": {
+          "n": 6,
+          "rail": 0.09660257072636474,
+          "reference": 0.2203039418707146,
+          "delta": -0.12370137114434984,
+          "leave_one_site_out": [
+            -0.15881541565837531,
+            -0.05603880039070808
+          ],
+          "richness_equalized_mean_delta": 0.035080876840810245,
+          "species_Jaccard_dissimilarity_delta": -0.23668147998545058
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        5,
+        0.25
+      ],
+      "single_year": {
+        "2014": {
+          "n": 1
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        10,
+        0.5
+      ],
+      "single_year": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "minimum": [
+        5,
+        0.25
+      ],
+      "single_year": {
+        "2014": {
+          "n": 1
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "minimum": [
+        10,
+        0.5
+      ],
+      "single_year": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        5,
+        0.25
+      ],
+      "single_year": {
+        "2014": {
+          "n": 15,
+          "rail": 0.2329778674246903,
+          "reference": 0.3042548190861525,
+          "delta": -0.07127695166146227,
+          "leave_one_site_out": [
+            -0.0920161529615499,
+            -0.048308039897763895
+          ],
+          "richness_equalized_mean_delta": 0.03049407306727685,
+          "species_Jaccard_dissimilarity_delta": -0.18620020739995635
+        },
+        "2017": {
+          "n": 12,
+          "rail": 0.2668273498945515,
+          "reference": 0.31031066949164327,
+          "delta": -0.0434833195970918,
+          "leave_one_site_out": [
+            -0.07265916526130355,
+            0.012313695736672788
+          ],
+          "richness_equalized_mean_delta": 0.0024218902136600093,
+          "species_Jaccard_dissimilarity_delta": -0.05430393810225931
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 12,
+          "rail": 0.21659372308504632,
+          "reference": 0.25567305511261146,
+          "delta": -0.03907933202756518,
+          "leave_one_site_out": [
+            -0.06920528161071839,
+            -0.020040927169987708
+          ],
+          "richness_equalized_mean_delta": 0.055457806674967275,
+          "species_Jaccard_dissimilarity_delta": -0.16475007474385928
+        },
+        "2017": {
+          "n": 12,
+          "rail": 0.2668273498945515,
+          "reference": 0.31031066949164327,
+          "delta": -0.0434833195970918,
+          "leave_one_site_out": [
+            -0.07265916526130355,
+            0.012313695736672788
+          ],
+          "richness_equalized_mean_delta": 0.0024218902136600093,
+          "species_Jaccard_dissimilarity_delta": -0.05430393810225931
+        }
+      }
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "minimum": [
+        10,
+        0.5
+      ],
+      "single_year": {
+        "2014": {
+          "n": 7,
+          "rail": 0.1990867565301492,
+          "reference": 0.20222658620543493,
+          "delta": -0.003139829675285728,
+          "leave_one_site_out": [
+            -0.060540834208364896,
+            0.02331244832775083
+          ],
+          "richness_equalized_mean_delta": 0.0653084834288337,
+          "species_Jaccard_dissimilarity_delta": -0.12031929996470137
+        },
+        "2017": {
+          "n": 1
+        }
+      },
+      "years": {
+        "2014": {
+          "n": 0
+        },
+        "2017": {
+          "n": 0
+        }
+      }
+    }
+  ],
+  "all_species": [
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "year": 2014,
+      "n": 16,
+      "all_species_distance_delta": -0.005117928679698958,
+      "richness_equalized_delta": -0.05813470015930169
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "year": 2017,
+      "n": 16,
+      "all_species_distance_delta": -0.04721378420198086,
+      "richness_equalized_delta": -0.13205930445880207
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "year": 2014,
+      "n": 15,
+      "all_species_distance_delta": 0.01444906786705591,
+      "richness_equalized_delta": -0.09607767536774028
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "year": 2017,
+      "n": 15,
+      "all_species_distance_delta": 0.1293320737692697,
+      "richness_equalized_delta": -0.09319591153044142
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "year": 2014,
+      "n": 16,
+      "all_species_distance_delta": -0.21700829798832177,
+      "richness_equalized_delta": 0.11796796318256965
+    },
+    {
+      "group": "station",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "year": 2017,
+      "n": 16,
+      "all_species_distance_delta": -0.1554510024989818,
+      "richness_equalized_delta": -0.013414462839514746
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "year": 2014,
+      "n": 12,
+      "all_species_distance_delta": -0.09737794471317152,
+      "richness_equalized_delta": -0.23363386799316438
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 2"
+      ],
+      "year": 2017,
+      "n": 12,
+      "all_species_distance_delta": -0.006587497161966049,
+      "richness_equalized_delta": -0.19377315872290757
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "year": 2014,
+      "n": 15,
+      "all_species_distance_delta": -0.09864143894081423,
+      "richness_equalized_delta": -0.23047723672992887
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Track",
+        "Interior Plot 1"
+      ],
+      "year": 2017,
+      "n": 15,
+      "all_species_distance_delta": -0.0745067588643441,
+      "richness_equalized_delta": -0.26730540457388996
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "year": 2014,
+      "n": 12,
+      "all_species_distance_delta": -0.16475007474385928,
+      "richness_equalized_delta": -0.008293492768327162
+    },
+    {
+      "group": "between",
+      "zones": [
+        "Embankment",
+        "Interior Plot 2"
+      ],
+      "year": 2017,
+      "n": 12,
+      "all_species_distance_delta": -0.05430393810225931,
+      "richness_equalized_delta": 0.02390683884611345
+    }
+  ]
+}

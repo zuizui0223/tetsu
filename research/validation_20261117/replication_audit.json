@@ -1,0 +1,805 @@
+{
+  "rail_czech_transfer": {
+    "IT28": {
+      "shared": 231,
+      "target_total": 430,
+      "rho": 0.3915604431482532,
+      "lower_mean": 0.22547974413646055,
+      "upper_mean": 0.4371921182266009,
+      "quartile_count": [
+        67,
+        58
+      ],
+      "movable": 107,
+      "within_genus_rank": 0.054,
+      "rho_with_unrecorded_training_species_as_zero": 0.386257208375676
+    },
+    "HR_BA15": {
+      "shared": 151,
+      "target_total": 356,
+      "rho": 0.25749226859059227,
+      "lower_mean": 0.303875968992248,
+      "upper_mean": 0.44666666666666666,
+      "quartile_count": [
+        43,
+        40
+      ],
+      "movable": 61,
+      "within_genus_rank": 0.069,
+      "rho_with_unrecorded_training_species_as_zero": 0.31068565465095344
+    },
+    "SI89": {
+      "shared": 193,
+      "target_total": 261,
+      "rho": 0.5121851966610922,
+      "lower_mean": 0.04318131747080855,
+      "upper_mean": 0.23066754791804361,
+      "quartile_count": [
+        51,
+        51
+      ],
+      "movable": 79,
+      "within_genus_rank": 0.006,
+      "rho_with_unrecorded_training_species_as_zero": 0.4421568095313238
+    },
+    "SK30": {
+      "shared": 301,
+      "target_total": 387,
+      "rho": 0.5680066840797957,
+      "lower_mean": 0.11860465116279072,
+      "upper_mean": 0.489753086419753,
+      "quartile_count": [
+        86,
+        81
+      ],
+      "movable": 177,
+      "within_genus_rank": 0.001,
+      "rho_with_unrecorded_training_species_as_zero": 0.6218848514294795
+    },
+    "Kashmir16": {
+      "shared": 22,
+      "target_total": 37,
+      "rho": 0.0005822545839687339,
+      "lower_mean": 0.3125,
+      "upper_mean": 0.25,
+      "quartile_count": [
+        6,
+        6
+      ],
+      "movable": 2,
+      "within_genus_rank": 0.515,
+      "rho_with_unrecorded_training_species_as_zero": 0.09798817279406889
+    }
+  },
+  "rail_ensemble_holdout": {
+    "CZ39": {
+      "shared": 257,
+      "target_total": 689,
+      "rho": 0.462501791577129,
+      "lower_mean": 0.2,
+      "upper_mean": 0.6119402985074627,
+      "quartile_count": [
+        65,
+        67
+      ],
+      "movable": 129,
+      "within_genus_rank": 0.001,
+      "rho_with_unrecorded_training_species_as_zero": 0.2792102458708102
+    },
+    "IT28": {
+      "shared": 216,
+      "target_total": 430,
+      "rho": 0.4851305461495147,
+      "lower_mean": 0.19610389610389609,
+      "upper_mean": 0.5072751322751322,
+      "quartile_count": [
+        55,
+        54
+      ],
+      "movable": 110,
+      "within_genus_rank": 0.007,
+      "rho_with_unrecorded_training_species_as_zero": 0.3624120610221998
+    },
+    "HR_BA15": {
+      "shared": 156,
+      "target_total": 356,
+      "rho": 0.35030037027196764,
+      "lower_mean": 0.24444444444444435,
+      "upper_mean": 0.49914529914529904,
+      "quartile_count": [
+        39,
+        39
+      ],
+      "movable": 65,
+      "within_genus_rank": 0.003,
+      "rho_with_unrecorded_training_species_as_zero": 0.32438371703026114
+    },
+    "SI89": {
+      "shared": 179,
+      "target_total": 261,
+      "rho": 0.4832751299883717,
+      "lower_mean": 0.04714215925744993,
+      "upper_mean": 0.24419475655430709,
+      "quartile_count": [
+        46,
+        45
+      ],
+      "movable": 71,
+      "within_genus_rank": 0.015,
+      "rho_with_unrecorded_training_species_as_zero": 0.33909068800547243
+    },
+    "SK30": {
+      "shared": 231,
+      "target_total": 387,
+      "rho": 0.6002405381848864,
+      "lower_mean": 0.12100000000000001,
+      "upper_mean": 0.5110344827586206,
+      "quartile_count": [
+        60,
+        58
+      ],
+      "movable": 115,
+      "within_genus_rank": 0.001,
+      "rho_with_unrecorded_training_species_as_zero": 0.48657481081983206
+    },
+    "Kashmir16": {
+      "shared": 23,
+      "target_total": 37,
+      "rho": 0.36703455786650097,
+      "lower_mean": 0.125,
+      "upper_mean": 0.3229166666666667,
+      "quartile_count": [
+        6,
+        6
+      ],
+      "movable": 2,
+      "within_genus_rank": 0.515,
+      "rho_with_unrecorded_training_species_as_zero": 0.1252971254771027
+    }
+  },
+  "rail_allpairs": {
+    "CZ39_IT28": {
+      "shared": 231,
+      "target_total": 430,
+      "rho": 0.3915604431482532,
+      "lower_mean": 0.22547974413646055,
+      "upper_mean": 0.4371921182266009,
+      "quartile_count": [
+        67,
+        58
+      ],
+      "movable": 107,
+      "within_genus_rank": 0.054,
+      "rho_with_unrecorded_training_species_as_zero": 0.386257208375676
+    },
+    "CZ39_HR_BA15": {
+      "shared": 151,
+      "target_total": 356,
+      "rho": 0.25749226859059227,
+      "lower_mean": 0.303875968992248,
+      "upper_mean": 0.44666666666666666,
+      "quartile_count": [
+        43,
+        40
+      ],
+      "movable": 61,
+      "within_genus_rank": 0.069,
+      "rho_with_unrecorded_training_species_as_zero": 0.31068565465095344
+    },
+    "CZ39_SI89": {
+      "shared": 193,
+      "target_total": 261,
+      "rho": 0.5121851966610922,
+      "lower_mean": 0.04318131747080855,
+      "upper_mean": 0.23066754791804361,
+      "quartile_count": [
+        51,
+        51
+      ],
+      "movable": 79,
+      "within_genus_rank": 0.006,
+      "rho_with_unrecorded_training_species_as_zero": 0.4421568095313238
+    },
+    "CZ39_SK30": {
+      "shared": 301,
+      "target_total": 387,
+      "rho": 0.5680066840797957,
+      "lower_mean": 0.11860465116279072,
+      "upper_mean": 0.489753086419753,
+      "quartile_count": [
+        86,
+        81
+      ],
+      "movable": 177,
+      "within_genus_rank": 0.001,
+      "rho_with_unrecorded_training_species_as_zero": 0.6218848514294795
+    },
+    "CZ39_Kashmir16": {
+      "shared": 22,
+      "target_total": 37,
+      "rho": 0.0005822545839687339,
+      "lower_mean": 0.3125,
+      "upper_mean": 0.25,
+      "quartile_count": [
+        6,
+        6
+      ],
+      "movable": 2,
+      "within_genus_rank": 0.515,
+      "rho_with_unrecorded_training_species_as_zero": 0.09798817279406889
+    },
+    "IT28_HR_BA15": {
+      "shared": 178,
+      "target_total": 356,
+      "rho": 0.44521254396494786,
+      "lower_mean": 0.23687943262411346,
+      "upper_mean": 0.553623188405797,
+      "quartile_count": [
+        47,
+        46
+      ],
+      "movable": 85,
+      "within_genus_rank": 0.014,
+      "rho_with_unrecorded_training_species_as_zero": 0.41209399928802054
+    },
+    "IT28_SI89": {
+      "shared": 141,
+      "target_total": 261,
+      "rho": 0.32901418275160377,
+      "lower_mean": 0.07965043695380773,
+      "upper_mean": 0.21850975753991717,
+      "quartile_count": [
+        45,
+        38
+      ],
+      "movable": 53,
+      "within_genus_rank": 0.232,
+      "rho_with_unrecorded_training_species_as_zero": 0.30427672305977344
+    },
+    "IT28_SK30": {
+      "shared": 184,
+      "target_total": 387,
+      "rho": 0.5048234114969509,
+      "lower_mean": 0.1356,
+      "upper_mean": 0.45770833333333333,
+      "quartile_count": [
+        50,
+        48
+      ],
+      "movable": 87,
+      "within_genus_rank": 0.007,
+      "rho_with_unrecorded_training_species_as_zero": 0.46971838246245257
+    },
+    "IT28_Kashmir16": {
+      "shared": 18,
+      "target_total": 37,
+      "rho": 0.2594114372922929,
+      "lower_mean": 0.1875,
+      "upper_mean": 0.46875,
+      "quartile_count": [
+        5,
+        6
+      ],
+      "movable": 2,
+      "within_genus_rank": 0.515,
+      "rho_with_unrecorded_training_species_as_zero": 0.2070433286061483
+    },
+    "HR_BA15_SI89": {
+      "shared": 92,
+      "target_total": 261,
+      "rho": 0.2706577318977779,
+      "lower_mean": 0.14934456928838952,
+      "upper_mean": 0.23336214347450304,
+      "quartile_count": [
+        24,
+        26
+      ],
+      "movable": 32,
+      "within_genus_rank": 0.708,
+      "rho_with_unrecorded_training_species_as_zero": 0.2591679467856734
+    },
+    "HR_BA15_SK30": {
+      "shared": 132,
+      "target_total": 387,
+      "rho": 0.4016846008908943,
+      "lower_mean": 0.19772727272727275,
+      "upper_mean": 0.46923076923076923,
+      "quartile_count": [
+        44,
+        39
+      ],
+      "movable": 53,
+      "within_genus_rank": 0.01,
+      "rho_with_unrecorded_training_species_as_zero": 0.23336363076245445
+    },
+    "HR_BA15_Kashmir16": {
+      "shared": 18,
+      "target_total": 37,
+      "rho": 0.5507049939024119,
+      "lower_mean": 0.175,
+      "upper_mean": 0.5416666666666666,
+      "quartile_count": [
+        5,
+        6
+      ],
+      "movable": 0,
+      "within_genus_rank": 1.0,
+      "rho_with_unrecorded_training_species_as_zero": 0.0714309547967907
+    },
+    "SI89_SK30": {
+      "shared": 150,
+      "target_total": 387,
+      "rho": 0.38734562690786206,
+      "lower_mean": 0.2568,
+      "upper_mean": 0.47074999999999995,
+      "quartile_count": [
+        50,
+        40
+      ],
+      "movable": 51,
+      "within_genus_rank": 0.007,
+      "rho_with_unrecorded_training_species_as_zero": 0.4352237494877897
+    },
+    "SI89_Kashmir16": {
+      "shared": 15,
+      "target_total": 37,
+      "rho": 0.4101741477676828,
+      "lower_mean": 0.21875,
+      "upper_mean": 0.359375,
+      "quartile_count": [
+        4,
+        4
+      ],
+      "movable": 0,
+      "within_genus_rank": 1.0,
+      "rho_with_unrecorded_training_species_as_zero": 0.11819305566551355
+    },
+    "SK30_Kashmir16": {
+      "shared": 20,
+      "target_total": 37,
+      "rho": 0.2550946410565229,
+      "lower_mean": 0.2604166666666667,
+      "upper_mean": 0.3875,
+      "quartile_count": [
+        6,
+        5
+      ],
+      "movable": 2,
+      "within_genus_rank": 0.515,
+      "rho_with_unrecorded_training_species_as_zero": 0.12245035527205107
+    }
+  },
+  "background": {
+    "SK30": {
+      "plots": 685,
+      "shared": 301,
+      "seen_in_background": 179,
+      "target_background_rho": 0.07981441222559824,
+      "partial_rail_rho": 0.5646483214609352,
+      "partial_seen_only": 0.6277385109263132
+    },
+    "IT28": {
+      "plots": 468,
+      "shared": 231,
+      "seen_in_background": 130,
+      "target_background_rho": 0.1051081815622762,
+      "partial_rail_rho": 0.3834524789666513,
+      "partial_seen_only": 0.39889754371242486
+    },
+    "HR_BA15": {
+      "plots": 167,
+      "shared": 151,
+      "seen_in_background": 93,
+      "target_background_rho": 0.18593465688713554,
+      "partial_rail_rho": 0.21256388097073084,
+      "partial_seen_only": 0.14247959414714553
+    },
+    "SI89": {
+      "plots": 231,
+      "shared": 193,
+      "seen_in_background": 134,
+      "target_background_rho": 0.2863422770539109,
+      "partial_rail_rho": 0.5051494425592588,
+      "partial_seen_only": 0.5380220174084198
+    },
+    "Kashmir16": {
+      "plots": 0
+    }
+  },
+  "kashmir_year_zone_transfer": {
+    "2014_track": {
+      "shared": 22,
+      "target_total": 37,
+      "rho": 0.0005822545839687339,
+      "lower_mean": 0.3125,
+      "upper_mean": 0.25,
+      "quartile_count": [
+        6,
+        6
+      ],
+      "movable": 2,
+      "within_genus_rank": 0.515,
+      "rho_with_unrecorded_training_species_as_zero": 0.09798817279406889
+    },
+    "2014_bank": {
+      "shared": 43,
+      "target_total": 69,
+      "rho": 0.06299793439548378,
+      "lower_mean": 0.39204545454545453,
+      "upper_mean": 0.4427083333333333,
+      "quartile_count": [
+        11,
+        12
+      ],
+      "movable": 12,
+      "within_genus_rank": 0.787,
+      "rho_with_unrecorded_training_species_as_zero": 0.19257367739309936
+    },
+    "2017_track": {
+      "shared": 13,
+      "target_total": 18,
+      "rho": -0.22192322784245286,
+      "lower_mean": 0.203125,
+      "upper_mean": 0.2125,
+      "quartile_count": [
+        4,
+        5
+      ],
+      "movable": 0,
+      "within_genus_rank": 1.0,
+      "rho_with_unrecorded_training_species_as_zero": 0.08521568275009947
+    },
+    "2017_bank": {
+      "shared": 26,
+      "target_total": 51,
+      "rho": 0.2596391642000177,
+      "lower_mean": 0.2578125,
+      "upper_mean": 0.3482142857142857,
+      "quartile_count": [
+        8,
+        7
+      ],
+      "movable": 6,
+      "within_genus_rank": 0.147,
+      "rho_with_unrecorded_training_species_as_zero": 0.14058304918054165
+    }
+  },
+  "kashmir_station_embankment_minus_track": {
+    "2014": {
+      "mean": 22.5625,
+      "positive": 16,
+      "ties": 0,
+      "n": 16
+    },
+    "2017": {
+      "mean": 10.5625,
+      "positive": 16,
+      "ties": 0,
+      "n": 16
+    }
+  },
+  "road": {
+    "first": {
+      "sites": 1005,
+      "roads": 64,
+      "metrics": {
+        "Alien_roadside_minus_interior": {
+          "n_regions": 24,
+          "positive": 23,
+          "region_equal": 2.9453698019100494,
+          "region_values": {
+            "ARC": 2.2166666666666663,
+            "ARM": 0.11764705882352941,
+            "ARS": 5.139473684210526,
+            "AUN": 12.72037037037037,
+            "AUT": 0.925,
+            "CHE": 0.8851851851851853,
+            "CLA": 3.6830484330484325,
+            "CLC": 1.2757936507936507,
+            "CLM": 1.9413919413919414,
+            "CLP": 2.8111111111111113,
+            "CLS": 3.8305555555555557,
+            "CNN": 1.7268009768009769,
+            "COL": 0.674404761904762,
+            "CZE": 2.0952380952380953,
+            "ECU": 6.1,
+            "ESL": 4.366666666666667,
+            "ESP": 1.0296052631578947,
+            "IND": 3.6207912457912457,
+            "ITA": 0.6018518518518519,
+            "MTN": 4.466666666666667,
+            "NOR": 1.7166666666666668,
+            "ORE": 7.066666666666666,
+            "ZAD": 1.7272727272727273,
+            "ZAM": -0.05
+          },
+          "drop_region_range": [
+            2.5203697771943836,
+            3.0756032715583124
+          ]
+        },
+        "alien_fraction_roadside_minus_interior": {
+          "n_regions": 24,
+          "positive": 22,
+          "region_equal": 0.09573776068998079,
+          "region_values": {
+            "ARC": 0.12502943517803466,
+            "ARM": 0.006862745098039216,
+            "ARS": 0.24601312374664805,
+            "AUN": 0.20557852387815675,
+            "AUT": 0.02965789992439683,
+            "CHE": 0.007772698281810211,
+            "CLA": 0.18795494987289993,
+            "CLC": 0.15473989450889078,
+            "CLM": 0.16405352279892235,
+            "CLP": 0.30038200882778626,
+            "CLS": 0.16534189522214038,
+            "CNN": 0.050481303075036725,
+            "COL": 0.0,
+            "CZE": 0.04460109258547356,
+            "ECU": 0.10466134972601834,
+            "ESL": 0.08569147991676232,
+            "ESP": 0.04898568456960544,
+            "IND": 0.09405567727841828,
+            "ITA": 0.009252341176656428,
+            "MTN": 0.0973090516409192,
+            "NOR": 0.05485107341752298,
+            "ORE": 0.06586150242509653,
+            "ZAD": 0.05560953991860615,
+            "ZAM": -0.007040536508302625
+          },
+          "drop_region_range": [
+            0.08684018468398924,
+            0.10020638230729745
+          ]
+        }
+      }
+    },
+    "modern_first": {
+      "sites": 845,
+      "roads": 56,
+      "metrics": {
+        "Alien_roadside_minus_interior": {
+          "n_regions": 21,
+          "positive": 20,
+          "region_equal": 2.5259125882117184,
+          "region_values": {
+            "ARC": 2.2166666666666663,
+            "ARM": 0.11764705882352941,
+            "AUN": 11.977582846003898,
+            "AUT": 0.925,
+            "CHE": 0.7777777777777777,
+            "CLA": 3.6830484330484325,
+            "CLC": 1.0892857142857142,
+            "CLM": 1.9413919413919414,
+            "CLP": 2.8111111111111113,
+            "CLS": 5.004166666666666,
+            "CNN": 1.7268009768009769,
+            "COL": 0.674404761904762,
+            "CZE": 2.0952380952380953,
+            "ESL": 3.6363636363636362,
+            "ESP": 3.381230854915066,
+            "IND": 1.023989898989899,
+            "ITA": 0.6018518518518519,
+            "MTN": 5.416666666666667,
+            "NOR": 2.2666666666666666,
+            "ZAD": 1.7272727272727273,
+            "ZAM": -0.05
+          },
+          "drop_region_range": [
+            2.053329075322109,
+            2.654708217622304
+          ]
+        },
+        "alien_fraction_roadside_minus_interior": {
+          "n_regions": 21,
+          "positive": 19,
+          "region_equal": 0.10651288853416371,
+          "region_values": {
+            "ARC": 0.12502943517803466,
+            "ARM": 0.006862745098039216,
+            "AUN": 0.4308163751392893,
+            "AUT": 0.02965789992439683,
+            "CHE": 0.014226534509284676,
+            "CLA": 0.18795494987289993,
+            "CLC": 0.15673354634678693,
+            "CLM": 0.16405352279892235,
+            "CLP": 0.30038200882778626,
+            "CLS": 0.19594887951261192,
+            "CNN": 0.050481303075036725,
+            "COL": 0.0,
+            "CZE": 0.04460109258547356,
+            "ESL": 0.10566013813234534,
+            "ESP": 0.07918560681269203,
+            "IND": 0.10848693352921333,
+            "ITA": 0.009252341176656428,
+            "MTN": 0.11532934085204805,
+            "NOR": 0.06353900243561693,
+            "ZAD": 0.05560953991860615,
+            "ZAM": -0.007040536508302625
+          },
+          "drop_region_range": [
+            0.09029771420390743,
+            0.11219055978628703
+          ]
+        }
+      }
+    },
+    "repeat_first": {
+      "sites": 484,
+      "roads": 31,
+      "metrics": {
+        "Alien_roadside_minus_interior": {
+          "n_regions": 11,
+          "positive": 11,
+          "region_equal": 4.059298176987454,
+          "region_values": {
+            "ARC": 2.2166666666666663,
+            "AUN": 12.72037037037037,
+            "CHE": 0.7129629629629629,
+            "CLC": 1.8186813186813187,
+            "CLS": 3.751851851851852,
+            "ESL": 4.3931818181818185,
+            "ESP": 1.0283797729618163,
+            "IND": 3.6207912457912457,
+            "MTN": 4.466666666666667,
+            "NOR": 1.7166666666666668,
+            "ORE": 8.206060606060605
+          },
+          "drop_region_range": [
+            3.1931909576491626,
+            4.3939316983899035
+          ]
+        },
+        "alien_fraction_roadside_minus_interior": {
+          "n_regions": 11,
+          "positive": 11,
+          "region_equal": 0.09629383965160866,
+          "region_values": {
+            "ARC": 0.12502943517803466,
+            "AUN": 0.20557852387815675,
+            "CHE": 0.004519968706494701,
+            "CLC": 0.13528835538856876,
+            "CLS": 0.16755602306198458,
+            "ESL": 0.09219824489151286,
+            "ESP": 0.04939387339065448,
+            "IND": 0.09405567727841828,
+            "MTN": 0.0973090516409192,
+            "NOR": 0.05485107341752298,
+            "ORE": 0.03345200933542792
+          },
+          "drop_region_range": [
+            0.08536537122895385,
+            0.10547122674612006
+          ]
+        }
+      }
+    },
+    "repeat_last": {
+      "sites": 484,
+      "roads": 31,
+      "metrics": {
+        "Alien_roadside_minus_interior": {
+          "n_regions": 11,
+          "positive": 11,
+          "region_equal": 4.21309812608715,
+          "region_values": {
+            "ARC": 1.8666666666666665,
+            "AUN": 13.846296296296297,
+            "CHE": 0.6620370370370371,
+            "CLC": 0.8681318681318682,
+            "CLS": 5.714814814814815,
+            "ESL": 3.743181818181818,
+            "ESP": 3.18015627303553,
+            "IND": 2.6835016835016834,
+            "MTN": 5.666666666666667,
+            "NOR": 2.0,
+            "ORE": 6.112626262626262
+          },
+          "drop_region_range": [
+            3.2497783090662353,
+            4.5682042349921606
+          ]
+        },
+        "alien_fraction_roadside_minus_interior": {
+          "n_regions": 11,
+          "positive": 11,
+          "region_equal": 0.13701839437714283,
+          "region_values": {
+            "ARC": 0.11161817179073502,
+            "AUN": 0.4096523495358553,
+            "CHE": 0.016634943457273933,
+            "CLC": 0.14926338232385988,
+            "CLS": 0.20532881011953627,
+            "ESL": 0.0760353005450502,
+            "ESP": 0.07789098546409932,
+            "IND": 0.11152824023731563,
+            "MTN": 0.1709376516888669,
+            "NOR": 0.05683677326649511,
+            "ORE": 0.12147572971948355
+          },
+          "drop_region_range": [
+            0.10975499886127157,
+            0.14905673946912973
+          ]
+        }
+      }
+    },
+    "remove_most_recorded_alien": {
+      "sites": 1005,
+      "roads": 64,
+      "metrics": {
+        "Alien_roadside_minus_interior": {
+          "n_regions": 24,
+          "positive": 23,
+          "region_equal": 2.6845320594772346,
+          "region_values": {
+            "ARC": 2.35,
+            "ARM": 0.0,
+            "ARS": 4.7552631578947375,
+            "AUN": 12.205555555555556,
+            "AUT": 0.525,
+            "CHE": 0.6407407407407407,
+            "CLA": 3.5484330484330484,
+            "CLC": 1.3558201058201058,
+            "CLM": 1.7042124542124544,
+            "CLP": 2.5703703703703704,
+            "CLS": 3.588888888888889,
+            "CNN": 1.0454822954822955,
+            "COL": 0.6773809523809523,
+            "CZE": 1.8571428571428572,
+            "ECU": 5.45,
+            "ESL": 4.266666666666667,
+            "ESP": 1.064327485380117,
+            "IND": 3.560185185185185,
+            "ITA": 0.4648148148148148,
+            "MTN": 3.75,
+            "NOR": 1.1500000000000001,
+            "ORE": 6.616666666666667,
+            "ZAD": 1.1818181818181819,
+            "ZAM": 0.1
+          },
+          "drop_region_range": [
+            2.2705745161694817,
+            2.801250844671897
+          ]
+        },
+        "alien_fraction_roadside_minus_interior": {
+          "n_regions": 24,
+          "positive": 22,
+          "region_equal": 0.08978563513379796,
+          "region_values": {
+            "ARC": 0.12988815791721908,
+            "ARM": 0.0,
+            "ARS": 0.234337682877188,
+            "AUN": 0.20270665227195028,
+            "AUT": 0.017926131628163734,
+            "CHE": 0.0035095411324319406,
+            "CLA": 0.19102662939754142,
+            "CLC": 0.1445299767828974,
+            "CLM": 0.14501836684356242,
+            "CLP": 0.2950274420123062,
+            "CLS": 0.15851035063539104,
+            "CNN": 0.026478707289171715,
+            "COL": 0.0,
+            "CZE": 0.03968155803240123,
+            "ECU": 0.09565773692578061,
+            "ESL": 0.0904442892583811,
+            "ESP": 0.04928143801408674,
+            "IND": 0.09088885634667958,
+            "ITA": 0.006899746946355544,
+            "MTN": 0.08528947639488303,
+            "NOR": 0.0372985892099913,
+            "ORE": 0.06687981954449364,
+            "ZAD": 0.04048940066558239,
+            "ZAM": 0.003084693084693085
+          },
+          "drop_region_range": [
+            0.08086207831299326,
+            0.09368935840048484
+          ]
+        }
+      }
+    }
+  }
+}

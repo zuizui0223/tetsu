@@ -1,0 +1,143 @@
+{
+  "source_taxa": 318,
+  "station_source_counts": [
+    48,
+    96,
+    76,
+    87,
+    41,
+    146,
+    73,
+    84,
+    70,
+    56,
+    59,
+    134,
+    83,
+    84,
+    171,
+    92,
+    83,
+    78,
+    202
+  ],
+  "coverage": {
+    "SK": {
+      "source_total_author_station_n": 19,
+      "source_original_unique_noncollapsed_taxon_names": 318,
+      "source_exact_joint_LEDA_known_species_n": 254,
+      "source_original_author_station_by_taxon_incidence": 1763,
+      "source_exact_LEDA_joint_study_station_taxon_incidence": 1436,
+      "source_incidence_joint_trait_coverage_fraction": 0.8145207033465683,
+      "source_station_trait_species_min_median_max": [
+        36,
+        66,
+        167
+      ],
+      "source_publisher_geography_classes_sample_sizes": {
+        "26b": 12,
+        "29": 7
+      },
+      "all_source_sites_have_at_least10_actual_dual_trait_species": true
+    }
+  },
+  "station_matched_counts": [
+    39,
+    82,
+    63,
+    71,
+    36,
+    118,
+    58,
+    68,
+    57,
+    44,
+    47,
+    111,
+    66,
+    64,
+    141,
+    73,
+    67,
+    64,
+    167
+  ],
+  "chains": [
+    {
+      "accepted_true_source_two_by_two_incidence_swaps": 187969,
+      "source_null_proposal_count": 188000,
+      "original_station_counts_and_original_geography_group_species_frequencies_held_constant": true
+    },
+    {
+      "accepted_true_source_two_by_two_incidence_swaps": 187960,
+      "source_null_proposal_count": 188000,
+      "original_station_counts_and_original_geography_group_species_frequencies_held_constant": true
+    }
+  ],
+  "draws": 200,
+  "results": {
+    "functional_CWM_centroid_distance_all_stationpairs": {
+      "original_observed": 0.1410549346146355,
+      "internal_source_geography_fixed_margin_null_mean": 0.14337660666511898,
+      "observed_minus_null": -0.0023216720504834754,
+      "technical_null_q025_NOT_field_CI": 0.12166982302000323,
+      "technical_null_q975_NOT_field_CI": 0.1653476459027927,
+      "technical_lower_tail_rank_plus_one_NOT_field_p": 0.42786069651741293,
+      "direction": "positive means more differentiated than rail-only conditional null"
+    },
+    "functional_CWM_centroid_distance_within_geography": {
+      "original_observed": 0.12564409915654717,
+      "internal_source_geography_fixed_margin_null_mean": 0.12511671041391945,
+      "observed_minus_null": 0.0005273887426277268,
+      "technical_null_q025_NOT_field_CI": 0.09707855977268046,
+      "technical_null_q975_NOT_field_CI": 0.15547688644493177,
+      "technical_lower_tail_rank_plus_one_NOT_field_p": 0.5572139303482587,
+      "direction": "positive means more differentiated than rail-only conditional null"
+    },
+    "functional_CWM_centroid_distance_between_geography": {
+      "original_observed": 0.15701615705336985,
+      "internal_source_geography_fixed_margin_null_mean": 0.16228864206814708,
+      "observed_minus_null": -0.005272485014777228,
+      "technical_null_q025_NOT_field_CI": 0.1409924651319823,
+      "technical_null_q975_NOT_field_CI": 0.18549325364814845,
+      "technical_lower_tail_rank_plus_one_NOT_field_p": 0.31343283582089554,
+      "direction": "positive means more differentiated than rail-only conditional null"
+    },
+    "source_station_2D_trait_trace_mean": {
+      "original_observed": 1.0651248730560714,
+      "internal_source_geography_fixed_margin_null_mean": 1.0737777173514353,
+      "observed_minus_null": -0.008652844295363948,
+      "technical_null_q025_NOT_field_CI": 1.0477399915292147,
+      "technical_null_q975_NOT_field_CI": 1.1026639776684002,
+      "technical_lower_tail_rank_plus_one_NOT_field_p": 0.29850746268656714,
+      "direction": "negative means less within-station 2D functional breadth"
+    },
+    "source_matched_species_Jaccard_all_stationpairs": {
+      "original_observed": 0.374321090968092,
+      "internal_source_geography_fixed_margin_null_mean": 0.3731637581912389,
+      "observed_minus_null": 0.0011573327768530928,
+      "technical_null_q025_NOT_field_CI": 0.3710524659900795,
+      "technical_null_q975_NOT_field_CI": 0.3752684261952425,
+      "technical_lower_tail_rank_plus_one_NOT_field_p": 0.8756218905472637,
+      "direction": "positive means more taxonomically similar than rail-only conditional null"
+    },
+    "source_matched_species_Jaccard_within_geography": {
+      "original_observed": 0.39741066533780095,
+      "internal_source_geography_fixed_margin_null_mean": 0.39633707612817254,
+      "observed_minus_null": 0.0010735892096284116,
+      "technical_null_q025_NOT_field_CI": 0.39413389232232715,
+      "technical_null_q975_NOT_field_CI": 0.399059259219935,
+      "technical_lower_tail_rank_plus_one_NOT_field_p": 0.7960199004975125,
+      "direction": "positive means more taxonomically similar than rail-only conditional null"
+    },
+    "source_matched_species_Jaccard_between_geography": {
+      "original_observed": 0.350406888942322,
+      "internal_source_geography_fixed_margin_null_mean": 0.3491628217565576,
+      "observed_minus_null": 0.0012440671857644192,
+      "technical_null_q025_NOT_field_CI": 0.346443398799773,
+      "technical_null_q975_NOT_field_CI": 0.35204992511666894,
+      "technical_lower_tail_rank_plus_one_NOT_field_p": 0.8407960199004975,
+      "direction": "positive means more taxonomically similar than rail-only conditional null"
+    }
+  }
+}
