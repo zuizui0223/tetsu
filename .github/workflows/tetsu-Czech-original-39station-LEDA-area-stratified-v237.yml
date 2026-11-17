@@ -1,0 +1,70 @@
+name: "v23.7 original Czech station-area-matched continuous functional divergence source sensitivity"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/validate_Czech_39station_area_matched_functional_divergence_v237.py'
+      - 'tests/test_Czech_area_matched_functional_divergence_v237.py'
+      - '.github/workflows/tetsu-Czech-original-39station-LEDA-area-stratified-v237.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v237-Czech-original-station-area-matched-height-seed-null
+  cancel-in-progress: true
+jobs:
+  Czech-original-39-station-5-stretch-10-area-bins-LEDA-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original XLSX reader only
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Validate genuine station fixed margins / centroid math on synthetic inputs only
+        run: python -m unittest discover -s tests -p 'test_Czech_station_LEDA_continuous_beta_v236.py' -v
+      - name: Fetch original 2024 Preslia publisher Czech 39station survey S1 and corrected erratum S2
+        run: |
+          set -euo pipefail
+          mkdir -p source/v237/Czech
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source/v237/Czech/S1.xlsx
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source/v237/Czech/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v237/Czech/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v237/Czech/S2.xlsx \
+            | sha256sum --check
+      - name: Fetch original University Oldenburg LEDA species-median canopy height and seed mass
+        run: |
+          set -euo pipefail
+          mkdir -p source/v237/LEDA
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v237/LEDA/canopy_height.txt
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v237/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v237/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v237/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Verify REAL source 39 station functional beta after within-stretch survey area rank bin fixed source margins and five leave-stretch-out controls
+        run: |
+          python -u scripts/validate_Czech_39station_area_matched_functional_divergence_v237.py \
+            --cz-s1 source/v237/Czech/S1.xlsx \
+            --cz-s2 source/v237/Czech/S2.xlsx \
+            --height source/v237/LEDA/canopy_height.txt \
+            --seed source/v237/LEDA/seed_mass.txt \
+            --output results/audit/v237_Czech_39_2020_22_station_area_matched_LEDA_2D_functional_divergence_internal_null.json
+      - name: Store only true source aggregate estimates and SHA QA (no raw publisher XLSX / LEDA)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v237-real-Czech-39station-five-stretch-ten-area-bins-continuous-divergence
+          path: results/audit/v237_Czech_39_2020_22_station_area_matched_LEDA_2D_functional_divergence_internal_null.json
+          if-no-files-found: warn

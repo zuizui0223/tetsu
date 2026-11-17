@@ -1,0 +1,94 @@
+name: "v24.1 original Czech railway stations vs nearby CzechVeg control with ZERO reused plot IDs across railway stations"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/validate_Czech_rail_station_local_reference_no_plot_reuse_v241.py'
+      - 'tests/test_Czech_local_reference_unique_control_plots_v241.py'
+      - '.github/workflows/tetsu-Czech-railway-no-reused-nearby-control-plots-v241.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v241-original-Czech-railway-global-disjoint-control-plots
+  cancel-in-progress: true
+jobs:
+  Czech-rail-vs-nontransport-reference-source-plot-exclusivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 48
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact original Preslia publisher XLSX reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Unit tests for source station-vs-independent-reference 5 unique plots, >=2 papers and sitewise dual-richness equalization
+        run: python -m unittest discover -s tests -p 'test_Czech_local_reference_unique_control_plots_v241.py' -v
+      - name: Download publisher genuine original Czech 2020-22 39 station floras and corrected geographic survey metadata
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v241/Preslia
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source_original/v241/Preslia/S1.xlsx
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source_original/v241/Preslia/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source_original/v241/Preslia/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source_original/v241/Preslia/S2.xlsx \
+            | sha256sum --check
+      - name: Obtain exact source SR70 station centroid lookup 2026 effective, reject changed third-party official source blob
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' \
+            -o source_original/v241/Preslia/SR70.csv
+          test "$(git hash-object source_original/v241/Preslia/SR70.csv)" = 'df1f4b41a6292071b58c4a9a862bd535914706c3'
+      - name: Original CzechVeg 2026 source headers and all 2510340 species records, no partial species backfill
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v241/CzechVeg
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v241/CzechVeg/headers.csv
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v241/CzechVeg/species.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' source_original/v241/CzechVeg/headers.csv \
+            'b296e5e19f03fb3bad0a8347c317f8a3' source_original/v241/CzechVeg/species.csv \
+            | md5sum --check
+      - name: Exact University Oldenburg original LEDA height seed mass species median phenotype reference with SHA
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v241/LEDA
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v241/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v241/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v241/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v241/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: "Strict global source plot exclusivity: 5 local field plots per station with no reuse"
+        run: |
+          python -u scripts/validate_Czech_rail_station_local_reference_no_plot_reuse_v241.py \
+            --s1 source_original/v241/Preslia/S1.xlsx \
+            --s2 source_original/v241/Preslia/S2.xlsx \
+            --sr70 source_original/v241/Preslia/SR70.csv \
+            --headers source_original/v241/CzechVeg/headers.csv \
+            --species source_original/v241/CzechVeg/species.csv \
+            --height source_original/v241/LEDA/canopy_height.txt \
+            --seed source_original/v241/LEDA/seed_mass.txt \
+            --output results/audit/v241_no_original_reference_plot_shared_across_rail_stations_Czech_LEDA_trait_beta.json
+      - name: Archive only source-authenticated aggregate species pool functional beta / support, no exact authors' raw GIS or species incidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v241-original-Czech-16railway-stations-local-reference-80unique-original-plots-trait-beta
+          path: results/audit/v241_no_original_reference_plot_shared_across_rail_stations_Czech_LEDA_trait_beta.json
+          if-no-files-found: warn

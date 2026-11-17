@@ -1,0 +1,239 @@
+{
+  "inputs": {
+    "splot.zip": "9f000fdbd4fd9ab8553f3c7841ffe97859905319b7a4fe90160a6f6ee533203c",
+    "geonames.zip": "2558d97bb13874889c1b16763a1d3ab09c69439b849ea018ded6a938d83aadd0"
+  },
+  "source_plots": 95104,
+  "source_station_records": 66856,
+  "distinct_station_coords": 66770,
+  "eligible_plots": 39583,
+  "bands_km": {
+    "0.25": {
+      "candidate_plots": 9,
+      "matched_stations": 7,
+      "matched_countries": 5,
+      "supported": []
+    },
+    "1.0": {
+      "candidate_plots": 244,
+      "matched_stations": 79,
+      "matched_countries": 17,
+      "supported": [
+        {
+          "country": "Australia",
+          "continent": "Oceania",
+          "dataset": "Australia",
+          "stations": 11,
+          "leda": {
+            "n": 0
+          },
+          "cwm": 0.5849413657738675,
+          "jaccard": 0.010978875833423163,
+          "equal_jaccard": 0.004696298702642252
+        },
+        {
+          "country": "Croatia",
+          "continent": "Europe",
+          "dataset": "Croatian Vegetation Database",
+          "stations": 4,
+          "leda": {
+            "n": 4,
+            "raw": 0.13051605128375343,
+            "equal": 0.12562043157648797
+          },
+          "cwm": 0.4091973162835554,
+          "jaccard": 0.015320535895005816,
+          "equal_jaccard": 0.02195747334011345
+        },
+        {
+          "country": "Czech Republic",
+          "continent": "Europe",
+          "dataset": "Czechia_nvd",
+          "stations": 4,
+          "leda": {
+            "n": 4,
+            "raw": -0.0746989193877301,
+            "equal": -0.07690110973170276
+          },
+          "cwm": 0.13656562717292164,
+          "jaccard": 0.03800366300366298,
+          "equal_jaccard": 0.03216810174649437
+        },
+        {
+          "country": "Netherlands",
+          "continent": "Europe",
+          "dataset": "Netherlands",
+          "stations": 6,
+          "leda": {
+            "n": 6,
+            "raw": 0.13820681479093505,
+            "equal": 0.12893374110120867
+          },
+          "cwm": 0.4622633057234904,
+          "jaccard": 0.02325420552013291,
+          "equal_jaccard": 0.006430784431796861
+        },
+        {
+          "country": "Slovenia",
+          "continent": "Europe",
+          "dataset": "Slovenia",
+          "stations": 8,
+          "leda": {
+            "n": 7,
+            "raw": -0.20823815599250184,
+            "equal": -0.20062978074126026
+          },
+          "cwm": -0.22138410394004615,
+          "jaccard": -0.008956530903836746,
+          "equal_jaccard": -0.0021679835098379844
+        },
+        {
+          "country": "Switzerland",
+          "continent": "Europe",
+          "dataset": "Switzerland_forests",
+          "stations": 26,
+          "leda": {
+            "n": 25,
+            "raw": -0.12419057053167804,
+            "equal": -0.09991039541447569
+          },
+          "cwm": 0.009260799854603263,
+          "jaccard": -0.009370388914674455,
+          "equal_jaccard": -0.012077678524390513
+        },
+        {
+          "country": "Taiwan",
+          "continent": "Asia",
+          "dataset": "Taiwan",
+          "stations": 4,
+          "leda": {
+            "n": 0
+          },
+          "cwm": 0.1736372177883454,
+          "jaccard": 0.0010565396335976418,
+          "equal_jaccard": -0.02034219969655034
+        }
+      ]
+    },
+    "2.0": {
+      "candidate_plots": 854,
+      "matched_stations": 179,
+      "matched_countries": 21,
+      "supported": [
+        {
+          "country": "Australia",
+          "continent": "Oceania",
+          "dataset": "Australia",
+          "stations": 38,
+          "leda": {
+            "n": 0
+          },
+          "cwm": -0.033680812679991234,
+          "jaccard": 0.005316922083384967,
+          "equal_jaccard": 0.0023364565950114535
+        },
+        {
+          "country": "Czech Republic",
+          "continent": "Europe",
+          "dataset": "Czechia_nvd",
+          "stations": 9,
+          "leda": {
+            "n": 4,
+            "raw": 0.04199652904028883,
+            "equal": -0.0031550108085256694
+          },
+          "cwm": 0.22510000402730768,
+          "jaccard": -0.008972211758950133,
+          "equal_jaccard": -0.009266846557446088
+        },
+        {
+          "country": "Netherlands",
+          "continent": "Europe",
+          "dataset": "Netherlands",
+          "stations": 18,
+          "leda": {
+            "n": 16,
+            "raw": 0.11833567115988741,
+            "equal": 0.07634429744620581
+          },
+          "cwm": 0.1872166587410432,
+          "jaccard": -0.025753616408729973,
+          "equal_jaccard": -0.02716698707089365
+        },
+        {
+          "country": "Slovenia",
+          "continent": "Europe",
+          "dataset": "Slovenia",
+          "stations": 10,
+          "leda": {
+            "n": 8,
+            "raw": -0.17379192189622578,
+            "equal": -0.10528423973305365
+          },
+          "cwm": -0.21201478892598047,
+          "jaccard": -0.041983469680184404,
+          "equal_jaccard": -0.008507913146034532
+        },
+        {
+          "country": "Switzerland",
+          "continent": "Europe",
+          "dataset": "Switzerland_forests",
+          "stations": 56,
+          "leda": {
+            "n": 55,
+            "raw": 0.10581153504848273,
+            "equal": 0.11344916350964382
+          },
+          "cwm": -0.021004076705272823,
+          "jaccard": 0.008632408176103001,
+          "equal_jaccard": 0.002361624004355208
+        },
+        {
+          "country": "Taiwan",
+          "continent": "Asia",
+          "dataset": "Taiwan",
+          "stations": 6,
+          "leda": {
+            "n": 0
+          },
+          "cwm": 0.2964088787401161,
+          "jaccard": -0.020090175594063786,
+          "equal_jaccard": -0.018558584602747844
+        },
+        {
+          "country": "United Kingdom",
+          "continent": "Europe",
+          "dataset": "Britain_nvcd",
+          "stations": 7,
+          "leda": {
+            "n": 5,
+            "raw": 0.480886758737698,
+            "equal": 0.49536067927553806
+          },
+          "cwm": -0.3740114202713498,
+          "jaccard": -0.04821482020504775,
+          "equal_jaccard": -0.014977591229447395
+        }
+      ]
+    },
+    "1.0_strict": {
+      "candidate_plots": 244,
+      "matched_stations": 19,
+      "matched_countries": 10,
+      "supported": [
+        {
+          "country": "Australia",
+          "continent": "Oceania",
+          "dataset": "Australia",
+          "stations": 5,
+          "leda": {
+            "n": 0
+          },
+          "cwm": 0.12512180403239503,
+          "jaccard": 0.008126015105913154,
+          "equal_jaccard": 0.007194015875782546
+        }
+      ]
+    }
+  }
+}

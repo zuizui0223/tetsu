@@ -1,0 +1,37 @@
+name: "v25.2 source-gated Italy railway vs nationally but geographically distant road control falsification"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_Parma_rail_vs_Italy_MIREN_road_geographic_mismatch_v252.py'
+      - 'tests/test_Parma_vs_Italy_MIREN_spatial_reference_v252.py'
+      - '.github/workflows/tetsu-Parma-national-road-not-local-reference-v252.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v252-Italy-Parma-distinct-original-rail-road-ecoregion
+  cancel-in-progress: true
+jobs:
+  reference-country-versus-city-spatial-mismatch-QA:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check original source Italia road bbox versus geographically distinct Parma city with synthetic edge tests
+        run: python -m unittest discover -s tests -p 'test_Parma_vs_Italy_MIREN_spatial_reference_v252.py' -v
+      - name: Source blob pinned true 2026-Nov-17 Italy railway country comparison versus 2022 MIREN roads geospatial era audit
+        run: |
+          python -u scripts/audit_Parma_rail_vs_Italy_MIREN_road_geographic_mismatch_v252.py \
+            --source research/validation_20261117/country_validation.json \
+            --output results/audit/v252_true_Italian_rail_28Parma_original_vs_nonlocal_2022_MIREN_road_country_holdout_QA.json
+      - name: Preserve geospatial QA only, not original station plot locations or plant species incidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v252-2026-Nov17-source-Italy-Parma-original-rail-vs-nonlocal-MIREN-2022road-reference-QA
+          path: results/audit/v252_true_Italian_rail_28Parma_original_vs_nonlocal_2022_MIREN_road_country_holdout_QA.json
+          if-no-files-found: warn

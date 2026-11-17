@@ -1,0 +1,43 @@
+name: "v24.8 audit genuine published India Kashmir 2014 and 2017 railway vegetation Dryad original XLSX source layout"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_India_Kashmir_Dryad_2014_2017_xlsx_source_structure_v248.py'
+      - '.github/workflows/tetsu-India-Kashmir-author-original-Matrix-plot-v248.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v248-first-party-India-Kashmir-original-railway-plant-data
+  cancel-in-progress: true
+jobs:
+  read-original-kashmir-railway-plant-workbook-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Download first-party Dryad original Kashmir railway plant matrix only by verified file ID
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v248/India
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://datadryad.org/api/v2/files/546003/download' \
+            -o source_original/v248/India/Matrix_plot.xlsx
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source_original/v248/India/Matrix_plot.xlsx | sha256sum --check
+          stat -c 'Author-original Dryad file bytes=%s' source_original/v248/India/Matrix_plot.xlsx
+      - name: Read source workbook XML sheet dimensions and exact first original rows only; no invented rail-zone/year labels
+        run: |
+          python -u scripts/audit_India_Kashmir_Dryad_2014_2017_xlsx_source_structure_v248.py \
+            --source source_original/v248/India/Matrix_plot.xlsx \
+            --output results/audit/v248_India_Kashmir_true_original_Dryad_2014_2017_rail_31transect_workbook_structure.json
+      - name: Archive only source workbook structure and source provenance (not raw author matrix)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v248-India-Kashmir-true-Dryad-rail-2014-2017-plant-workbook-structure
+          path: results/audit/v248_India_Kashmir_true_original_Dryad_2014_2017_rail_31transect_workbook_structure.json
+          if-no-files-found: warn

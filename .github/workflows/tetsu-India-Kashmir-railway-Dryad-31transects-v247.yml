@@ -1,0 +1,31 @@
+name: "v24.7 first-party Dryad authentic India Kashmir railway 31 paired transects dataset DOI and files audit"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_India_Kashmir_railway_Dryad_original_files_v247.py'
+      - '.github/workflows/tetsu-India-Kashmir-railway-Dryad-31transects-v247.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v247-dryad-india-kashmir-railway-original-dataset-probe
+  cancel-in-progress: true
+jobs:
+  dryad-first-party-31-T-transect-original-original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Identify first-party Dryad original railway field dataset rather than guessing mirror DOI or source file schema
+        run: |
+          python -u scripts/audit_India_Kashmir_railway_Dryad_original_files_v247.py \
+            --output results/audit/v247_true_Dryad_original_Kashmir_2014_2017_railway_31transects_files.json
+      - name: Keep original source API metadata provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v247-Dryad-first-party-India-Kashmir-31railway-T-transects-source-file-provenance
+          path: results/audit/v247_true_Dryad_original_Kashmir_2014_2017_railway_31transects_files.json
+          if-no-files-found: warn

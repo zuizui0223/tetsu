@@ -1,0 +1,67 @@
+name: "v22.9 authentic Slovenian railway BS BT same-site continuous functional beta vs taxonomic beta"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/analyze_SI_original_82site_BS_BT_continuous_functional_beta_v229.py'
+      - 'tests/test_SI_original_continuous_functional_beta_v229.py'
+      - '.github/workflows/tetsu-SI-original-continuous-functional-beta-v229.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v229-original-SI-functional-beta
+  cancel-in-progress: true
+jobs:
+  authentic-82-sites-15-lines-continuous-functional-centroid-beta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Synthetic original-convergence mathematical tests, not observed ecology
+        run: python -m unittest discover -s tests -p 'test_SI_original_continuous_functional_beta_v229.py' -v
+      - name: Obtain exact publisher original 2022-23 Slovenia 92-site x trait species data
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v229/Slovenia
+      - name: Authenticate publisher original exact immutable source
+        run: |
+          set -euo pipefail
+          F='source/v229/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$F")" = '401279'
+          printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum --check
+      - name: Verify authentic same original LEDA height and seed-mass tables
+        run: |
+          set -euo pipefail
+          mkdir -p source/v229/LEDA
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v229/LEDA/canopy_height.txt
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v229/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v229/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v229/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Compute original paired BS-to-BT cross-site taxon and functional beta, same-site label null and richness balancing
+        run: |
+          python -u scripts/analyze_SI_original_82site_BS_BT_continuous_functional_beta_v229.py \
+            --original-xlsx source/v229/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v229/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --height source/v229/LEDA/canopy_height.txt \
+            --seed source/v229/LEDA/seed_mass.txt \
+            --output results/audit/v229_SI_original_BS_BT_continuous_functional_beta_source.json
+      - name: Preserve source-authenticated aggregate beta and placebo ranks only, not exact GPS / raw plants
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v229-SI-source-paired-82sites-taxonomic-vs-functional-beta
+          path: results/audit/v229_SI_original_BS_BT_continuous_functional_beta_source.json
+          if-no-files-found: warn

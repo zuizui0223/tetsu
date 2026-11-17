@@ -1,0 +1,60 @@
+name: "v24.9 worldwide MIREN original 25-region mountain ROADS roadside vs interior functional beta external comparator, not railways"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/analyze_global_MIREN_road_interior_LEDA_2D_functional_beta_v249.py'
+      - 'tests/test_global_MIREN_road_interior_not_railway_v249.py'
+      - '.github/workflows/tetsu-global-MIREN-25region-ROADS-reference-v249.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v249-original-MIREN-global-road-external-control
+  cancel-in-progress: true
+jobs:
+  authenticate-global-roads-original-standardized-vegetation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    permissions: {contents: read}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Verify original region road site year plot pairing, no repeated source year and same survey area
+        run: python -m unittest discover -s tests -p 'test_global_MIREN_road_interior_not_railway_v249.py' -v
+      - name: Retrieve first-party global MIREN mountain ROADS original Zenodo v3 17.9MB 2007-2023 25region plant survey
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v249/MIREN
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 350 \
+            'https://zenodo.org/records/15749536/files/MIREN_road_survey_%282007-2023%29_zen_v3_002507.csv?download=1' \
+            -o source_original/v249/MIREN/MIREN_original_2007_2023.csv
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' \
+            source_original/v249/MIREN/MIREN_original_2007_2023.csv | md5sum --check
+      - name: Retrieve source original Oldenburg LEDA canopy height and seed mass with fixed SHA
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v249/LEDA
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v249/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v249/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v249/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v249/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: "Genuine MIREN 25-region ROADS original species×plot survey, first source year paired 100m² roadside and interior functional beta and true trait QC"
+        run: |
+          python -u scripts/analyze_global_MIREN_road_interior_LEDA_2D_functional_beta_v249.py \
+            --miren source_original/v249/MIREN/MIREN_original_2007_2023.csv \
+            --height source_original/v249/LEDA/canopy_height.txt \
+            --seed source_original/v249/LEDA/seed_mass.txt \
+            --output results/audit/v249_global_MIREN_25regions_original_ROADS_not_railway_paired_2D_functional_beta.json
+      - name: Archive only source real global region aggregates and all-source QA, not raw original CSV/GPS/taxa×plot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v249-real-worldwide-MIREN-25region-ROADS-100m2-external-transport-vegetation-control-LEDA
+          path: results/audit/v249_global_MIREN_25regions_original_ROADS_not_railway_paired_2D_functional_beta.json
+          if-no-files-found: warn

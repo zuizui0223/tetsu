@@ -1,0 +1,64 @@
+name: "v23.1 authentic 2023 Slovenia railway station kilometre source to 2020 Eurostat traffic real flora coverage"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_SI_2023_official_station_chainage_2020_eurostat_v231.py'
+      - 'tests/test_SI_official_station_chainage_traffic_v231.py'
+      - '.github/workflows/tetsu-SI-2023-station-km-2020-Eurostat-traffic-crosswalk-v231.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v231-official-2023-station-km-real-2020-EUROSTAT
+  cancel-in-progress: true
+jobs:
+  three-source-verified-2023-station-km-historical-2020-traffic-vegetation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install genuine PDF text-table decoder, never OCR fabricated records
+        run: python -m pip install 'pdfplumber==0.11.7'
+      - name: Test source-verified named-station numeric chainage parsing and strict network-code-to-author-line non-substitution
+        run: python -m unittest discover -s tests -p 'test_SI_official_station_chainage_traffic_v231.py' -v
+      - name: Get genuine publisher original 2022-23 Slovenia vegetation 92-site supplement with original km records
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v231/Slovenia
+      - name: Verify exact immutable authentic source publisher XLSX
+        run: |
+          set -euo pipefail
+          F='source/v231/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$F")" = 401279
+          printf '%s  %s\n' '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$F" | sha256sum --check
+      - name: Fetch ORIGINAL 2023 official Slovenian infrastructure station chainage annex from its source, never current historical hindsight
+        run: |
+          set -euo pipefail
+          mkdir -p source/v231/official
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 120 \
+            --user-agent 'tetsu-original-operator-railways-2023-station-statements-source/1.0' \
+            'https://infrastruktura.sz.si/wp-content/uploads/2023/02/NS_2023_1.2_Annex_2B_Stations.pdf' \
+            -o source/v231/official/NS_2023_1.2_Annex_2B_Stations.pdf
+          test "$(stat -c%s source/v231/official/NS_2023_1.2_Annex_2B_Stations.pdf)" -gt 50000
+          sha256sum source/v231/official/NS_2023_1.2_Annex_2B_Stations.pdf
+      - name: Join ONLY original source official station km to Eurostat 2020 named segment endpoints to publisher 89 plant sites
+        run: |
+          python -u scripts/audit_SI_2023_official_station_chainage_2020_eurostat_v231.py \
+            --official-station-pdf source/v231/official/NS_2023_1.2_Annex_2B_Stations.pdf \
+            --original-xlsx source/v231/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v231/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v231_SI_2023_original_station_km_2020_Eurostat_89site_vegetation_coverage.json
+      - name: Archive ONLY aggregate source SHA and original mapped count not original site species coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v231-2023-station-km-historic-Eurostat-2020-89-original-sites-coverage
+          path: results/audit/v231_SI_2023_original_station_km_2020_Eurostat_89site_vegetation_coverage.json
+          if-no-files-found: warn

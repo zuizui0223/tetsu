@@ -1,0 +1,71 @@
+name: "v23.9 Czech 35 verified railway station representative points vs CzechVeg 2026 truly georeferenced local nontransport plots support"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/audit_Czech_35SR70_station_local_CzechVeg_nontransport_georeference_v239.py'
+      - 'tests/test_Czech_35SR70_stations_CzechVeg_georeference_v239.py'
+      - '.github/workflows/tetsu-Czech-35verified-stations-vs-local-CzechVeg-nontransport-v239.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v239-Czech35-railway-true-local-nontransport-reference
+  cancel-in-progress: true
+jobs:
+  original-35rail-stations-to-genuine-independent-nearby-vegetation-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Genuine XLSX source reader only
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Verify coordinate-year-uncertainty metadata opportunity test with synthetic fixtures only
+        run: python -m unittest discover -s tests -p 'test_Czech_35SR70_stations_CzechVeg_georeference_v239.py' -v
+      - name: Download original 2024 Czech 39 station publisher S1 and corrected S2
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v239
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 200 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source_original/v239/S1.xlsx
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 200 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source_original/v239/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source_original/v239/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source_original/v239/S2.xlsx \
+            | sha256sum --check
+      - name: Download pinned authoritative station registry SR70 2026 derivative, reject changed source git blob
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 180 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' \
+            -o source_original/v239/SR70.csv
+          test "$(git hash-object source_original/v239/SR70.csv)" = 'df1f4b41a6292071b58c4a9a862bd535914706c3'
+      - name: Retrieve genuine CzechVeg source 117739 plot metadata ONLY (no species needed for opportunity gate)
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 3 --connect-timeout 20 --max-time 600 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v239/CzechVeg_headers.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' source_original/v239/CzechVeg_headers.csv \
+            | md5sum --check
+      - name: Audit EXACT original rail source names + 2026 SR70 geo and unrelated published vegetation coords year precision within 5 10 25km
+        run: |
+          python -u scripts/audit_Czech_35SR70_station_local_CzechVeg_nontransport_georeference_v239.py \
+            --cz-s1 source_original/v239/S1.xlsx \
+            --cz-s2 source_original/v239/S2.xlsx \
+            --sr70 source_original/v239/SR70.csv \
+            --headers source_original/v239/CzechVeg_headers.csv \
+            --output results/audit/v239_original_Czech_35station_real_local_nontransport_5_10_25km_plot_opportunity.json
+      - name: Archive only aggregate geospatial candidate count and publisher metadata, no source plot or station exact coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v239-Czech35-authentic-stations-vs-original-geocoded-nontransport-local-plot-availability
+          path: results/audit/v239_original_Czech_35station_real_local_nontransport_5_10_25km_plot_opportunity.json
+          if-no-files-found: warn
