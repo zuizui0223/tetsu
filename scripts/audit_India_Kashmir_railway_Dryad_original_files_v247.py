@@ -77,6 +77,14 @@ def discover():
         embedded=verlist.get("_embedded") or {}
         version_rows=(embedded.get("stash:versions") or embedded.get("versions") or
                       verlist.get("versions") or [])
+    # Dryad's first-party dataset JSON exposes a canonical
+    # stash:version link that can be followed directly even when the
+    # paginated versions endpoint does not return embedded rows.
+    current=d.get("_links",{}).get("stash:version",{}).get("href")
+    if current:
+        current_id=str(current).rstrip("/").split("/")[-1]
+        if current_id.isdigit() and not any(str(x.get("id"))==current_id for x in version_rows):
+            version_rows.append({"versionNumber":d.get("versionNumber"),"id":int(current_id)})
     if not version_rows and d.get("versionNumber"):
         version_rows=[{"versionNumber":d["versionNumber"],"id":d.get("stashVersionId")}]
     files=[]
@@ -90,6 +98,11 @@ def discover():
             checks.append({"file_list_api_attempt":url,"error":str(e)[:300]});continue
         embedded=listing.get("_embedded") or {}
         listings=embedded.get("stash:files") or embedded.get("files") or listing.get("files") or []
+        if not listings:
+            checks.append({"original_dryad_file_listing_api":url,
+                "listing_keys":sorted(listing) if isinstance(listing,dict) else [],
+                "embedded_keys":sorted(embedded),
+                "pagination_links":listing.get("_links") if isinstance(listing,dict) else None})
         for file in listings:
             files.append({"version_id":versionid,
                 "file_id":file.get("id"),"path":file.get("path") or file.get("filename"),
