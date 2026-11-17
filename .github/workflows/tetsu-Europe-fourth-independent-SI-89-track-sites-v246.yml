@@ -41,7 +41,7 @@ jobs:
         with:
           name: tetsu-v245-genuine-Czech39-Italy28-CroatiaBosnia15-stations-shared-LEDA-2D-source-null
           run-id: 44010794675
-          github-token: GITHUB_TOKEN_PLACEHOLDER
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           path: source_original/v246/Europe_reference
       - name: Download authentic Oldenburg original LEDA canopy height and seed mass reference tables
         run: |
