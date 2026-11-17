@@ -62,7 +62,7 @@ jobs:
           python -u scripts/validate_SI_89_original_track_sites_Europe82_trait_axis_v246.py \
             --source-xlsx source_original/v246/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
             --source-audit source_original/v246/SI/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
-            --v245-audit source_original/v246/Europe_reference/results/audit/v245_Europe_3_real_rail_flora_studies_82stations_same_2D_LEDA_beta_source_null.json \
+            --v245-audit source_original/v246/Europe_reference/v245_Europe_3_real_rail_flora_studies_82stations_same_2D_LEDA_beta_source_null.json \
             --height source_original/v246/LEDA/canopy_height.txt \
             --seed source_original/v246/LEDA/seed_mass.txt \
             --output results/audit/v246_fourth_independent_Slovenia_89_author_rail_track_locations_European_frozen_trait_axes.json
