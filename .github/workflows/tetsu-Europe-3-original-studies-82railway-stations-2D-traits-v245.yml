@@ -1,0 +1,90 @@
+name: "v24.5 genuine three independent railway flora studies in four nations 82 stations, unified LEDA functional beta"
+on:
+  push:
+    branches: [research/tetsu-slovenia-identity-guild-v210-20261116]
+    paths:
+      - 'scripts/validate_Europe_3studies_82stations_original_LEDA_2D_trait_beta_v245.py'
+      - 'tests/test_Europe_three_independent_rail_studies_functional_beta_v245.py'
+      - '.github/workflows/tetsu-Europe-3-original-studies-82railway-stations-2D-traits-v245.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v245-original-europe-3-studies-CZ-IT-HRBA
+  cancel-in-progress: true
+jobs:
+  verify-three-authentic-independent-original-railway-publications:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install genuine original publisher native PDF + XLSX readers
+        run: python -m pip install 'PyMuPDF==1.24.14' 'openpyxl==3.1.5'
+      - name: Test source-study 82-station grouped exact incidence margins and shared trait axes on synthetic fixtures
+        run: python -m unittest discover -s tests -p 'test_Europe_three_independent_rail_studies_functional_beta_v245.py' -v
+      - name: Retrieve genuine Czech Preslia original 39 railway stations S1 and corrected S2 erratum
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v245/CZ
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source_original/v245/CZ/S1.xlsx
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source_original/v245/CZ/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source_original/v245/CZ/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source_original/v245/CZ/S2.xlsx \
+            | sha256sum --check
+      - name: Download genuine Italian Parma 28-station original museum PDF with locked source SHA256
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v245/IT
+          echo 'Museum TLS certificate expired; public publisher PDF only --insecure + exact original source SHA256 fail-closed'
+          curl --insecure -LfsS --retry 4 --connect-timeout 20 --max-time 240 \
+            'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+            -o source_original/v245/IT/Parma_2020_original.pdf
+          printf '%s  %s\n' 'c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787' \
+            source_original/v245/IT/Parma_2020_original.pdf | sha256sum --check
+      - name: Download original Croatian Bosnian 15-station 2017 published PDF with source SHA256
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v245/HR_BA
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://hrcak.srce.hr/file/282429' \
+            -o source_original/v245/HR_BA/Jasprica2017.pdf
+          printf '%s  %s\n' '90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956' \
+            source_original/v245/HR_BA/Jasprica2017.pdf | sha256sum --check
+      - name: Retrieve same ORIGINAL university LEDA canopy height and seed-mass traits for all countries
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v245/LEDA
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v245/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v245/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v245/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v245/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Source-original 82 stations: CZ IT HR-BA shared LEDA axes and geography group fixed incidence 2D beta null
+        run: |
+          python -u scripts/validate_Europe_3studies_82stations_original_LEDA_2D_trait_beta_v245.py \
+            --cz-s1 source_original/v245/CZ/S1.xlsx \
+            --cz-s2 source_original/v245/CZ/S2.xlsx \
+            --it-pdf source_original/v245/IT/Parma_2020_original.pdf \
+            --hr-pdf source_original/v245/HR_BA/Jasprica2017.pdf \
+            --height source_original/v245/LEDA/canopy_height.txt \
+            --seed source_original/v245/LEDA/seed_mass.txt \
+            --output results/audit/v245_Europe_3_real_rail_flora_studies_82stations_same_2D_LEDA_beta_source_null.json
+      - name: Archive true source aggregate 3 original study estimates, never original PDF or station×taxon incidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v245-genuine-Czech39-Italy28-CroatiaBosnia15-stations-shared-LEDA-2D-source-null
+          path: results/audit/v245_Europe_3_real_rail_flora_studies_82stations_same_2D_LEDA_beta_source_null.json
+          if-no-files-found: warn
