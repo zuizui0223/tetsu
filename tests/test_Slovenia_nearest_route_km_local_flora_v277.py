@@ -42,7 +42,7 @@ class RouteNearestFloraTests(unittest.TestCase):
         q=locations("10",[(0,2022,"SINGLE"),(3,2023,"DOUBLE"),
                           (5,2022,"SINGLE")])
         near=m.source_neighbors(q,4,"all")
-        self.assertEqual(len(near),2)  # site at 5km lacks another within 4km? 5-3=2, yes 3 sites
+        self.assertEqual(len(near),3)  # 0↔3 km and 3↔5 km, all three have a valid source neighbor
         # Strict same-year/site-layout must choose actual 5km site, never
         # use source-year 2023 observation at 3km for the 2022 site at 0.
         within=m.source_neighbors(q,5,"same_year_and_layout")
