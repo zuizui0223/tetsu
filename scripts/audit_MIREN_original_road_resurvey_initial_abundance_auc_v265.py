@@ -45,7 +45,7 @@ MIN_ROADS_PER_REGION=2
 
 
 def numerical(x:str) -> float|None:
-    if not str(x).strip():return None
+    if str(x).strip().upper() in ("","NA","N/A","NAN"):return None
     try: value=float(x)
     except ValueError:raise ValueError("Non-numeric ordinal source plant count or cover")
     if not math.isfinite(value) or value<=0:
