@@ -1,0 +1,53 @@
+name: "v27.3 true Slovenian original RAIL 15-section local BS-BT fixed plant frequency null"
+on:
+  push:
+    branches: [research/tetsu-rail-road-replacement-v269-20261118]
+    paths:
+      - 'scripts/audit_Slovenia_original_rail_15sections_fixed_local_frequency_null_v273.py'
+      - 'tests/test_Slovenia_original_fixed_section_frequency_null_v273.py'
+      - '.github/workflows/tetsu-v273-Slovenia-source-section-site-fixed-frequency.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v273-Slovenia-original-rail-15section-margins
+  cancel-in-progress: true
+jobs:
+  genuine-original-rail-microhabitat-species-frequency-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Original location-sides/sections frequency-margin mathematical QA
+        run: python -m unittest discover -s tests -p 'test_Slovenia_original_fixed_section_frequency_null_v273.py' -v
+      - name: Restore author-original 2026 Slovenia railway vegetation CC-BY XLSX and audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v273/Slovenia
+      - name: Hard gate genuine original publisher XLSX SHA 26be7c and source audit
+        run: |
+          set -euo pipefail
+          SOURCE='source/v273/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SOURCE")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SOURCE" | sha256sum --check
+          test -s source/v273/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: Check 89 genuine original rail locations, 173 BS BT sides, exact prior source Jaccard and strict frequency null
+        run: |
+          python -u scripts/audit_Slovenia_original_rail_15sections_fixed_local_frequency_null_v273.py \
+            --source-xlsx source/v273/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v273/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v273_Slovenia_original_15_sections_BS_BT_matched_site_frequency_null.json \
+            --draws 99
+      - name: Archive source authentic section-level aggregate diagnostics only, never publisher raw taxon plots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v273-source-authentic-Slovenia-rail-BS-BT-section-fixed-frequency
+          path: results/audit/v273_Slovenia_original_15_sections_BS_BT_matched_site_frequency_null.json
+          if-no-files-found: warn
