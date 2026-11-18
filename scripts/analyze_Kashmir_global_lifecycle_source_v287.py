@@ -203,6 +203,9 @@ def main():
                       "original_taxa_match":result.get("match",{}).get("classified_original_taxa"),
                       "strict_primary":result.get("strict_70pct",{}).get("comparisons",{}).get(
                               "Track__minus__Interior Plot 1",{}).get("all"),
+                      "strict_50_percent_sensitivity":result.get("strict_50pct",{}).get("comparisons",{}),
+                      "by_zone_trait_coverage":result.get("original_matched_site_trait_coverage",{}),
+                      "matched_species":result.get("match",{}),
                       "output":str(args.result)},ensure_ascii=False))
 
 
