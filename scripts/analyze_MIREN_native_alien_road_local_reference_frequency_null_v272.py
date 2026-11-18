@@ -81,10 +81,16 @@ def statuses(path:Path)->tuple[dict,dict]:
             value[region,taxon].add(label)
     if nrows!=167804:
         raise ValueError("MIREN source nativity scan population changed")
+    resolved,qa=resolve_regional_status(value)
+    qa["source_rows"]=nrows
+    return resolved,qa
+
+
+def resolve_regional_status(value:dict)->tuple[dict,dict]:
+    """Never select a source-native label when the same Region taxon disagrees."""
     disagree={key for key,v in value.items() if len(v)>1}
     resolved={key:(next(iter(v)) if len(v)==1 else "Unknown") for key,v in value.items()}
     qa={
-        "source_rows":nrows,
         "classified_region_taxon_pairs":len(resolved),
         "conflicting_original_region_taxon_status_conservatively_UNKNOWN":len(disagree),
         "unknown_region_taxon_pairs":sum(x=="Unknown" for x in resolved.values()),
