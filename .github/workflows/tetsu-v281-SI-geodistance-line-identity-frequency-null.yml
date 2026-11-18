@@ -1,0 +1,54 @@
+name: "v28.1 original Slovenia geographic-matched line effect vs taxon occupancy null"
+on:
+  push:
+    branches: [research/tetsu-topology-distance-matched-v280-20261118]
+    paths:
+      - 'scripts/audit_Slovenia_same_line_geodistance_matched_frequency_null_v281.py'
+      - 'tests/test_Slovenia_source_line_geodistance_guild_free_null_v281.py'
+      - '.github/workflows/tetsu-v281-SI-geodistance-line-identity-frequency-null.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v281-source-authentic-distance-matched-line-occupancy
+  cancel-in-progress: true
+jobs:
+  original-Slovenian-rail-section-geographic-matched-identity-falsification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Source original geodistance triple matching and checkerboard taxon frequency exact math QA
+        run: python -m unittest discover -s tests -p 'test_Slovenia_source_line_geodistance_guild_free_null_v281.py' -v
+      - name: Restore genuine author-original 2026 Slovenian railway field Excel
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v281/slovenia
+      - name: Original source workbook SHA256 and 401279-byte integrity gate
+        run: |
+          set -euo pipefail
+          SRC='source/v281/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SRC" | sha256sum --check
+          test -s source/v281/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: Authentic 89 original plants matched source geography with source year layout restricted taxa incidence frequency null
+        run: |
+          mkdir -p results/audit
+          python -u scripts/audit_Slovenia_same_line_geodistance_matched_frequency_null_v281.py \
+            --original-xlsx source/v281/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v281/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v281_SI_original_geodistance_same_line_species_occupancy_null.json \
+            --draws 99 --burnin 3000 --thin 350
+      - name: Only derived national-line-level source matched beta and technical MCMC diagnostics are archived
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v281-original-slovenia-geodistance-rail-line-match-species-prevalence-null
+          path: results/audit/v281_SI_original_geodistance_same_line_species_occupancy_null.json
+          if-no-files-found: warn
