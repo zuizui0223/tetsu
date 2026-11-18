@@ -1,0 +1,53 @@
+name: "v28.0 original Slovenian railway same-line vs other-line matched source geography"
+on:
+  push:
+    branches: [research/tetsu-topology-distance-matched-v280-20261118]
+    paths:
+      - 'scripts/audit_Slovenia_source_same_line_vs_other_geodistance_matched_v280.py'
+      - 'tests/test_Slovenia_same_line_nearby_other_geo_match_v280.py'
+      - '.github/workflows/tetsu-v280-original-SI-sameline-vs-otherline-geodesic-matched.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v280-original-Slovenia-same-vs-different-rail-lines
+  cancel-in-progress: true
+jobs:
+  author-original-genuine-railway-network-membership-falsification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Source-independent site/line matching and geography controlled synthetic QA
+        run: python -m unittest discover -s tests -p 'test_Slovenia_same_line_nearby_other_geo_match_v280.py' -v
+      - name: Download publisher genuine Slovenian 2026 RAIL vegetation original
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v280/slovenia
+      - name: Verify author-original vegetation XLSX 401279 bytes and SHA256
+        run: |
+          set -euo pipefail
+          FILE='source/v280/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$FILE")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$FILE" | sha256sum --check
+          test -s source/v280/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: Evaluate 89 real sites 15 true lines with matched geography, year, track and richness sensitivity, no fabricated support
+        run: |
+          mkdir -p results/audit
+          python -u scripts/audit_Slovenia_source_same_line_vs_other_geodistance_matched_v280.py \
+            --original-xlsx source/v280/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v280/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v280_original_rail_same_line_other_line_geography_matched.json
+      - name: Upload aggregated original-study line-level support and results only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v280-original-SI-rail-sameline-otherline-distance-matched-source
+          path: results/audit/v280_original_rail_same_line_other_line_geography_matched.json
+          if-no-files-found: warn
