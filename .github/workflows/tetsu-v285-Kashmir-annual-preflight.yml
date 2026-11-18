@@ -1,0 +1,26 @@
+name: "v28.5 Kashmir life-span matched-site SOURCE PREFLIGHT (synthetic QA only)"
+on:
+  push:
+    branches:
+      - research/tetsu-kashmir-annual-crossregion-preflight-v285-20261118
+    paths:
+      - "scripts/analyze_Kashmir_annual_microsites_v285.py"
+      - "tests/test_Kashmir_annual_microsites_v285.py"
+      - ".github/workflows/tetsu-v285-Kashmir-annual-preflight.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  synthetic-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check new original-source preflight parser syntax
+        run: python -m py_compile scripts/analyze_Kashmir_annual_microsites_v285.py
+      - name: Run six synthetic mathematical tests; never fake original source results
+        run: python -m unittest discover -s tests -p 'test_Kashmir_annual_microsites_v285.py' -v
+      - name: Clarify true source status
+        run: echo "PASSING SYNTHETIC QA IS NOT ORIGINAL KASHMIR ANNUAL FRACTION; trait crosswalk remains unverified"
