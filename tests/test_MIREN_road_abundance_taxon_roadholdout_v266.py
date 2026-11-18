@@ -27,6 +27,32 @@ class RoadHeldoutAbundanceTests(unittest.TestCase):
         self.assertAlmostEqual(te[0],2.)
         self.assertAlmostEqual(np.mean(tr),0.)
 
+    def test_source_2007_records_not_added_to_2012plus_primary_risk_set(self):
+        pairs=[]
+        plants={}
+        for reg in ("R1","R2"):
+            for road in ("A","B"):
+                for idx in range(5):  # 4 modern supported + 1 old source site
+                    year=2007 if idx==4 else 2012
+                    s=str(idx)
+                    row={"region":reg,"road":road,"site":s,
+                         "initial_year":year,"final_year":2022}
+                    for plot in m.PLOTS:
+                        row[(plot,"Abundance")]={"identified":True,"auc":1.}
+                        row[(plot,"Cover")]={"identified":True,"auc":1.}
+                        plants[(reg,road,s,year,plot)]={
+                            "Plant A":(3.,2.),"Plant B":(1.,1.)
+                        }
+                        plants[(reg,road,s,2022,plot)]={
+                            "Plant A":(2.,2.)
+                        }
+                    pairs.append(row)
+        risk,qa=m.risk_set({"plants":plants},pairs)
+        self.assertEqual(qa["source_original_field_sites"],16)
+        self.assertEqual(qa["source_true_independent_roads"],4)
+        self.assertEqual(qa["source_early_positive_taxon_plot_risk_events"],64)
+        self.assertEqual(qa["source_original_first_year_min"],2012)
+
     def test_heldout_road_holds_all_source_sites_both_plots(self):
         rows=[]
         for reg in ("A","B"):
