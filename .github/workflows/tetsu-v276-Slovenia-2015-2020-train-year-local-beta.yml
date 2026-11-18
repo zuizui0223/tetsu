@@ -1,0 +1,63 @@
+name: "v27.6 authentic historical 2015 and 2020 train volume versus unchanged Slovenian local rail flora"
+on:
+  push:
+    branches: [research/tetsu-Slovenia-traffic-local-coupling-v274-20261118]
+    paths:
+      - 'scripts/audit_Slovenia_2015_2020_real_train_local_coupling_temporal_v276.py'
+      - 'tests/test_Slovenia_historical_2015_2020_local_source_coupling_v276.py'
+      - '.github/workflows/tetsu-v276-Slovenia-2015-2020-train-year-local-beta.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v276-genuine-2015-2020-train-years-same-field-flora
+  cancel-in-progress: true
+jobs:
+  original-matched-EUROSTAT-two-historical-years:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Real 2023 operator station statement PDF parser, source fixed
+        run: python -m pip install 'pdfplumber==0.11.7'
+      - name: Ensure real traffic 2015/2020 does not alter heldout 2022/2023 biological response
+        run: python -m unittest discover -s tests -p 'test_Slovenia_historical_2015_2020_local_source_coupling_v276.py' -v
+      - name: Restore source-authenticated author genuine original Slovenia plant vegetation workbook
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v276/Slovenia
+      - name: Strict publisher author 2026 plant XLSX 401279 bytes SHA
+        run: |
+          set -euo pipefail
+          SOURCE='source/v276/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SOURCE")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$SOURCE" | sha256sum --check
+      - name: Retrieve original operator 2023 station kilometrage PDF / hash validated in exact decoder
+        run: |
+          set -euo pipefail
+          mkdir -p source/v276/official results/audit
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 120 \
+            --user-agent 'tetsu-original-operator-Slovenia-2023-rail-stations-source/1.0' \
+            'https://infrastruktura.sz.si/wp-content/uploads/2023/02/NS_2023_1.2_Annex_2B_Stations.pdf' \
+            -o source/v276/official/NS_2023_1.2_Annex_2B_Stations.pdf
+          test "$(stat -c%s source/v276/official/NS_2023_1.2_Annex_2B_Stations.pdf)" -gt 50000
+      - name: Exact original 2015/2020 Eurostat direction code and label matched 9 physical segments / frozen local species excess
+        run: |
+          python -u scripts/audit_Slovenia_2015_2020_real_train_local_coupling_temporal_v276.py \
+            --original-xlsx source/v276/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v276/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --official-station-pdf source/v276/official/NS_2023_1.2_Annex_2B_Stations.pdf \
+            --output results/audit/v276_SI_original_same_9segments_2015_2020_freight_vs_local_coupling.json \
+            --draws 99
+      - name: Archive only original nine physical traffic segment summary and signed provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v276-authentic-2015-2020-freight-vs-unchanged-slovenia-local-flora
+          path: results/audit/v276_SI_original_same_9segments_2015_2020_freight_vs_local_coupling.json
+          if-no-files-found: warn
