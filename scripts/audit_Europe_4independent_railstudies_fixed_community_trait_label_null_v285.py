@@ -69,7 +69,7 @@ from validate_Europe_3studies_82stations_original_LEDA_2D_trait_beta_v245 import
     traits_join,source_cohort,get_metrics,LEDASHA
 )
 from validate_SI_89_original_track_sites_Europe82_trait_axis_v246 import (
-    source_european_trait_axis,genuine_slovenian_89_microhabitat_unions
+    genuine_slovenian_89_microhabitat_unions
 )
 from audit_SI_CZ_original_continuous_trait_coverage_v220 import read_leda
 from analyze_Slovenia_rail_microhabitats_v103 import extract_original_xlsx
@@ -83,6 +83,18 @@ N_CHAINS=2
 DRAWS=299
 SEED=285118
 SOURCE_REQUIRED_STUDIES=4
+# Exact successful v24.5/v24.6 first-party source-audited checks. Earlier
+# aggregate artifact retrieval can fail with GitHub cross-run credentials;
+# instead regenerate the actual 3-study axis from ALL original SHA-gated
+# publisher materials and verify every scalar against these frozen values.
+FROZEN_3_STUDY_LOG_MEANS=(-0.5802365754696401,0.2936113186962433)
+FROZEN_3_STUDY_LOG_SDS=(1.3801000545693773,2.1657660559995824)
+FROZEN_SOURCE_CWM_MEANS={
+    "CZ_Czechia":0.16501788905535814,
+    "IT_Italy_Parma":0.2014200675821101,
+    "HR_BA_2017_one_study":0.2232461322998969,
+    "SI_Slovenia_100m_track":0.35003008736045554,
+}
 METRICS=("cwm2D_mean_all_source_pairs",
          "cwm2D_mean_within_original_geography",
          "cwm_height_absolute_mean_within_original_geography",
@@ -90,7 +102,7 @@ METRICS=("cwm2D_mean_all_source_pairs",
          "source_site_within_2D_trait_variance_trace")
 
 
-def frozen_reference(originals:dict,raw_z:dict,v245:dict,v246:dict)->tuple[dict,dict]:
+def frozen_reference(originals:dict,raw_z:dict)->tuple[dict,dict,dict]:
     studies,original_qa=originals
     traits,traitqa=traits_join(studies,raw_z["height"],raw_z["seed"])
     sourcecohort,cov=source_cohort(studies,traits)
@@ -98,34 +110,41 @@ def frozen_reference(originals:dict,raw_z:dict,v245:dict,v246:dict)->tuple[dict,
         raise ValueError("Original 82 complete Preslia, Parma, Croatia/Bosnia railway stations disappeared")
     if traitqa["source_original_LEDA_both_canopy_height_seed_mass_species_n"]!=622:
         raise ValueError("Original v24.5 European fixed 622 species trait axis changed")
-    si_all,siqa=source_european_trait_axis(v245,raw_z["height"],raw_z["seed"])
-    si_sites,sl_qa=genuine_slovenian_89_microhabitat_unions(original_qa["slovenia"],si_all)
+    mu=traitqa["species_equal_global_log_mean"]
+    sd=traitqa["species_equal_global_log_SD"]
+    if (any(abs(x-y)>1e-12 for x,y in zip(mu,FROZEN_3_STUDY_LOG_MEANS))
+        or any(abs(x-y)>1e-12 for x,y in zip(sd,FROZEN_3_STUDY_LOG_SDS))):
+        raise ValueError("Original 2026 Nov 17 source 3-publisher European 2D reference z axis changed")
+    # Exactly the held-out Slovenian source transformation frozen in v24.6,
+    # calculated solely from the 3 other independently published source
+    # studies, NOT ever scaled anew using Slovenian plant observations.
+    si_all={taxon:((math.log(raw_z["height"][taxon])-mu[0])/sd[0],
+                   (math.log(raw_z["seed"][taxon])-mu[1])/sd[1])
+            for taxon in set(raw_z["height"])&set(raw_z["seed"])}
+    si_sites,sl_qa=genuine_slovenian_89_microhabitat_unions(
+        original_qa["slovenia"],si_all)
     if len(si_sites)!=89:
         raise ValueError("Slovenian original source 89 100m railway plots disappeared")
     sourcecohort["SI_Slovenia_100m_track"]=si_sites
     source_trait={}
+    observed={}
     for k in STUDIES:
         source_trait[k]=si_all if k=="SI_Slovenia_100m_track" else traits
         if k not in sourcecohort or len(sourcecohort[k])!=N[k]:
             raise ValueError(f"One original study source site population changed: {k}")
-        ref=(
-            v246["Slovenian_4th_study_same_two_tratis_under_different_field_sampling_grain"]
-            if k=="SI_Slovenia_100m_track" else
-            v245["original_three_study_separate_continuous_functional_inference"][k]["source_source_trait_observed_null"]
-        )
         baseline=get_metrics(sourcecohort[k],source_trait[k])[
             "functional_CWM_centroid_distance_all_stationpairs"]
-        frozen=(ref["functional_CWM_centroid_distance_all_stationpairs"][
-            "observed_genuine_100m_author_rail_sites" if k=="SI_Slovenia_100m_track" else "original_observed"]
-        )
-        if abs(baseline-frozen)>1e-10:
-            raise ValueError(f"Reanalyzed genuine original {k} source CWM does not match frozen v24.5/v24.6 original first-party audit")
+        if abs(baseline-FROZEN_SOURCE_CWM_MEANS[k])>1e-10:
+            raise ValueError(f"Reanalyzed genuine original {k} source CWM does not match frozen v24.5/v24.6 author-source audit")
+        observed[k]=baseline
     return sourcecohort,source_trait,{
         "original_3_study_v245_author_source":{k:v for k,v in original_qa.items() if k!="slovenia"},
         "original_3_study_trait_axis":traitqa,
         "original_3_study_trait_site_coverage":cov,
         "original_Slovenian_89_100m_source":sl_qa,
         "v245_AND_v246_prior_true_original_observed_CWM_baselines_exactly_reproduced":True,
+        "v245_v246_prior_genuine_source_frozen_observed_means":observed,
+        "v245_refit_from_original_3_study_source_data_not_private_action_artifact":True,
         "source_four_independently_published_railway_field_studies":True
     }
 
@@ -284,7 +303,7 @@ def source_study_null(sites:list[dict],traits:dict,study:str,draws:int=DRAWS)->d
 
 
 def run(cz_s1:Path,cz_s2:Path,it_pdf:Path,hr_pdf:Path,
-        si_xlsx:Path,si_audit:Path,v245_audit:Path,v246_audit:Path,
+        si_xlsx:Path,si_audit:Path,
         height:Path,seed:Path,draws:int=DRAWS)->dict:
     for file,dig in ((height,LEDASHA["height"]),(seed,LEDASHA["seed"])):
         if hashlib.sha256(file.read_bytes()).hexdigest()!=dig:
@@ -299,10 +318,8 @@ def run(cz_s1:Path,cz_s2:Path,it_pdf:Path,hr_pdf:Path,
     studies={k:v[0] for k,v in published.items()}
     qc={k:v[1] for k,v in published.items()}
     original=extract_original_xlsx(si_xlsx,si_audit)
-    v245=json.loads(v245_audit.read_text(encoding="utf8"))
-    v246=json.loads(v246_audit.read_text(encoding="utf8"))
     cohorts,traits,gate=frozen_reference((studies,{**qc,"slovenia":original}),
-        {"height":h,"seed":s},v245,v246)
+        {"height":h,"seed":s})
     results={k:source_study_null(cohorts[k],traits[k],k,draws)
              for k in STUDIES}
     positives={mode:{
@@ -334,13 +351,13 @@ def run(cz_s1:Path,cz_s2:Path,it_pdf:Path,hr_pdf:Path,
 def main():
     p=argparse.ArgumentParser()
     names=("cz_s1","cz_s2","it_pdf","hr_pdf","si_xlsx","si_audit",
-           "v245_audit","v246_audit","height","seed","output")
+           "height","seed","output")
     for name in names:
         p.add_argument("--"+name.replace("_","-"),required=True,type=Path)
     p.add_argument("--draws",type=int,default=DRAWS)
     a=p.parse_args()
     report=run(a.cz_s1,a.cz_s2,a.it_pdf,a.hr_pdf,a.si_xlsx,a.si_audit,
-               a.v245_audit,a.v246_audit,a.height,a.seed,a.draws)
+               a.height,a.seed,a.draws)
     a.output.parent.mkdir(parents=True,exist_ok=True)
     a.output.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf8")
     for study,data in report["four_independent_field_publication_group_trait_label_null"].items():
