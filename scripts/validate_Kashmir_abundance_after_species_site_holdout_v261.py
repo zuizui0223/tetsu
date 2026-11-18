@@ -243,8 +243,8 @@ def fold_evaluation(rows:list[dict],ridge_C:float=BASE_RIDGE_C) -> dict:
             site_scores=[r for r in per_site_zone if r["group"]==group and r["zone"]==zone]
             avg={m:summarize_site_mean(site_scores,m) for m in MODELS}
             def gain(a,b,metric="logloss"):
-                return avg[a]["mean_heldout_site_"+metric+("_nats" if metric=="logloss" else "")] - \
-                    avg[b]["mean_heldout_site_"+metric+("_nats" if metric=="logloss" else "")]
+                field = "mean_heldout_site_logloss_nats" if metric=="logloss" else "mean_heldout_site_Brier"
+                return avg[a][field]-avg[b][field]
             contrasts[group][zone]={
                 "n_original_source_heldout_site_folds":len(site_scores),
                 "source_2014_at_risk_taxon_site_events":sum(x["n_2014_at_risk"] for x in site_scores),
