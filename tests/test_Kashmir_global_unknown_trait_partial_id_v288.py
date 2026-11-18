@@ -73,6 +73,17 @@ class ExactPartialIdentificationTests(unittest.TestCase):
         self.assertEqual(bounds["sharp_lower"],0)
         self.assertEqual(bounds["sharp_upper"],0)
 
+    def test_impact_rank_width_equals_exact_partial_bound_width(self):
+        names=["Annual known","Perennial known","Unknown 2","Unknown 3"]
+        queue=mod.unknown_taxon_priority(self.plots,self.traits,names)
+        estimates=mod.analyze(self.plots,self.traits,4)
+        effect=estimates["comparisons"]["Track__minus__Interior Plot 1"]["all"]["two_year_mean"]
+        self.assertAlmostEqual(queue["full_sharp_range_width_pp"],
+                               (effect["sharp_upper"]-effect["sharp_lower"])*100)
+        self.assertEqual(queue["unknown_original_taxa"],2)
+        self.assertGreaterEqual(queue["ranked_unmatched_species"][0]["uncertainty_width_pp"],
+                                queue["ranked_unmatched_species"][1]["uncertainty_width_pp"])
+
     def test_empty_plot_errors(self):
         with self.assertRaisesRegex(ValueError,"Zero-richness"):
             mod.zone_fractions(set(),self.traits,4)
