@@ -41,15 +41,16 @@ def derangement(ids: list, rng: random.Random) -> dict:
     """Bijective source-site reassignment that never retains the same site."""
     if len(ids)<2:
         raise ValueError("A singleton stratum cannot identify spatial pairing null")
-    # Sattolo's algorithm produces one nontrivial cycle: always a derangement,
-    # with no duplicated controls and exact preservation of each assemblage.
-    shuffled=list(ids)
-    for i in range(len(shuffled)-1,0,-1):
-        j=rng.randrange(i)
-        shuffled[i],shuffled[j]=shuffled[j],shuffled[i]
-    if set(ids)!=set(shuffled) or any(a==b for a,b in zip(ids,shuffled)):
-        raise AssertionError("Source-site reassignment not bijective derangement")
-    return dict(zip(ids,shuffled))
+    # Fisher-Yates shuffles, rejected if any original site remains paired:
+    # conditional on no fixed points, this is uniform over all derangements.
+    for attempt in range(500):
+        shuffled=list(ids)
+        rng.shuffle(shuffled)
+        if all(a!=b for a,b in zip(ids,shuffled)):
+            if len(set(shuffled))!=len(ids):
+                raise AssertionError("Non-bijective source reference reassignment")
+            return dict(zip(ids,shuffled))
+    raise RuntimeError("Could not draw original-site derangement")
 
 
 def quantile(a: list[float],p: float) -> float:
