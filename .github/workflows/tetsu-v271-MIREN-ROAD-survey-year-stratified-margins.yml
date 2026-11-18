@@ -1,0 +1,49 @@
+name: "v27.1 genuine MIREN ROAD source survey-year blocked reference frequency null"
+on:
+  push:
+    branches: [research/tetsu-rail-road-replacement-v269-20261118]
+    paths:
+      - 'scripts/audit_MIREN_year_stratified_frequency_null_v271.py'
+      - 'tests/test_MIREN_year_stratified_reference_null_v271.py'
+      - '.github/workflows/tetsu-v271-MIREN-ROAD-survey-year-stratified-margins.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v271-source-original-MIREN-year-conditional-reference
+  cancel-in-progress: true
+jobs:
+  original-global-ROAD-year-stratified-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Test full source-first-survey year, road and region nested fixed margins
+        run: python -m unittest discover -s tests -p 'test_MIREN_year_stratified_reference_null_v271.py' -v
+      - name: Restore original and previously signed publisher MIREN 2007-23 mountain ROAD data
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v271/MIREN
+      - name: Strict source byte count and author 167804-row data MD5
+        run: |
+          set -euo pipefail
+          SOURCE='source/v271/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv'
+          test "$(stat -c%s "$SOURCE")" = 17899241
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' "$SOURCE" | md5sum --check
+      - name: Independently seeded fixed-margin null and exact same source survey year blocks
+        run: |
+          python -u scripts/audit_MIREN_year_stratified_frequency_null_v271.py \
+            --miren-csv source/v271/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --output results/audit/v271_original_MIREN_year_conditioned_local_beta_reference_null.json \
+            --draws 79 --burnin 3000 --spacing 450
+      - name: Archive derived source region-level ecological diagnostics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v271-MIREN-original-same-survey-year-species-frequency-null
+          path: results/audit/v271_original_MIREN_year_conditioned_local_beta_reference_null.json
+          if-no-files-found: warn
