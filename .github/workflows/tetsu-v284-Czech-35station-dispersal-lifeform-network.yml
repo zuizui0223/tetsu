@@ -36,7 +36,7 @@ jobs:
           printf '%s  %s\n' \
             'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v284/S1.xlsx \
             '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v284/S2.xlsx | sha256sum --check
-      - name: Fetch UPDATED Pladias public trait vintage, print hashes, fail if source schema/coverage not genuine
+      - name: PIN 2026-11-18 refreshed Pladias public trait vintage, source SHA and 544-taxon original structural gate
         run: |
           set -euo pipefail
           curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
@@ -50,7 +50,9 @@ jobs:
           # publication bytes and fail if original Pladias 3147/4599
           # taxonomy rows or 544 taxa /5081 original station incidences
           # fail the independent source reader's strict checks.
-          sha256sum source/v284/dispersal.xlsx source/v284/lifeform.xlsx
+          printf '%s  %s\n' \
+            '20dbb08b99e08751e57d337313bdca6cbfc0ec5dd833290363347534deea203e' source/v284/dispersal.xlsx \
+            '3ee134f767eb556aa08a99c1465e9616dd6df094d7e72e80fde8bd57ef209742' source/v284/lifeform.xlsx | sha256sum --check
       - name: Source 2026 official registry SR70 station centroids exact independently pinned third-party derivative
         run: |
           set -euo pipefail
