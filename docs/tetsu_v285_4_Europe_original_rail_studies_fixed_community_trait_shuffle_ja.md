@@ -39,6 +39,64 @@
 
 この試験は、別の公開研究が用いるtrait-label permutationと同じ「種の出現構造を固定しtraitとsite occupancyとの対応を切る」概念と整合するが、観測単位・source種プール・traits欠損を一致させない限り他研究の推定係数と混ぜない。たとえばtrait randomizationでコミュニティ構成を保持するnullは Swenson 2014などの機能多様性研究で使われており、\`https://doi.org/10.1111/ddi.70270\` の2026年公表研究にもtaxon-swap方式が記載されている。
 
+## v28.5 真正SOURCE完走後の新しい肯定結果（2026-11-18）
+
+**[真正4独立原著SOURCE GitHub Actions SUCCESS #44296227526](https://github.com/zuizui0223/tetsu/actions/runs/44296227526)**。新しい数学QA5/5・Czech original S1/S2 SHA・Italian original source museum PDF SHA・HR/BA原著PDF SHA・Slovenia original publisher XLSX SHA・Oldenburg LEDA height/seed原表 SHAがすべて成功した。過去のsource v24.5／v24.6に報告済みの4つの本物の全siteペアCWM値（CZ 0.16501788905535814、IT 0.2014200675821101、HRBA 0.2232461322998969、SI 0.35003008736045554）を、作者原sourceから **1e−10以内で全て再現**。国ごとにtrait z-scoreを再標準化せず、CZ/IT/HRBAの622種を用いた前回のzlog平均・SDも **1e−12以内**で元値と照合できた。初期のCIは過去Github Actions集計artifactをダウンロードする権限エラーで失敗したが、今回は**全元著者sourceからtraitの初期較正を再生成する方式**へ変更し、別の元集計artifactを取得できなくても独立source検証を成立させた。失敗は元生物解析の不一致ではなく、旧集計artifactの認証経路だった。
+
+### 1．全species/site植物群集を固定し、種に付くLEDA二形質のペアだけをランダム化する
+
+| 真正独立field study | 本物の駅・道床地点 | 両形質既知種 | 2D CWM距離source元実測（同著者地理内） | species trait-label null期待値 | **実測−trait-label null** | 草丈1Dの実測−null | 種子重1Dの実測−null |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| CZ Czechia Kutlvašr2024 | 39駅 | 507 | 0.154620 | 0.093251 | **+0.061368** | **+0.057253** | +0.026440 |
+| IT Parma Adorni2020 | 28駅 | 271 | 0.203252 | 0.154865 | **+0.048388** | **+0.038231** | +0.027471 |
+| HR+BA Jasprica2017 | 15駅（2国・1原著） | 190 | 0.209951 | 0.146172 | **+0.063779** | **+0.095326** | −0.028017 |
+| SI Šabić2026 | 89実100m道床source地点 | 224 | 0.336127 | 0.286862 | **+0.049265** | **+0.056525** | +0.004771 |
+
+**全4独立原著で元地点内地理群の2D CWMβ距離が、元site/taxon assembly完全固定・paired height/mass trait-label shuffleより大きい**。注目すべきは、**草丈軸は4/4原著で強い正方向**であり、種子重はHRBAで負、SIでほぼゼロという点。これは地理に沿って種々の大きさの植物が入れ替わることが、元研究内でランダムな種→形質対応を超えて成立することと整合する。
+
+技術的なsource permutation上側順位（各モデルの2固定seed×299draw=598本の独立**形質ラベル組替え**であり野外実験p値ではない）：2D距離はCZ 0.00167, IT 0.00668, HRBA 0.02170, SI 0.04007。草丈のみCZ 0.00167、IT 0.01836、HRBA 0.00167、SI 0.01503。種子重はCZ 0.0050、IT 0.0518、HRBA 0.8915、SI 0.3990と非一様。これは確証的なmultiple-testing補正済p値ではない。元地理group数はCZ5、IT2、HRBA3、SI15であり、それぞれの元siteペアは互いに依存する。
+
+### 2．出現頻度の近いspeciesでのみ二形質を入れ替えるより保守的な帰無
+
+各元speciesの本物のsource研究内出現site数で上位/下位5等数binを一意に定義し、同じbin内でだけ2D height/seed paired trait vectorsを交換する。元サイト種数・species identity・種ごとのexact site occupancy、元site×species co-occurrence、元2D trait相関はそのまま保つ。**出現頻度とtraitの関連を分位レベルでは保存する**が、5分位以内の厳格frequency同値は固定していない。これはsource群集の種名の局所構造がどのくらい形質との特異的対応をもつかの補助確認。
+
+| 原著 | 源元同地域内2D CWM距離実測−frequent-bin trait-shuffle null | 草丈1D実測−null | 種子重1D実測−null | 2D technical上側順位 |
+|---|---:|---:|---:|---:|
+| CZ39駅 | **+0.058534** | **+0.054819** | +0.025337 | 0.00167 |
+| IT28駅 | **+0.048722** | **+0.038810** | +0.026291 | 0.01169 |
+| HRBA15駅 | **+0.070119** | **+0.099189** | −0.024478 | 0.00501 |
+| SI89道床地点 | **+0.080191** | **+0.078781** | +0.023874 | 0.00167 |
+
+この別定義でも**2D・草丈は4/4原著で正**。特にSIでは全源種を一緒にshuffleした初期null +0.0493からfrequency-bin +0.0802へ増加。これは多くのサイトに出る種と稀な種の間の元形質−占有率関係だけでは、元現場の形質空間的分化を説明しきれないことと整合する。元の頻度binの定義を固定しているだけなので、真の地域種pool・plant climate/soil/management・phylogenetic similarity・缺測biasを消した結果とはならない。
+
+### 3．同一サイト内部の2D形質幅αはβと別の応答
+
+源site内height+seed massの2D variance traceとtrait-shuffle null平均との差：
+
+| 出版研究 | 全species trait-label nullへのsite α trace差 | 出現頻度5分位内shuffleへの差 |
+|---|---:|---:|
+| CZ | −0.02823 | −0.10306 |
+| IT | −0.25224 | −0.03038 |
+| HR+BA | −0.31447 | −0.03674 |
+| SI | −0.42385 | −0.00716 |
+
+Unrestricted trait shuffleではα traceの符号が4/4負で、一見機能幅縮小に見える。しかし**site出現頻度bin別にすると、特にIT、HRBA、SIは負の効果量が大幅に小さくなる**。種子/高さと通常のspecies occupancyの相関によるαの見かけの狭さの可能性がある。従って**鉄道で個々のplant communityが普遍的に機能幅を狭める**という強い一般則にはしない。各研究の多重分類群とsite集団構成の交絡・trait missingnessが残る。
+
+### 4．新しい論文の中核と未解決
+
+高い信頼度の観察：鉄道に共通した人工環境が反復されても、その場にある植物種の**草丈の地理的対応**は研究内でランダムな種→形質割当を超える。鉄道のどの場所にも同じ植物の背丈が再現する、という単純な「均質化」予測とは異なり、**regional plant pool × site filters / plant life-history sorting**による*局所特有の機能状態*という解釈と整合する。この解釈は主張可能だが、どのフィルターが草丈を変えたかという具体的因果機構はまだ未同定。
+
+現地plant height実測や遺伝子、剪定日、車両風圧、種子実測到着は取得していない。LEDA元種中央値のheightを現地の可塑的草丈や進化的耐刈取り形質と誤認しない。また、**自然植生vs鉄道の同季節・同面積の対照**の分布を取り込めていない。したがって「鉄道特異的に草丈の地域差が生まれる」「鉄道で進化的適応する」という因果主張はできない。
+
+*先行研究との結合：* 元4/4のβCWM分化は、v27.0–v27.9の「鉄道内での同実現地site BS/BT植物種の強い局所共有」、v28.0–v28.4の「別地点同一路線の追加taxonomic均質化は弱く、実散布能力や実貨物ODの効果は未認証」と同時に成立する。異なる空間/群集単位の機構を一つの効果量に混ぜない。
+
+**暫定投稿の一文案**：
+“Repeated railway habitats do not imply uniform functional states: spatially differentiated plant stature recurs across four independently surveyed European railway floras, even when plant community memberships and species occurrence frequencies are held constant.”
+
+ただし表題/要旨でより大きな全球の因果フィルタと見せかけず、真の4原著/5国、各publicationを独立単位とした探索的scopeを明示する。
+
+---
+
 ## 外部真正独立鉄道＋非鉄道data入手監査
 
 Penone et al 2012 France71実site：元著者論文は2線、実71 site×5m²/186種で接続/跨線橋断絶を検証した。ただし公開MNHN博士論文 Appendix Bは種別のNumber of observationsであり、その意味が71真site出現頻度かは未認証。元71site×186taxa＋GPS＋駅/跨線橋の中断位置と植生環境のfull matrixは取得できず、tetsu既存v14.5/14.6では6種の周辺度数から同線差の符号すら一意に推定できないことをsource conditional mathematical witnessで検証済み。これを今回の「4独立研究」へ5個目として捏造しない。
