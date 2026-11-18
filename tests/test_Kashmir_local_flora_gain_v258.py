@@ -40,9 +40,9 @@ class LocalFloraTemporalGainTests(unittest.TestCase):
 
     def test_exact_leave_same_site_out_expectation(self):
         records={
-            "A":{"gained":frozenset({11})},
-            "B":{"gained":frozenset({12})},
-            "C":{"gained":frozenset({13})},
+            "A":{"gained":frozenset({11}),"before_n":1,"after_n":2},
+            "B":{"gained":frozenset({12}),"before_n":1,"after_n":2},
+            "C":{"gained":frozenset({13}),"before_n":1,"after_n":2},
         }
         pools={
             "A":frozenset({11}),
@@ -62,7 +62,7 @@ class LocalFloraTemporalGainTests(unittest.TestCase):
             self.assertEqual(m.permuted_score(records,pools,"gained",mapping),0.)
 
     def test_common_regional_species_not_falsely_enriched(self):
-        rec={x:{"gained":frozenset({1})} for x in ("A","B","C","D")}
+        rec={x:{"gained":frozenset({1}),"before_n":1,"after_n":2} for x in ("A","B","C","D")}
         donors={x:frozenset({1}) for x in rec}
         out=m.observed_and_analytic_expected(rec,donors,"gained")
         self.assertEqual(out["observed_site_equal_hit_share"],1.)
