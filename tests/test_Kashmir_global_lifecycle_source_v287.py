@@ -17,6 +17,10 @@ class GlobalLifeCycleTests(unittest.TestCase):
         s,l,diag=mod.infer_source_columns(["Species","Scientific_Name","Life_Cycle"])
         self.assertIsNone(s)
 
+    def test_lowercase_accepted_names_are_still_binomial_species(self):
+        donor,_=mod.parse_life_cycles([{"Accepted Name":"poa annua","LifeCycle":"Annual"}],"Accepted Name","LifeCycle")
+        self.assertEqual(donor[0]["binomial"],"poa annua")
+
     def test_categorical_values_are_not_guessed(self):
         rows=[{"Species":"Poa annua","Life_Cycle":"annual"},
               {"Species":"Poa pratensis","Life_Cycle":"perennial"},
