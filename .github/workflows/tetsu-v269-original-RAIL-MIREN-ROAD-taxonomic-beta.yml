@@ -1,0 +1,70 @@
+name: "v26.9 original RAIL vs global ROAD 100m2 same-site taxon beta partition"
+on:
+  push:
+    branches: [research/tetsu-rail-road-replacement-v269-20261118]
+    paths:
+      - 'scripts/analyze_original_RAIL_vs_global_ROAD_taxonomic_microhabitat_beta_v269.py'
+      - 'tests/test_original_RAIL_ROAD_taxonomic_beta_v269.py'
+      - '.github/workflows/tetsu-v269-original-RAIL-MIREN-ROAD-taxonomic-beta.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v269-author-original-rail-road-100sqm-beta
+  cancel-in-progress: true
+jobs:
+  original-field-source-taxonomic-beta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Exact Baselga taxonomic beta and field sampling-grain synthetic mathematical QA
+        run: python -m unittest discover -s tests -p 'test_original_RAIL_ROAD_taxonomic_beta_v269.py' -v
+      - name: Restore published and MD5 audited original MIREN ROAD field observations
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v269/miren
+      - name: Verify original mountain ROAD source digest
+        run: |
+          set -euo pipefail
+          MIREN='source/v269/miren/source_original/MIREN_road_survey_2007_2023_v3.csv'
+          test "$(stat -c%s "$MIREN")" = 17899241
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' "$MIREN" | md5sum --check
+      - name: Download original Kashmir source Dryad railway file and hard SHA gate
+        run: |
+          set -euo pipefail
+          mkdir -p source/v269/kashmir results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/v269/kashmir/dryad_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,shutil
+          with zipfile.ZipFile('source/v269/kashmir/dryad_99735.zip') as z:
+              matches=[v for v in z.infolist() if not v.is_dir() and v.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(matches)!=1:raise ValueError('Dryad original must contain exactly one authentic Matrix_plot.xlsx')
+              with z.open(matches[0]) as source,Path('source/v269/kashmir/Matrix_plot.xlsx').open('wb') as dest:
+                  shutil.copyfileobj(source,dest)
+          PY
+          test "$(stat -c%s source/v269/kashmir/Matrix_plot.xlsx)" = 122187
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            'source/v269/kashmir/Matrix_plot.xlsx' | sha256sum --check
+      - name: True two-study source-original rail vs ROAD same-site taxonomic partition, never pooled
+        run: |
+          python -u scripts/analyze_original_RAIL_vs_global_ROAD_taxonomic_microhabitat_beta_v269.py \
+            --miren-csv source/v269/miren/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --kashmir-xlsx source/v269/kashmir/Matrix_plot.xlsx \
+            --output results/audit/v269_original_RAIL_Kashmir_vs_MIREN_ROAD_site_beta_nestedness_replacement.json \
+            --draws 79
+      - name: Archive only aggregate biology, never source taxon/site or GPS rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v269-original-rail-and-global-road-taxonomic-beta-derived
+          path: results/audit/v269_original_RAIL_Kashmir_vs_MIREN_ROAD_site_beta_nestedness_replacement.json
+          if-no-files-found: warn
