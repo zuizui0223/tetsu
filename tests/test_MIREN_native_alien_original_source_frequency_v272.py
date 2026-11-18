@@ -67,7 +67,7 @@ class MIRENNativeAlienTests(unittest.TestCase):
         # Unknown taxa produce undefined proportions, never zero imputations
         records[0]["alien_share_of_known_reference_only"]=None
         out2=v.alien_fraction_comparison(records)
-        self.assertEqual(out2["source_sites"],15)
+        self.assertEqual(out2["source_sites"],8)  # R1 loses one entire road and thus Region support
 
     def test_source_zero_alien_plot_not_falsely_forced_into_panel(self):
         only_one_zone={("R1","road1"):[{"site":str(i),"corridor":{1},
