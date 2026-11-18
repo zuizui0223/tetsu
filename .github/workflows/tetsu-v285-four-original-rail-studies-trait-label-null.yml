@@ -68,20 +68,6 @@ jobs:
           printf '%s  %s\n' \
             '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
             "$SRC" | sha256sum --check
-      - name: Restore exact previous original study 82 station functional axes and source audit JSON v24.5
-        uses: actions/download-artifact@v4
-        with:
-          name: tetsu-v245-genuine-Czech39-Italy28-CroatiaBosnia15-stations-shared-LEDA-2D-source-null
-          run-id: 44010794675
-          github-token: GITHUB_TOKEN_EXPR
-          path: source/v285/ref245
-      - name: Restore exact previous original independent Slovenian source 89 real field sites audit v24.6
-        uses: actions/download-artifact@v4
-        with:
-          name: tetsu-v246-SI-fourth-independent-author-89-track-locations-Europe-frozen-LEDA-2D-study-comparison
-          run-id: 44011602082
-          github-token: GITHUB_TOKEN_EXPR
-          path: source/v285/ref246
       - name: Restore pinned original Oldenburg University LEDA paired trait coordinates
         run: |
           set -euo pipefail
@@ -104,8 +90,6 @@ jobs:
             --it-pdf source/v285/IT/Parma2020.pdf --hr-pdf source/v285/HR/Jasprica2017.pdf \
             --si-xlsx source/v285/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
             --si-audit source/v285/SI/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
-            --v245-audit source/v285/ref245/v245_Europe_3_real_rail_flora_studies_82stations_same_2D_LEDA_beta_source_null.json \
-            --v246-audit source/v285/ref246/v246_fourth_independent_Slovenia_89_author_rail_track_locations_European_frozen_trait_axes.json \
             --height source/v285/LEDA/canopy_height.txt \
             --seed source/v285/LEDA/seed_mass.txt \
             --output results/audit/v285_Europe_4_original_rail_field_studies_frozen_plant_matrix_permutes_trait_names.json \
