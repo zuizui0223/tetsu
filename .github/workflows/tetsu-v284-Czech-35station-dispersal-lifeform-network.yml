@@ -52,12 +52,13 @@ jobs:
           # taxonomy rows or 544 taxa /5081 original station incidences
           # fail the independent source reader's strict checks.
           sha256sum source/v284/dispersal.xlsx source/v284/lifeform.xlsx
-      - name: Audit semantic Pladias taxon-strategy and lifeform mapping in regenerated XLSX downloads
+      - name: Require pinned canonical 3147+4161-taxonomy Pladias trait-value SHA despite regenerated XLSX packaging
         run: |
           python -u scripts/audit_Pladias_original_semantic_trait_fingerprint_v284.py \
             --dispersal source/v284/dispersal.xlsx \
             --lifeform source/v284/lifeform.xlsx \
             --output results/audit/v284_original_Pladias_semantic_strict_taxon_trait_checksum.json
+            --expect-semantic-sha256 3ad00d97a88c41cb9b6c4e8775a8cc69ae0b70684a5247bcb1c4d7383e2204d1
       - name: Source 2026 official registry SR70 station centroids exact independently pinned third-party derivative
         run: |
           set -euo pipefail
