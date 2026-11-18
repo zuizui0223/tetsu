@@ -1,0 +1,53 @@
+name: "v27.9 original Slovenian railway route-km versus geographic 5km source local fixed species null"
+on:
+  push:
+    branches: [research/tetsu-route-distance-local-pool-v277-20261118]
+    paths:
+      - 'scripts/audit_Slovenia_rail_route_vs_geo_distance_source_null_v279.py'
+      - 'tests/test_Slovenia_route_geo_distance_reference_v279.py'
+      - '.github/workflows/tetsu-v279-Slovenia-rail-route-vs-geodesic-fixed-margins.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v279-rail-route-vs-geo-true-site-reference-frequency
+  cancel-in-progress: true
+jobs:
+  authentic-original-site-identical-route-and-geographic-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Six synthetic no-source-drift route/geodesic same-site species frequency QA
+        run: python -m unittest discover -s tests -p 'test_Slovenia_route_geo_distance_reference_v279.py' -v
+      - name: Fetch true 2026 Slovenia author original 89 true locations / 173 microhabitat pairs
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v279/Slovenia
+      - name: Source SHA/size audit for real 2026 author railway site/route/GPS data
+        run: |
+          set -euo pipefail
+          SRC='source/v279/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$SRC" | sha256sum --check
+          test -s source/v279/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: True field same-site targets under route and GPS equal support restricted source null
+        run: |
+          mkdir -p results/audit
+          python -u scripts/audit_Slovenia_rail_route_vs_geo_distance_source_null_v279.py \
+            --original-xlsx source/v279/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v279/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v279_real_SI_5_10_20km_route_vs_geo_exact_same_source_plants.json \
+            --draws 79 --burnin 2500 --spacing 300
+      - name: Archive source region-independent rail section support and two distance null aggregates only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v279-source-original-Slovenia-rail-route-vs-geo-5km-same-sites
+          path: results/audit/v279_real_SI_5_10_20km_route_vs_geo_exact_same_source_plants.json
+          if-no-files-found: warn

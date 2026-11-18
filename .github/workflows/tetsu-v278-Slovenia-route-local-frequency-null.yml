@@ -1,0 +1,53 @@
+name: "v27.8 original Slovenian railway <=5km source flora fixed richness and occupancy local null"
+on:
+  push:
+    branches: [research/tetsu-route-distance-local-pool-v277-20261118]
+    paths:
+      - 'scripts/audit_Slovenia_rail_nearby_route_distance_fixed_frequency_null_v278.py'
+      - 'tests/test_Slovenia_route_local_species_frequency_v278.py'
+      - '.github/workflows/tetsu-v278-Slovenia-route-local-frequency-null.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v278-authentic-SI-5km-local-source-frequency
+  cancel-in-progress: true
+jobs:
+  original-route-limited-vegetation-matrix-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Five synthetic source richness plus species frequency checkerboard and local matching tests
+        run: python -m unittest discover -s tests -p 'test_Slovenia_route_local_species_frequency_v278.py' -v
+      - name: Restore author ORIGINAL Slovenian 2026 railway 92-location source workbook
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v278/Slovenia
+      - name: Strict publisher original 401279-byte vegetation XLSX source SHA256 gate
+        run: |
+          set -euo pipefail
+          SRC='source/v278/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$SRC" | sha256sum --check
+          test -s source/v278/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: Source original within-route-neighbor 5/10/20/50km 79-site fixed frequency rare source matrix swaps
+        run: |
+          mkdir -p results/audit
+          python -u scripts/audit_Slovenia_rail_nearby_route_distance_fixed_frequency_null_v278.py \
+            --original-xlsx source/v278/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v278/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v278_source_real_Slovenia_chainage_nearby_5km_fixed_species_frequency_null.json \
+            --draws 99 --burnin 2500 --spacing 300
+      - name: Archive source line-level summaries and strict fixed common support only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v278-genuine-Slovenia-railway-route-nearby-5km-species-frequency-null
+          path: results/audit/v278_source_real_Slovenia_chainage_nearby_5km_fixed_species_frequency_null.json
+          if-no-files-found: warn

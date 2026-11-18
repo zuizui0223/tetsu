@@ -1,0 +1,52 @@
+name: "v27.7 original Slovenian railway true route-km nearest-vegetation local flora test"
+on:
+  push:
+    branches: [research/tetsu-route-distance-local-pool-v277-20261118]
+    paths:
+      - 'scripts/analyze_Slovenia_rail_route_nearest_plant_microhabitat_v277.py'
+      - 'tests/test_Slovenia_nearest_route_km_local_flora_v277.py'
+      - '.github/workflows/tetsu-v277-Slovenia-route-distance-nearest-local-flora.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v277-SI-author-original-rail-chainage-nearest-local-plants
+  cancel-in-progress: true
+jobs:
+  original-railway-route-distance-local-flora:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Five synthetic true source rail-km/nearest/radius/survey-year/section QA tests
+        run: python -m unittest discover -s tests -p 'test_Slovenia_nearest_route_km_local_flora_v277.py' -v
+      - name: Restore publisher author-original 89-site 15-line Slovenian railway plants
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v277/Slovenia
+      - name: Hard original published XLSX SHA and first-party vegetation audit
+        run: |
+          set -euo pipefail
+          SRC='source/v277/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$SRC" | sha256sum --check
+          test -s source/v277/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: True original author railway-kilometre distance nearest other source site plant assembly
+        run: |
+          mkdir -p results/audit
+          python -u scripts/analyze_Slovenia_rail_route_nearest_plant_microhabitat_v277.py \
+            --original-xlsx source/v277/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v277/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v277_original_rail_BS_BT_nearest_other_source_chainage.json
+      - name: Archive aggregate-only source section support and distance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v277-original-Slovenia-rail-km-nearest-other-location-flora
+          path: results/audit/v277_original_rail_BS_BT_nearest_other_source_chainage.json
+          if-no-files-found: warn
