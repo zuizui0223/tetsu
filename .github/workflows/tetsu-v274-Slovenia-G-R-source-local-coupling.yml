@@ -1,0 +1,52 @@
+name: "v27.4 authentic Slovenia official main G vs regional R local plant coupling"
+on:
+  push:
+    branches: [research/tetsu-Slovenia-traffic-local-coupling-v274-20261118]
+    paths:
+      - 'scripts/analyze_Slovenia_official_main_regional_local_coupling_v274.py'
+      - 'tests/test_Slovenia_official_GR_local_species_coupling_v274.py'
+      - '.github/workflows/tetsu-v274-Slovenia-G-R-source-local-coupling.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v274-SI-source-rail-GR-local-coupling
+  cancel-in-progress: true
+jobs:
+  original-Slovenia-genuine-G-vs-R-site-coupling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Test G/R official source categorization, true section and track confounding
+        run: python -m unittest discover -s tests -p 'test_Slovenia_official_GR_local_species_coupling_v274.py' -v
+      - name: Get genuine author-original 2026 Slovenia railway 92-location published supplement
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v274/Slovenia
+      - name: Hard verify source author original 401279 byte original XLSX digest and audit
+        run: |
+          set -euo pipefail
+          SRC='source/v274/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' "$SRC" | sha256sum --check
+          test -s 'source/v274/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json'
+      - name: Original section G vs R local species frequency matched coupling and single-track source sensitivity
+        run: |
+          python -u scripts/analyze_Slovenia_official_main_regional_local_coupling_v274.py \
+            --original-xlsx source/v274/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v274/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v274_real_Slovenia_G_R_local_species_coupling_fixed_frequency.json \
+            --draws 99
+      - name: Publish only original line-based aggregates, never field site taxa
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v274-SI-source-original-GR-single-double-track-local-coupling
+          path: results/audit/v274_real_Slovenia_G_R_local_species_coupling_fixed_frequency.json
+          if-no-files-found: warn
