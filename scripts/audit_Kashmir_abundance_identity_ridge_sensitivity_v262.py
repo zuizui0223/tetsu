@@ -61,7 +61,7 @@ def compare(fitted:dict[float,dict]) -> dict:
         }
         if abs(rows[1.0]["M2_minus_M3_rank_added_after_taxon_logloss_gain"]-
                EXPECTED_MAIN_TRACK_M2_M3[group])>1e-10:
-            raise ValueError("Frozen source original v26.1 C=1 Track score did not reproduce")
+            raise ValueError(f"Frozen v26.1 C=1 group={group} Track score did not reproduce: got={rows[1.0]['M2_minus_M3_rank_added_after_taxon_logloss_gain']:.15g} expected={EXPECTED_MAIN_TRACK_M2_M3[group]:.15g}")
     return out
 
 
