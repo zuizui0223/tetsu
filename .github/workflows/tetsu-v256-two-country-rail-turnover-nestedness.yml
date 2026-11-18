@@ -1,0 +1,77 @@
+name: "v25.6 original Kashmir and Slovenia railway microhabitat beta decomposition"
+on:
+  push:
+    branches: [research/tetsu-beta-turnover-nestedness-v256-20261118]
+    paths:
+      - 'scripts/analyze_rail_microhabitat_replacement_nestedness_v256.py'
+      - 'tests/test_rail_microhabitat_replacement_nestedness_v256.py'
+      - '.github/workflows/tetsu-v256-two-country-rail-turnover-nestedness.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tetsu-v256-real-two-independent-rail-studies
+  cancel-in-progress: true
+jobs:
+  original-railway-flora-compositional-mechanism:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Run mathematical partition and site/section independence tests
+        run: python -m unittest discover -s tests -p 'test_rail_microhabitat_replacement_nestedness_v256.py' -v
+      - name: Retrieve authentic Kashmir Dryad source version archive
+        run: |
+          set -euo pipefail
+          mkdir -p source/v256/kashmir source/v256/slovenia results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/v256/kashmir/dryad_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import shutil, zipfile
+          path=Path('source/v256/kashmir/dryad_99735.zip')
+          with zipfile.ZipFile(path) as z:
+              candidates=[v for v in z.infolist() if not v.is_dir() and v.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(candidates)!=1: raise RuntimeError('Dryad source must contain exactly one Matrix_plot.xlsx')
+              with z.open(candidates[0]) as handle, Path('source/v256/kashmir/Matrix_plot.xlsx').open('wb') as out:
+                  shutil.copyfileobj(handle,out)
+          PY
+          test "$(stat -c%s source/v256/kashmir/Matrix_plot.xlsx)" = "122187"
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/v256/kashmir/Matrix_plot.xlsx | sha256sum --check
+      - name: Retrieve source-authenticated Slovenian 2026 original author XLSX and audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v256/slovenia
+      - name: Strict publisher Slovenian source SHA verification
+        run: |
+          set -euo pipefail
+          SOURCE='source/v256/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SOURCE")" = "401279"
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SOURCE" | sha256sum --check
+          test -s source/v256/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json
+      - name: Compare actual original two-country within-site replacement vs nestedness (two studies kept separate)
+        run: |
+          python -u scripts/analyze_rail_microhabitat_replacement_nestedness_v256.py \
+            --kashmir-source source/v256/kashmir/Matrix_plot.xlsx \
+            --slovenia-xlsx source/v256/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --slovenia-audit source/v256/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v256_authentic_two_country_rail_replacement_nestedness.json \
+            --bootstrap 1999
+      - name: Archive derived field-unit summary only, never raw published plant records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v256-two-original-rail-study-taxonomic-replacement-nestedness-derived-only
+          path: results/audit/v256_authentic_two_country_rail_replacement_nestedness.json
+          if-no-files-found: warn
