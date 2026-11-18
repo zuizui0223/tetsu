@@ -122,7 +122,10 @@ def parse_life_cycles(rows: list[dict], name_col: str, span_col: str) -> tuple[l
         name=(r.get(name_col) or "").strip()
         span=(r.get(span_col) or "").strip().casefold()
         if not name or span not in allowed: continue
-        species.append({"name":name,"binomial":binomial(name),
+        # Poppenwimer Figshare Accepted Name column is all lower case (WFO).
+        # Restore the genus initial solely for strict two-token taxon parsing.
+        normalized_name = name[:1].upper() + name[1:] if name and name[0].islower() else name
+        species.append({"name":normalized_name,"binomial":binomial(normalized_name),
                         "synonym":"","span":span})
     return species,{"source_rows":len(rows),
                     "life_cycle_records":len(species),
