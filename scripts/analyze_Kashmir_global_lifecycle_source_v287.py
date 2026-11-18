@@ -171,6 +171,7 @@ def main():
                 "global_example_common_species":[r["name"] for r in donor if "poa annua" in r["name"].lower()][:2]
             },ensure_ascii=False),flush=True)
             mapping,mapping_meta=crosswalk(original,donor,allow_binomial=True)
+            mapping_meta["trait_identification"]="Poppenwimer et al. 2023 Nature global plant life-cycle database"
             exact,_=crosswalk(original,donor,allow_binomial=False)
             args.crosswalk.parent.mkdir(parents=True,exist_ok=True)
             with args.crosswalk.open("w",encoding="utf-8",newline="") as fp:
