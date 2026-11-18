@@ -84,6 +84,8 @@ def risk_set(source:dict,pairs:list[dict])->tuple[list[dict],dict]:
         region,road,site,yr0,yr1=(
             item["region"],item["road"],item["site"],
             item["initial_year"],item["final_year"])
+        if yr0<PRIMARY_MIN_YEAR:
+            continue
         if road not in allowed_region_roads.get(region,set()):
             continue
         if not all(item[(z,"Abundance")]["identified"] for z in PLOTS):
