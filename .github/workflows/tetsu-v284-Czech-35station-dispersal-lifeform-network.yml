@@ -1,0 +1,91 @@
+name: "v28.4 Czech rail original dispersal and life-form guild network identity"
+on:
+  push:
+    branches: [research/tetsu-Czech-dispersal-guild-network-v284-20261118]
+    paths:
+      - 'scripts/analyze_Czech_35stations_same_stretch_pladias_dispersal_guild_v284.py'
+      - 'scripts/audit_Pladias_original_semantic_trait_fingerprint_v284.py'
+      - 'tests/test_Pladias_semantic_trait_fingerprint_v284.py'
+      - 'tests/test_Czech_original_Pladias_dispersal_trait_matched_v284.py'
+      - '.github/workflows/tetsu-v284-Czech-35station-dispersal-lifeform-network.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v284-genuine-Czech-Pladias-35station-dispersal-proxy
+  cancel-in-progress: true
+jobs:
+  source-real-author-railway-stretch-dispersal-proxy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install exact read-only XLSX parser
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Five mathematical matched original Czech station and four-guild incidence-frequency exact-null tests
+        run: |
+          python -m unittest discover -s tests -p 'test_Pladias_semantic_trait_fingerprint_v284.py' -v
+          python -m unittest discover -s tests -p 'test_Czech_original_Pladias_dispersal_trait_matched_v284.py' -v
+      - name: Retrieve genuine Czech Preslia author original 2024 S1 and corrected S2 from publisher
+        run: |
+          set -euo pipefail
+          mkdir -p source/v284 results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' -o source/v284/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' -o source/v284/S2.xlsx
+          test "$(stat -c%s source/v284/S1.xlsx)" = 79261
+          test "$(stat -c%s source/v284/S2.xlsx)" = 13533
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v284/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v284/S2.xlsx | sha256sum --check
+      - name: Re-fetch Pladias updated public source where XLSX ZIP bytes regenerated; validate content-level author traits separately
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/141/lang/en' \
+            -o source/v284/dispersal.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en' \
+            -o source/v284/lifeform.xlsx
+          # Pladias public source files differ at the byte level from v14.3.
+          # Do not silently pass the OLD known hash. Record the new
+          # publication bytes and fail if original Pladias 3147/4599
+          # taxonomy rows or 544 taxa /5081 original station incidences
+          # fail the independent source reader's strict checks.
+          sha256sum source/v284/dispersal.xlsx source/v284/lifeform.xlsx
+      - name: Require pinned canonical 3147+4161-taxonomy Pladias trait-value SHA despite regenerated XLSX packaging
+        run: |
+          python -u scripts/audit_Pladias_original_semantic_trait_fingerprint_v284.py \
+            --dispersal source/v284/dispersal.xlsx \
+            --lifeform source/v284/lifeform.xlsx \
+            --output results/audit/v284_original_Pladias_semantic_strict_taxon_trait_checksum.json \
+            --expect-semantic-sha256 3ad00d97a88c41cb9b6c4e8775a8cc69ae0b70684a5247bcb1c4d7383e2204d1
+      - name: Source 2026 official registry SR70 station centroids exact independently pinned third-party derivative
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' \
+            -o source/v284/SR70.csv
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' \
+            source/v284/SR70.csv | sha256sum --check
+      - name: Genuine 35 source site 33 match Pladias 4-group wind-strategy trait differential with exact source prevalence nulls
+        run: |
+          python -u scripts/analyze_Czech_35stations_same_stretch_pladias_dispersal_guild_v284.py \
+            --s1 source/v284/S1.xlsx --s2 source/v284/S2.xlsx \
+            --dispersal source/v284/dispersal.xlsx \
+            --lifeform source/v284/lifeform.xlsx \
+            --sr70 source/v284/SR70.csv \
+            --output results/audit/v284_Czech_true_original_35station_Pladias_dispersion_margins_source_network.json \
+            --draws 79 --burnin 2000 --thin 280
+      - name: Archive only derived genuine study/trait group scores and metadata provenance, no original taxa or station coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v284-real-Czech-Pladias-dispersal-proxy-rail-geography-matched
+          path: |
+            results/audit/v284_Czech_true_original_35station_Pladias_dispersion_margins_source_network.json
+            results/audit/v284_original_Pladias_semantic_strict_taxon_trait_checksum.json
+          if-no-files-found: warn
