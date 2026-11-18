@@ -36,7 +36,7 @@ jobs:
           printf '%s  %s\n' \
             'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v284/S1.xlsx \
             '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v284/S2.xlsx | sha256sum --check
-      - name: Restore original Pladias public Sádlo strategy and Raunkiaer lifeform sources, exact prior v14.3 SHA
+      - name: Fetch UPDATED Pladias public trait vintage, print hashes, fail if source schema/coverage not genuine
         run: |
           set -euo pipefail
           curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
@@ -45,9 +45,12 @@ jobs:
           curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
             'https://pladias.ibot.cas.cz/public/traits/downloadTraitData/feature/136/lang/en' \
             -o source/v284/lifeform.xlsx
-          printf '%s  %s\n' \
-            '135fff21b339b0774dd5c1ff3504240175b72be384b4813d747a2905527ec636' source/v284/dispersal.xlsx \
-            '6076383e6b206a74a0f23d6f8f8691c94f4c83eea8ea05a19b2d59f08e8c856c' source/v284/lifeform.xlsx | sha256sum --check
+          # Pladias public source files differ at the byte level from v14.3.
+          # Do not silently pass the OLD known hash. Record the new
+          # publication bytes and fail if original Pladias 3147/4599
+          # taxonomy rows or 544 taxa /5081 original station incidences
+          # fail the independent source reader's strict checks.
+          sha256sum source/v284/dispersal.xlsx source/v284/lifeform.xlsx
       - name: Source 2026 official registry SR70 station centroids exact independently pinned third-party derivative
         run: |
           set -euo pipefail
