@@ -1,0 +1,71 @@
+name: "v28.6 original Kashmir rail x independent 2025 alpine life-span traits"
+on:
+  push:
+    branches:
+      - research/tetsu-kashmir-independent-traits-v286-20261118
+    paths:
+      - "scripts/analyze_Kashmir_external_alpine_lifespan_v286.py"
+      - "tests/test_Kashmir_external_alpine_lifespan_v286.py"
+      - ".github/workflows/tetsu-v286-Kashmir-independent-alpine-lifespan.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-kashmir-independent-alpine-lifespan-v286
+  cancel-in-progress: true
+jobs:
+  original-source-crosswalk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Synthetic crosswalk tests
+        run: |
+          python -m unittest discover -s tests -p 'test_Kashmir_external_alpine_lifespan_v286.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_annual_microsites_v285.py' -v
+      - name: Download two public and independent original Dryad version ZIPs
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v286/rail source_original/v286/alpine results/audit
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 360 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source_original/v286/rail/original_dryad_2021_99735.zip
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 360 \
+            'https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.vmcvdnd4c/download' \
+            -o source_original/v286/alpine/original_dryad_2025_alpine.zip
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, zipfile
+          files=[
+            ('source_original/v286/rail/original_dryad_2021_99735.zip','Matrix_plot.xlsx','source_original/v286/rail/Matrix_plot.xlsx'),
+            ('source_original/v286/alpine/original_dryad_2025_alpine.zip','Alpine_Check_List.xlsx','source_original/v286/alpine/Alpine_Check_List.xlsx')
+          ]
+          for archive, original_name, target in files:
+            with zipfile.ZipFile(archive) as z:
+              names=[x for x in z.infolist() if x.filename.split('/')[-1]==original_name and not x.is_dir()]
+              if len(names)!=1: raise RuntimeError('Expected exactly one original '+original_name)
+              dest=Path(target)
+              with z.open(names[0]) as src, dest.open('wb') as dst:
+                import shutil
+                shutil.copyfileobj(src,dst)
+              print(original_name,'size',dest.stat().st_size,'sha256',hashlib.sha256(dest.read_bytes()).hexdigest(),flush=True)
+          p=Path(files[0][2])
+          expected='529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474'
+          if hashlib.sha256(p.read_bytes()).hexdigest()!=expected:
+            raise ValueError('Authentic original 2021 Dryad railway SHA mismatch')
+          PY
+      - name: Original species-level life-span overlap and site-cohort impact
+        run: |
+          python -u scripts/analyze_Kashmir_external_alpine_lifespan_v286.py \
+            --rail source_original/v286/rail/Matrix_plot.xlsx \
+            --alpine source_original/v286/alpine/Alpine_Check_List.xlsx \
+            --crosswalk-output results/audit/v286_Kashmir_original_name_alpine_lifespan_crosswalk.csv \
+            --output results/audit/v286_Kashmir_alpine_trait_source_summary_only.json
+      - name: Archive only trait crosswalk + aggregate summary; never original incidence matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v286-original-independent-Kashmir-trait-overlap-aggregate
+          path: results/audit/v286_Kashmir_*
+          if-no-files-found: warn
