@@ -309,6 +309,24 @@ def run(s1:Path,s2:Path,sr70:Path,headers:Path,species:Path,
     output={}
     for panel in PANELS:
         sites,opportunity=panel_stations(eligible,metadata,panel)
+        # Metadata-only original field-support preflight; avoid calling
+        # expensive exact optimizer for a panel already proven impossible
+        # to retain >=3 original railway sampling stretches. Source
+        # geography, observed traits and outcome are not used here.
+        supported=[site for site in sites if len(site["control_options"])>=5
+                   and len({x["study"] for x in site["control_options"]})>=2]
+        n_supported_stretches=len({x["stretch"] for x in supported})
+        if n_supported_stretches<3:
+            output[panel]={
+                "source_metadata_opportunity":opportunity,
+                "source_MILP_status":{
+                    "status":"NOT_IDENTIFIABLE_METADATA_MIN5_PLOTS_2PAPERS_LT3_STRETCHES",
+                    "n_original_stretches_with_min5_distinct_publications":n_supported_stretches,
+                    "source_rail_stations_with_min5_source_plots_and_two_papers":len(supported),
+                    "not_a_zero_biological_effect":True},
+                "source_effect_identified":False
+            }
+            continue
         alloc,matchqa=exact_max_stations_with_cell_uniqueness(
             sites,geo,decimals=3,timeout_s=120)
         if alloc is None:
