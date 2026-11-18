@@ -107,7 +107,7 @@ def risk_set(source:dict,pairs:list[dict])->tuple[list[dict],dict]:
         raise ValueError("Original source road site paired plot cohort violated")
     if (len(bysite)!=main["source_sites_in_supported_equal_region_summary"]
         or len({(r,d) for r,d,s in bysite})!=main["source_roads_in_supported_equal_region_summary"]):
-        raise ValueError("v26.5 fixed original source 251 site / 20 road cohort not reproduced")
+        raise ValueError(f"v26.5 cohort gate: expected site={main['source_sites_in_supported_equal_region_summary']} road={main['source_roads_in_supported_equal_region_summary']}; got site={len(bysite)} road={len({(r,d) for r,d,s in bysite})}; by region={dict(sorted(__import__('collections').Counter(r for r,d,s in bysite).items()))}")
     qa={
         "verified_original_MIREN_MD5":"b640195cc44f252ccb6ddb28eb6fff13",
         "source_original_field_sites":len(bysite),
