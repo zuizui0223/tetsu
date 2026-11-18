@@ -1,0 +1,64 @@
+name: "v28.2 independent Czech 35 genuine railway stations matched same versus other stretch GPS"
+on:
+  push:
+    branches: [research/tetsu-Czech-independent-line-distance-v282-20261118]
+    paths:
+      - 'scripts/audit_Czech_2024_true_35_stations_stretch_geodistance_matched_v282.py'
+      - 'tests/test_Czech_author_station_stretch_geodistance_v282.py'
+      - '.github/workflows/tetsu-v282-Czech-original-stretch-geodistance-matching.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v282-original-czech-2024-true-2026-centroids
+  cancel-in-progress: true
+jobs:
+  genuine-independent-Czech-stations-source-matched:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install first-party original source XLSX reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Synthetic no-botanical-tuning Czech station/line/site-geography matching tests
+        run: python -m unittest discover -s tests -p 'test_Czech_author_station_stretch_geodistance_v282.py' -v
+      - name: Retrieve publisher-original 2024 Czech 39-station plant spreadsheet and corrected source metadata
+        run: |
+          set -euo pipefail
+          mkdir -p source/v282
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source/v282/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source/v282/S2.xlsx
+          test "$(stat -c%s source/v282/S1.xlsx)" = 79261
+          test "$(stat -c%s source/v282/S2.xlsx)" = 13533
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v282/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v282/S2.xlsx | sha256sum --check
+      - name: Fetch third-party Czech 2026 national railway station registry point derivative, strict SHA
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' \
+            -o source/v282/SR70.csv
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' \
+            'source/v282/SR70.csv' | sha256sum --check
+      - name: Independently execute Czech Preslia 761 taxa 35 geolocated stations and 5 source stretch matched contrast
+        run: |
+          mkdir -p results/audit
+          python -u scripts/audit_Czech_2024_true_35_stations_stretch_geodistance_matched_v282.py \
+            --s1 source/v282/S1.xlsx \
+            --s2 source/v282/S2.xlsx \
+            --sr70 source/v282/SR70.csv \
+            --output results/audit/v282_Czech_original_35stations_5stretches_same_other_distance_triad.json
+      - name: Preserve only descriptive population support and original-stretch aggregate scores
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v282-original-independent-Czech-35station-real-geodesic-stretch
+          path: results/audit/v282_Czech_original_35stations_5stretches_same_other_distance_triad.json
+          if-no-files-found: warn
