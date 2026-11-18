@@ -10,6 +10,8 @@ class MIRENRoadAUCTests(unittest.TestCase):
     def test_numeric_and_empty_source(self):
         self.assertEqual(m.numerical("3"),3.)
         self.assertIsNone(m.numerical(""))
+        self.assertIsNone(m.numerical("NA"))
+        self.assertIsNone(m.numerical("NaN"))
         for s in ("0","-1","not-a-number"):
             with self.assertRaises(ValueError):m.numerical(s)
 
