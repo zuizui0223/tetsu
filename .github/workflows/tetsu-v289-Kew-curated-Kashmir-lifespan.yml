@@ -1,0 +1,69 @@
+name: "v28.9 original Kashmir full 27 sites Kew-curated strict annual bounds"
+on:
+  push:
+    branches:
+      - research/tetsu-kashmir-evidence-curated-lifespan-v289-20261118
+    paths:
+      - "scripts/analyze_Kashmir_Kew_curated_strict_annual_v289.py"
+      - "tests/test_Kashmir_Kew_curated_lifespan_v289.py"
+      - "data/literature/tetsu_v289_original_name_Kew_provenance_lifespan_overrides.csv"
+      - ".github/workflows/tetsu-v289-Kew-curated-Kashmir-lifespan.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-Kashmir-verified-two-species-strict-annual-v289
+  cancel-in-progress: true
+jobs:
+  evidence-curated-original-sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Verify synthetic mathematics and two original-name curated provenance checks
+        run: |
+          python -m unittest discover -s tests -p 'test_Kashmir_Kew_curated_lifespan_v289.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_global_unknown_trait_partial_id_v288.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_global_lifecycle_source_v287.py' -v
+      - name: Fetch original 2021 Kashmir Dryad version with source checksum gate
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v289/India results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 360 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source_original/v289/India/dryad_2021_version_99735.zip
+          python - <<'PY'
+          import hashlib
+          import zipfile
+          from pathlib import Path
+          with zipfile.ZipFile('source_original/v289/India/dryad_2021_version_99735.zip') as z:
+            names=[v for v in z.infolist() if not v.is_dir() and v.filename.split('/')[-1]=='Matrix_plot.xlsx']
+            if len(names)!=1: raise ValueError("The original raw workbook must be unique")
+            p=Path('source_original/v289/India/Matrix_plot.xlsx')
+            p.write_bytes(z.read(names[0]))
+            expect='529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474'
+            if hashlib.sha256(p.read_bytes()).hexdigest()!=expect: raise ValueError("Original Kashmir 2021 source SHA mismatch")
+          PY
+      - name: Authenticate 2023 Nature Figshare global species life-cycle CSV source
+        run: |
+          python -u scripts/analyze_Kashmir_global_lifecycle_source_v287.py \
+            --rail source_original/v289/India/Matrix_plot.xlsx \
+            --crosswalk results/audit/v289_global_2023_source_crosswalk.csv \
+            --result results/audit/v289_original_global_crosswalk_coverage_audit.json
+      - name: Merge author-source two Kew proven perennials and calculate fully bounded 27-site contrast
+        run: |
+          python -u scripts/analyze_Kashmir_Kew_curated_strict_annual_v289.py \
+            --rail source_original/v289/India/Matrix_plot.xlsx \
+            --global-traits results/audit/v289_global_2023_source_crosswalk.csv \
+            --curated-traits data/literature/tetsu_v289_original_name_Kew_provenance_lifespan_overrides.csv \
+            --merged-traits results/audit/v289_global_Kew_evidence_merged_original_lifespan.csv \
+            --output results/audit/v289_original_27site_partial_id_verified.json \
+            --bootstrap 1999
+      - name: Release derivative life-span crosswalk and mathematical summary only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v289-Kashmir-original-27site-Kew-curated-partial-id-summary
+          path: results/audit/v289_*
+          if-no-files-found: warn
