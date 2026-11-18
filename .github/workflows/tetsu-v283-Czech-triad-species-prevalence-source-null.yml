@@ -1,0 +1,63 @@
+name: "v28.3 independent Czech original 35 station matched line taxa frequency null"
+on:
+  push:
+    branches: [research/tetsu-Czech-independent-line-distance-v282-20261118]
+    paths:
+      - 'scripts/audit_Czech_35station_distance_matched_species_prevalence_null_v283.py'
+      - 'tests/test_Czech_station_geodistance_taxon_fixed_source_null_v283.py'
+      - '.github/workflows/tetsu-v283-Czech-triad-species-prevalence-source-null.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v283-authentic-Czech-original-35-station-frequency-null
+  cancel-in-progress: true
+jobs:
+  genuine-original-Czech-study-five-stretch-frequency-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Pin Excel source reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Synthetic original Czech station/site frequency and geology-matched triad math QA
+        run: python -m unittest discover -s tests -p 'test_Czech_station_geodistance_taxon_fixed_source_null_v283.py' -v
+      - name: Fetch genuine publisher 2024 original Preslia S1 and corrected S2
+        run: |
+          set -euo pipefail
+          mkdir -p source/v283 results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source/v283/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source/v283/S2.xlsx
+          test "$(stat -c%s source/v283/S1.xlsx)" = 79261
+          test "$(stat -c%s source/v283/S2.xlsx)" = 13533
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v283/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v283/S2.xlsx | sha256sum --check
+      - name: Fetch genuine third-party reproduced 2026 official Czech station SR70 registry centroids
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' \
+            -o source/v283/SR70.csv
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' \
+            'source/v283/SR70.csv' | sha256sum --check
+      - name: Source authentic 761 contemporary Czech taxa 35 station 5 original stretch geo-matched 2x99 technical prevalence null
+        run: |
+          python -u scripts/audit_Czech_35station_distance_matched_species_prevalence_null_v283.py \
+            --s1 source/v283/S1.xlsx \
+            --s2 source/v283/S2.xlsx \
+            --sr70 source/v283/SR70.csv \
+            --output results/audit/v283_Czech_35stations_geodistance_real_taxon_source_frequency_null.json
+      - name: Upload author-study aggregate geo-matched source frequencies only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v283-Czech-35station-S1-S2-SR70-real-species-frequency-null
+          path: results/audit/v283_Czech_35stations_geodistance_real_taxon_source_frequency_null.json
+          if-no-files-found: warn
