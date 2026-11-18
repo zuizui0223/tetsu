@@ -1,0 +1,49 @@
+name: "v26.5 source-authentic global MIREN ROAD abundance rank resurvey comparison"
+on:
+  push:
+    branches: [research/tetsu-global-road-abundance-control-v265-20261118]
+    paths:
+      - 'scripts/audit_MIREN_original_road_resurvey_initial_abundance_auc_v265.py'
+      - 'tests/test_MIREN_initial_abundance_road_resurvey_auc_v265.py'
+      - '.github/workflows/tetsu-v265-MIREN-road-abundance-resurvey-control.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v265-global-MIREN-original-ROAD-resurvey-abundance
+  cancel-in-progress: true
+jobs:
+  source-original-mountain-road-resurvey-v265:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Run synthetic ordinal-AUC/road-region aggregation/missing-source checks
+        run: python -m unittest discover -s tests -p 'test_MIREN_initial_abundance_road_resurvey_auc_v265.py' -v
+      - name: Retrieve previously MD5-verified true Zenodo MIREN v3 original CSV, not any rail data
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v265/miren
+      - name: Verify first-party original 167804-row MIREN CSV MD5 and byte count
+        run: |
+          set -euo pipefail
+          SOURCE='source/v265/miren/source_original/MIREN_road_survey_2007_2023_v3.csv'
+          test "$(stat -c%s "$SOURCE")" = '17899241'
+          printf '%s  %s\n' \
+            'b640195cc44f252ccb6ddb28eb6fff13' "$SOURCE" | md5sum --check
+      - name: Run real original 484-site MIREN ROAD vs interior abundance and cover class AUC
+        run: |
+          python -u scripts/audit_MIREN_original_road_resurvey_initial_abundance_auc_v265.py \
+            --original-csv source/v265/miren/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --output results/audit/v265_original_MIREN_road_abundance_resurvey_auc.json
+      - name: Upload SOURCE-DERIVED aggregate only, no individual taxa or site locations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v265-original-MIREN-road-resurvey-abundance-ordinal-AUC-derived
+          path: results/audit/v265_original_MIREN_road_abundance_resurvey_auc.json
+          if-no-files-found: warn
