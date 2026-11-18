@@ -289,7 +289,7 @@ def run(xlsx:Path,audit:Path)->dict:
         "source_true_rail_route_kilometrage_nearest_different_site_within_line":values,
         "source_original_section_equal_cross_zone_species_similarity_by_route_km":bins,
         "true_railway_main_branch_or_traffic_NOT_causal_inference":True,
-        "source_plant_taxon_GPS_or_original_location_ids_NOT_exported":False,
+        "source_plant_taxon_GPS_or_original_location_ids_NOT_exported":True,
         "both_original_BS_BT_source_zones_are_railway_habitats":True,
         "zero_distance_site_vs_nonzero_nearest_does_not_separate_environment_from_seed_supply":True,
     }
