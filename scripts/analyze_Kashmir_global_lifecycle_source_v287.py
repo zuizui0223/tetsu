@@ -156,6 +156,17 @@ def main():
         # unknown categorical encoding fails closed; the report records data schema instead.
         try:
             donor,sourceinfo=parse_life_cycles(rows,namecol,spancol)
+            original_binomials={binomial(n) for n in original if binomial(n)}
+            donor_binomials={r["binomial"] for r in donor if r["binomial"]}
+            print("LIFEFORM_SCHEMA_DIAGNOSTIC "+json.dumps({
+                "original_first_names":original[:12],
+                "global_first_names":[r["name"] for r in donor[:12]],
+                "global_life_cycle_count":len(donor),
+                "original_binomial_count":len(original_binomials),
+                "global_binomial_count":len(donor_binomials),
+                "binomial_intersection_count":len(original_binomials & donor_binomials),
+                "global_example_common_species":[r["name"] for r in donor if "poa annua" in r["name"].lower()][:2]
+            },ensure_ascii=False),flush=True)
             mapping,mapping_meta=crosswalk(original,donor,allow_binomial=True)
             exact,_=crosswalk(original,donor,allow_binomial=False)
             args.crosswalk.parent.mkdir(parents=True,exist_ok=True)
