@@ -1,0 +1,65 @@
+name: "v28.8 exact 27-site unknown species life-span bounds on original Kashmir railway"
+on:
+  push:
+    branches:
+      - research/tetsu-kashmir-unknown-trait-bounds-v288-20261118
+    paths:
+      - "scripts/analyze_Kashmir_global_unknown_trait_partial_id_v288.py"
+      - "tests/test_Kashmir_global_unknown_trait_partial_id_v288.py"
+      - "scripts/analyze_Kashmir_global_lifecycle_source_v287.py"
+      - ".github/workflows/tetsu-v288-Kashmir-species-consistent-trait-bounds.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-kashmir-global-unknown-trait-partial-id-v288
+  cancel-in-progress: true
+jobs:
+  authenticated-real-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Synthetic tests for global unknown taxa sharing one label across all plots
+        run: |
+          python -m unittest discover -s tests -p 'test_Kashmir_global_unknown_trait_partial_id_v288.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_global_lifecycle_source_v287.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_annual_microsites_v285.py' -v
+      - name: Download authentic author Dryad railway original
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v288/India results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 360 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source_original/v288/India/dryad_v99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,hashlib
+          with zipfile.ZipFile('source_original/v288/India/dryad_v99735.zip') as z:
+            matches=[x for x in z.infolist() if not x.is_dir() and x.filename.split('/')[-1]=='Matrix_plot.xlsx']
+            if len(matches)!=1: raise ValueError('Expected one original 2021 Dryad railway matrix')
+            p=Path('source_original/v288/India/Matrix_plot.xlsx')
+            p.write_bytes(z.read(matches[0]))
+            expected='529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474'
+            if hashlib.sha256(p.read_bytes()).hexdigest()!=expected:raise ValueError('Dryad SHA mismatch')
+          PY
+      - name: Authenticate Nature global 235k life-span file and source-name crosswalk
+        run: |
+          python -u scripts/analyze_Kashmir_global_lifecycle_source_v287.py \
+            --rail source_original/v288/India/Matrix_plot.xlsx \
+            --crosswalk results/audit/v288_global_2023_name_trait_crosswalk.csv \
+            --result results/audit/v288_existing_50_70_traitcoverage_effect.json
+      - name: Exact original 27-site sharp bounds with one life span per unknown species
+        run: |
+          python -u scripts/analyze_Kashmir_global_unknown_trait_partial_id_v288.py \
+            --rail source_original/v288/India/Matrix_plot.xlsx \
+            --traits results/audit/v288_global_2023_name_trait_crosswalk.csv \
+            --output results/audit/v288_global_missing_species_sharp_partial_id_summary.json
+      - name: Archive only summary and source trait crosswalk, no real plot×taxon matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v288-Kashmir-genuine-27site-unknown-species-sharp-bounds
+          path: results/audit/v288_*
+          if-no-files-found: warn
