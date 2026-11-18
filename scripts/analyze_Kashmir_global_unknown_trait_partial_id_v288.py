@@ -149,6 +149,41 @@ def analyze(plots:dict,classified:dict[int,str],
     return result
 
 
+
+def unknown_taxon_priority(plots:dict,classified:dict[int,str],
+                           original_names:list[str],zone:str="Track",
+                           ref:str="Interior Plot 1",
+                           year_weights:dict[int,float] | None=None)->dict:
+    """Rank original unresolved species by exact contribution to uncertainty width.
+
+    This is a curation queue, not evidence that species are annual/perennial.
+    It reports each species name, never its original plot-by-site occurrences.
+    """
+    weights=year_weights or WEIGHTS["two_year_mean"]
+    sites=common_source_sites(plots)
+    values=[one_site_linear_contrast(plots,classified,len(original_names),
+                                     site,zone,ref,weights) for site in sites]
+    aggregate=collections.defaultdict(float)
+    for _,coeff in values:
+        accumulate(aggregate,coeff,1/len(values))
+    missing=set(range(len(original_names)))-set(classified)
+    ranked=sorted(
+        ({"original_taxon":original_names[i],
+          "source_header_index":i,
+          "coefficient_if_annual":aggregate.get(i,0.0),
+          "uncertainty_width_pp":100*abs(aggregate.get(i,0.0))}
+         for i in missing),
+        key=lambda row:(-row["uncertainty_width_pp"],row["original_taxon"]))
+    full_width=sum(row["uncertainty_width_pp"] for row in ranked)
+    for rank,item in enumerate(ranked,1):
+        item["priority_rank"]=rank
+    return {"unknown_original_taxa":len(missing),"full_sharp_range_width_pp":full_width,
+            "top5_width_contribution_pp":sum(r["uncertainty_width_pp"] for r in ranked[:5]),
+            "top5_fraction_of_width":(sum(r["uncertainty_width_pp"] for r in ranked[:5])/full_width
+                                      if full_width else None),
+            "ranked_unmatched_species":ranked,
+            "method":"pre-existing source original name; life-span annotation still unverified"}
+
 def main()->None:
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--rail",type=Path,required=True,help="SHA-authenticated 2021 Dryad Matrix_plot.xlsx")
@@ -162,7 +197,8 @@ def main()->None:
          "trait_crosswalk_sha256":trait_meta["crosswalk_sha256"],
          "partial_identification_not_observed_trait_complete_effect":True,
          "author_species_by_plot_records_not_redistributed":True,
-         "original_study_effect":analyze(plots,classified,len(names))}
+         "original_study_effect":analyze(plots,classified,len(names)),
+         "unclassified_original_taxa_curation_priority":unknown_taxon_priority(plots,classified,names)}
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(out,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     main=out["original_study_effect"]["comparisons"]["Track__minus__Interior Plot 1"]
@@ -173,6 +209,7 @@ def main()->None:
        "Track_minus_Interior1":main,
        "Track_minus_Interior2":out["original_study_effect"]["comparisons"]["Track__minus__Interior Plot 2"]["all"],
        "Track_minus_Embankment":out["original_study_effect"]["comparisons"]["Track__minus__Embankment"]["all"],
+       "unknown_trait_priority":out["unclassified_original_taxa_curation_priority"],
        "output_path":str(args.output)},ensure_ascii=False))
 
 
