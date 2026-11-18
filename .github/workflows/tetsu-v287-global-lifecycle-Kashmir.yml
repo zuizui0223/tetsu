@@ -1,0 +1,60 @@
+name: "v28.7 global 235k-species life-cycle labels x authentic Kashmir railway"
+on:
+  push:
+    branches:
+      - research/tetsu-global-life-cycle-235k-v287-20261118
+    paths:
+      - "scripts/analyze_Kashmir_global_lifecycle_source_v287.py"
+      - "tests/test_Kashmir_global_lifecycle_source_v287.py"
+      - ".github/workflows/tetsu-v287-global-lifecycle-Kashmir.yml"
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-global-lifecycle-2023-kashmir-2021-v287
+  cancel-in-progress: true
+jobs:
+  original-source-macro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Source-schema and fail-closed six-site QA
+        run: |
+          python -m unittest discover -s tests -p 'test_Kashmir_global_lifecycle_source_v287.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_external_alpine_lifespan_v286.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_annual_microsites_v285.py' -v
+      - name: Download original immutable railway Dryad version 99735
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v287/India results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 360 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source_original/v287/India/dryad_v99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,hashlib
+          archive=Path('source_original/v287/India/dryad_v99735.zip')
+          with zipfile.ZipFile(archive) as z:
+            files=[f for f in z.infolist() if not f.is_dir() and f.filename.split('/')[-1]=='Matrix_plot.xlsx']
+            if len(files)!=1: raise ValueError('Expected original 2021 Matrix_plot.xlsx exactly once')
+            p=Path('source_original/v287/India/Matrix_plot.xlsx')
+            p.write_bytes(z.read(files[0]))
+            expect='529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474'
+            if hashlib.sha256(p.read_bytes()).hexdigest()!=expect:
+              raise ValueError('Genuine original Dryad 2021 checksum does not match')
+          PY
+      - name: Fetch original Nature/figshare global life-cycle data and calculate strict annual track contrast
+        run: |
+          python -u scripts/analyze_Kashmir_global_lifecycle_source_v287.py \
+            --rail source_original/v287/India/Matrix_plot.xlsx \
+            --crosswalk results/audit/v287_genuine_global_trait_crosswalk_matched_taxa.csv \
+            --result results/audit/v287_Kashmir_global_lifecycle_verified_summary.json
+      - name: Archive derivative summary only; original plant matrix excluded
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v287-2023-global-life-cycle-x-2021-Kashmir-source-summary
+          path: results/audit/v287_*
+          if-no-files-found: warn
