@@ -1,0 +1,58 @@
+name: "v26.0 Kashmir within-site 2014 cover AUC track versus adjacent plots"
+on:
+  push:
+    branches: [research/tetsu-local-source-2014-2017-v258-20261118]
+    paths:
+      - 'scripts/audit_Kashmir_same_sites_early_cover_AUC_track_vs_adjacent_v260.py'
+      - 'tests/test_Kashmir_matched_zone_auc_v260.py'
+      - '.github/workflows/tetsu-v260-Kashmir-track-vs-interior-cover-persistence.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v260-Kashmir-original-source-matched-plots-early-cover
+  cancel-in-progress: true
+jobs:
+  authenticate-original-and-measure-matched-site-cover-auc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install original XLSX read-only parser
+        run: pip install 'openpyxl==3.1.5'
+      - name: Synthetic paired-site AUC support / bootstrap / rank tests
+        run: python -m unittest discover -s tests -p 'test_Kashmir_matched_zone_auc_v260.py' -v
+      - name: Download authentic original Dryad archive and hard-check source digest
+        run: |
+          set -euo pipefail
+          mkdir -p source/v260/india results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/v260/india/dryad_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,shutil
+          with zipfile.ZipFile('source/v260/india/dryad_99735.zip') as z:
+              matches=[v for v in z.infolist() if not v.is_dir() and v.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(matches)!=1:raise ValueError('Not exactly one original Dryad matrix')
+              with z.open(matches[0]) as f,Path('source/v260/india/Matrix_plot.xlsx').open('wb') as out:
+                  shutil.copyfileobj(f,out)
+          PY
+          test "$(stat -c%s source/v260/india/Matrix_plot.xlsx)" = "122187"
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/v260/india/Matrix_plot.xlsx | sha256sum --check
+      - name: Compare original 2014 cover AUC on exactly matched spatial sites and years
+        run: |
+          python -u scripts/audit_Kashmir_same_sites_early_cover_AUC_track_vs_adjacent_v260.py \
+            --source source/v260/india/Matrix_plot.xlsx \
+            --output results/audit/v260_Kashmir_matched_site_track_vs_embankment_interior_AUC.json \
+            --bootstrap 1999
+      - name: Archive only aggregate matched-site field summaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v260-original-Dryad-rail-vs-adjacent-matched-site-cover-AUC
+          path: results/audit/v260_Kashmir_matched_site_track_vs_embankment_interior_AUC.json
+          if-no-files-found: warn
