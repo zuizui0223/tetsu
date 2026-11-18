@@ -1,0 +1,8 @@
+study_id,continent,country,independent_original_study,source_zone_design,recorded_units,annual_effect_status,annual_effect_delta,main_gate,source_url
+SI_Sabic_2026,Europe,Slovenia,true,ballast_shoulder_vs_ballast_toe,89_matched_field_sites,quantitative_original_source_verified,0.054703,"BS vs BT differs from Track vs Interior; 2022/23 same source study",https://doi.org/10.1007/s44473-026-00155-z
+IN_Rashid_2021,Asia,India,true,track_embankment_interior1_interior2,31_sites_27_all_zones_complete,raw_matrix_verified_traits_unmapped,,"123-taxon life-span crosswalk not yet authenticated; two years one study",https://doi.org/10.1111/1365-2664.13961
+FR_Rakotoson_2025,Europe,France,true,track_vs_embankment,394_2m2_quadrats,qualitative_published_only,,"Annual/ruderal enrichment known direction; raw species-by-plot matrix not public",https://doi.org/10.1111/wre.70025
+CN_Li_2026,Asia,China_Laos,true,rail_disturbed_station_vs_undisturbed,84_plots,unverified,,"Raw zone taxonomy and life spans not verified",https://doi.org/10.1016/j.jenvman.2026.130380
+BR_Mendes_2026,South_America,Brazil,true,rail_platform_edge_four_stretches,400_1m2_quadrats,not_comparable,,"No matched non-rail outside; published 2026-11-13; 2023 thesis not new field study",https://doi.org/10.1590/2175-7860202677029
+CZ_Kutlvasr_2024,Europe,Czech_Republic,true,railway_station_mixed_habitats,39_stations,not_comparable,,"Station-by-taxon data not a matched ballast-outside contrast",https://doi.org/10.23855/preslia.2024.247
+IT_Adorni_2020,Europe,Italy,true,railway_station_mixed_habitats,28_stations,not_comparable,,"Station list and functional data; zone gradient not authenticated",https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf
