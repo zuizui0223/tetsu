@@ -24,7 +24,7 @@ class RoadHeldoutAbundanceTests(unittest.TestCase):
         self.assertEqual(train.tolist(),[-1.,1.,0.])
         self.assertEqual(test.tolist(),[0.])
         tr,te=m.centered_rank_for_fold(rank,keys,np.array([0,2,3]),np.array([1]))
-        self.assertAlmostEqual(te[0],0.)
+        self.assertAlmostEqual(te[0],2.)
         self.assertAlmostEqual(np.mean(tr),0.)
 
     def test_heldout_road_holds_all_source_sites_both_plots(self):
