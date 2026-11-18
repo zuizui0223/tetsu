@@ -1,0 +1,53 @@
+name: "v26.7 source-authentic MIREN ROAD leave-whole-region-out rank transfer"
+on:
+  push:
+    branches: [research/tetsu-miren-region-holdout-v267-20261118]
+    paths:
+      - 'scripts/analyze_MIREN_source_region_holdout_abundance_v267.py'
+      - 'tests/test_MIREN_region_holdout_abundance_v267.py'
+      - '.github/workflows/tetsu-v267-MIREN-whole-region-holdout.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v267-real-source-MIREN-whole-region-out
+  cancel-in-progress: true
+jobs:
+  source-authentic-7-region-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install fixed sparse source prediction dependencies
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'scikit-learn==1.7.2'
+      - name: Five mathematical tests for source REGION holdout and unseen species
+        env: {OPENBLAS_NUM_THREADS: '1', OMP_NUM_THREADS: '1'}
+        run: python -m unittest discover -s tests -p 'test_MIREN_region_holdout_abundance_v267.py' -v
+      - name: Restore original-MD5 audited Zenodo 2025 MIREN mountain ROAD dataset
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v267/MIREN
+      - name: Fail closed if author original MIREN 17.9 MB file bytes or MD5 drift
+        run: |
+          set -euo pipefail
+          SOURCE='source/v267/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv'
+          test "$(stat -c%s "$SOURCE")" = 17899241
+          printf '%s  %s\n' \
+            'b640195cc44f252ccb6ddb28eb6fff13' "$SOURCE" | md5sum --check
+      - name: Real original 7-REGION heldout source predictions, 2012plus, known/unseen taxa
+        env: {OPENBLAS_NUM_THREADS: '1', OMP_NUM_THREADS: '1'}
+        run: |
+          python -u scripts/analyze_MIREN_source_region_holdout_abundance_v267.py \
+            --original-csv source/v267/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --output results/audit/v267_MIREN_7Region_out_initial_rank_taxon_re_recording.json
+      - name: Preserve derived region-level predictive score results, never source raw records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v267-original-MIREN-ROAD-7-region-holdout-unseen-taxon-derived
+          path: results/audit/v267_MIREN_7Region_out_initial_rank_taxon_re_recording.json
+          if-no-files-found: warn

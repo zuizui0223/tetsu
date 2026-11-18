@@ -1,0 +1,52 @@
+name: "v26.8 source-authentic MIREN ROAD same taxon both habitats whole-REGION-out"
+on:
+  push:
+    branches: [research/tetsu-miren-region-holdout-v267-20261118]
+    paths:
+      - 'scripts/analyze_MIREN_source_taxon_matched_road_interior_region_holdout_v268.py'
+      - 'tests/test_MIREN_same_taxon_both_plot_region_holdout_v268.py'
+      - '.github/workflows/tetsu-v268-MIREN-taxonomic-matched-region-holdout.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v268-MIREN-ROAD-same-original-taxon-two-habitat-region-out
+  cancel-in-progress: true
+jobs:
+  true-source-shared-taxon-contrasts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install deterministic original MIREN sparse prediction requirements
+        run: pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'scikit-learn==1.7.2'
+      - name: Synthetic tests source matched taxon and paired sampling grain
+        env: {OPENBLAS_NUM_THREADS: '1', OMP_NUM_THREADS: '1'}
+        run: python -m unittest discover -s tests -p 'test_MIREN_same_taxon_both_plot_region_holdout_v268.py' -v
+      - name: Restore original source MIREN author data under prior MD5 signed artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v268/MIREN
+      - name: Verify original MIREN published source checksum and byte count
+        run: |
+          set -euo pipefail
+          SOURCE='source/v268/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv'
+          test "$(stat -c%s "$SOURCE")" = '17899241'
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' "$SOURCE" | md5sum --check
+      - name: Genuine 7-REGION-out same-source-taxon paired roadside vs interior prediction
+        env: {OPENBLAS_NUM_THREADS: '1', OMP_NUM_THREADS: '1'}
+        run: |
+          python -u scripts/analyze_MIREN_source_taxon_matched_road_interior_region_holdout_v268.py \
+            --original-csv source/v268/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --output results/audit/v268_MIREN_source_taxon_matched_RAIL_NEGATIVE_CONTROL_ROAD.json
+      - name: Archive derived macro level only, no source site/taxon table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v268-source-original-MIREN-ROAD-same-taxon-road-inland-macro-summary
+          path: results/audit/v268_MIREN_source_taxon_matched_RAIL_NEGATIVE_CONTROL_ROAD.json
+          if-no-files-found: warn
