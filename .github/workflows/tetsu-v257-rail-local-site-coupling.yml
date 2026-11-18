@@ -1,0 +1,73 @@
+name: "v25.7 original two-study railway same-site vs reassigned-site plant similarity"
+on:
+  push:
+    branches: [research/tetsu-beta-turnover-nestedness-v256-20261118]
+    paths:
+      - 'scripts/analyze_rail_local_site_coupling_v257.py'
+      - 'tests/test_rail_local_site_coupling_v257.py'
+      - '.github/workflows/tetsu-v257-rail-local-site-coupling.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v257-source-matched-site-null
+  cancel-in-progress: true
+jobs:
+  source-authentic-within-location-overlap-null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Synthetic exact derangement / Jaccard tests
+        run: python -m unittest discover -s tests -p 'test_rail_local_site_coupling_v257.py' -v
+      - name: Download published Dryad Kashmir ZIP version and hard-check source XLSX digest
+        run: |
+          set -euo pipefail
+          mkdir -p source/v257/kashmir source/v257/slovenia results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/v257/kashmir/dryad_99735.zip
+          python - <<'PY'
+          import zipfile,shutil
+          from pathlib import Path
+          with zipfile.ZipFile('source/v257/kashmir/dryad_99735.zip') as z:
+              xs=[x for x in z.infolist() if not x.is_dir() and x.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(xs)!=1:raise ValueError('Dryad source file must occur exactly once')
+              with z.open(xs[0]) as f,open('source/v257/kashmir/Matrix_plot.xlsx','wb') as o:
+                  shutil.copyfileobj(f,o)
+          PY
+          test "$(stat -c%s source/v257/kashmir/Matrix_plot.xlsx)" = "122187"
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/v257/kashmir/Matrix_plot.xlsx | sha256sum --check
+      - name: Restore strictly source-verified original Slovenia author supplement
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v257/slovenia
+      - name: Verify original Slovenia source before demographic/site beta analysis
+        run: |
+          set -euo pipefail
+          SOURCE='source/v257/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SOURCE")" = "401279"
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SOURCE" | sha256sum --check
+      - name: Evaluate 999 source site-label reassignments without duplicating observations
+        run: |
+          python -u scripts/analyze_rail_local_site_coupling_v257.py \
+            --kashmir-source source/v257/kashmir/Matrix_plot.xlsx \
+            --slovenia-xlsx source/v257/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --slovenia-audit source/v257/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v257_rail_source_within_location_vs_reassigned_site_999.json \
+            --draws 999
+      - name: Upload only derived two-study diagnostics, never original species-by-site
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v257-source-rail-site-identity-local-pool-vs-pairing-null
+          path: results/audit/v257_rail_source_within_location_vs_reassigned_site_999.json
+          if-no-files-found: warn
