@@ -117,7 +117,7 @@ def blocks_by_source_year(first:list[dict])->tuple[dict,dict]:
     qualified={reg:roads for reg,roads in blocks.items() if len(roads)>=MIN_ROADS_REGION}
     qa={
         "n_source_original_first_2012plus_site_rows":len(recent),
-        "n_road_year_strata_with_four_original_sites":sum(len(x) for x in blocks.values()),
+        "n_road_year_strata_with_four_original_sites":sum(len(years) for roads in blocks.values() for years in roads.values()),
         "n_road_year_strata_supported_in_two_road_regions":sum(len(g) for roads in qualified.values() for g in roads.values()),
         "n_source_regions_with_min_two_original_roads":len(qualified),
         "n_original_source_roads":sum(len(x) for x in qualified.values()),
