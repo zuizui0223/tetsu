@@ -197,7 +197,7 @@ def output_panel(bysection:dict,*,mode:str,radius:float,draws:int=DRAWS,
     return qc,all_sections
 
 
-def intersection_stats(panels:dict,mode:str)->dict:
+def intersection_stats(panels:dict,mode:str,draws:int=DRAWS)->dict:
     # Same exact original source sections across *all 5 radii*.
     name=lambda x: "ALL" if math.isinf(x) else f"{x:g}km"
     members=[{k for k,v in panels[mode][name(r)]["source_internal"].items()
@@ -211,7 +211,7 @@ def intersection_stats(panels:dict,mode:str)->dict:
         sub=[panels[mode][key]["source_internal"][section] for section in sorted(shared)]
         observed={m:mean(x["observed"][m] for x in sub) for m in METRICS}
         nul=[{m:mean(x["null_draws"][j][m] for x in sub) for m in METRICS}
-             for j in range(DRAWS)]
+             for j in range(draws)]
         val=finish_null(observed,nul)
         result[key]={
             "actual_source_original_section_n":len(sub),
@@ -251,7 +251,7 @@ def run(xlsx:Path,sourceaudit:Path,draws:int=DRAWS,
     if abs(all_unrestricted["section_equal_original_observed_and_local_frequency_fixed_null"][
         "beta_jac"]["observed"]-.6367636451153651)>1e-10:
         raise ValueError("True source 14-line equal mean observed Jaccard drift from v27.3")
-    common={mode:intersection_stats(allout,mode) for mode in MODES}
+    common={mode:intersection_stats(allout,mode,draws) for mode in MODES}
     # Remove per-original-railway-section internal ephemeral source plant
     # maps/coupled MCMC draws; only section-level aggregate metrics remain.
     compressed={
