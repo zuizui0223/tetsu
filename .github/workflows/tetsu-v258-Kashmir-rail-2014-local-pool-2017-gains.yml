@@ -1,0 +1,57 @@
+name: "v25.8 source-authentic Kashmir 2014 local flora predict 2017 rail gains"
+on:
+  push:
+    branches: [research/tetsu-local-source-2014-2017-v258-20261118]
+    paths:
+      - 'scripts/analyze_Kashmir_2014_local_flora_predict_2017_rail_gains_v258.py'
+      - 'tests/test_Kashmir_local_flora_gain_v258.py'
+      - '.github/workflows/tetsu-v258-Kashmir-rail-2014-local-pool-2017-gains.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v258-source-kashmir-local-2014-flora-temporal-2017
+  cancel-in-progress: true
+jobs:
+  original-source-baseline-flora-gain-prediction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Test synthetic temporal target leakage and exact local-null expectation
+        run: python -m unittest discover -s tests -p 'test_Kashmir_local_flora_gain_v258.py' -v
+      - name: Acquire official original Dryad version archive; strict original SHA gate
+        run: |
+          set -euo pipefail
+          mkdir -p source/v258/india results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/v258/india/original_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,shutil
+          f=Path('source/v258/india/original_99735.zip')
+          with zipfile.ZipFile(f) as z:
+              matches=[v for v in z.infolist() if not v.is_dir() and v.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(matches)!=1:raise RuntimeError('Not exactly one real source Matrix_plot.xlsx')
+              with z.open(matches[0]) as stream,Path('source/v258/india/Matrix_plot.xlsx').open('wb') as out:
+                  shutil.copyfileobj(stream,out)
+          PY
+          test "$(stat -c%s source/v258/india/Matrix_plot.xlsx)" = "122187"
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/v258/india/Matrix_plot.xlsx | sha256sum --check
+      - name: Analyze source-verified 2014 neighborhood seed-pool indicator vs 2017 track recorded gains
+        run: |
+          python -u scripts/analyze_Kashmir_2014_local_flora_predict_2017_rail_gains_v258.py \
+            --source source/v258/india/Matrix_plot.xlsx \
+            --output results/audit/v258_Kashmir_2014_local_source_2017_track_gain_predicted.json \
+            --draws 999
+      - name: Archive derived diagnostics without raw taxon lists or site GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v258-original-Dryad-local-source-gain-diagnostics
+          path: results/audit/v258_Kashmir_2014_local_source_2017_track_gain_predicted.json
+          if-no-files-found: warn
