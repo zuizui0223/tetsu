@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/analyze_Czech_35stations_same_stretch_pladias_dispersal_guild_v284.py'
       - 'scripts/audit_Pladias_original_semantic_trait_fingerprint_v284.py'
+      - 'tests/test_Pladias_semantic_trait_fingerprint_v284.py'
       - 'tests/test_Czech_original_Pladias_dispersal_trait_matched_v284.py'
       - '.github/workflows/tetsu-v284-Czech-35station-dispersal-lifeform-network.yml'
   workflow_dispatch:
@@ -23,7 +24,9 @@ jobs:
       - name: Install exact read-only XLSX parser
         run: python -m pip install 'openpyxl==3.1.5'
       - name: Five mathematical matched original Czech station and four-guild incidence-frequency exact-null tests
-        run: python -m unittest discover -s tests -p 'test_Czech_original_Pladias_dispersal_trait_matched_v284.py' -v
+        run: |
+          python -m unittest discover -s tests -p 'test_Pladias_semantic_trait_fingerprint_v284.py' -v
+          python -m unittest discover -s tests -p 'test_Czech_original_Pladias_dispersal_trait_matched_v284.py' -v
       - name: Retrieve genuine Czech Preslia author original 2024 S1 and corrected S2 from publisher
         run: |
           set -euo pipefail
