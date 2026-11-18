@@ -56,7 +56,7 @@ from audit_RAIL_ROAD_source_frequency_fixed_reference_null_v270 import (
 
 CONFIGS={
     "primary":{"dist":160.,"caliper":10.,"area":None},
-    "same_1970s_source_station_area":{"dist":160.,"caliper":10.,"area":.5}
+    "source_station_area_log_difference_le_0p5":{"dist":160.,"caliper":10.,"area":.5}
 }
 SCOPE=("original_35_stations_total_species_frequency",
        "original_5_stretches_species_frequency")
