@@ -81,9 +81,10 @@ class ActualHistoricalTrafficSourceTests(unittest.TestCase):
     def test_missing_source_site_no_zero_imputation_and_source_line_consistency(self):
         traffic=[{"sid":"A","section":"10","source_segment":"X",
                   "freight":150,"passenger":500,"year":2022}]
-        segment,qc=m.join_and_group(traffic,{})
-        self.assertEqual(len(segment),0)
-        self.assertEqual(qc["mapped_sites_on_original_singleton_line_without_local_reference_null"],1)
+        # Unsupported zero-observed traffic sites must FAIL CLOSED, not be
+        # manufactured as a fake 9-segment zero-exposure ecological panel.
+        with self.assertRaises(ValueError):
+            m.join_and_group(traffic,{})
         with self.assertRaises(ValueError):
             m.join_and_group(traffic,{"A":{
                 "section":"20","local_excess_beta":.1,
