@@ -1,0 +1,49 @@
+name: "v27.2 original global MIREN ROAD native alien source frequency fixed coupling"
+on:
+  push:
+    branches: [research/tetsu-rail-road-replacement-v269-20261118]
+    paths:
+      - 'scripts/analyze_MIREN_native_alien_road_local_reference_frequency_null_v272.py'
+      - 'tests/test_MIREN_native_alien_original_source_frequency_v272.py'
+      - '.github/workflows/tetsu-v272-MIREN-status-native-alien-frequency-null.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v272-original-MIREN-native-alien-source-margins
+  cancel-in-progress: true
+jobs:
+  source-original-region-native-alien-plant-status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Validate original nativity conflicts, positive plots, site-road support and exact source beta
+        run: python -m unittest discover -s tests -p 'test_MIREN_native_alien_original_source_frequency_v272.py' -v
+      - name: Retrieve author-original MIREN 2025 Zenodo original source via previously signed audit
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v272/MIREN
+      - name: Validate author-original 167804-row CSV MD5
+        run: |
+          set -euo pipefail
+          SOURCE='source/v272/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv'
+          test "$(stat -c%s "$SOURCE")" = 17899241
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' "$SOURCE" | md5sum --check
+      - name: Estimate author-original regional Native and Alien source microhabitat beta and frequency-null
+        run: |
+          python -u scripts/analyze_MIREN_native_alien_road_local_reference_frequency_null_v272.py \
+            --miren-csv source/v272/MIREN/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --output results/audit/v272_original_global_ROAD_region_Native_Alien_beta_local_reference_frequency_null.json \
+            --draws 79 --burnin 2500 --spacing 300
+      - name: Keep only source regional aggregates/QA, never exact taxon-site or GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v272-global-MIREN-original-Native-Alien-region-macro-frequency-null
+          path: results/audit/v272_original_global_ROAD_region_Native_Alien_beta_local_reference_frequency_null.json
+          if-no-files-found: warn
