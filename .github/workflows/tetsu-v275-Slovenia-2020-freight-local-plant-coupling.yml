@@ -1,0 +1,65 @@
+name: "v27.5 Slovenian original 2020 actual traffic vs original 2022-23 local rail plant excess"
+on:
+  push:
+    branches: [research/tetsu-Slovenia-traffic-local-coupling-v274-20261118]
+    paths:
+      - 'scripts/analyze_Slovenia_historical_train_frequency_local_species_coupling_v275.py'
+      - 'tests/test_Slovenia_real_train_freight_local_species_coupling_v275.py'
+      - '.github/workflows/tetsu-v275-Slovenia-2020-freight-local-plant-coupling.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v275-genuine-SI-2020-freight-physical-plant-coupling
+  cancel-in-progress: true
+jobs:
+  original-publisher-railway-and-official-train-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install genuine station operator PDF tables decoder, not OCR
+        run: python -m pip install 'pdfplumber==0.11.7'
+      - name: Mathematical physical segment and exact original 48 within-line traffic reassignments
+        run: python -m unittest discover -s tests -p 'test_Slovenia_real_train_freight_local_species_coupling_v275.py' -v
+      - name: Restore source authentic author Slovenia original plant XLSX
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v275/Slovenia
+      - name: Verify original CC-BY publisher source sha256 401279 bytes
+        run: |
+          set -euo pipefail
+          SOURCE='source/v275/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SOURCE")" = '401279'
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SOURCE" | sha256sum --check
+      - name: Retrieve operator 2023 TRUE railway station route chainage PDF and verify SHA in source code
+        run: |
+          set -euo pipefail
+          mkdir -p source/v275/official results/audit
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 120 \
+            --user-agent 'tetsu-original-operator-railways-2023-source/1.0' \
+            'https://infrastruktura.sz.si/wp-content/uploads/2023/02/NS_2023_1.2_Annex_2B_Stations.pdf' \
+            -o source/v275/official/NS_2023_1.2_Annex_2B_Stations.pdf
+          test "$(stat -c%s source/v275/official/NS_2023_1.2_Annex_2B_Stations.pdf)" -gt 50000
+          sha256sum source/v275/official/NS_2023_1.2_Annex_2B_Stations.pdf
+      - name: Rebuild genuine 9 2020 historical traffic segments, local source frequency fixed residual, 48 line shuffles
+        run: |
+          python -u scripts/analyze_Slovenia_historical_train_frequency_local_species_coupling_v275.py \
+            --original-xlsx source/v275/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v275/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --official-station-pdf source/v275/official/NS_2023_1.2_Annex_2B_Stations.pdf \
+            --output results/audit/v275_original_SI_2020_freight_passenger_vs_local_species_coupling.json \
+            --draws 99
+      - name: Archive only nine-source physical segment aggregate, no site GPS or species
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v275-source-Slovenia-2020-train-volume-original-BS-BT-local-plants
+          path: results/audit/v275_original_SI_2020_freight_passenger_vs_local_species_coupling.json
+          if-no-files-found: warn
