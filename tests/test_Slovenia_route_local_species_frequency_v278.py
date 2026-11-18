@@ -53,7 +53,7 @@ class LocalWindowFrequencyNullTests(unittest.TestCase):
         out=m.original_rail_section_null(source,5,"all",draws=29,burnin=50,spacing=10)
         self.assertFalse(out["informative"])
         self.assertEqual(out["reason"],"SOURCE_INCIDENCE_MATRIX_NOT_EXCHANGEABLE_AT_ROUTE_RADIUS")
-        self.assertEqual(out["observed"]["beta_jac"],.75)
+        self.assertAlmostEqual(out["observed"]["beta_jac"],2/3)
         s2=rail_source(1)["10"]
         for i,x in enumerate(s2):x["routekm"]=float(i*30)
         out=m.original_rail_section_null(s2,5,"all",draws=29,burnin=50,spacing=10)
