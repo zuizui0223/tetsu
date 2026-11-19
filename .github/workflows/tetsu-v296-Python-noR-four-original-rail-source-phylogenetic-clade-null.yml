@@ -4,6 +4,9 @@ on:
     branches: [research/tetsu-4rail-phylogenetic-clade-depth-null-v296-20261119]
     paths:
       - 'scripts/prepare_Europe_4original_rail_phylogeny_audit_source_v295.py'
+      - 'scripts/audit_VPhyloMaker2_RData_python_no_R_environment_v296.py'
+      - 'scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py'
+      - 'tests/test_4rail_true_phylogeny_clade_null_python_v296.py'
       - 'scripts/audit_Europe_original_4rail_VPhyloMaker2_three_megatrees_v295.R'
       - 'tests/test_original_4rail_phylogeny_audit_source_v295.py'
       - '.github/workflows/tetsu-v296-Python-noR-four-original-rail-source-phylogenetic-clade-null.yml'
