@@ -15,7 +15,7 @@ def synthetic_study():
     sites=[]
     for g in range(3):
         for i in range(4):
-            pool={names[(j+i*3+g*7)%60] for j in range(23)}
+            pool={names[(j+i*5+g*20)%60] for j in range(23)}
             sites.append({'station':f'site_{g}_{i}','group':f'field_region{g}',
                           'taxa':pool})
     return sites,traits
