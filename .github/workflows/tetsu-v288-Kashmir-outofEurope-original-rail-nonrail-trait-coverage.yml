@@ -27,8 +27,22 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p source/v288/India source/v288/LEDA results/audit
-          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
-            'https://datadryad.org/api/v2/files/546003/download' -o source/v288/India/Matrix_plot.xlsx
+          # The public per-file endpoint returns HTTP 401 in hosted CI; use the
+          # previously successful version-99735 publisher archive (v25.6).
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/v288/India/dryad_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import shutil,zipfile
+          with zipfile.ZipFile('source/v288/India/dryad_99735.zip') as z:
+              candidates=[f for f in z.infolist()
+                          if not f.is_dir() and f.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(candidates)!=1:
+                  raise RuntimeError('Original Dryad archive must contain exactly one Matrix_plot.xlsx')
+              with z.open(candidates[0]) as handle, Path('source/v288/India/Matrix_plot.xlsx').open('wb') as out:
+                  shutil.copyfileobj(handle,out)
+          PY
           test "$(stat -c%s source/v288/India/Matrix_plot.xlsx)" = '122187'
           printf '%s  %s\n' \
             '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
