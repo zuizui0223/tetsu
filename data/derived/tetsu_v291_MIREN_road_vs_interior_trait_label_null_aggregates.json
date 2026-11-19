@@ -14,7 +14,9 @@
     "per_null_mode_technical_draws": 598,
     "real_source_site_species_incidence_held_fixed": true,
     "not_a_railway_field_dataset": true,
-    "same_MIREN_program_not_8_or_5_independent_papers": true
+    "same_MIREN_program_not_8_or_5_independent_papers": true,
+    "canonical_source_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44462368280/artifacts/14500352634",
+    "aggregation_check": "Source archive full precision; no raw data included"
   },
   "outcome": "Original same road different site CWM distances; species-by-site observed minus within-source REGION paired trait-label shuffle null; sites -> roads -> regions weighted equally",
   "primary_panel": {
@@ -39,8 +41,8 @@
           -0.08562530595273958,
           -0.0490288259336468
         ],
-        "observed_roadside_minus_interior": -0.093148836743,
-        "null_expected_roadside_minus_interior": -0.0299286910837
+        "observed_roadside_minus_interior": -0.0931493207367427,
+        "null_expected_roadside_minus_interior": -0.02992917507743902
       },
       "seed_mass": {
         "roadside": 0.05991771482760438,
@@ -59,14 +61,14 @@
     "occupancy_quintile_null": {
       "joint": {
         "roadside": 0.13786563177526714,
-        "interior": 0.201422613014,
-        "roadside_minus_interior": -0.063556981239,
+        "interior": 0.20142280214152927,
+        "roadside_minus_interior": -0.06355717036626214,
         "region_n_difference_negative": 4
       },
       "height": {
         "roadside": 0.11604552727482026,
-        "interior": 0.167265695,
-        "roadside_minus_interior": -0.051220167,
+        "interior": 0.16726591621440645,
+        "roadside_minus_interior": -0.05122038893958619,
         "region_n_difference_negative": 4,
         "LOO_region_mean_range": [
           -0.06492698336835832,
@@ -75,12 +77,11 @@
       },
       "seed_mass": {
         "roadside": 0.07367450624951188,
-        "interior": 0.112127737,
-        "roadside_minus_interior": -0.038453231,
+        "interior": 0.11212772376767674,
+        "roadside_minus_interior": -0.03845321751816487,
         "region_n_difference_negative": 4
       }
     }
   },
-  "caveat": "Some convenient rounded numeric values in this prose summary are rounded; machine canonical full-precision per-region values are in source artifact and are the only canonical values.",
   "causal_scope": "No causal rail-specific selection, mowing, gust, railway seed dispersal or adapted genotypes identified; Swedish missing source site×taxon cannot be included"
 }
