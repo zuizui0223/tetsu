@@ -332,9 +332,9 @@ for(ti in seq_along(BACKBONES)) {
         original_observed_exact_backbone_CWM_joint2D=original_raw[["joint"]],
         observed_minus_clade_null_joint2D=if(is.null(values))NA_real_ else values$excess[["joint"]],
         original_site_species_geography_FIXED=TRUE,
-        2D_LEDA_height_and_seed_mass_paired_vector_preserved=TRUE,
+        `2D_LEDA_height_and_seed_mass_paired_vector_preserved`=TRUE,
         tree_tip_NOT_guaranteed_to_have_own_sequenced_DNA=TRUE,
-        stringsAsFactors=FALSE)
+        stringsAsFactors=FALSE,check.names=FALSE)
     }
   }
 }
