@@ -108,7 +108,12 @@ for (model in models) {
     original_site_heights <- vapply(site_chunks,function(x)mean(x$zlog_canopy_height),numeric(1))
     matches_per_site <- vapply(site_chunks,
       function(x)sum(vapply(x$taxon,exists,logical(1),envir=tipset,inherits=FALSE)),integer(1))
-    frac_per_site <- matches_per_site / lengths(site_chunks)
+    # R lengths(data.frame) counts COLUMNS, not original species rows!
+    # The denominator must be actual observed species per ORIGINAL source site.
+    species_n_per_site <- vapply(site_chunks,nrow,integer(1))
+    frac_per_site <- matches_per_site / species_n_per_site
+    if (any(frac_per_site < 0 | frac_per_site > 1 | !is.finite(frac_per_site)))
+       stop("Original source site-tip fraction outside [0,1]")
     all_raw_height <- cmw_beta(original_site_heights,groups)
     if(!is.finite(all_raw_height) ||
        abs(all_raw_height-known_height_beta[[study]])>1e-10) {
