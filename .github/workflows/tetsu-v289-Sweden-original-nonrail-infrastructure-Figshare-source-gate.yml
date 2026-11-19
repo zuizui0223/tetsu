@@ -1,0 +1,36 @@
+name: "v28.9 Swedish original Figshare non-rail corridor plant-source schema audit"
+on:
+  push:
+    branches: [research/tetsu-Sweden-nonrail-transport-controls-v289-20261119]
+    paths:
+      - 'scripts/audit_Figshare_Sweden_nonrail_infrastructure_source_opportunity_v289.py'
+      - 'tests/test_Figshare_Sweden_nonrail_source_schema_v289.py'
+      - '.github/workflows/tetsu-v289-Sweden-original-nonrail-infrastructure-Figshare-source-gate.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v289-authentic-publisher-nonrail-source
+  cancel-in-progress: true
+jobs:
+  source-authentic-public-nonrail-corridor-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install source spreadsheet reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Seven source schema and raw-private-row exclusion synthetic tests
+        run: python -m unittest discover -s tests -p 'test_Figshare_Sweden_nonrail_source_schema_v289.py' -v
+      - name: Verify both actual author Figshare DOI version metadata + source MD5, audit plant matrix schema
+        run: |
+          python -u scripts/audit_Figshare_Sweden_nonrail_infrastructure_source_opportunity_v289.py \
+            --output results/audit/tetsu_v289_Sweden_open_original_nonrail_transport_Figshare_plants_source_schema.json
+      - name: Publish only provenance and schema, never location/source rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v289-original-public-nonrail-corridor-plant-source-schema
+          path: results/audit/tetsu_v289_Sweden_open_original_nonrail_transport_Figshare_plants_source_schema.json
+          if-no-files-found: warn
