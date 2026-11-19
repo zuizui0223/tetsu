@@ -147,7 +147,7 @@ def construct_original_region_tree_panel(original_roads, original_zlog_traits, t
                 for taxon in row[zone]:P[i,position[taxon]]=1
             if np.any(P.sum(axis=1)<site_species_threshold):
                 raise ValueError('Original source matched site species richness not preserved after tree')
-            occ+=P.sum(axis=0)
+            occ+=P.sum(axis=0,dtype=np.int64)
             matrices[zone]=P/P.sum(axis=1)[:,None]
         road_design.append(matrices)
     if np.any(occ<=0) or not np.all(np.isfinite(trait)):
