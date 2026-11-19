@@ -1,0 +1,175 @@
+{
+  "version": "v29.7",
+  "original_source_run": "https://github.com/zuizui0223/tetsu/actions/runs/44543008509",
+  "original_aggregate_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44543008509/artifacts/14538279120",
+  "source_authentic": true,
+  "original_MIREN_mountain_ROADS_program_not_rail_study": true,
+  "original_source_MIREN_Zenodo_DOI": "10.5281/zenodo.15749536",
+  "original_MIREN_csv_md5": "b640195cc44f252ccb6ddb28eb6fff13",
+  "original_plant_occurrence_rows": 167804,
+  "original_matched_both_LEDA_species": 1096,
+  "MIREN_source_species": 5739,
+  "original_VPhyloMaker2_commit": "7af3fb5152f691af2e4ec9d5e2e467d1b50505e9",
+  "original_tree_cut": "75% original root to tip median branch length, true source clade, paired original LE DA vectors",
+  "original_field_study_programs_n": 1,
+  "phylogeny_versions_are_sensitivity_not_independent_studies": true,
+  "original_source_full_primary_panel": {
+    "original_region_codes": 8,
+    "original_roads": 22,
+    "original_paired_sites": 272,
+    "minimum_original_joint_trait_species_each_habitat": 5,
+    "min_original_trait_fraction_each_habitat": 0.25
+  },
+  "original_source_full_strict_panel": {
+    "original_region_codes": 5,
+    "original_roads": 13,
+    "original_paired_sites": 192,
+    "minimum_original_joint_trait_species_each_habitat": 10,
+    "min_original_trait_fraction_each_habitat": 0.5
+  },
+  "primary_75pct": {
+    "LCVP": {
+      "regions_used": 5,
+      "region_codes_supported": [
+        "AUT",
+        "CHE",
+        "IND",
+        "ITA",
+        "NOR"
+      ],
+      "original_paired_sites_remaining": 210,
+      "roadside": 0.09120396195611474,
+      "interior": 0.11535722002780964,
+      "roadside_minus_interior": -0.024153258071694897,
+      "positive_roadside_regions": 5,
+      "positive_interior_regions": 4,
+      "negative_roadside_minus_interior_regions": 2,
+      "difference_LOO_range": [
+        -0.03900407184725374,
+        -0.0035551834146850623
+      ]
+    },
+    "WP": {
+      "regions_used": 5,
+      "region_codes_supported": [
+        "AUT",
+        "CHE",
+        "IND",
+        "ITA",
+        "NOR"
+      ],
+      "original_paired_sites_remaining": 210,
+      "roadside": 0.09353586992504087,
+      "interior": 0.11830766193215939,
+      "roadside_minus_interior": -0.024771792007118522,
+      "positive_roadside_regions": 5,
+      "positive_interior_regions": 4,
+      "negative_roadside_minus_interior_regions": 3,
+      "difference_LOO_range": [
+        -0.04060285233680716,
+        -0.007406055942832567
+      ]
+    },
+    "TPL": {
+      "regions_used": 6,
+      "region_codes_supported": [
+        "AUT",
+        "CHE",
+        "IND",
+        "ITA",
+        "NOR",
+        "ORE"
+      ],
+      "original_paired_sites_remaining": 224,
+      "roadside": 0.06908666090286858,
+      "interior": 0.10464695862104663,
+      "roadside_minus_interior": -0.035560297718178036,
+      "positive_roadside_regions": 5,
+      "positive_interior_regions": 5,
+      "negative_roadside_minus_interior_regions": 3,
+      "difference_LOO_range": [
+        -0.04998594319178203,
+        -0.021390499710082257
+      ]
+    }
+  },
+  "strict_75pct": {
+    "LCVP": {
+      "regions_used": 5,
+      "region_codes_supported": [
+        "AUT",
+        "CHE",
+        "IND",
+        "ITA",
+        "NOR"
+      ],
+      "original_paired_sites_remaining": 185,
+      "roadside": 0.08733756021145406,
+      "interior": 0.10282077749314962,
+      "roadside_minus_interior": -0.015483217281695577,
+      "positive_roadside_regions": 5,
+      "positive_interior_regions": 4,
+      "negative_roadside_minus_interior_regions": 2,
+      "difference_LOO_range": [
+        -0.031714269448260946,
+        0.004594015275453254
+      ]
+    },
+    "WP": {
+      "regions_used": 4,
+      "region_codes_supported": [
+        "AUT",
+        "CHE",
+        "IND",
+        "ITA"
+      ],
+      "original_paired_sites_remaining": 129,
+      "roadside": 0.0855100557217556,
+      "interior": 0.10703969049161498,
+      "roadside_minus_interior": -0.021529634769859383,
+      "positive_roadside_regions": 4,
+      "positive_interior_regions": 3,
+      "negative_roadside_minus_interior_regions": 2,
+      "difference_LOO_range": [
+        -0.046519596021823324,
+        -0.0013888809064879007
+      ]
+    },
+    "TPL": {
+      "regions_used": 5,
+      "region_codes_supported": [
+        "AUT",
+        "CHE",
+        "IND",
+        "ITA",
+        "NOR"
+      ],
+      "original_paired_sites_remaining": 186,
+      "roadside": 0.08973909585410306,
+      "interior": 0.10274097126812151,
+      "roadside_minus_interior": -0.013001875414018463,
+      "positive_roadside_regions": 5,
+      "positive_interior_regions": 4,
+      "negative_roadside_minus_interior_regions": 2,
+      "difference_LOO_range": [
+        -0.028920693331292553,
+        0.0062600403000816485
+      ]
+    }
+  },
+  "unidentifiable_phylogeny_cut_depths": [
+    0.25,
+    0.5
+  ],
+  "critical_limit": "0/8 etc under .25/.50 clade null reflects fewer than five source multi-species exchangeable clades, NOT absence of biology",
+  "estimand": "Source original within-road between-site CWM height observed minus true original phylo clade label permutation null, source region-equal descriptive mean",
+  "limitations": [
+    "Original region support shrinks and differs across backbones, 8 to 5/6 primary codes, 5 to 4/5 strict",
+    "Road-minus-inland average negative, regional signs mixed; strict LCVP and TPL LOO span zero",
+    "Only one MIREN mountain road field program, not 5 or 8 independent publications",
+    "True original tree tip does not prove own DNA sequenced",
+    "Observational flora only; cannot attribute railway seed dispersal, mowing, wind or plant genetic adaptation",
+    "Three alternative trees are sensitivity, not three independent ecological studies"
+  ],
+  "canon_full_precision_per_region_source_artifact_only": true
+}
