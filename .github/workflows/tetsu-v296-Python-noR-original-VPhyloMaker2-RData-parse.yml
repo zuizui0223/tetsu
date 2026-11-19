@@ -1,0 +1,62 @@
+name: "v29.6 Python no-R parse genuine published LCVP WP TPL phylo RData source"
+on:
+  push:
+    branches: [research/tetsu-4rail-phylogenetic-clade-depth-null-v296-20261119]
+    paths:
+      - 'scripts/audit_VPhyloMaker2_RData_python_no_R_environment_v296.py'
+      - '.github/workflows/tetsu-v296-Python-noR-original-VPhyloMaker2-RData-parse.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v296-original-three-VphyloMegatree-pure-python-source
+  cancel-in-progress: true
+jobs:
+  genuine-author-RData-tree-source-no-R-or-apt:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pure Python RData decoder and numerical arrays; NO R installation
+        run: python -m pip install 'rdata==1.1.0' 'numpy>=1.26,<3'
+      - name: Validate original source parser imports and synthetic genus metadata checks
+        run: |
+          python -m compileall -q scripts/audit_VPhyloMaker2_RData_python_no_R_environment_v296.py
+          python - <<'PY'
+          from pathlib import Path
+          import sys
+          sys.path.insert(0,'scripts')
+          import audit_VPhyloMaker2_RData_python_no_R_environment_v296 as x
+          assert len(x.TREES)==3
+          assert x.unwrap_tree({'edge':[[3,1],[3,2]]})['edge']==[[3,1],[3,2]]
+          try: x.unwrap_tree(None)
+          except ValueError: pass
+          else: raise AssertionError('Source taxon tree reader did not fail closed')
+          print('Source tree parser basic source-schema tests PASS')
+          PY
+      - name: Fetch original V.PhyloMaker2 2022 published S3 phylo backbones pinned to immutable git commit
+        run: |
+          set -euo pipefail
+          mkdir -p source/v296/VPhyloMaker2 results/audit
+          PREFIX='https://raw.githubusercontent.com/jinyizju/V.PhyloMaker2/7af3fb5152f691af2e4ec9d5e2e467d1b50505e9/data'
+          for TREE in LCVP WP TPL; do
+            curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+              "$PREFIX/GBOTB.extended.$TREE.rda" \
+              -o "source/v296/VPhyloMaker2/GBOTB.extended.$TREE.rda"
+          done
+          test "$(git hash-object source/v296/VPhyloMaker2/GBOTB.extended.LCVP.rda)" = '0d761cb0bf36392cc13759a7ac9026db564217eb'
+          test "$(git hash-object source/v296/VPhyloMaker2/GBOTB.extended.WP.rda)" = '8d3777762cb32a80e8c6ea097a0456e2b63a94c6'
+          test "$(git hash-object source/v296/VPhyloMaker2/GBOTB.extended.TPL.rda)" = 'd7bc9b69bf3cb11c3c3d090282723b6e73b1de55'
+      - name: Parse all three genuine original phylo S3 source trees using Python-only rdata, no original tip identities exported
+        run: |
+          python -u scripts/audit_VPhyloMaker2_RData_python_no_R_environment_v296.py \
+            --tree-dir source/v296/VPhyloMaker2 \
+            --output results/audit/v296_three_original_megatree_Python_RData_source_qa.json
+      - name: Archive only original mega-tree metadata and source fingerprints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v296-Python-only-genuine-VPhyloMaker2-three-original-phylo-tree-QA
+          path: results/audit/v296_three_original_megatree_Python_RData_source_qa.json
+          if-no-files-found: warn

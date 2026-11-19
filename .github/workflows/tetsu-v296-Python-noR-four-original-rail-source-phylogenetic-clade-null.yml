@@ -1,0 +1,156 @@
+name: "v29.6 SOURCE four real rail studies x three V.PhyloMaker2 clade-depth null pure Python NO R"
+on:
+  push:
+    branches: [research/tetsu-4rail-phylogenetic-clade-depth-null-v296-20261119]
+    paths:
+      - 'scripts/prepare_Europe_4original_rail_phylogeny_audit_source_v295.py'
+      - 'scripts/audit_VPhyloMaker2_RData_python_no_R_environment_v296.py'
+      - 'scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py'
+      - 'tests/test_4rail_true_phylogeny_clade_null_python_v296.py'
+      - 'scripts/audit_Europe_original_4rail_VPhyloMaker2_three_megatrees_v295.R'
+      - 'tests/test_original_4rail_phylogeny_audit_source_v295.py'
+      - '.github/workflows/tetsu-v296-Python-noR-four-original-rail-source-phylogenetic-clade-null.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v296-4-original-railstudies-real-3phylo-Python-noR
+  cancel-in-progress: true
+jobs:
+  original-four-independent-publisher-studies-source-gated:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install source authentic XLSX/PDF and numerical readers
+        run: python -m pip install 'PyMuPDF==1.24.14' 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'rdata==1.1.0'
+      - name: Verify nine true phylogenetic branch-clade and six author-original site field sample synthetic mathematical tests
+        run: |
+          python -m unittest discover -s tests -p 'test_original_4rail_phylogeny_audit_source_v295.py' -v
+          python -m unittest discover -s tests -p 'test_4rail_true_phylogeny_clade_null_python_v296.py' -v
+          python -u scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py --self-test
+      - name: Authenticate Preslia original 2024 39-station S1 and erratum S2
+        run: |
+          set -euo pipefail
+          mkdir -p source/v295/CZ source/v295/IT source/v295/HR source/v295/LEDA results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' -o source/v295/CZ/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' -o source/v295/CZ/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v295/CZ/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v295/CZ/S2.xlsx | sha256sum --check
+      - name: Authenticate Italian 2020 Parma 28 true station source museum PDF SHA
+        run: |
+          set -euo pipefail
+          # Original institution TLS expiration documented in original v24.5;
+          # this is safe only because source PDF bytes MUST match pinned SHA.
+          curl --insecure -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+            -o source/v295/IT/Parma2020.pdf
+          printf '%s  %s\n' \
+            'c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787' \
+            source/v295/IT/Parma2020.pdf | sha256sum --check
+      - name: Authenticate genuine Croatian Bosnian one 2017 publisher study original PDF
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://hrcak.srce.hr/file/282429' -o source/v295/HR/Jasprica2017.pdf
+          printf '%s  %s\n' \
+            '90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956' \
+            source/v295/HR/Jasprica2017.pdf | sha256sum --check
+      - name: Restore authenticated Slovenian 2026 original author 89 genuine 100m railway sites and metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v295/SI
+      - name: Source immutable Slovenian original XLSX checksum
+        run: |
+          set -euo pipefail
+          SRC='source/v295/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = '401279'
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SRC" | sha256sum --check
+      - name: Restore pinned original Oldenburg University LEDA paired trait coordinates
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v295/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v295/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v295/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v295/LEDA/seed_mass.txt | sha256sum --check
+      - name: Validate four true original author field study site-by-species cohorts, write original-species rows ONLY into private runner temp
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v295-private-source"
+          python -u scripts/prepare_Europe_4original_rail_phylogeny_audit_source_v295.py \
+            --cz-s1 source/v295/CZ/S1.xlsx --cz-s2 source/v295/CZ/S2.xlsx \
+            --it-pdf source/v295/IT/Parma2020.pdf --hr-pdf source/v295/HR/Jasprica2017.pdf \
+            --si-xlsx source/v295/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --si-audit source/v295/SI/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --height source/v295/LEDA/canopy_height.txt --seed source/v295/LEDA/seed_mass.txt \
+            --private-source-csv "$RUNNER_TEMP/v295-private-source/original_site_taxon_LEDA_PRIVATE.csv" \
+            --aggregate-qa results/audit/v295_original_four_publisher_railway_studies_source_QA.json
+      - name: Retrieve three pinned original V.PhyloMaker2 GBOTB TPL LCVP WP evolutionary backbone source files and verify exact git blob SHA
+        run: |
+          set -euo pipefail
+          mkdir -p source/v295/VPhyloMaker2
+          PREFIX='https://raw.githubusercontent.com/jinyizju/V.PhyloMaker2/7af3fb5152f691af2e4ec9d5e2e467d1b50505e9/data'
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            "$PREFIX/GBOTB.extended.LCVP.rda" -o source/v295/VPhyloMaker2/GBOTB.extended.LCVP.rda
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            "$PREFIX/GBOTB.extended.WP.rda" -o source/v295/VPhyloMaker2/GBOTB.extended.WP.rda
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            "$PREFIX/GBOTB.extended.TPL.rda" -o source/v295/VPhyloMaker2/GBOTB.extended.TPL.rda
+          test "$(git hash-object source/v295/VPhyloMaker2/GBOTB.extended.LCVP.rda)" = '0d761cb0bf36392cc13759a7ac9026db564217eb'
+          test "$(git hash-object source/v295/VPhyloMaker2/GBOTB.extended.WP.rda)" = '8d3777762cb32a80e8c6ea097a0456e2b63a94c6'
+          test "$(git hash-object source/v295/VPhyloMaker2/GBOTB.extended.TPL.rda)" = 'd7bc9b69bf3cb11c3c3d090282723b6e73b1de55'
+          echo 'All three original V.PhyloMaker2 megatree source objects match fixed public repository Git blob digests'
+      - name: Authenticate genuine 4 original author source floras and three real phylogenetic RData backbones, then run exact-tip height/seed trait-label clade null in Python
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          python -u scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py \
+            --private-original-source "$RUNNER_TEMP/v295-private-source/original_site_taxon_LEDA_PRIVATE.csv" \
+            --tree-dir source/v295/VPhyloMaker2 \
+            --draws 199 \
+            --output results/audit/v296_four_original_rail_3tree_true_clade_source_and_height_beta.json
+      - name: Verify only real source 4 independently published field studies and 3 repeated taxonomy backbones in aggregate
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,math
+          p=Path('results/audit/v296_four_original_rail_3tree_true_clade_source_and_height_beta.json')
+          j=json.loads(p.read_text(encoding='utf8'))
+          assert j['version']=='v29.6' and j['original_independent_publisher_studies_n']==4
+          assert j['original_study_physical_field_sites_n']==171
+          assert len(j['source_studies_original_phylo_branch_length_clade_analyses'])==3
+          for tree,src in j['source_studies_original_phylo_branch_length_clade_analyses'].items():
+              assert len(src['original_studies'])==4
+              for study,record in src['original_studies'].items():
+                  assert len(record['four_original_phylo_label_nulls'])==4
+                  assert 0 <= record['source_original_community_and_true_tip_support_QA']['source_original_field_site_median_fraction_of_direct_tip_species'] <= 1
+          print('AUTHENTIC ORIGINAL author plant studies × unaugmented phylogeny × original fixed-site source control PASS')
+          PY
+      - name: Archive source-authenticated only four original railway publication level phylogenetic clade effects, no original plant species rows or phylo original leaves
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v296-source-authentic-Python-only-3original-phylo-backbone-4rail-clade-null
+          path: |
+            results/audit/v295_original_four_publisher_railway_studies_source_QA.json
+            results/audit/v296_four_original_rail_3tree_true_clade_source_and_height_beta.json
+          if-no-files-found: warn
