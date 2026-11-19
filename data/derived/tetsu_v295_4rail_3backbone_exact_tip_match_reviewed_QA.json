@@ -1,0 +1,161 @@
+{
+  "version": "v29.5 reviewed original tree baseline",
+  "source_verified_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44517543086",
+  "source_verified_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44517543086/artifacts/14526930803",
+  "source_tree_author_repo_commit": "7af3fb5152f691af2e4ec9d5e2e467d1b50505e9",
+  "no_new_tree_grafted_species": true,
+  "no_claim_of_DNA_sequence_for_each_tip": true,
+  "original_independent_publications": 4,
+  "original_source_sites_total": 171,
+  "review_correction": "Original first-run R site median matching fraction invalid: used number of data.frame columns, not source plot species count; excluded entirely from this report; corresponding script fixed 2026-11-19. Original tree exact-tip species counts and observed CWM height beta remain unaffected. Recalculation attempted but R apt-get 503 infrastructure error.",
+  "corrected_source_site_fraction_not_yet_source_verified": true,
+  "source_by_tree_and_study": {
+    "LCVP": {
+      "original_source_tree_git_blob": "0d761cb0bf36392cc13759a7ac9026db564217eb",
+      "original_field_publications": [
+        {
+          "study": "CZ_Czechia",
+          "original_true_field_sites": 39,
+          "original_dual_LEDA_species": 507,
+          "exact_original_megatree_backbone_tip_species": 433,
+          "exact_tip_fraction": 0.854043392504931,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.117898697617946,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.115896747380225,
+          "site_count_with_at_least_5_original_direct_tips": 39,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "IT_Italy_Parma",
+          "original_true_field_sites": 28,
+          "original_dual_LEDA_species": 271,
+          "exact_original_megatree_backbone_tip_species": 245,
+          "exact_tip_fraction": 0.9040590405904059,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.139613658320724,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.136848676217088,
+          "site_count_with_at_least_5_original_direct_tips": 28,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "HR_BA_2017_one_study",
+          "original_true_field_sites": 15,
+          "original_dual_LEDA_species": 190,
+          "exact_original_megatree_backbone_tip_species": 163,
+          "exact_tip_fraction": 0.8578947368421053,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.188748319827503,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.1928370852884,
+          "site_count_with_at_least_5_original_direct_tips": 15,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "SI_Slovenia_100m_track",
+          "original_true_field_sites": 89,
+          "original_dual_LEDA_species": 224,
+          "exact_original_megatree_backbone_tip_species": 195,
+          "exact_tip_fraction": 0.8705357142857143,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.241022032054856,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.273269737385033,
+          "site_count_with_at_least_5_original_direct_tips": 89,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        }
+      ]
+    },
+    "WP": {
+      "original_source_tree_git_blob": "8d3777762cb32a80e8c6ea097a0456e2b63a94c6",
+      "original_field_publications": [
+        {
+          "study": "CZ_Czechia",
+          "original_true_field_sites": 39,
+          "original_dual_LEDA_species": 507,
+          "exact_original_megatree_backbone_tip_species": 416,
+          "exact_tip_fraction": 0.8205128205128205,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.117898697617946,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.111559522478825,
+          "site_count_with_at_least_5_original_direct_tips": 39,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "IT_Italy_Parma",
+          "original_true_field_sites": 28,
+          "original_dual_LEDA_species": 271,
+          "exact_original_megatree_backbone_tip_species": 242,
+          "exact_tip_fraction": 0.8929889298892989,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.139613658320724,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.132856099063241,
+          "site_count_with_at_least_5_original_direct_tips": 28,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "HR_BA_2017_one_study",
+          "original_true_field_sites": 15,
+          "original_dual_LEDA_species": 190,
+          "exact_original_megatree_backbone_tip_species": 161,
+          "exact_tip_fraction": 0.8473684210526315,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.188748319827503,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.202736623392164,
+          "site_count_with_at_least_5_original_direct_tips": 15,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "SI_Slovenia_100m_track",
+          "original_true_field_sites": 89,
+          "original_dual_LEDA_species": 224,
+          "exact_original_megatree_backbone_tip_species": 189,
+          "exact_tip_fraction": 0.84375,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.241022032054856,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.251815943995816,
+          "site_count_with_at_least_5_original_direct_tips": 89,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        }
+      ]
+    },
+    "TPL": {
+      "original_source_tree_git_blob": "d7bc9b69bf3cb11c3c3d090282723b6e73b1de55",
+      "original_field_publications": [
+        {
+          "study": "CZ_Czechia",
+          "original_true_field_sites": 39,
+          "original_dual_LEDA_species": 507,
+          "exact_original_megatree_backbone_tip_species": 444,
+          "exact_tip_fraction": 0.8757396449704142,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.117898697617946,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.117758595809626,
+          "site_count_with_at_least_5_original_direct_tips": 39,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "IT_Italy_Parma",
+          "original_true_field_sites": 28,
+          "original_dual_LEDA_species": 271,
+          "exact_original_megatree_backbone_tip_species": 248,
+          "exact_tip_fraction": 0.915129151291513,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.139613658320724,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.134910314590972,
+          "site_count_with_at_least_5_original_direct_tips": 28,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "HR_BA_2017_one_study",
+          "original_true_field_sites": 15,
+          "original_dual_LEDA_species": 190,
+          "exact_original_megatree_backbone_tip_species": 170,
+          "exact_tip_fraction": 0.8947368421052632,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.188748319827503,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.200609743136368,
+          "site_count_with_at_least_5_original_direct_tips": 15,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        },
+        {
+          "study": "SI_Slovenia_100m_track",
+          "original_true_field_sites": 89,
+          "original_dual_LEDA_species": 224,
+          "exact_original_megatree_backbone_tip_species": 202,
+          "exact_tip_fraction": 0.9017857142857143,
+          "source_original_full_bivariate_trait_CWM_height_beta": 0.241022032054856,
+          "source_exact_tip_bivariate_trait_CWM_height_beta": 0.251253493136368,
+          "site_count_with_at_least_5_original_direct_tips": 89,
+          "old_site_tip_fraction_median_DO_NOT_USE": true
+        }
+      ]
+    }
+  }
+}
