@@ -4,6 +4,7 @@ on:
     branches: [research/tetsu-original-4rail-three-megatree-tip-coverage-v295-20261119]
     paths:
       - 'scripts/prepare_Europe_4original_rail_phylogeny_audit_source_v295.py'
+      - 'scripts/audit_Europe_original_4rail_VPhyloMaker2_three_megatrees_v295.R'
       - 'tests/test_original_4rail_phylogeny_audit_source_v295.py'
       - '.github/workflows/tetsu-v295-four-original-rail-VPhyloMaker2-backbone-source-audit.yml'
   workflow_dispatch:
