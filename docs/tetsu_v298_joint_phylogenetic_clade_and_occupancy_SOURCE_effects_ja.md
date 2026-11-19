@@ -2,9 +2,9 @@
 
 解析時点：2026-11-19 JST。元publisherの鉄道植物原著4研究、独立のMIREN mountain ROADS field program 1件、Oldenburg LEDA高さ・種子重量、V.PhyloMaker2 original LCVP/WP/TPL 3樹の真正SHA/MD5を使用。
 
-SOURCE source-runの最初の完全な原データ計算（https://github.com/zuizui0223/tetsu/actions/runs/44547195906 ）では、4鉄道出版×3treeの既存v29.6 clade75 original source係数12点と、MIREN v29.7 tree×primary/strictの元Region集合・site数・roadside/ inland とその差の基準係数を全6パネル再現した後、新しいclade75×source occupancy bin joint nullを完走した。最後のGitHub CI checkerに出力キー名「source_panels / original_panels」の不一致があり、そのCI自体はFAIL。**新数値はSOURCE計算完走・公開集計から独立検算済みだが、修正したCIの最終完走を待っている**。元真観察行・数式・source support閾値は一切変更していない。
+**最終真正SOURCE成功**：[GitHub Actions #44547819438](https://github.com/zuizui0223/tetsu/actions/runs/44547819438) は原著資料4出版＋MIREN原167,804観測行＋LEDA原2表＋元公開系統樹3本を真正SHA照合し、数理テスト、既存v29.6の12組の原著系統帰無係数、v29.7の6 tree×support-panel基準（元region/元site/道路・内陸高さ）をすべて元SOURCEから再現した後、v29.8新規同時条件帰無を計算し、最終CI源研究・識別可能性・集計スキーマまで全通過。source-authenticated正本は [artifact #14542595533](https://github.com/zuizui0223/tetsu/actions/runs/44547819438/artifacts/14542595533)。最初のrun #44547195906は新値を全計算後、最終checkerの参照キーの誤記のみでFAILしたが、これを変更後に元publisherデータも改めて全再計算し、真正のsource研究値と同じ数値を再現。別の独立したソース派生集計検算も成功。元真観察行・帰無数式・source support閾値は一切変更していない。
 
-元SOURCE集計artifact： https://github.com/zuizui0223/tetsu/actions/runs/44547195906/artifacts/14540484122 。資料は4原著出版社の元生物観察＋LEDA2原著源ハッシュ＋published元系統tree原バイナリGit blobハッシュを固定し、元個別site/taxon/GPSは公開していない。
+元SOURCEの最終成功artifact： https://github.com/zuizui0223/tetsu/actions/runs/44547819438/artifacts/14542595533 。資料は4原著出版社の元生物観察＋LEDA2原著源ハッシュ＋published元系統tree原バイナリGit blobハッシュを固定し、元個別site/taxon/GPSは公開していない。
 
 ## 数理検定の意味
 
