@@ -347,14 +347,14 @@ def run(s1:Path,s2:Path,sr70:Path,headers:Path,species:Path,
             old_score=score["source_trait_beta_components"]["CWM_2D_Euclidean"][
                 "all_14_source_station_pairs"][
                 "mean_original_technical_rarefied_RAIL_minus_nearby_context"]
-            if abs(old_score-OLD_100M_SOURCE_2D["rail_minus_local_nontransport_CWM_beta"])>1e-9:
+            if abs(old_score-(-0.42673326131926104))>1e-9:
                 from hashlib import sha256
                 rows=[f'{eligible[i]["id"]}:{",".join(sorted(p["id"] for p in arr))}'
                       for i,arr in sorted(alloc.items())]
                 digest=sha256("|".join(rows).encode()).hexdigest()
                 raise ValueError(
                     f"True original v28.6 14/70 control source 2D baseline changed: "
-                    f"new={old_score:.12f}, expected={OLD_100M_SOURCE_2D['rail_minus_local_nontransport_CWM_beta']:.12f}, "
+                    f"new={old_score:.12f}, exact_prior_original_v28_6=-0.426733261319, "
                     f"selected_railway_station_n={len(alloc)}, original_plot_allocation_sha256={digest}, "
                     f"source_MILP={matchqa.get('status')}"
                 )
