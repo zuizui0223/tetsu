@@ -1,0 +1,80 @@
+{
+  "version": "v29.3",
+  "empirical_status": "SOURCE_AUTHENTICATED",
+  "source_run": "https://github.com/zuizui0223/tetsu/actions/runs/44476119363",
+  "source_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44476119363/artifacts/14506416561",
+  "source_note": "Four independently published original European railway field studies, five countries; source author original PDFs/XLSX and Oldenburg LEDA pinned; 171 original source field units, not 171 equivalent stations",
+  "experimental_design": "Original source species-by-site geographic structure completely frozen, paired height/seed traits shuffled within original study genus only. Original study-level CWM means; 2x299 technical label shuffles, not independent field p-values",
+  "independences": {
+    "original_study_n": 4,
+    "multiple_countries_hr_ba_same_paper": true,
+    "slovenia_89_are_original_100m_track_locations": true
+  },
+  "studies": [
+    {
+      "id": "CZ_Czechia",
+      "actual_field_units": 39,
+      "joint_leda_taxa": 507,
+      "original_genera": 282,
+      "multi_species_genera": 100,
+      "exchangeable_source_occurrence_fraction": 0.6560884293100374,
+      "height_v285_occupancy_quintile_excess": 0.05481851038601343,
+      "height_v293_genus_excess": 0.007899686894602617,
+      "height_genus_technical_upper_rank": 0.00667779632721202,
+      "joint_v285_excess": 0.05853444003573853,
+      "joint_v293_excess": 0.010315485829160087
+    },
+    {
+      "id": "IT_Italy_Parma",
+      "actual_field_units": 28,
+      "joint_leda_taxa": 271,
+      "original_genera": 176,
+      "multi_species_genera": 54,
+      "exchangeable_source_occurrence_fraction": 0.5604125736738703,
+      "height_v285_occupancy_quintile_excess": 0.038809797789880585,
+      "height_v293_genus_excess": 0.004432047173827419,
+      "height_genus_technical_upper_rank": 0.22036727879799667,
+      "joint_v285_excess": 0.048721801571997375,
+      "joint_v293_excess": 0.0036586952272057716
+    },
+    {
+      "id": "HR_BA_2017_one_study",
+      "actual_field_units": 15,
+      "joint_leda_taxa": 190,
+      "original_genera": 130,
+      "multi_species_genera": 35,
+      "exchangeable_source_occurrence_fraction": 0.48415300546448087,
+      "height_v285_occupancy_quintile_excess": 0.09918912960928948,
+      "height_v293_genus_excess": 0.01725435627986599,
+      "height_genus_technical_upper_rank": 0.05843071786310518,
+      "joint_v285_excess": 0.0701185532444843,
+      "joint_v293_excess": 0.014274761897531851
+    },
+    {
+      "id": "SI_Slovenia_100m_track",
+      "actual_field_units": 89,
+      "joint_leda_taxa": 224,
+      "original_genera": 167,
+      "multi_species_genera": 42,
+      "exchangeable_source_occurrence_fraction": 0.47476552032157215,
+      "height_v285_occupancy_quintile_excess": 0.07878120980772302,
+      "height_v293_genus_excess": -0.004464893349074961,
+      "height_genus_technical_upper_rank": 0.7913188647746243,
+      "joint_v285_excess": 0.08019057964601856,
+      "joint_v293_excess": -0.008156999366512818
+    }
+  ],
+  "study_equal_descriptive": {
+    "height_v285_broad_null": 0.06789966189822663,
+    "height_v293_genus_null": 0.006280299249805266,
+    "joint_v285_broad_null": 0.06439134362455969,
+    "joint_v293_genus_null": 0.005022985896846223,
+    "height_genus_positive_studies": 3,
+    "original_studies": 4,
+    "genus_study_LOO_height_mean_minmax": [
+      0.002622280239785025,
+      0.009862030116098675
+    ]
+  },
+  "caution": "The difference between two trait-label nulls is NOT phylogenetic variance explained; genus singleton species remain fixed and source LEDA missingness is nonrandom. No field p-values, rail-vs-nonrail treatment or genetic adaptation identified."
+}
