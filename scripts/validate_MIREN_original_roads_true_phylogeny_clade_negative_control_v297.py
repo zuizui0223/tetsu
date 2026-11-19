@@ -333,7 +333,7 @@ def run(miren:Path,height:Path,seed:Path,tree_dir:Path,output:Path,
                 unsupported=[]
                 for region,source in dat['original_source_region_results'].items():
                     modes=source['conditional_trait_label_nulls']
-                    if modes is None or modes[mode]['effects'] is None:
+                    if modes is None or modes[mode].get('source_original_region_two_zone_effects') is None:
                         unsupported.append(region);continue
                     for zone in signed:
                         for metric in SCIENTIFIC_METRICS:
