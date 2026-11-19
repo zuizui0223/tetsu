@@ -23,7 +23,7 @@ from prepare_Europe_4original_rail_phylogeny_audit_source_v295 import (
 
 STUDIES=("CZ_Czechia","IT_Italy_Parma","HR_BA_2017_one_study","SI_Slovenia_100m_track")
 SITES=(39,28,15,89)
-MODELS=("original_source_tip_occupancy_quintile",
+MODES=("original_source_tip_occupancy_quintile",
         "source_tree_clade_rootdepth_fraction_0.25",
         "source_tree_clade_rootdepth_fraction_0.50",
         "source_tree_clade_rootdepth_fraction_0.75")
