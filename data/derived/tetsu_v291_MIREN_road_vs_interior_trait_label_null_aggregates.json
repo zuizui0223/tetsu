@@ -1,0 +1,86 @@
+{
+  "version": "v29.1",
+  "empirical_status": "SOURCE_VERIFIED",
+  "original_source": "MIREN ROADS v3 Zenodo 10.5281/zenodo.15749536",
+  "publication": "Haider et al. 2026 GEB 10.1111/geb.70284",
+  "provenance": {
+    "source_run_url": "https://github.com/zuizui0223/tetsu/actions/runs/44462368280",
+    "source_artifact_id": 14500352634,
+    "miren_csv_md5": "b640195cc44f252ccb6ddb28eb6fff13",
+    "original_occurrence_rows": 167804,
+    "original_binomial_taxa": 5739,
+    "joint_LEDA_trait_taxa": 1096,
+    "original_4_European_study_zlog_calibration_is_frozen": true,
+    "per_null_mode_technical_draws": 598,
+    "real_source_site_species_incidence_held_fixed": true,
+    "not_a_railway_field_dataset": true,
+    "same_MIREN_program_not_8_or_5_independent_papers": true
+  },
+  "outcome": "Original same road different site CWM distances; species-by-site observed minus within-source REGION paired trait-label shuffle null; sites -> roads -> regions weighted equally",
+  "primary_panel": {
+    "source_region_codes": 8,
+    "source_roads": 22,
+    "source_spatial_sites": 272,
+    "joint_trait_species_per_plot_minimum": 5,
+    "joint_trait_coverage_fraction_minimum": 0.25,
+    "occupancy_quintile_null": {
+      "joint": {
+        "roadside": 0.09781637895934095,
+        "interior": 0.14687877179244888,
+        "roadside_minus_interior": -0.04906239283310791,
+        "region_n_difference_negative": 6
+      },
+      "height": {
+        "roadside": 0.0730889172873733,
+        "interior": 0.13630906294667697,
+        "roadside_minus_interior": -0.06322014565930367,
+        "region_n_difference_negative": 7,
+        "LOO_region_mean_range": [
+          -0.08562530595273958,
+          -0.0490288259336468
+        ],
+        "observed_roadside_minus_interior": -0.093148836743,
+        "null_expected_roadside_minus_interior": -0.0299286910837
+      },
+      "seed_mass": {
+        "roadside": 0.05991771482760438,
+        "interior": 0.06722953359086938,
+        "roadside_minus_interior": -0.007311818763264992,
+        "region_n_difference_negative": 4
+      }
+    }
+  },
+  "strict_panel": {
+    "source_region_codes": 5,
+    "source_roads": 13,
+    "source_spatial_sites": 192,
+    "joint_trait_species_per_plot_minimum": 10,
+    "joint_trait_coverage_fraction_minimum": 0.5,
+    "occupancy_quintile_null": {
+      "joint": {
+        "roadside": 0.13786563177526714,
+        "interior": 0.201422613014,
+        "roadside_minus_interior": -0.063556981239,
+        "region_n_difference_negative": 4
+      },
+      "height": {
+        "roadside": 0.11604552727482026,
+        "interior": 0.167265695,
+        "roadside_minus_interior": -0.051220167,
+        "region_n_difference_negative": 4,
+        "LOO_region_mean_range": [
+          -0.06492698336835832,
+          -0.02996253702626047
+        ]
+      },
+      "seed_mass": {
+        "roadside": 0.07367450624951188,
+        "interior": 0.112127737,
+        "roadside_minus_interior": -0.038453231,
+        "region_n_difference_negative": 4
+      }
+    }
+  },
+  "caveat": "Some convenient rounded numeric values in this prose summary are rounded; machine canonical full-precision per-region values are in source artifact and are the only canonical values.",
+  "causal_scope": "No causal rail-specific selection, mowing, gust, railway seed dispersal or adapted genotypes identified; Swedish missing source site×taxon cannot be included"
+}
