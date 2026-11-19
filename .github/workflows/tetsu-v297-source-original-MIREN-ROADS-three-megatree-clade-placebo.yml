@@ -1,0 +1,108 @@
+name: "v29.7 real MIREN road vs interior true original phylogenetic clade label-null"
+on:
+  push:
+    branches: [research/tetsu-MIREN-roads-real-phylogeny-placebo-v297-20261119]
+    paths:
+      - 'scripts/validate_MIREN_original_roads_true_phylogeny_clade_negative_control_v297.py'
+      - 'tests/test_MIREN_road_interior_true_tree_source_v297.py'
+      - '.github/workflows/tetsu-v297-source-original-MIREN-ROADS-three-megatree-clade-placebo.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v297-original-ROADS-vs-interior-3realphylo-clade
+  cancel-in-progress: true
+jobs:
+  original-MIREN-road-and-inland-author-source-real-phylo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 48
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install only stable Python original floristic source readers (never R apt installation)
+        run: python -m pip install 'numpy>=1.26,<3' 'openpyxl==3.1.5' 'PyMuPDF==1.24.14' 'rdata==1.1.0'
+      - name: Nine original matched roadside/inland and exact phylogenetic clade trait math source tests
+        run: |
+          python -m unittest discover -s tests -p 'test_MIREN_road_interior_true_tree_source_v297.py' -v
+          python -u scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py --self-test
+      - name: Download authentic published mountain ROADS v3 MIREN original source and verify immutable original MD5
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v297/MIREN source_original/v297/LEDA source_original/v297/MEGATREES results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 350 \
+            'https://zenodo.org/records/15749536/files/MIREN_road_survey_%282007-2023%29_zen_v3_002507.csv?download=1' \
+            -o source_original/v297/MIREN/original.csv
+          test "$(stat -c%s source_original/v297/MIREN/original.csv)" = '17899241'
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' \
+            source_original/v297/MIREN/original.csv | md5sum --check
+      - name: Download original Oldenburg LEDA height and seed mass for genuine botanically observed species only
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v297/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v297/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v297/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v297/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Restore original published LCVP WP TPL no-grafted phylo RData author trees from immutable Git commit
+        run: |
+          set -euo pipefail
+          PREFIX='https://raw.githubusercontent.com/jinyizju/V.PhyloMaker2/7af3fb5152f691af2e4ec9d5e2e467d1b50505e9/data'
+          for TREE in LCVP WP TPL; do
+            curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+              "$PREFIX/GBOTB.extended.$TREE.rda" -o "source_original/v297/MEGATREES/GBOTB.extended.$TREE.rda"
+          done
+          test "$(git hash-object source_original/v297/MEGATREES/GBOTB.extended.LCVP.rda)" = '0d761cb0bf36392cc13759a7ac9026db564217eb'
+          test "$(git hash-object source_original/v297/MEGATREES/GBOTB.extended.WP.rda)" = '8d3777762cb32a80e8c6ea097a0456e2b63a94c6'
+          test "$(git hash-object source_original/v297/MEGATREES/GBOTB.extended.TPL.rda)" = 'd7bc9b69bf3cb11c3c3d090282723b6e73b1de55'
+      - name: Source genuine MIREN 8 region 22 road 272 site vs strict 5 13 192, original LE DA matched plants, real phylo clade shuffles
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          python -u scripts/validate_MIREN_original_roads_true_phylogeny_clade_negative_control_v297.py \
+            --miren source_original/v297/MIREN/original.csv \
+            --height source_original/v297/LEDA/canopy_height.txt \
+            --seed source_original/v297/LEDA/seed_mass.txt \
+            --tree-dir source_original/v297/MEGATREES \
+            --draws-per-chain 199 \
+            --output results/audit/tetsu_v297_true_MIREN_ROADS_vs_INLAND_original_3phylo_clade_source_null.json
+      - name: Verify only MIREN original field studies and real source phylogenetic support with no false zero effects
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('results/audit/tetsu_v297_true_MIREN_ROADS_vs_INLAND_original_3phylo_clade_source_null.json')
+          d=json.loads(p.read_text(encoding='utf8'))
+          assert d['version']=='v29.7'
+          assert d['original_MIREN_independent_field_programs_n']==1
+          assert len(d['source_tree_original_per_region_support_and_effects'])==3
+          assert len(d['source_region_equal_descriptive_summaries_only_if_supported'])==3
+          for tree,record in d['source_tree_original_per_region_support_and_effects'].items():
+              assert set(record['panels'])=={'primary_5species_25percent','strict_10species_50percent'}
+              for panel,detail in record['panels'].items():
+                  assert len(detail['original_source_region_results']) in (8,5)
+                  for region,results in detail['original_source_region_results'].items():
+                      status=results['status']
+                      assert status in ('ORIGINAL_DIRECT_TIP_MIREN_FIELD_COHORT_SUPPORTED',
+                                        'NOT_IDENTIFIABLE_ORIGINAL_DIRECT_TIP_FIELD_COHORT')
+                      if status=='NOT_IDENTIFIABLE_ORIGINAL_DIRECT_TIP_FIELD_COHORT':
+                          assert results['conditional_trait_label_nulls'] is None
+                      else:
+                          assert len(results['conditional_trait_label_nulls'])==4
+                          for k,v in results['conditional_trait_label_nulls'].items():
+                              if v['effects'] is None: assert v['status'].startswith('NOT_IDENTIFIABLE')
+          print('v29.7 SOURCE: actual study program, three trees, original road site retention and no false biological zeros QA PASS')
+          PY
+      - name: Archive only original MIREN region codes, original road/site counts, source taxonomy and aggregate trait-beta differences, never original site plant rows/leaf tip names
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v297-original-MIREN-roads-and-inland-source-3true-phylogeny-clade-null
+          path: results/audit/tetsu_v297_true_MIREN_ROADS_vs_INLAND_original_3phylo_clade_source_null.json
+          if-no-files-found: warn
