@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   original-four-independent-publisher-studies-source-gated:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 48
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
         with: {python-version: '3.11'}
       - uses: r-lib/actions/setup-r@v2
         with:
-          r-version: 'release'
+          r-version: '4.5.2'
       - name: Install source authentic XLSX/PDF and numerical readers
         run: python -m pip install 'PyMuPDF==1.24.14' 'openpyxl==3.1.5' 'numpy>=1.26,<3'
       - name: Six tests verify original site field units and no invented source species
