@@ -10,7 +10,7 @@ import json
 import math
 import random
 from pathlib import Path
-from statistics import mean
+from statistics import mean, median
 from openpyxl import load_workbook
 from analyze_Kashmir_same_sites_reference_year_v254 import (
     DRYAD_SHA256, YEARS, GROUPS, parse_xlsx_matrix, matching_sites,
@@ -90,9 +90,13 @@ def eligible_pairs(plots, names, traits, group, reference):
     # SAME original matched sites for both years. Source-prespecified gate only.
     matched=matching_sites(plots,group,ZONES)
     paired=[]; audit=[]
+    upper_bound_by_original_richness=0
+    potential_if_no_30pct_coverage_gate=0
     for site in matched:
         rec={'traits':traits}
         allpass=True
+        raw_possible=True
+        known_possible=True
         for year in YEARS:
             r,cr,nr=cov(plots,traits,names,site,year,'Track')
             b,cb,nb=cov(plots,traits,names,site,year,reference)
@@ -100,8 +104,12 @@ def eligible_pairs(plots, names, traits, group, reference):
                           'rail_coverage':cr,'inland_coverage':cb,
                           'rail_richness':nr,'inland_richness':nb})
             rec[year]={'Track':r,'reference':b}
+            raw_possible &= min(nr,nb) >= MIN_DUAL_TRAIT_PER_ZONE
+            known_possible &= min(len(r),len(b)) >= MIN_DUAL_TRAIT_PER_ZONE
             allpass &= (min(len(r),len(b)) >= MIN_DUAL_TRAIT_PER_ZONE and
                         min(cr,cb) >= MIN_COVERAGE_PER_ZONE)
+        if raw_possible: upper_bound_by_original_richness+=1
+        if known_possible: potential_if_no_30pct_coverage_gate+=1
         if allpass:paired.append(rec)
     n_taxa=(len(set().union(*(rec[y][z] for rec in paired for y in YEARS
                               for z in ('Track','reference')))) if paired else 0)
@@ -110,6 +118,11 @@ def eligible_pairs(plots, names, traits, group, reference):
     aggregate={
         'original_sites_with_both_field_years_and_four_zones':len(matched),
         'n_original_sites_meeting_predeclared_trait_gate_both_years':len(paired),
+        'absolute_max_eligible_sites_even_with_100pct_trait_coverage_given_observed_plot_richness':upper_bound_by_original_richness,
+        'sites_with_observed_5plus_joint_trait_species_both_years_ignoring_coverage_fraction':potential_if_no_30pct_coverage_gate,
+        'original_rail_plot_raw_richness_min_median_max':[min(x['rail_richness'] for x in audit),median(x['rail_richness'] for x in audit),max(x['rail_richness'] for x in audit)],
+        'original_rail_plot_matched_joint_trait_species_min_median_max':[min(x['rail_known'] for x in audit),median(x['rail_known'] for x in audit),max(x['rail_known'] for x in audit)],
+        'original_inland_plot_raw_richness_min_median_max':[min(x['inland_richness'] for x in audit),median(x['inland_richness'] for x in audit),max(x['inland_richness'] for x in audit)],
         'n_distinct_original_binomials_with_both_traits_in_eligible_sites':n_taxa,
         'min_site_n':MIN_SITES[group],
         'min_taxa_n':MIN_DISTINCT_TAXA,
