@@ -96,7 +96,7 @@ jobs:
                       else:
                           assert len(results['conditional_trait_label_nulls'])==4
                           for k,v in results['conditional_trait_label_nulls'].items():
-                              if v['effects'] is None: assert v['status'].startswith('NOT_IDENTIFIABLE')
+                              if v.get('source_original_region_two_zone_effects') is None: assert v['status'].startswith('NOT_IDENTIFIABLE')
           print('v29.7 SOURCE: actual study program, three trees, original road site retention and no false biological zeros QA PASS')
           PY
       - name: Archive only original MIREN region codes, original road/site counts, source taxonomy and aggregate trait-beta differences, never original site plant rows/leaf tip names
