@@ -43,3 +43,19 @@ v25.6 / v26.9 / v27.3 で、少なくとも2つの真正鉄道著者データで
 \`.github/workflows/tetsu-v289-Sweden-original-nonrail-infrastructure-Figshare-source-gate.yml\`
 
 原元著者個票は再配布せず、source checksums・source fieldsのschemaと行列適合ゲートだけを公開する。生態量は真正原行列・非独立検査後のみ報告。
+
+
+## v28.9 SOURCE VERIFIEDの取得判定（2026-11-19）
+
+**[Figshare真正原著source Actions SUCCESS #44457472437](https://github.com/zuizui0223/tetsu/actions/runs/44457472437)**。元Figshare DOI article IDs \`13286141\` と \`22178651\` と本文のpublisher file metadataを確認し、全5元public source fileの元byte取得、source file size / MD5 metadata checks と7/7 synthetic schema/private-plot exclusion QAが成功した。source元行列そのものはGitHubへ配布していない。
+
+| 原出典 | 本当に取得したデータ構造 | 結論 |
+|---|---|---|
+| Dániel-Ferreira et al. 2020, figshare 13286141 | 32原景観×18列の要約CSV（元siteごと植物種名×出現行列なし） | 元field-species βを再計算できない |
+| Dániel-Ferreira et al. 2023, figshare 22178651 | \`Mean_abundance.csv\` 205 rows×18 cols（Speciesラベルはあるが元site-IDなし）、\`Transect_coordinates.csv\` 133×8、\`Database_alpha_diversity.csv\` 133×18、\`Metadata.txt\` | 元真のsite×species floristic incidenceを復元できない。地点のα多様性・位置情報と種ごとの平均量を結合して真の植物種同所的共存を逆推定しない |
+
+**新しい生態係数は1つも生成しなかった。** 元文献で報告されたSørensen replacementは引用できても、同じデータの真正site×taxon Jaccardとして再解析したと書けない。したがって本v28.9の原行列基準は **NOT_IDENTIFIABLE_ORIGINAL_SITE_TAXON_MATRIX**。2020/2023はauthor・2016景観調査が重なるので2つの独立field研究とは数えない。
+
+**新しい次段のsource-backed外部検定**：既存tetsu v24.9/v25.0ですでに真正原行列が認証された世界MIREN山岳**道路**（8地域22道路272地点、厳格5地域13道路192地点）において、v28.5鉄道4研究と同じ真site出現固定の\`paired height/seed trait-label shuffle\`帰無を「道路際と内陸」に別々に適用する。この計画は別のDraft PRに実装し、鉄道独自の環境フィルターを道路一般の地域形質配置と識別できるかを調べる。
+
+[元監査結果artifact #14498911726](https://github.com/zuizui0223/tetsu/actions/runs/44457472437/artifacts/14498911726)。sourceからの各植物行、個別元site座標や原元研究を再配布していない。
