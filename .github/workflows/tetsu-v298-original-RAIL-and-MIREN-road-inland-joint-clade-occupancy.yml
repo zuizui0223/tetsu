@@ -1,0 +1,200 @@
+name: "v29.8 ORIGINAL RAIL + MIREN ROADS: joint source phylo75 clade and plant occurrence null"
+on:
+  push:
+    branches: [research/tetsu-rail-road-joint-phylo-occupancy-null-v298-20261119]
+    paths:
+      - 'scripts/prepare_Europe_4original_rail_phylogeny_audit_source_v295.py'
+      - 'scripts/audit_VPhyloMaker2_RData_python_no_R_environment_v296.py'
+      - 'scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py'
+      - 'scripts/phylogeny_occupancy_joint_label_null_v298.py'
+      - 'scripts/analyze_4original_rail_joint_phylo75_occupancy_null_v298.py'
+      - 'scripts/analyze_MIREN_roads_inland_joint_phylo75_occupancy_null_v298.py'
+      - 'tests/test_rail_road_joint_phylo_occ_source_v298.py'
+      - 'data/derived/tetsu_v297_MIREN_original_roads_inland_phylogenetic_height_summary.json'
+      - 'tests/test_4rail_true_phylogeny_clade_null_python_v296.py'
+      - 'scripts/audit_Europe_original_4rail_VPhyloMaker2_three_megatrees_v295.R'
+      - 'tests/test_original_4rail_phylogeny_audit_source_v295.py'
+      - '.github/workflows/tetsu-v298-original-RAIL-and-MIREN-road-inland-joint-clade-occupancy.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v298-original-4rail-and-MIREN-roads-two-axis-source
+  cancel-in-progress: true
+jobs:
+  original-four-independent-publisher-studies-source-gated:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 52
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install source authentic XLSX/PDF and numerical readers
+        run: python -m pip install 'PyMuPDF==1.24.14' 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'rdata==1.1.0'
+      - name: Verify nine true phylogenetic branch-clade and six author-original site field sample synthetic mathematical tests
+        run: |
+          python -m unittest discover -s tests -p 'test_original_4rail_phylogeny_audit_source_v295.py' -v
+          python -m unittest discover -s tests -p 'test_4rail_true_phylogeny_clade_null_python_v296.py' -v
+          python -m unittest discover -s tests -p 'test_rail_road_joint_phylo_occ_source_v298.py' -v
+          python -u scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py --self-test
+      - name: Authenticate Preslia original 2024 39-station S1 and erratum S2
+        run: |
+          set -euo pipefail
+          mkdir -p source/v295/CZ source/v295/IT source/v295/HR source/v295/LEDA results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' -o source/v295/CZ/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' -o source/v295/CZ/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v295/CZ/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v295/CZ/S2.xlsx | sha256sum --check
+      - name: Authenticate Italian 2020 Parma 28 true station source museum PDF SHA
+        run: |
+          set -euo pipefail
+          # Original institution TLS expiration documented in original v24.5;
+          # this is safe only because source PDF bytes MUST match pinned SHA.
+          curl --insecure -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+            -o source/v295/IT/Parma2020.pdf
+          printf '%s  %s\n' \
+            'c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787' \
+            source/v295/IT/Parma2020.pdf | sha256sum --check
+      - name: Authenticate genuine Croatian Bosnian one 2017 publisher study original PDF
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://hrcak.srce.hr/file/282429' -o source/v295/HR/Jasprica2017.pdf
+          printf '%s  %s\n' \
+            '90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956' \
+            source/v295/HR/Jasprica2017.pdf | sha256sum --check
+      - name: Restore authenticated Slovenian 2026 original author 89 genuine 100m railway sites and metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v295/SI
+      - name: Source immutable Slovenian original XLSX checksum
+        run: |
+          set -euo pipefail
+          SRC='source/v295/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = '401279'
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SRC" | sha256sum --check
+      - name: Restore pinned original Oldenburg University LEDA paired trait coordinates
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v295/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v295/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v295/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v295/LEDA/seed_mass.txt | sha256sum --check
+      - name: Validate four true original author field study site-by-species cohorts, write original-species rows ONLY into private runner temp
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/v295-private-source"
+          python -u scripts/prepare_Europe_4original_rail_phylogeny_audit_source_v295.py \
+            --cz-s1 source/v295/CZ/S1.xlsx --cz-s2 source/v295/CZ/S2.xlsx \
+            --it-pdf source/v295/IT/Parma2020.pdf --hr-pdf source/v295/HR/Jasprica2017.pdf \
+            --si-xlsx source/v295/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --si-audit source/v295/SI/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --height source/v295/LEDA/canopy_height.txt --seed source/v295/LEDA/seed_mass.txt \
+            --private-source-csv "$RUNNER_TEMP/v295-private-source/original_site_taxon_LEDA_PRIVATE.csv" \
+            --aggregate-qa results/audit/v295_original_four_publisher_railway_studies_source_QA.json
+      - name: Retrieve three pinned original V.PhyloMaker2 GBOTB TPL LCVP WP evolutionary backbone source files and verify exact git blob SHA
+        run: |
+          set -euo pipefail
+          mkdir -p source/v295/VPhyloMaker2
+          PREFIX='https://raw.githubusercontent.com/jinyizju/V.PhyloMaker2/7af3fb5152f691af2e4ec9d5e2e467d1b50505e9/data'
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            "$PREFIX/GBOTB.extended.LCVP.rda" -o source/v295/VPhyloMaker2/GBOTB.extended.LCVP.rda
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            "$PREFIX/GBOTB.extended.WP.rda" -o source/v295/VPhyloMaker2/GBOTB.extended.WP.rda
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            "$PREFIX/GBOTB.extended.TPL.rda" -o source/v295/VPhyloMaker2/GBOTB.extended.TPL.rda
+          test "$(git hash-object source/v295/VPhyloMaker2/GBOTB.extended.LCVP.rda)" = '0d761cb0bf36392cc13759a7ac9026db564217eb'
+          test "$(git hash-object source/v295/VPhyloMaker2/GBOTB.extended.WP.rda)" = '8d3777762cb32a80e8c6ea097a0456e2b63a94c6'
+          test "$(git hash-object source/v295/VPhyloMaker2/GBOTB.extended.TPL.rda)" = 'd7bc9b69bf3cb11c3c3d090282723b6e73b1de55'
+          echo 'All three original V.PhyloMaker2 megatree source objects match fixed public repository Git blob digests'
+      - name: Fetch genuine global MIREN MOUNTAIN ROADS source independently, not as a fifth railway study
+        run: |
+          set -euo pipefail
+          mkdir -p source/v298/MIREN
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 350 \
+            'https://zenodo.org/records/15749536/files/MIREN_road_survey_%282007-2023%29_zen_v3_002507.csv?download=1' \
+            -o source/v298/MIREN/original.csv
+          test "$(stat -c%s source/v298/MIREN/original.csv)" = '17899241'
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' \
+            source/v298/MIREN/original.csv | md5sum --check
+      - name: Replay all 12 genuine v29.6 PHYLO75 original author railway source results then test joint phylogenetic clade and occupancy-bin trait null
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          python -u scripts/analyze_4original_rail_joint_phylo75_occupancy_null_v298.py \
+            --private-original-source "$RUNNER_TEMP/v295-private-source/original_site_taxon_LEDA_PRIVATE.csv" \
+            --tree-dir source/v295/VPhyloMaker2 \
+            --draws 199 \
+            --output results/audit/v298_4original_EU_rail_true_phylo75_plus_occupancy_joint_traits_source.json
+      - name: Replay all 6 prior v29.7 original source MIREN ROADS/inland tree/panel contrasts then jointly constrain labels by true phylogenetic clade + occupancy
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          python -u scripts/analyze_MIREN_roads_inland_joint_phylo75_occupancy_null_v298.py \
+            --miren source/v298/MIREN/original.csv \
+            --height source/v295/LEDA/canopy_height.txt \
+            --seed source/v295/LEDA/seed_mass.txt \
+            --tree-dir source/v295/VPhyloMaker2 \
+            --original-v297-summary data/derived/tetsu_v297_MIREN_original_roads_inland_phylogenetic_height_summary.json \
+            --draws 199 \
+            --output results/audit/v298_original_MIREN_roads_inland_true_phylo75_plus_occ_joint_traits_source.json
+      - name: Check number of original independent field programmes and prevent unsupported clade effects from masquerading as zero
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          rail=json.loads(Path('results/audit/v298_4original_EU_rail_true_phylo75_plus_occupancy_joint_traits_source.json').read_text())
+          road=json.loads(Path('results/audit/v298_original_MIREN_roads_inland_true_phylo75_plus_occ_joint_traits_source.json').read_text())
+          assert rail['version']==road['version']=='v29.8'
+          assert rail['original_first_party_rail_publications_n']==4
+          assert rail['original_source_rail_physical_sites_n']==171
+          assert rail['original_v296_source_398_draw_label_null_reproduced_for_all_12_pairs']
+          assert road['original_independent_mountain_road_field_programs_n']==1
+          assert road['original_v297_source_baseline_REPRODUCED_in_all_six_tree_panels']
+          assert len(rail['source_true_original_tree_and_study_outputs'])==3
+          assert len(road['source_true_trees_and_regions'])==3
+          for tree,record in rail['source_true_original_tree_and_study_outputs'].items():
+              assert len(record['original_rail_publications'])==4
+              for study,x in record['original_rail_publications'].items():
+                  qa=x['original_joint_phylo75_occupancy_source_support']
+                  if not qa['joint_phylogenetic_clade_AND_source_occupancy_null_identifiable']:
+                      assert x['joint_phylo75_and_occupancy_observed_minus_null'] is None
+          for tree,record in road['source_true_trees_and_regions'].items():
+              assert len(record['source_panels'])==2
+              for panel,x in record['source_panels'].items():
+                  n=x['n_new_joint_phylo_occupancy_source_regions']
+                  assert 0<=n<=x['n_original_v297_phylo75_supported_source_regions']<=8
+                  for reg,item in x['source_original_region_records'].items():
+                      source_qa=item.get('clade_and_occupancy_joint_source_QA')
+                      if source_qa is not None and not source_qa['joint_phylogenetic_clade_AND_source_occupancy_null_identifiable']:
+                          assert item.get('new_joint_null') is None
+          print('v29.8 BOTH original studies, 3 genuine trees, source nulls, QA support gates PASS; no false zero effects')
+          PY
+      - name: Publish ONLY original 4 railway publication plus ONE MIREN road/inland field programme aggregate source results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v298-original-4rail-and-MIREN-road-inland-true-phylo75-plus-occupancy-source
+          path: |
+            results/audit/v295_original_four_publisher_railway_studies_source_QA.json
+            results/audit/v298_4original_EU_rail_true_phylo75_plus_occupancy_joint_traits_source.json
+            results/audit/v298_original_MIREN_roads_inland_true_phylo75_plus_occ_joint_traits_source.json
+          if-no-files-found: warn
