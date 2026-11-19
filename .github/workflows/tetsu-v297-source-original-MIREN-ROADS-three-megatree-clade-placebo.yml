@@ -4,6 +4,8 @@ on:
     branches: [research/tetsu-MIREN-roads-real-phylogeny-placebo-v297-20261119]
     paths:
       - 'scripts/validate_MIREN_original_roads_true_phylogeny_clade_negative_control_v297.py'
+      - 'scripts/validate_MIREN_v297_derived_results_against_original_source.py'
+      - 'data/derived/tetsu_v297_MIREN_original_roads_inland_phylogenetic_height_summary.json'
       - 'tests/test_MIREN_road_interior_true_tree_source_v297.py'
       - '.github/workflows/tetsu-v297-source-original-MIREN-ROADS-three-megatree-clade-placebo.yml'
   workflow_dispatch:
@@ -99,10 +101,18 @@ jobs:
                               if v.get('source_original_region_two_zone_effects') is None: assert v['status'].startswith('NOT_IDENTIFIABLE')
           print('v29.7 SOURCE: actual study program, three trees, original road site retention and no false biological zeros QA PASS')
           PY
+      - name: Independently verify frozen readable results against ALL original source region and tree QA, signs, site retention, and LOOs
+        run: |
+          python -u scripts/validate_MIREN_v297_derived_results_against_original_source.py \
+            --original-source results/audit/tetsu_v297_true_MIREN_ROADS_vs_INLAND_original_3phylo_clade_source_null.json \
+            --derived data/derived/tetsu_v297_MIREN_original_roads_inland_phylogenetic_height_summary.json \
+            --output results/audit/tetsu_v297_original_source_derived_stature_summary_consistency_QA.json
       - name: Archive only original MIREN region codes, original road/site counts, source taxonomy and aggregate trait-beta differences, never original site plant rows/leaf tip names
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: tetsu-v297-original-MIREN-roads-and-inland-source-3true-phylogeny-clade-null
-          path: results/audit/tetsu_v297_true_MIREN_ROADS_vs_INLAND_original_3phylo_clade_source_null.json
+          path: |
+            results/audit/tetsu_v297_true_MIREN_ROADS_vs_INLAND_original_3phylo_clade_source_null.json
+            results/audit/tetsu_v297_original_source_derived_stature_summary_consistency_QA.json
           if-no-files-found: warn
