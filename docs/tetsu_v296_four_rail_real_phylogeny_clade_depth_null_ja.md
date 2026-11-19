@@ -50,3 +50,15 @@ Jin & Qian (2022) V.PhyloMaker2 DOI https://doi.org/10.1016/j.pld.2022.05.005。
 - .github/workflows/tetsu-v296-real-four-rail-phylo-clade-depth-null.yml
 
 結論の限界：これは4欧州独立元出版のtraitと植物群集地理配置の関係であり、鉄道適応、列車による種子散布、草刈りや車両風圧という因果的メカニズムの実証ではない。稼働中rail ballastと同一面積/年/開放度の非鉄道砂礫地点原sourceは別途必要。
+
+## v29.6 実装更新（2026-11-19、Python主解析）
+
+GitHub-hosted R 4.5.2のsetup-rがUbuntu apt mirrorの503と連続待機で不安定だったため、Rスクリプトは手動参照に残し、**純Pythonの原著source解析を主実行**とした。観測値・元source版・3系統樹の真Git blob SHA・0.25/0.50/0.75のbranch長切断、元study/site/geographical groups、2固定seed×199帰無ラベル試行、属/科との区別は**変更なし**。
+
+- 真source原著4論文のXLSX/PDF、LEDA2表、元Slovenia author XLSXは従来の原SHAで認証。元pub別site×species×trait観察行は**GitHub Actions一時RUNNER_TEMPのみ**で扱い、Git/artifactには入れない。
+- 原著V.PhyloMaker2 LCVP/WP/TPL RDataは作者のコミット `7af3fb5152f691af2e4ec9d5e2e467d1b50505e9` とGit blob SHAで認証。純Python `rdata==1.1.0` は[原版3樹のS3 phylo構造読取を真正確認済み](https://github.com/zuizui0223/tetsu/actions/runs/44522362608)。
+- `scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py` は元treeの1-based edge/edge.lengthから根を同定し、全tipまでの枝長を積算。各source studyで真sourceの厳格な二名法がtree-tipにある種に限定し、**先行v29.5の実source12組のtip種数および同じ標本での草丈CWM観測値に一致するまで新しい帰無結果を作らない**。
+- `tests/test_4rail_true_phylogeny_clade_null_python_v296.py` は9つの数理テスト。特にsource original地理区分のラベル「10」をNumPyの短い文字列配列で「1」に切り詰める誤りを避け、`dtype=object` を指定。tip群は真のtree節点による排他的partition、元高さと種子重の**ペア**を保存し、元species×site出現は固定する。
+- 新しい原著-source自動ワークフロー `.github/workflows/tetsu-v296-Python-noR-four-original-rail-source-phylogenetic-clade-null.yml` はR/apt不要。R版のワークフローは元環境障害を受けたため`workflow_dispatch`専用の検証とし、自動pushではスキップする。
+
+**現時点での検証ステータス**：原本3系統樹の純Python読み込みはSUCCESS、元4研究のPython source clade/null計算はGitHubキュー待ち。**新しいphylogeny-conditioned草丈超過効果はCI source完走まで未確定**。source実行が失敗する場合、出た値を成功扱いせず生態学的な結論を撤回/留保する。
