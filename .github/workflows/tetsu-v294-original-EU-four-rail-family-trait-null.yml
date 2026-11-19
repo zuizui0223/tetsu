@@ -1,0 +1,104 @@
+name: "v29.4 four original railway studies GBIF-family trait-label falsification"
+on:
+  push:
+    branches: [research/tetsu-four-rail-family-genus-null-v294-20261119]
+    paths:
+      - 'scripts/validate_Europe_original_4rail_family_genus_taxon_null_v294.py'
+      - 'tests/test_Europe_original_family_classification_null_v294.py'
+      - '.github/workflows/tetsu-v294-original-EU-four-rail-family-trait-null.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v294-four-original-rail-studies-GBIF-family-null
+  cancel-in-progress: true
+jobs:
+  original-four-independent-publisher-studies-source-gated:
+    runs-on: ubuntu-latest
+    timeout-minutes: 48
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install source authentic XLSX/PDF and numerical readers
+        run: python -m pip install 'PyMuPDF==1.24.14' 'openpyxl==3.1.5' 'numpy>=1.26,<3'
+      - name: Ten synthetic source family taxonomy and original paired-trait mathematical tests
+        run: python -m unittest discover -s tests -p 'test_Europe_original_family_classification_null_v294.py' -v
+      - name: Authenticate Preslia original 2024 39-station S1 and erratum S2
+        run: |
+          set -euo pipefail
+          mkdir -p source/v294/CZ source/v294/IT source/v294/HR source/v294/LEDA results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' -o source/v294/CZ/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' -o source/v294/CZ/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v294/CZ/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v294/CZ/S2.xlsx | sha256sum --check
+      - name: Authenticate Italian 2020 Parma 28 true station source museum PDF SHA
+        run: |
+          set -euo pipefail
+          # Original institution TLS expiration documented in original v24.5;
+          # this is safe only because source PDF bytes MUST match pinned SHA.
+          curl --insecure -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' \
+            -o source/v294/IT/Parma2020.pdf
+          printf '%s  %s\n' \
+            'c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787' \
+            source/v294/IT/Parma2020.pdf | sha256sum --check
+      - name: Authenticate genuine Croatian Bosnian one 2017 publisher study original PDF
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://hrcak.srce.hr/file/282429' -o source/v294/HR/Jasprica2017.pdf
+          printf '%s  %s\n' \
+            '90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956' \
+            source/v294/HR/Jasprica2017.pdf | sha256sum --check
+      - name: Restore authenticated Slovenian 2026 original author 89 genuine 100m railway sites and metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v294/SI
+      - name: Source immutable Slovenian original XLSX checksum
+        run: |
+          set -euo pipefail
+          SRC='source/v294/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$SRC")" = '401279'
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$SRC" | sha256sum --check
+      - name: Restore pinned original Oldenburg University LEDA paired trait coordinates
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v294/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v294/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v294/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v294/LEDA/seed_mass.txt | sha256sum --check
+      - name: Verify original v29.3 exact results, then run GBIF source-family conditioned trait permutations
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          python -u scripts/validate_Europe_original_4rail_family_genus_taxon_null_v294.py \
+            --cz-s1 source/v294/CZ/S1.xlsx --cz-s2 source/v294/CZ/S2.xlsx \
+            --it-pdf source/v294/IT/Parma2020.pdf --hr-pdf source/v294/HR/Jasprica2017.pdf \
+            --si-xlsx source/v294/SI/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --si-audit source/v294/SI/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --height source/v294/LEDA/canopy_height.txt \
+            --seed source/v294/LEDA/seed_mass.txt \
+            --previous-v293 data/derived/tetsu_v293_4European_original_rail_genus_null_summary.json \
+            --output results/audit/v294_four_rail_original_family_conditional_trait_label_null.json \
+            --draws 299
+      - name: Archive ONLY four separate original study macro trait results, not raw PDF or station species
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v294-original-four-railway-papers-family-conditioned-source
+          path: results/audit/v294_four_rail_original_family_conditional_trait_label_null.json
+          if-no-files-found: warn

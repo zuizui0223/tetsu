@@ -1,0 +1,119 @@
+{
+  "version": "v29.4",
+  "source_genuine": true,
+  "original_field_publications": 4,
+  "original_author_botanical_source": "4 original European railway field studies 2024 Czech, 2020 Italy, 2017 Croatia+Bosnia ONE study, 2026 Slovenia 89 actual 100m vegetation sites",
+  "original_study_n_sites_total": 171,
+  "source_family_taxonomy": {
+    "provider": "GBIF v1 exact genus name match kingdom Plantae 2026-11-19T11:08:50.695767Z",
+    "n_unique_source_genus": 337,
+    "n_exact_family_assigned_genus": 322,
+    "n_unresolved_genus": 15,
+    "match_snapshot_sha256": "7ad9be2c544bb2799d2c0fa3823a20d8c9e50de35ab343e8289225a872608f69",
+    "taxonomic_classification_not_phylogenetic_branch_lengths": true
+  },
+  "source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44511961103",
+  "source_workflow_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44511961103/artifacts/14523431813",
+  "endpoints": "Observation minus mean trait-label null; source original within-study geography site-pair canopy height 1D CWM distance in frozen Europe v24.5 standard deviation of log height, not equivalent field plots",
+  "technology": {
+    "within_family_shuffle": "Keep original source site species incidences, species richness, source taxon prevalence and taxonomy; shuffle paired height-seed species trait values only within GBIF confirmed family",
+    "n_technical_permutations": 598,
+    "unmatched_family_taxa_frozen_in_original_source": true,
+    "strict_GBIF_genus_exact_only": true
+  },
+  "per_original_study": [
+    {
+      "id": "CZ_Czechia",
+      "label": "Czech original 2024",
+      "source_sites": 39,
+      "known_dual_trait_taxa": 507,
+      "n_original_genera": 282,
+      "n_original_families": 66,
+      "n_multi_genus_families": 37,
+      "original_family_assigned_site_taxon_fraction": 0.9880549117489749,
+      "movable_multi_genus_family_incidence_fraction": 0.8785879835977892,
+      "height_broad_occupancy_null": 0.05481851038601343,
+      "height_family_null": 0.012999332214494577,
+      "height_genus_null": 0.007899686894602617,
+      "height_family_technical_upper_rank": 0.03171953255425709,
+      "joint_family_null": 0.01647894609974948,
+      "seed_family_null": 0.009798480846662183
+    },
+    {
+      "id": "IT_Italy_Parma",
+      "label": "Italy Parma original 2020",
+      "source_sites": 28,
+      "known_dual_trait_taxa": 271,
+      "n_original_genera": 176,
+      "n_original_families": 55,
+      "n_multi_genus_families": 27,
+      "original_family_assigned_site_taxon_fraction": 0.9882121807465619,
+      "movable_multi_genus_family_incidence_fraction": 0.8575638506876228,
+      "height_broad_occupancy_null": 0.038809797789880585,
+      "height_family_null": 0.022423537841655558,
+      "height_genus_null": 0.004432047173827419,
+      "height_family_technical_upper_rank": 0.02671118530884808,
+      "joint_family_null": 0.029711430584543147,
+      "seed_family_null": 0.017609472407551244
+    },
+    {
+      "id": "HR_BA_2017_one_study",
+      "label": "Croatia and Bosnia original 2017 ONE paper",
+      "source_sites": 15,
+      "known_dual_trait_taxa": 190,
+      "n_original_genera": 130,
+      "n_original_families": 39,
+      "n_multi_genus_families": 17,
+      "original_family_assigned_site_taxon_fraction": 0.9683060109289617,
+      "movable_multi_genus_family_incidence_fraction": 0.8120218579234972,
+      "height_broad_occupancy_null": 0.09918912960928948,
+      "height_family_null": 0.06950875190896431,
+      "height_genus_null": 0.01725435627986599,
+      "height_family_technical_upper_rank": 0.00667779632721202,
+      "joint_family_null": 0.04272680036312049,
+      "seed_family_null": -0.032450974841581284
+    },
+    {
+      "id": "SI_Slovenia_100m_track",
+      "label": "Slovenia original 2026 89 actual 100m ballast sites",
+      "source_sites": 89,
+      "known_dual_trait_taxa": 224,
+      "n_original_genera": 167,
+      "n_original_families": 53,
+      "n_multi_genus_families": 23,
+      "original_family_assigned_site_taxon_fraction": 0.9874944171505137,
+      "movable_multi_genus_family_incidence_fraction": 0.8021438142027691,
+      "height_broad_occupancy_null": 0.07878120980772302,
+      "height_family_null": 0.03241659587178164,
+      "height_genus_null": -0.004464893349074961,
+      "height_family_technical_upper_rank": 0.03672787979966611,
+      "joint_family_null": 0.010888786395081118,
+      "seed_family_null": -0.023025786603522835
+    }
+  ],
+  "descriptive_publication_equal": {
+    "height_observed_minus_broad_occupancy_null": 0.06789966189822663,
+    "height_observed_minus_family_null": 0.034337054459224026,
+    "height_observed_minus_genus_null": 0.006280299249805266,
+    "positive_studies": {
+      "broad": 4,
+      "family": 4,
+      "genus": 3
+    },
+    "family_null_height_LOO_minmax": [
+      0.02261315530931059,
+      0.041449628540800504
+    ],
+    "family_null_joint_mean": 0.02495149086062356,
+    "family_null_joint_positive_studies": 4,
+    "family_null_seed_mean": -0.007017202047722673,
+    "family_null_seed_positive_studies": 2
+  },
+  "critical_limits": [
+    "Genus/family taxonomy levels are NOT an ultrametric phylogeny or branch lengths",
+    "Compared null models have different exchangeability spaces; effect attenuation is not phylogenetic R2",
+    "Only four independently published European railway studies, and Slovenia site grain differs from station-wide studies",
+    "No matched nonrail active-ballast equal-area open gravel vegetation fields are included",
+    "No actual within-species genetic response, mowing/wind stress or train dispersal observed"
+  ]
+}
