@@ -178,8 +178,8 @@ jobs:
                   if not qa['joint_phylogenetic_clade_AND_source_occupancy_null_identifiable']:
                       assert x['joint_phylo75_and_occupancy_observed_minus_null'] is None
           for tree,record in road['source_true_trees_and_regions'].items():
-              assert len(record['source_panels'])==2
-              for panel,x in record['source_panels'].items():
+              assert len(record['original_panels'])==2
+              for panel,x in record['original_panels'].items():
                   n=x['n_new_joint_phylo_occupancy_source_regions']
                   assert 0<=n<=x['n_original_v297_phylo75_supported_source_regions']<=8
                   for reg,item in x['source_original_region_records'].items():
