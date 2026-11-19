@@ -40,7 +40,9 @@ GENUS_RX=re.compile(r'^[A-Z][A-Za-z-]+$')
 
 def genus(taxon: str)->str:
     p=taxon.split()
-    if len(p)!=2 or not GENUS_RX.fullmatch(p[0]) or not p[1].islower():
+    if (len(p)!=2 or not GENUS_RX.fullmatch(p[0]) or
+        not re.fullmatch(r'[a-z][a-z-]+',p[1]) or
+        p[1] in {'sp','spp','cf','aff','agg','indet'}):
         raise ValueError('Original binomial taxonomy is ambiguous: '+repr(taxon))
     return p[0]
 
