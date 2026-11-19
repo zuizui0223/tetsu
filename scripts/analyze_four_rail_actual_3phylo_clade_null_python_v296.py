@@ -278,6 +278,14 @@ def source_null(P,T,groups,g,ii,jj,study_idx:int,tree_idx:int,mode_idx:int,draws
     result["n_technical_label_assignments_not_field_studies"]=2*draws
     return result
 
+def source_json_native(value):
+    """Serialize NumPy result scalars without altering original scientific values."""
+    if isinstance(value,np.integer):return int(value)
+    if isinstance(value,np.floating):return float(value)
+    if isinstance(value,np.bool_):return bool(value)
+    if isinstance(value,np.ndarray):return value.tolist()
+    raise TypeError("Unexpected nonnumeric source QA object: "+type(value).__name__)
+
 def run(private:Path,tree_dir:Path,output:Path,draws:int=N_PER_CHAIN)->dict:
     source_records=original_source_private_csv(private)
     alltrees={}
@@ -355,13 +363,13 @@ def run(private:Path,tree_dir:Path,output:Path,draws:int=N_PER_CHAIN)->dict:
         "technical_permutation_ranks_NOT_biological_study_p_values":True,
         "no_rail_vs_open_nonrail_matched_causal_field_study":True}
     output.parent.mkdir(parents=True,exist_ok=True)
-    output.write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n",encoding="utf8")
+    output.write_text(json.dumps(result,indent=2,ensure_ascii=False,default=source_json_native)+"\n",encoding="utf8")
     print(json.dumps({"original_true_phylogenetic_null_status":"SOURCE_AUTHENTICATED","results":{
         tree:{mode:{"studies":x["original_field_publications_n_source_support"],
                      "height_excess":x["descriptive_original_publication_equal_height_excess"],
                      "source_studies_positive":x["descriptive_n_original_studies_positive"]}
               for mode,x in analysis.items()}
-        for tree,analysis in summary.items()}},indent=2))
+        for tree,analysis in summary.items()}},indent=2,default=source_json_native))
     return result
 
 def _self_test():
