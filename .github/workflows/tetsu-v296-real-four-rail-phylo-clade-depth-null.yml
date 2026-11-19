@@ -17,6 +17,10 @@ concurrency:
   cancel-in-progress: true
 jobs:
   original-four-independent-publisher-studies-source-gated:
+    # Keep R reference validation available by explicit workflow_dispatch.
+    # R apt setup on hosted GitHub runner repeatedly returned 503. The new
+    # Python original-source workflow is the authoritative push validator.
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 55
     steps:
