@@ -176,7 +176,10 @@ def source_study_matrix(source_records:dict,study:str,backbone_tip_lookup:dict[s
             P[row,idx[taxon]]=1
     n=P.sum(axis=1)
     if np.any(n<5):raise ValueError("Retained original field plot still has fewer than 5 real backbone tip taxa")
-    g=np.asarray(g,dtype=str)
+    # np.asarray(..., dtype=str) silently truncates geographic labels to U1
+    # (e.g. source group "10" -> "1"), changing original within-geo site pairs.
+    # Use object strings so the actual author geography IDs remain intact.
+    g=np.asarray(g,dtype=object)
     uniq=sorted(set(g))
     valid_groups=sum(np.sum(g==label)>=2 for label in uniq)
     if valid_groups<2:raise ValueError("Original field geography strata lost under exact-tip matching")
