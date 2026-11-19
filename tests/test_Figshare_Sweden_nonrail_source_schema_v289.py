@@ -14,7 +14,7 @@ class SchemaOnlyTests(unittest.TestCase):
             m.article_audit(-5)
 
     def test_wide_scientific_binomials_detected(self):
-        header=['plot_id','habitat']+[f'Genus{i} species' for i in range(20)]
+        header=['plot_id','habitat']+[f'Genus species{chr(97+i)}' for i in range(20)]
         res=m.plant_columns(header)
         self.assertTrue(res['plausible_wide_site_by_taxon'])
         self.assertTrue(res['site_identifier_column_present'])
