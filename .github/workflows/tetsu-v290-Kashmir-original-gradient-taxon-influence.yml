@@ -1,0 +1,67 @@
+name: "v29.0 Kashmir original 27-site life-span reference and taxon influence"
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/tetsu-kashmir-gradient-taxon-influence-v290-20261119]
+    paths:
+      - "scripts/analyze_Kashmir_gradient_taxon_influence_v290.py"
+      - "tests/test_Kashmir_gradient_taxon_influence_v290.py"
+      - ".github/workflows/tetsu-v290-Kashmir-original-gradient-taxon-influence.yml"
+permissions: {contents: read}
+concurrency:
+  group: "tetsu-v290-Kashmir-original-life-span-influence"
+  cancel-in-progress: true
+jobs:
+  original-sources-and-sensitivity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Test synthetic original-site, paired-zone, taxon influence algebra before accessing data
+        run: |
+          python -m unittest discover -s tests -p 'test_Kashmir_gradient_taxon_influence_v290.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_Kew_curated_lifespan_v289.py' -v
+          python -m unittest discover -s tests -p 'test_Kashmir_global_unknown_trait_partial_id_v288.py' -v
+      - name: Retrieve immutable 2021 Dryad version 99735 and SHA verify
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v290/India results/audit
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source_original/v290/India/dryad_v99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import zipfile
+          with zipfile.ZipFile("source_original/v290/India/dryad_v99735.zip") as z:
+              files=[f for f in z.infolist() if not f.is_dir() and f.filename.split("/")[-1]=="Matrix_plot.xlsx"]
+              if len(files)!=1:
+                  raise ValueError("One and only one source workbook expected")
+              p=Path("source_original/v290/India/Matrix_plot.xlsx")
+              p.write_bytes(z.read(files[0]))
+              if p.stat().st_size!=122187:raise ValueError("Dryad source size drift")
+              if hashlib.sha256(p.read_bytes()).hexdigest()!="529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474":
+                  raise ValueError("Dryad original SHA-256 drift")
+          PY
+      - name: Authenticate Nature 2023 original global plant life-cycle source and crosswalk
+        run: |
+          python -u scripts/analyze_Kashmir_global_lifecycle_source_v287.py \
+            --rail source_original/v290/India/Matrix_plot.xlsx \
+            --crosswalk results/audit/v290_global_original_taxon_crosswalk.csv \
+            --result results/audit/v290_global_2023_source_validation.json
+      - name: Calculate all five Kashmir original physical references and source-taxon leverage
+        run: |
+          python -u scripts/analyze_Kashmir_gradient_taxon_influence_v290.py \
+            --rail source_original/v290/India/Matrix_plot.xlsx \
+            --global-traits results/audit/v290_global_original_taxon_crosswalk.csv \
+            --curated-traits data/literature/tetsu_v289_original_name_Kew_provenance_lifespan_overrides.csv \
+            --output results/audit/v290_Kashmir_site_reference_taxon_influence_aggregate.json
+      - name: Archive aggregate and independently sourced species life-cycle crosswalk only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "tetsu-v290-original-Kashmir-27sites-reference-taxon-leverage"
+          path: results/audit/v290_*
+          if-no-files-found: warn
