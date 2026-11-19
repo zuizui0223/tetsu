@@ -56,7 +56,7 @@ class GenusConstrainedRailOriginalFieldValidation(unittest.TestCase):
         self.assertEqual(q['n_original_true_field_sites'],12)
         self.assertEqual(q['n_original_joint_trait_taxa'],60)
         self.assertEqual(q['n_multispecies_trait_known_genus'],20)
-        self.assertEqual(q['source_original_trait_known_plot_taxon_incidence_total'],
+        self.assertEqual(q['original_source_trait_known_plot_taxon_incidence_total'],
                          sum(len(x['taxa']) for x in sites))
         self.assertTrue(q['source_genus_trait_shuffle_eligible'])
 
