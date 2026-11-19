@@ -1,0 +1,92 @@
+name: "v28.7 author-original Czech railway reference HABITAT area year altitude matching opportunity"
+on:
+  push:
+    branches: [research/tetsu-Czech-nearby-nonrail-height-beta-v286-20261118]
+    paths:
+      - 'scripts/audit_Czech_original_14station_reference_habitat_era_area_altitude_v287.py'
+      - 'tests/test_Czech_reference_original_HABITAT_area_year_v287.py'
+      - '.github/workflows/tetsu-v287-CzechVeg-original-habitat-area-era-controlled-rail-reference.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v287-original-Czech-rail-local-source-habitat-era-open
+  cancel-in-progress: true
+jobs:
+  genuine-author-original-rail-reference-vegetation-habitat-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 52
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install original source XLSX and exact MILP numerical dependencies
+        run: python -m pip install 'openpyxl==3.1.5' 'numpy==2.1.3' 'scipy==1.14.1'
+      - name: Five synthetic tests original HABITAT-only vocabulary, source survey year, plot area, no species leakage
+        run: python -m unittest discover -s tests -p 'test_Czech_reference_original_HABITAT_area_year_v287.py' -v
+      - name: Download genuine 2024 publisher Czech railway flora original S1/S2
+        run: |
+          set -euo pipefail
+          mkdir -p source/v287/Preslia source/v287/CzechVeg source/v287/LEDA results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source/v287/Preslia/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source/v287/Preslia/S2.xlsx
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source/v287/Preslia/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source/v287/Preslia/S2.xlsx \
+            | sha256sum --check
+      - name: Download and source-authenticate independent Czech third-party 2026 railway SR70 registry coordinates
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' \
+            -o source/v287/Preslia/SR70.csv
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' \
+            'source/v287/Preslia/SR70.csv' | sha256sum --check
+      - name: Retrieve CzechVeg original all 117739 meta headers and 2510340 species occurrence records
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 750 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source/v287/CzechVeg/headers.csv
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source/v287/CzechVeg/species.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' source/v287/CzechVeg/headers.csv \
+            'b296e5e19f03fb3bad0a8347c317f8a3' source/v287/CzechVeg/species.csv | md5sum --check
+      - name: Download exact Oldenburg university LEDA canopy height and seed mass original source species traits
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source/v287/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source/v287/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source/v287/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source/v287/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Rebuild exact 14/70 100m unique source references and assess strict habitat/year/area/elevation supports
+        env: {OPENBLAS_NUM_THREADS: '1', OMP_NUM_THREADS: '1'}
+        run: |
+          python -u scripts/audit_Czech_original_14station_reference_habitat_era_area_altitude_v287.py \
+            --s1 source/v287/Preslia/S1.xlsx \
+            --s2 source/v287/Preslia/S2.xlsx \
+            --sr70 source/v287/Preslia/SR70.csv \
+            --headers source/v287/CzechVeg/headers.csv \
+            --species source/v287/CzechVeg/species.csv \
+            --height source/v287/LEDA/canopy_height.txt \
+            --seed source/v287/LEDA/seed_mass.txt \
+            --output results/audit/v287_Czech_true14rail_70CzechVeg_HABITAT_open_era_area_elev_source_support.json
+      - name: Archive source-only plot support and source study beta, never author original plot IDs/habitat text/taxon/GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v287-genuine-CzechVeg-open-habitat-same-era-area-elev-original-rail-reference
+          path: results/audit/v287_Czech_true14rail_70CzechVeg_HABITAT_open_era_area_elev_source_support.json
+          if-no-files-found: warn
