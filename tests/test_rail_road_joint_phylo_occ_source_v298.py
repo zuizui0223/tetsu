@@ -83,7 +83,7 @@ class AuthenticSourceJointNullMath(unittest.TestCase):
             site_rows.append({"roadside":a,"interior":b})
         source={"species":[f"taxon{i}" for i in range(n)],
                 "roads":site_rows,
-                "original_occupancy":np.asarray([16 if i else 15 for i in range(n)])}
+                "original_occupancy":np.asarray([16 if i else 14 for i in range(n)])}
         P,g,zones,roads=source_study_incidence(source)
         self.assertEqual(P.shape,(16,40))
         self.assertEqual(set(zones),{"roadside","interior"})
