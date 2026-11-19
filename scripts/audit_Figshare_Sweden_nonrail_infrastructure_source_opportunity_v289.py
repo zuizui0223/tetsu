@@ -62,7 +62,7 @@ def plant_columns(header: list[str])->dict:
     # when one word is an author, location or survey code.
     latin=re.compile(r"^[A-Z][a-zA-Z-]{2,}\s+[a-z][a-z-]{2,}(?:\s|$)")
     name_hits=sum(bool(latin.match(str(v).strip())) for v in header)
-    h=[re.sub(r"\W+","",str(v).lower()) for v in header]
+    h=[re.sub(r"[^a-z0-9]+","",str(v).lower()) for v in header]
     return {
         "n_columns":len(header),
         "n_scientific_binomial_like_header_columns":name_hits,
