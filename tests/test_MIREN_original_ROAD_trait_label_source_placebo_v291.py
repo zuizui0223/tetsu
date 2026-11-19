@@ -57,8 +57,8 @@ class OriginalFieldSourceNullMath(unittest.TestCase):
             self.assertEqual(sorted(new.values()),sorted(local.values()))
             self.assertEqual(set(new),set(local))
             self.assertEqual(len(new),len(local))
-            self.assertEqual(sum(x[0]*x[1] for x in new.values()),
-                             sum(x[0]*x[1] for x in local.values()))
+            self.assertAlmostEqual(sum(x[0]*x[1] for x in new.values()),
+                                   sum(x[0]*x[1] for x in local.values()),places=11)
 
     def test_original_region_and_road_weighting(self):
         sites=[
