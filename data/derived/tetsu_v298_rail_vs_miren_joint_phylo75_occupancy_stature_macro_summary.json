@@ -1,0 +1,134 @@
+{
+  "version": "v29.8",
+  "status": "SOURCE_AUTHENTICATED_AND_INDEPENDENT_AGGREGATE_QA_PASS",
+  "original_first_party_GitHub_source_run": "https://github.com/zuizui0223/tetsu/actions/runs/44547819438",
+  "source_original_publisher_aggregate_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44547819438/artifacts/14542595533",
+  "original_study_structure": {
+    "independent_European_RAIL_field_publications": 4,
+    "original_European_RAIL_physical_field_units": 171,
+    "independent_MIREN_mountain_ROAD_field_programs": 1,
+    "original_MIREN_regions_primary": 8,
+    "original_MIREN_roads_primary": 22,
+    "original_MIREN_paired_sites_primary": 272,
+    "original_MIREN_regions_strict": 5,
+    "original_MIREN_roads_strict": 13,
+    "original_MIREN_paired_sites_strict": 192
+  },
+  "phylogenetic_source": {
+    "original_author": "Jin & Qian 2022 V.PhyloMaker2",
+    "pinned_original_public_git_commit": "7af3fb5152f691af2e4ec9d5e2e467d1b50505e9",
+    "source_alternative_taxonomic_backbones": [
+      "LCVP",
+      "WP",
+      "TPL"
+    ],
+    "original_phylogeny_monophyletic_clade_root_to_tip_fraction": 0.75,
+    "original_species_occupancy_quintiles": 5,
+    "original_plant_species_site_incidence_FIXED": true,
+    "source_original_height_seed_2D_bivariate_vectors_conserved": true,
+    "n_technical_trait_label_assignments_per_original_evaluable_model": 398
+  },
+  "rail_true_original_author_publication_equal_height_excess": {
+    "LCVP": {
+      "source_original_phylo75_only": 0.056695275539577455,
+      "new_original_phylo75_and_species_occupancy_joint": 0.044022798269967564,
+      "original_papers_joint_supported": 4,
+      "positive_original_papers": 4,
+      "min_source_site_species_incidence_movable": 0.8635666836995401,
+      "leave_one_original_publication_out_joint_height_mean_range": [
+        0.031501936345608536,
+        0.05191811526178957
+      ]
+    },
+    "WP": {
+      "source_original_phylo75_only": 0.05542897397755882,
+      "new_original_phylo75_and_species_occupancy_joint": 0.04064101029302604,
+      "original_papers_joint_supported": 4,
+      "positive_original_papers": 4,
+      "min_source_site_species_incidence_movable": 0.843186372745491,
+      "leave_one_original_publication_out_joint_height_mean_range": [
+        0.023394449811288978,
+        0.05020220647590336
+      ]
+    },
+    "TPL": {
+      "source_original_phylo75_only": 0.058997559309495226,
+      "new_original_phylo75_and_species_occupancy_joint": 0.0464847507777081,
+      "original_papers_joint_supported": 4,
+      "positive_original_papers": 4,
+      "min_source_site_species_incidence_movable": 0.8511358144030933,
+      "leave_one_original_publication_out_joint_height_mean_range": [
+        0.03207771697717002,
+        0.05571453923045932
+      ]
+    }
+  },
+  "MIREN_nonrail_true_original_roadside_and_inland_original_region_equal_height_excess": {
+    "primary_original_5_species_25percent_trait_source": {
+      "LCVP": {
+        "n_original_regions_joint_supported": 5,
+        "source_original_joint_roadside": 0.07938399136720437,
+        "source_original_joint_inland": 0.10506042533406305,
+        "source_original_joint_roadside_minus_inland": -0.025676433966858703,
+        "positive_roadside_regions": 5,
+        "positive_inland_regions": 5
+      },
+      "WP": {
+        "n_original_regions_joint_supported": 5,
+        "source_original_joint_roadside": 0.07767133836008147,
+        "source_original_joint_inland": 0.10373193385539889,
+        "source_original_joint_roadside_minus_inland": -0.0260605954953174,
+        "positive_roadside_regions": 5,
+        "positive_inland_regions": 5
+      },
+      "TPL": {
+        "n_original_regions_joint_supported": 6,
+        "source_original_joint_roadside": 0.06109773062827808,
+        "source_original_joint_inland": 0.08360028405975213,
+        "source_original_joint_roadside_minus_inland": -0.022502553431474052,
+        "positive_roadside_regions": 5,
+        "positive_inland_regions": 6
+      }
+    },
+    "strict_original_10_species_50percent_trait_source": {
+      "LCVP": {
+        "n_original_regions_joint_supported": 5,
+        "source_original_joint_roadside": 0.07886387405461867,
+        "source_original_joint_inland": 0.0956933005764409,
+        "source_original_joint_roadside_minus_inland": -0.016829426521822233
+      },
+      "WP": {
+        "n_original_regions_joint_supported": 4,
+        "source_original_joint_roadside": 0.07396720854181321,
+        "source_original_joint_inland": 0.09618843647984306,
+        "source_original_joint_roadside_minus_inland": -0.022221227938029834
+      },
+      "TPL": {
+        "n_original_regions_joint_supported": 5,
+        "source_original_joint_roadside": 0.07678605499713147,
+        "source_original_joint_inland": 0.08536326967798281,
+        "source_original_joint_roadside_minus_inland": -0.008577214680851363
+      }
+    }
+  },
+  "source_reliability": {
+    "all_12_prior_v296_original_rail_author_tree_source_effects_reproduced_exact": true,
+    "all_6_prior_v297_original_MIREN_tree_panel_site_region_and_beta_baselines_reproduced_exact": true,
+    "source_qa_4_original_paper_vs_ONE_MIREN_program_preserved": true,
+    "original_phylo_clade_AND_occupancy_joint_source_field_support_predeclared": true,
+    "source_original_publisher_hash_checks_passed": true,
+    "source_earlier_final_CI_field_key_issue_fixed_and_rerun_success": true,
+    "new_grafted_plant_phylogenetic_tips": 0,
+    "not_a_global_causal_meta_analysis_or_within_species_adaptation_test": true
+  },
+  "limitations": [
+    "MIREN one field program, not 8 independent source publications or an additional railway study",
+    "LCVP/WP/TPL are alternative original trees applied to same botanical studies, not independent ecology",
+    "Source regions and original site/protocol differ in rail station-wide vs Slovenia ballast vs roadside interior",
+    "Roadside−inland region-level signs vary even though conditional region-equal means are negative",
+    "No genuinely matched current active rail ballast vs physically matched nonrail open-gravel botanical plots",
+    "Source LE DA height/seed are published species-level medians not phenotypes of tracked railway plant individuals",
+    "The number or sign of supported source field papers does not imply a nonzero meta-analysis prediction interval",
+    "True published phylogenetic backbone tip does not establish own DNA sequencing for each plant"
+  ]
+}
