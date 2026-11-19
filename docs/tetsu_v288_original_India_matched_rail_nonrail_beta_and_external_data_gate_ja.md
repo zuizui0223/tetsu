@@ -31,3 +31,29 @@
 厳格な研究間メタ解析ができるのは、**真に独立した複数原著で、同じエリア・気候・調査年・field extent・物理対照・形質軸の種構成βを再計算でき、publication単位のばらつきが得られてから**。それまでは段階別のevidence mapに限定し、無理な平均CIや普遍性主張はしない。
 
 実装: \`scripts/validate_Kashmir_out_of_Europe_rail_nonrail_height_beta_v288.py\`, \`tests/test_Kashmir_original_rail_nonrail_LEDA_beta_v288.py\`, \`.github/workflows/tetsu-v288-Kashmir-outofEurope-original-rail-nonrail-trait-coverage.yml\`.
+
+
+## v28.8 真正原著SOURCE完走結果（2026-11-19 JST）
+
+**[Actions source+seven synthetic tests SUCCESS #44454765452](https://github.com/zuizui0223/tetsu/actions/runs/44454765452)**。Dryadの個別files/546003/downloadはActionsでHTTP401のため、以前v25.6で成功した著者original VERSION 99735 ZIPから唯一の Matrix_plot.xlsx を展開し、**元SHA-256と122187バイトを再照合**。Oldenburg LEDA 2原表SHAも一致。元sourceの植物群集を一切合成・置換せず真正照合している。
+
+原著123 taxon columns → 厳格な二名法に解決した122種 → LEDA草丈と種子重が共に対応する76種（**62.30%**）。空間field unitは元2014/2017×4 zone全ての完全共通地点で駅構内15、駅間12。二つの年は同一地点の反復調査であり2独立研究ではない。
+
+### 検証の結論：形質欠測に加え「元々の種数不足」が構造的なボトルネック
+
+同じ元著者のplot year/zoneと同一site保持基準で、本物のraw track種数を種ごとに確かめた後、**もし122種すべてのLEDA形質が分かっていたら最大何実地点がoriginal sourceの各plot5種条件を満たすか**を算定。これは元植物の生態効果値でなく「完全形質があっても超えられないサンプル上限」の計算。基準は効果量閲覧前に固定している。
+
+| 元設計階層・同地点の真対照 | 原source完全共通site | Track元raw種数 min/median/max（site×year） | Track元LEDA二形質既知種 min/median/max | **全種形質既知と仮定した候補地点数の最大値** | 実際の事前trait/support合格site |
+|---|---:|---:|---:|---:|---:|
+| 駅構内 Track vs Interior 1 | 15 | 2 / **4** / 12 | 1 / **3** / 8 | **0** | **0** |
+| 駅構内 Track vs Interior 2 | 15 | 2 / **4** / 12 | 1 / **3** / 8 | **0** | **0** |
+| 駅間 Track vs Interior 1 | 12 | 2 / **4** / 6 | 2 / **3** / 4 | **1** | **0** |
+| 駅間 Track vs Interior 2 | 12 | 2 / **4** / 6 | 2 / **3** / 4 | **1** | **0** |
+
+したがって事前固定した**駅構内最低10地点／駅間最低8地点、plot両形質種数5以上×2年×同地対照**のモデルでは、仮に観測した元植物の全ての高さ・種子重量が100%得られても計算上の対照site supportが成立しない。4比較パネル全部を **NOT_IDENTIFIABLE_TRAIT_SUPPORT** とした。これを「インドで機能収斂なし」「草丈差0」「真のβ効果が負」と解釈してはいけない。
+
+**実務上の変更点**：このKashmir100m²×2014/17 datasetを新たな独立functional-betaメタ効果量に追加する道は、もっと正確なLEDAや英語学名照合だけでは救済できない。もし対象を広げるなら、調査地点の上位grainでの植物群集集計を**別の事前登録仮説として**設計するか、各plotで充分なtaxa richnessがある同調査面積の真正rail/nonrailフィールド原著を新たに取得する必要がある。元地点×年を恣意的にプールしたり今の5種/30%閾値を効果の符号が出るまで後から下げない。
+
+**最も近い次のsource拡張**：フランス394 plotの全種行列はrequest/未取得、ポーランド廃線25＋草地25は運用状態が違うため別subgroup、中国–ラオス14駅84plotは対照の真の調査面積と原種行列が未確認。上記3つについて、source plot area／独立site／field date／original habitat metadata／trait dual-coverageの照合を効果量計算前に済ませる。鉄道vs非鉄道の因果効果と、鉄道内trait-label帰無超過を混ぜない。
+
+元のsource植物個別site×taxon行列やLEDA種別原表はGitHubへ再配布していない。集計artifactは [v28.8 Actions](https://github.com/zuizui0223/tetsu/actions/runs/44454765452) のみ公開。
