@@ -89,7 +89,9 @@ class OriginalMIRENElevationQA(unittest.TestCase):
             roads[0][1][-1]["year"]=2018
             info=m.evaluate_original_region_support(roads,"AAA",meta)
             self.assertEqual(info["source_road_n_with_mixed_original_first_eligible_survey_years"],1)
-            self.assertFalse(info["source_environmental_gradient_support_PASS"])
+            # Year mismatch is reported as a possible confound, not silently
+            # assumed to remove an otherwise valid elevation gradient.
+            self.assertTrue(info["source_environmental_gradient_support_PASS"])
 
 if __name__=="__main__":
     unittest.main()
