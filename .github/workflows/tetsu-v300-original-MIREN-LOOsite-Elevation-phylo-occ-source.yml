@@ -1,0 +1,125 @@
+name: "v30.0 original MIREN Elevation predicts held-out original sites beyond phylogeny+occupancy null"
+on:
+  push:
+    branches: [research/tetsu-MIREN-LOOCV-elevation-stature-v300-20261120]
+    paths:
+      - 'scripts/evaluate_MIREN_native_elevation_heldout_stature_predictability_v300.py'
+      - 'tests/test_MIREN_true_site_elevation_LOOCV_v300.py'
+      - 'data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json'
+      - '.github/workflows/tetsu-v300-original-MIREN-LOOsite-Elevation-phylo-occ-source.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v300-MIREN-source-real-site-heldout-elevation-predictability
+  cancel-in-progress: true
+jobs:
+  source-genuine-MIREN-field-site-heldout-phylo-occupancy-CV:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install only stable Python original floristic source readers (never R apt installation)
+        run: python -m pip install 'numpy>=1.26,<3' 'openpyxl==3.1.5' 'PyMuPDF==1.24.14' 'rdata==1.1.0'
+      - name: Original MIREN metadata QA, native Elevation source & ten held-out genuine site CV mathematical tests
+        run: |
+          python -m unittest discover -s tests -p 'test_MIREN_original_Elevation_source_v299.py' -v
+          python -m unittest discover -s tests -p 'test_MIREN_native_elevation_phylo_occ_mechanism_v299.py' -v
+          python -m unittest discover -s tests -p 'test_MIREN_true_site_elevation_LOOCV_v300.py' -v
+          python -u scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py --self-test
+      - name: Download authentic published mountain ROADS v3 MIREN original source and verify immutable original MD5
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v299/MIREN source_original/v299/LEDA source_original/v299/MEGATREES results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 350 \
+            'https://zenodo.org/records/15749536/files/MIREN_road_survey_%282007-2023%29_zen_v3_002507.csv?download=1' \
+            -o source_original/v299/MIREN/original.csv
+          test "$(stat -c%s source_original/v299/MIREN/original.csv)" = '17899241'
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' \
+            source_original/v299/MIREN/original.csv | md5sum --check
+      - name: Download original Oldenburg LEDA height and seed mass for genuine botanically observed species only
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v299/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v299/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v299/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v299/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Restore original published LCVP WP TPL no-grafted phylo RData author trees from immutable Git commit
+        run: |
+          set -euo pipefail
+          PREFIX='https://raw.githubusercontent.com/jinyizju/V.PhyloMaker2/7af3fb5152f691af2e4ec9d5e2e467d1b50505e9/data'
+          for TREE in LCVP WP TPL; do
+            curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+              "$PREFIX/GBOTB.extended.$TREE.rda" -o "source_original/v299/MEGATREES/GBOTB.extended.$TREE.rda"
+          done
+          test "$(git hash-object source_original/v299/MEGATREES/GBOTB.extended.LCVP.rda)" = '0d761cb0bf36392cc13759a7ac9026db564217eb'
+          test "$(git hash-object source_original/v299/MEGATREES/GBOTB.extended.WP.rda)" = '8d3777762cb32a80e8c6ea097a0456e2b63a94c6'
+          test "$(git hash-object source_original/v299/MEGATREES/GBOTB.extended.TPL.rda)" = 'd7bc9b69bf3cb11c3c3d090282723b6e73b1de55'
+      - name: Source-only verify original MIREN Plot 1 and 3 native Elevation metadata and original physical site-year support
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+        run: |
+          python -u scripts/audit_MIREN_original_native_elevation_source_v299.py \
+            --miren source_original/v299/MIREN/original.csv \
+            --height source_original/v299/LEDA/canopy_height.txt \
+            --seed source_original/v299/LEDA/seed_mass.txt \
+            --output results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json
+      - name: First reproduce six v29.9 genuine MIREN elevation × phylogeny75 × occupancy original observational source gradients BEFORE heldout test
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          python -u scripts/evaluate_MIREN_native_elevation_heldout_stature_predictability_v300.py \
+            --miren source_original/v299/MIREN/original.csv \
+            --height source_original/v299/LEDA/canopy_height.txt \
+            --seed source_original/v299/LEDA/seed_mass.txt \
+            --tree-dir source_original/v299/MEGATREES \
+            --original-v299-summary data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json \
+            --draws 199 \
+            --output results/audit/v300_original_MIREN_heldout_Elevation_stature_source_phylo_occ_null.json
+      - name: Source QA: no sample pseudo-replication, no unsupported zero, exact original road/Region/year ancestry and LOOCV subtraction
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,math
+          j=json.loads(Path('results/audit/v300_original_MIREN_heldout_Elevation_stature_source_phylo_occ_null.json').read_text())
+          assert j['version']=='v30.0' and j['original_v299_six_tree_by_support_panel_true_native_altitude_effects_reproduced_to_1e_10']
+          assert j['source_original_author_MIREN_study_programmes_n']==1
+          assert j['original_MIREN_source_elevation_plot_metadata_supported_n']==6446
+          assert set(j['original_first_party_tree_source_and_original_region_support'])=={'LCVP','WP','TPL'}
+          for tree,p in j['original_first_party_tree_source_and_original_region_support'].items():
+              assert len(p['panels'])==2
+              for panel,d in p['panels'].items():
+                  assert 0<=d['n_new_source_regions_with_single_year_source_roads_prediction']<=d['n_new_source_regions_with_true_out_of_sample_prediction']<=d['n_prior_source_environmental_regions_reproduced']<=8
+                  for name,z in d['original_source_region_support_and_predictivity'].items():
+                      eff=z.get('new_predictive_heldout_effects')
+                      if eff is None:
+                          assert z['status'].startswith('NOT_IDENTIFIABLE')
+                          continue
+                      assert z['status']=='SOURCE_ORIGINAL_ROADSIDE_INLAND_SITE_HELDOUT_ELEVATION_ELIGIBLE'
+                      assert eff['true_field_heldout_sites_NEVER_used_in_own_road_elevation_fit']
+                      for zone,metrics in eff['original_source_original_site_heldout_predictability'].items():
+                          obs=metrics['source_original_heldout_elevation_predictive_gain_zlog_CWM_RMSE']
+                          null=metrics['source_phylogeny_and_occupancy_trait_null_heldout_predictive_gain']
+                          delta=metrics['original_site_LOOCV_observed_minus_source_conditional_null']
+                          assert math.isfinite(obs) and math.isfinite(null) and math.isfinite(delta)
+                          assert abs(obs-null-delta)<1e-10
+                          assert metrics['n_technical_label_draws_NOT_field_studies']==398
+          print('v30.0 real original Road and Inland source, exact 75% phylo + occupancy, holdout-predictive skill QA PASS')
+          PY
+      - name: Archive only original field programme, source region / anonymized road counts and site heldout prediction gain aggregates (no original plant table, elevations, GPS, mega-tree tips)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v300-original-MIREN-native-Elevation-real-site-heldout-phylogenetic-occupancy-predictability
+          path: |
+            results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json
+            results/audit/v300_original_MIREN_heldout_Elevation_stature_source_phylo_occ_null.json
+          if-no-files-found: warn
