@@ -1,8 +1,8 @@
 {
   "version": "v29.9",
   "empirical_status": "AUTHENTIC_SOURCE_DATA_AND_2256_INDEPENDENT_NUMERIC_COHORT_REGION_AND_LOO_CHECKS_PASS",
-  "source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44658352848",
-  "original_source_audit_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44658352848/artifacts/14594770935",
+  "source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44659330637",
+  "original_source_audit_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44659330637/artifacts/14594079180",
   "source_original_pub_DOI": "10.1111/geb.70284",
   "source_original_data_DOI": "10.5281/zenodo.15749536",
   "source_original_occurrence_rows": 167804,
@@ -200,5 +200,7 @@
     "Original traits from species medians not local measured phenotypic plasticity or genetic adaptation",
     "No active railway ballast-versus-matched-nonrail open gravel original plot environmental comparison",
     "No field permutation p-value, no global ecological random-effects prediction interval"
-  ]
+  ],
+  "additional_published_source_machine_summary_QA_checks": 54,
+  "all_six_frozen_macro_derived_panels_verified_against_original_source": true
 }
