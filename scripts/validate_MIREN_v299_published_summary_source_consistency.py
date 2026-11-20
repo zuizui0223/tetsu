@@ -51,7 +51,7 @@ def run(src:dict,frozen:dict)->dict:
                 if r["source_status"]=="SOURCE_ALTITUDE_ENVIRONMENTAL_SLOPE_ESTIMABLE"]
         road=sum(r["original_source_roads_with_4_sites_150m_valid_elevation"] for r in active)
         site=sum(r["source_true_field_sites_on_usable_elevation_roads"] for r in active)
-        if road!=x["original_true_roads_n"] or site!=x["original_paired_real_sites_n"]:
+        if road!=x["original_real_roads_n"] or site!=x["original_paired_real_sites_n"]:
             raise ValueError("Original physical Road×Site ecological source support changed")
         for zone,displayed in (("roadside","roadside"),("interior","inland")):
             v=main["region_equal_estimates"][zone][METRIC_A]
@@ -76,7 +76,7 @@ def run(src:dict,frozen:dict)->dict:
       "original_MIREN_source_published_derived_rows_n":6,
       "independent_original_source_numeric_summary_comparisons":count,
       "original_6_main_years_phylogeny_support_panels_identical_to_source":True,
-      "all_six_prior_rail_source_environmental_slope_original_units_preserved":True,
+      "all_six_original_MIREN_source_environmental_slope_units_preserved":True,
       "no_source_original_plant_per_site_elevation_and_GPS_exported":True}
 
 def main():
