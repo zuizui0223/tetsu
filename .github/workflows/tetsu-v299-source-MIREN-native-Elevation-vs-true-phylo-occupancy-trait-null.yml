@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/audit_MIREN_original_native_elevation_source_v299.py'
       - 'scripts/test_MIREN_source_elevation_phylo_occ_stature_v299.py'
+      - 'scripts/validate_MIREN_native_Elevation_environmental_source_v299.py'
       - 'tests/test_MIREN_original_Elevation_source_v299.py'
       - 'tests/test_MIREN_native_elevation_phylo_occ_mechanism_v299.py'
       - 'data/derived/tetsu_v298_rail_vs_miren_joint_phylo75_occupancy_stature_macro_summary.json'
@@ -115,6 +116,12 @@ jobs:
                               assert abs(a-b-diff)<1e-10
           print('v29.9 original field source native Elevation + true phylo × source occupancy slope QA PASS')
           PY
+      - name: Independently revalidate EVERY original Region Roadside/Inland native Elevation slope, null subtraction, sign, LOO and survey-year gate
+        run: |
+          python -u scripts/validate_MIREN_native_Elevation_environmental_source_v299.py \
+            --source results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json \
+            --metadata results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json \
+            --output results/audit/v299_original_Elevation_independent_source_math_field_year_QA.json
       - name: Archive original plot provenance and only field programme / region / anonymous road environmental effects (no original Elevations/GPS/taxa)
         if: always()
         uses: actions/upload-artifact@v4
@@ -123,4 +130,5 @@ jobs:
           path: |
             results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json
             results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json
+            results/audit/v299_original_Elevation_independent_source_math_field_year_QA.json
           if-no-files-found: warn
