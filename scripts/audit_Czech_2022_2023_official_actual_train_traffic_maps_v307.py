@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 import re
 import unicodedata
+import math
 import fitz
 
 AUTHORITY="Správa železnic"
@@ -71,6 +72,49 @@ def audit_botanical_name_glyph_coverage(pdf_pages_text:list[str])->dict:
     }
 
 
+
+
+def station_pdf_text_spatial_candidate_audit(d,botanical_station_names:list[str])->dict:
+    """Text-only placement QA. Nearby number token NEVER becomes traffic.
+
+    A station at a junction may have multiple services/directions; standalone
+    numeric labels could be segment traffic, route marker or unrelated annotation.
+    Report only short candidate snippets for manual map-based traceability.
+    """
+    result={}
+    for station in botanical_station_names:
+        boxes=[]
+        for page_no,page in enumerate(d):
+            raw_boxes=page.search_for(station,quads=False)
+            num_words=[]
+            for w in page.get_text("words"):
+                txt=str(w[4]).strip()
+                m=re.fullmatch(r"([0-9]{1,3})(?:[.,][0-9]+)?",txt)
+                if m and int(m.group(1))<=600:
+                    num_words.append((int(m.group(1)),fitz.Rect(w[:4])))
+            for b in raw_boxes[:8]:
+                cx=(b.x0+b.x1)/2;cy=(b.y0+b.y1)/2
+                distances=[]
+                for val,rect in num_words:
+                    rpx=(rect.x0+rect.x1)/2;rpy=(rect.y0+rect.y1)/2
+                    dist=math.hypot(rpx-cx,rpy-cy)
+                    if dist<28:
+                        distances.append({"number_text_unclassified":val,
+                            "distance_pdf_points":round(dist,2),
+                            "number_text_bbox_pdf_points":[round(x,2) for x in rect]})
+                distances.sort(key=lambda x:x["distance_pdf_points"])
+                boxes.append({"page_index":page_no,
+                              "label_bbox_pdf_points":[round(x,2) for x in b],
+                              "nearest_number_tokens_UNASSIGNED":distances[:8]})
+        result[station]=boxes
+    return {
+      "source_original_botanical_station_names":len(botanical_station_names),
+      "station_names_with_EXACT_PDF_search_boxes":sum(bool(x) for x in result.values()),
+      "name_bbox_records_not_original_geo_or_actual_train_exposure":result,
+      "declared_station_numeric_traffic_exposures":0,
+      "all_nearby_numeric_tokens_AMBIGUOUS_not_actual_counts":True
+    }
+
 def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
     if year not in SOURCE_URLS:
         raise ValueError("Only original 2022/2023 public maps supported")
@@ -103,6 +147,7 @@ def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
         text_digest.append(hashlib.sha256(txt.encode()).hexdigest())
         parts.append(txt)
     full="\n".join(parts)
+    reviewed_stations=station_pdf_text_spatial_candidate_audit(d,ORIGINAL_CZECH_BOTANICAL_STATIONS)
     if render_dir is not None:
         render_dir.mkdir(parents=True,exist_ok=True)
         page=d[0]
@@ -117,7 +162,9 @@ def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
         "official_original_source_url":SOURCE_URLS[year],
         "original_official_public_landing_page":PUBLIC_SOURCE_PAGE,
         "official_map_infrastructure_operator":AUTHORITY,
-        "published_measure":"daily counts of actually running ALL trains over the publisher-specified first-quarter period, not annual freight/passenger-specific trains",
+        "published_measure":"daily count of actually running ALL trains on the ninth-busiest day (publisher: 9th decile) of 1 January–31 March, rounded to nearest five for values over 25; not annual freight/passenger counts",
+        "ninth_decile_NOT_a_mean_day":True,
+        "counts_above_25_rounded_to_multiples_of_5":True,
         "published_months":ORIGINAL_PUBLISHED_PERIOD[year],
         "publisher_original_pdf_sha256":hashlib.sha256(raw).hexdigest(),
         "publisher_original_pdf_bytes":len(raw),
@@ -131,6 +178,7 @@ def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
         "numeric_text_tokens_unassigned_count":len(num_tokens),
         "has_extractable_glyph_text":any(n>0 for n in chars),
         "botanical_station_NAME_glyph_match_not_numeric_exposure":audit_botanical_name_glyph_coverage(parts),
+        "station_text_bbox_and_nearby_NUMBER_CANDIDATES_NOT_EXPOSURES":reviewed_stations,
         "railway_vegetation_2020_2022_station_specific_passes_identified":False,
         "real_year_specific_botanical_site_linkage_performed":False,
         "freight_passenger_split_proven":False,
@@ -154,6 +202,7 @@ def verify_pair(records:dict)->dict:
         "original_publication":"Kutlvašr et al 2024, Preslia DOI 10.23855/preslia.2024.247",
         "year_2022_2023_map_SAMPLES_ONLY_1JAN_TO_31MAR":True,
         "cannot_claim_annual_freight_trains":True,
+        "official_9th_decile_day_count_not_period_mean":True,
         "source_maps":records
     }
 
