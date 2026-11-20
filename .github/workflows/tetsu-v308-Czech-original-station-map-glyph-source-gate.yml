@@ -1,0 +1,93 @@
+name: "v308 original Czech botanical 39-station vs 2022/23 official train map glyph identifiability"
+on:
+  push:
+    branches: [research/tetsu-v308-Czech-botanical-traffic-glyph-source-gate-20261121]
+    paths:
+      - 'scripts/audit_Czech_original_station_to_traffic_map_glyph_identifiability_v308.py'
+      - 'tests/test_Czech_original_station_traffic_map_glyph_audit_v308.py'
+      - '.github/workflows/tetsu-v308-Czech-original-station-map-glyph-source-gate.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v308-Czech-author-S2-source-stations-operator-map-glyph
+  cancel-in-progress: true
+jobs:
+  genuine-Czech-original-station-to-traffic-map-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install exact source text/Excel parser, never OCR
+        run: python -m pip install 'PyMuPDF==1.24.14' 'openpyxl==3.1.5'
+      - name: Synthetic tests for true publisher station labels and rotation semantics
+        run: python -m unittest discover -s tests -p 'test_Czech_original_station_traffic_map_glyph_audit_v308.py' -v
+      - name: Retrieve publisher corrected S1/S2 source, original source hashes mandatory
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v308 results/audit/v308
+          curl -fLfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' -o source_original/v308/S1.xlsx
+          curl -fLfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://preslia.cz/appendix/file?id=540' -o source_original/v308/S2.xlsx
+          test "$(stat -c%s source_original/v308/S1.xlsx)" = '79261'
+          test "$(stat -c%s source_original/v308/S2.xlsx)" = '13533'
+          printf '%s  %s\n' \
+            'df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06' source_original/v308/S1.xlsx \
+            '00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2' source_original/v308/S2.xlsx | sha256sum --check
+      - name: Retrieve third-party exact 2026 SR70 station registry derivative (not plot GPS)
+        run: |
+          curl -fLfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' -o source_original/v308/SR70.csv
+          printf '%s  %s\n' \
+            'fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019' \
+            'source_original/v308/SR70.csv' | sha256sum --check
+      - name: Obtain exact original 2022 and 2023 first-quarter ALL trains official PDFs
+        run: |
+          set -euo pipefail
+          curl -fLfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            -A 'academic railway botany source audit' \
+            'https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_22.pdf' \
+            -o source_original/v308/official_2022.pdf
+          curl -fLfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            -A 'academic railway botany source audit' \
+            'https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_23.pdf' \
+            -o source_original/v308/official_2023.pdf
+          printf '%s  %s\n' \
+            'c4d2436a7e1950bc6c247926b12dbba16649491221c94fc7288e234c1c3830ee' source_original/v308/official_2022.pdf \
+            '4cbd4349814ac636bda74d3389810d6100ecc9e12daef237a12fa8b62eb25b57' source_original/v308/official_2023.pdf | sha256sum --check
+      - name: Validate true publisher 39 sites, 35 registered station points, rotated glyphs, non-assignable train counts
+        run: |
+          python -u scripts/audit_Czech_original_station_to_traffic_map_glyph_identifiability_v308.py \
+            --s1 source_original/v308/S1.xlsx \
+            --s2 source_original/v308/S2.xlsx \
+            --sr70 source_original/v308/SR70.csv \
+            --map-2022 source_original/v308/official_2022.pdf \
+            --map-2023 source_original/v308/official_2023.pdf \
+            --output results/audit/v308/Czech_original_Preslia39_official_Q1_traffic_glyph_identifiability.json
+      - name: Hard gate: never assign annual passenger or freight flow by text proximity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          d=json.loads(Path('results/audit/v308/Czech_original_Preslia39_official_Q1_traffic_glyph_identifiability.json').read_text())
+          assert d['n_original_floristic_stations']==39
+          assert d['n_station_level_train_counts_approved']==0
+          assert d['no_ecological_rail_traffic_slope_fitted']
+          assert d['original_botanical_publisher_and_station_geometry']['n_independently_matched_2026_sr70_centroids']==35
+          assert d['original_botanical_publisher_and_station_geometry']['source_S1_S2_verified_biological_incidence_markers']==6941
+          for k in ('2022','2023'):
+              p=d['operator_maps'][k]
+              assert p['n_approved_botanical_station_traffic_exposures']==0
+              assert p['n_station_labels_found_by_pdf_glyph_bbox']>=15
+              assert p['station_line_and_number_assignment_not_proven']
+          print('v308 ALL genuine source identity + official train GIS glyph + zero invented exposure checks PASS')
+          PY
+      - name: Archive minimal author source-support and number glyph ambiguity only, never publisher PDFs/XLSXs or raw flora
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v308-Czech-Preslia-39stations-2022-2023-operator-9decile-glyph-source-gate
+          path: results/audit/v308/Czech_original_Preslia39_official_Q1_traffic_glyph_identifiability.json
+          if-no-files-found: warn
