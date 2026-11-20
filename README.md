@@ -1,5 +1,9 @@
 # tetsu — Railway-mediated plant redistribution
 
+## 外国鉄道頻度の追加予測を原データで検証（v304、2026-11-20）
+
+[結果と図](docs/tetsu_v304_incremental_foreign_rail_prediction_results_ja.md)：国内背景を条件とした原研究留保では外国鉄道頻度の追加が5研究中4研究で予測を改善。カシミールの同面積局所比較でも改善したが、国内の別地点の鉄道頻度を含めると追加価値は小さく、外国道路に対する優位は学習種集合に依存した。[計画](docs/tetsu_v304_incremental_foreign_rail_prediction_plan_ja.md)・[全42全国/12局所パネル](data/derived/v304_incremental_foreign_rail.json)。広域的情報の有用性と鉄道特異性を区別する。
+
 ## 全結果の論文化・先行研究との対応（2026-11-20）
 
 [全結果から組み直した論文化案](docs/tetsu_all_results_publication_synthesis_ja.md)を現在の統合入口とする。草丈に限定せず、種輸送、局所共有、遠隔路線、種・形質の予測、標高応答、写真・衛星・進化まで扱う。[全198文書の索引](docs/evidence_inventory/all_reports_index_ja.md)、[全ファイル台帳](docs/evidence_inventory/repository_files.csv)、[47件の先行研究・差別化](docs/tetsu_literature_scope_and_prior_art_ja.md)から肯定・反証・判定不能と出典を追跡できる。基準はda8cc06の1,190追跡ファイル。新たな生態解析・全計算再現・完了した系統的レビューではなく、既存成果の統合監査である。以下は各時点の研究履歴として保持する。
