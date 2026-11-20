@@ -1,0 +1,140 @@
+{
+  "version": "v30.1",
+  "status": "ORIGINAL_FIRST_PARTY_SOURCE_SUCCESS_WITH_INDEPENDENT_AGGREGATE_RECHECK",
+  "source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44668536407",
+  "source_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44668536407/artifacts/14598074083",
+  "source_artifact_zip_sha256": "d870fafb14b2fcc5f723f188779737378998d6beb95b4cdf8189c8f15eb27382",
+  "original_field_study_programmes": 1,
+  "original_MIREN_is_mountain_ROADS_not_RAIL": true,
+  "original_plant_observations": 167804,
+  "original_elevation_plot_QA_units": 6446,
+  "original_v300_six_panels_exact_reproduced_to_1e_10": true,
+  "original_v300_independent_second_parser_source_checks_passed": 328,
+  "primary_actual_frozen_field_cohort": {
+    "region_codes": [
+      "AUT",
+      "CHE",
+      "IND",
+      "ITA",
+      "NOR"
+    ],
+    "original_real_roads": 14,
+    "original_roadside_inland_paired_sites": 210
+  },
+  "effect_definition": "Original region equal of equal-Road RMSE(one heldout Road single calibration anchor constant) - RMSE(slopes fitted on OTHER Roads in SAME Region, one observed anchor intercept); true original remaining Road sites are held-out",
+  "metric_units": "z(log source LEDA species-median canopy height) RMSE",
+  "joint_trait_label_null": "true phylogenetic tree rooted clade at 75% of source root-to-tip median × source taxon site occupancy quintile, bivariate LEDA trait-label vectors only, 2 independent deterministic chains x199 technical assignments; NOT field p",
+  "primary_panels": {
+    "LCVP": {
+      "lowest": {
+        "actual": 0.055586359877164586,
+        "excess_vs_joint_null": 0.04786819914778891,
+        "actual_positive_regions": 4,
+        "excess_positive_regions": 5,
+        "region_loo_excess_bounds": [
+          0.022416,
+          0.056464
+        ]
+      },
+      "median": {
+        "actual": 0.030676,
+        "excess_vs_joint_null": 0.022393,
+        "actual_positive_regions": 4,
+        "excess_positive_regions": 4
+      },
+      "lowest_actual_by_region": {
+        "AUT": 0.014608,
+        "CHE": -0.018173,
+        "IND": 0.047017,
+        "ITA": 0.192336,
+        "NOR": 0.042143
+      }
+    },
+    "WP": {
+      "lowest": {
+        "actual": 0.058186249187015,
+        "excess_vs_joint_null": 0.053108782323845034,
+        "actual_positive_regions": 4,
+        "excess_positive_regions": 5,
+        "region_loo_excess_bounds": [
+          0.022367,
+          0.064037
+        ]
+      },
+      "median": {
+        "actual": 0.030861,
+        "excess_vs_joint_null": 0.024613,
+        "actual_positive_regions": 3,
+        "excess_positive_regions": 4
+      }
+    },
+    "TPL": {
+      "lowest": {
+        "actual": 0.05613493422350943,
+        "excess_vs_joint_null": 0.046729827735366394,
+        "actual_positive_regions": 4,
+        "excess_positive_regions": 5,
+        "region_loo_excess_bounds": [
+          0.01913,
+          0.054294
+        ]
+      },
+      "median": {
+        "actual": 0.031142,
+        "excess_vs_joint_null": 0.022648,
+        "actual_positive_regions": 4,
+        "excess_positive_regions": 4
+      }
+    }
+  },
+  "strict_panels": {
+    "LCVP": {
+      "original_region_codes": 4,
+      "real_roads": 11,
+      "paired_sites": 174,
+      "lowest_real_gain": 0.05420175610186255,
+      "lowest_joint_null_excess": 0.050288813724130625,
+      "median_real_gain": 0.023761
+    },
+    "WP": {
+      "original_region_codes": 3,
+      "real_roads": 8,
+      "paired_sites": 118,
+      "lowest_real_gain": 0.05925528759023259,
+      "lowest_joint_null_excess": 0.0578586851793198,
+      "median_real_gain": 0.015399,
+      "median_positive_real_regions": 1,
+      "median_excess_region_loo_bounds": [
+        -0.007497,
+        0.031251
+      ]
+    },
+    "TPL": {
+      "original_region_codes": 4,
+      "real_roads": 11,
+      "paired_sites": 175,
+      "lowest_real_gain": 0.0575335899679825,
+      "lowest_joint_null_excess": 0.0544565463060518,
+      "median_real_gain": 0.026161
+    }
+  },
+  "primary_inland_lowest_actual_RMSE_gain": {
+    "LCVP": 0.097364,
+    "WP": 0.134838,
+    "TPL": 0.10358
+  },
+  "primary_lowest_roadside_minus_inland_conditional_excess": {
+    "LCVP": -0.016075,
+    "WP": -0.028936,
+    "TPL": -0.002835
+  },
+  "important_limitations": [
+    "Original 5 MIREN Regions are one field programme, not independent publications",
+    "LCVP WP TPL trees are alternative source taxonomic backbones on the same plant data",
+    "One original site on held-out Road is measured to calibrate intercept, so not no-data road prediction",
+    "Transfer is only within the SAME previously sampled Region, not across unknown Region",
+    "Region heterogeneity and median-anchor strict WP support preclude universal improvement",
+    "These are source species-median plant trait CWMs, not within-species plasticity or evolution",
+    "Mountain ROADS do not identify railway-only filtering, rail connectedness, wind/mowing or train seed transport"
+  ]
+}
