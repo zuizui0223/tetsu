@@ -1,0 +1,137 @@
+{
+  "version": "v30.0",
+  "status": "ORIGINAL_SOURCE_SUCCESS_LOOCV_AT_REAL_SITE_LEVEL",
+  "verified_original_source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44661986353",
+  "original_source_canonical_aggregate_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44661986353/artifacts/14596295975",
+  "original_MIREN_study_field_programmes": 1,
+  "original_mountain_road_source_not_railway": true,
+  "original_MIREN_2007_2023_botanical_occurrence_rows": 167804,
+  "original_MIREN_plot_Elevation_metadata_with_source_QA": 6446,
+  "original_flora_source_panel_before_phylo_elevation_CV": {
+    "primary": {
+      "original_region_codes": 8,
+      "actual_roads": 22,
+      "same_site_paired_survey_sites": 272
+    },
+    "strict": {
+      "original_region_codes": 5,
+      "actual_roads": 13,
+      "same_site_paired_survey_sites": 192
+    }
+  },
+  "source_original_phylogenetic_trees_alternative_nomenclatures_not_field_studies": [
+    "LCVP",
+    "WP",
+    "TPL"
+  ],
+  "original_root_tip_branch_length_cut_fraction": 0.75,
+  "original_taxon_occupancy_quintiles": 5,
+  "original_site_holdout_definition": "Each real site left out of training within SAME original Road. Original physically paired roadside/inland plots and true native Elevation stay fixed.",
+  "primary_metric": "RMSE(training-site intercept-only mean) minus RMSE(training-site elevation linear OLS model) for real original held-out site canopy height CWM zlog; positive means heldout prediction improvement",
+  "original_technical_source_null_draws": 398,
+  "original_independent_publisher_studies_added": 0,
+  "source_taxa_site_AND_paired_LEDA_height_seed_vectors_never_moved_from_original_observed_source": true,
+  "original_source_six_v299_signed_native_elevation_effects_reproduced_exact": true,
+  "source_tree_by_field_support_panel": [
+    {
+      "original_tree": "LCVP",
+      "source_trait_support": "primary",
+      "original_source_region_codes_with_true_heldout_prediction": 5,
+      "original_real_roads_with_6plus_source_sites": 14,
+      "original_physical_roadside_inland_site_pairs": 210,
+      "real_observed_original_roadside_site_elevation_LOO_RMSE_gain": 0.03515619990966915,
+      "roadside_gain_excess_vs_joint_phylo75_occ_label_null": 0.028757453660861135,
+      "inland_gain_excess_vs_joint_phylo75_occ_label_null": 0.040481958451822855,
+      "roadside_minus_inland_gain_excess_vs_joint_phylo75_occ_label_null": -0.01172450479096172,
+      "n_original_region_codes_actual_roadside_prediction_gain_positive": 3,
+      "n_original_region_codes_roadside_gain_excess_positive": 4,
+      "same_original_field_year_roads_only_source_roadside_excess": 0.028158542578185886,
+      "same_original_field_year_roads_only_source_inland_excess": 0.03909191589085706
+    },
+    {
+      "original_tree": "WP",
+      "source_trait_support": "primary",
+      "original_source_region_codes_with_true_heldout_prediction": 5,
+      "original_real_roads_with_6plus_source_sites": 14,
+      "original_physical_roadside_inland_site_pairs": 210,
+      "real_observed_original_roadside_site_elevation_LOO_RMSE_gain": 0.037466950981843904,
+      "roadside_gain_excess_vs_joint_phylo75_occ_label_null": 0.030722099011448414,
+      "inland_gain_excess_vs_joint_phylo75_occ_label_null": 0.04451162028708584,
+      "roadside_minus_inland_gain_excess_vs_joint_phylo75_occ_label_null": -0.013789521275637429,
+      "n_original_region_codes_actual_roadside_prediction_gain_positive": 3,
+      "n_original_region_codes_roadside_gain_excess_positive": 4,
+      "same_original_field_year_roads_only_source_roadside_excess": 0.030489013007470797,
+      "same_original_field_year_roads_only_source_inland_excess": 0.043197757666612636
+    },
+    {
+      "original_tree": "TPL",
+      "source_trait_support": "primary",
+      "original_source_region_codes_with_true_heldout_prediction": 5,
+      "original_real_roads_with_6plus_source_sites": 14,
+      "original_physical_roadside_inland_site_pairs": 210,
+      "real_observed_original_roadside_site_elevation_LOO_RMSE_gain": 0.034797787357142514,
+      "roadside_gain_excess_vs_joint_phylo75_occ_label_null": 0.027366363675903848,
+      "inland_gain_excess_vs_joint_phylo75_occ_label_null": 0.03632705813835424,
+      "roadside_minus_inland_gain_excess_vs_joint_phylo75_occ_label_null": -0.00896069446245039,
+      "n_original_region_codes_actual_roadside_prediction_gain_positive": 3,
+      "n_original_region_codes_roadside_gain_excess_positive": 4,
+      "same_original_field_year_roads_only_source_roadside_excess": 0.027017679905031237,
+      "same_original_field_year_roads_only_source_inland_excess": 0.03425026018029809
+    },
+    {
+      "original_tree": "LCVP",
+      "source_trait_support": "strict",
+      "original_source_region_codes_with_true_heldout_prediction": 4,
+      "original_real_roads_with_6plus_source_sites": 11,
+      "original_physical_roadside_inland_site_pairs": 174,
+      "real_observed_original_roadside_site_elevation_LOO_RMSE_gain": 0.04706315826333381,
+      "roadside_gain_excess_vs_joint_phylo75_occ_label_null": 0.02942900338124068,
+      "inland_gain_excess_vs_joint_phylo75_occ_label_null": 0.054653136644318305,
+      "roadside_minus_inland_gain_excess_vs_joint_phylo75_occ_label_null": -0.025224133263077632,
+      "n_original_region_codes_actual_roadside_prediction_gain_positive": 3,
+      "n_original_region_codes_roadside_gain_excess_positive": 3,
+      "same_original_field_year_roads_only_source_roadside_excess": 0.027167406609813923,
+      "same_original_field_year_roads_only_source_inland_excess": 0.05594225740385163
+    },
+    {
+      "original_tree": "WP",
+      "source_trait_support": "strict",
+      "original_source_region_codes_with_true_heldout_prediction": 3,
+      "original_real_roads_with_6plus_source_sites": 8,
+      "original_physical_roadside_inland_site_pairs": 118,
+      "real_observed_original_roadside_site_elevation_LOO_RMSE_gain": 0.041079863271392875,
+      "roadside_gain_excess_vs_joint_phylo75_occ_label_null": 0.027840853497837555,
+      "inland_gain_excess_vs_joint_phylo75_occ_label_null": 0.03918924058729223,
+      "roadside_minus_inland_gain_excess_vs_joint_phylo75_occ_label_null": -0.01134838708945468,
+      "n_original_region_codes_actual_roadside_prediction_gain_positive": 2,
+      "n_original_region_codes_roadside_gain_excess_positive": 2,
+      "same_original_field_year_roads_only_source_roadside_excess": 0.029064491009464608,
+      "same_original_field_year_roads_only_source_inland_excess": 0.03910347081208493
+    },
+    {
+      "original_tree": "TPL",
+      "source_trait_support": "strict",
+      "original_source_region_codes_with_true_heldout_prediction": 4,
+      "original_real_roads_with_6plus_source_sites": 11,
+      "original_physical_roadside_inland_site_pairs": 175,
+      "real_observed_original_roadside_site_elevation_LOO_RMSE_gain": 0.047695685710813056,
+      "roadside_gain_excess_vs_joint_phylo75_occ_label_null": 0.027405762073800428,
+      "inland_gain_excess_vs_joint_phylo75_occ_label_null": 0.04608426594916655,
+      "roadside_minus_inland_gain_excess_vs_joint_phylo75_occ_label_null": -0.018678503875366122,
+      "n_original_region_codes_actual_roadside_prediction_gain_positive": 3,
+      "n_original_region_codes_roadside_gain_excess_positive": 3,
+      "same_original_field_year_roads_only_source_roadside_excess": 0.025764071542959094,
+      "same_original_field_year_roads_only_source_inland_excess": 0.0460945974280081
+    }
+  ],
+  "critical_limitations": [
+    "5 source original region codes in primary panel vs baseline original 8, with one MIREN source field research programme and not 5 independent papers",
+    "Region effects mixed: actual original roadside heldout gain positive in 3/5 regions, mostly Italy and Norway; Austria negative and India near zero",
+    "Strict WP original panel only three source regions and its region deletion sensitivity may cross zero",
+    "LOO hides one original site within the SAME Road, not out-of-region or out-of-network forecast",
+    "Original species-level canopy height median not measured railway-plant phenotype",
+    "Observational Elevation covaries with climate, habitat openness, disturbance and management; cannot attribute causal filtering to elevation",
+    "No matched active railway ballast and physically comparable open nonrail gravel community data; MIREN roads not railway",
+    "Technical trait relabel shuffles are not independent field p-values; source Regions cannot be treated as fully representative global papers"
+  ]
+}
