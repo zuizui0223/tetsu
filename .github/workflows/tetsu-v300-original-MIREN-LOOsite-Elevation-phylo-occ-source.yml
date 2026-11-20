@@ -84,7 +84,7 @@ jobs:
             --original-v299-summary data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json \
             --draws 199 \
             --output results/audit/v300_original_MIREN_heldout_Elevation_stature_source_phylo_occ_null.json
-      - name: Source QA: no sample pseudo-replication, no unsupported zero, exact original road/Region/year ancestry and LOOCV subtraction
+      - name: Source QA - no pseudo-replication, no unsupported zero, exact road/year ancestry and LOO CV subtraction
         run: |
           python - <<'PY'
           from pathlib import Path
