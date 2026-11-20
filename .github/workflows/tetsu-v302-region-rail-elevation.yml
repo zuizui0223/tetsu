@@ -1,0 +1,72 @@
+name: v30.2 original region and railway elevation transfer
+on:
+  push:
+    branches: [research/tetsu-region-rail-elevation-transfer-v302-20261120]
+    paths:
+      - 'scripts/*v302.py'
+      - 'tests/*v302.py'
+      - 'data/derived/v302*.json'
+      - '.github/workflows/tetsu-v302-region-rail-elevation.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  original-source-transfer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.13'}
+      - name: Install source readers
+        run: python -m pip install 'numpy>=1.26,<3' 'openpyxl==3.1.5' 'PyMuPDF==1.24.14' 'rdata==1.1.0'
+      - name: Test region exclusion and prediction arithmetic
+        run: python -m unittest discover -s tests -p 'test_region_rail_elevation_transfer_v302.py' -v
+      - name: Download original sources
+        run: |
+          set -euo pipefail
+          mkdir -p source/v302/trees results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 350 'https://zenodo.org/records/15749536/files/MIREN_road_survey_%282007-2023%29_zen_v3_002507.csv?download=1' -o source/v302/miren.csv
+          for TRAIT in canopy_height seed_mass; do
+            curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 "https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/$TRAIT.txt" -o "source/v302/$TRAIT.txt"
+          done
+          for TREE in LCVP WP TPL; do
+            curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 "https://raw.githubusercontent.com/jinyizju/V.PhyloMaker2/7af3fb5152f691af2e4ec9d5e2e467d1b50505e9/data/GBOTB.extended.$TREE.rda" -o "source/v302/trees/GBOTB.extended.$TREE.rda"
+          done
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 'https://datadryad.org/api/v2/versions/99735/download' -o source/v302/dryad.zip
+          python - <<'PY'
+          import zipfile
+          from pathlib import Path
+          with zipfile.ZipFile('source/v302/dryad.zip') as z:
+              files=[n for n in z.namelist() if n.split('/')[-1]=='Matrix_plot.xlsx']
+              assert len(files)==1
+              Path('source/v302/Matrix_plot.xlsx').write_bytes(z.read(files[0]))
+          PY
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf' -o source/v302/parma.pdf
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 'https://hrcak.srce.hr/file/282429' -o source/v302/hrba.pdf
+      - name: Hash-verified primary source replay and new predictions
+        run: |
+          python -u scripts/analyze_region_rail_elevation_transfer_v302.py --data source/v302 --output results/audit/v302_results.json
+          python -u scripts/analyze_height_only_region_transfer_v302.py --data source/v302 --output results/audit/v302_height_only.json
+          python -u scripts/analyze_europe_rail_to_Kashmir_elevation_v302.py --data source/v302 --output results/audit/v302_rail_to_rail.json
+      - name: Independent source and frozen numeric verification
+        run: |
+          python scripts/verify_region_rail_transfer_v302.py --data source/v302 --result results/audit/v302_results.json --reference data/derived/v302_results.json --height-result results/audit/v302_height_only.json --height-reference data/derived/v302_height_only.json
+          PYTHONPATH=scripts python - <<'PY'
+          import json
+          from pathlib import Path
+          from verify_region_rail_transfer_v302 import check_close
+          a=json.loads(Path('results/audit/v302_rail_to_rail.json').read_text())
+          b=json.loads(Path('data/derived/v302_rail_to_rail.json').read_text())
+          check_close(a,b,'rail-to-rail')
+          print('European published-altitude railway external transfer replay PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v302-source-verified-transfer-aggregates
+          path: results/audit/v302*.json
+          if-no-files-found: warn
