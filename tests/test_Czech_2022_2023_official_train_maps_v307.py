@@ -3,10 +3,18 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-import fitz
+# PyMuPDF is deliberately installed by the dedicated source-authentication CI.
+# The repository-wide lightweight suite does not install it; mark PDF-only
+# tests as skipped there rather than fail module import before any test runs.
+try:
+    import fitz
+except ModuleNotFoundError:
+    fitz = None
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
-from audit_Czech_2022_2023_official_actual_train_traffic_maps_v307 import inspect, verify_pair
+if fitz is not None:
+    from audit_Czech_2022_2023_official_actual_train_traffic_maps_v307 import inspect, verify_pair
 
+@unittest.skipUnless(fitz is not None, 'PyMuPDF only installed in dedicated original-source workflow')
 class TestOriginalMapSourceNoFabricatedExposure(unittest.TestCase):
     def _create(self, p, message):
         d=fitz.open()
