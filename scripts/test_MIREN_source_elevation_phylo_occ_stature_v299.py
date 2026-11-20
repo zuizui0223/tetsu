@@ -68,7 +68,8 @@ def _observed_plant_taxa(W:np.ndarray,names:list[str],row:int)->set[str]:
     return {names[int(x)] for x in np.flatnonzero(W[row])}
 
 def construct_native_environment_cohort(original_roads:list,reg:str,source_phylo:dict,
-                                        original_altitude:dict,min_species:int)->tuple[list,dict]:
+                                        original_altitude:dict,min_species:int,
+                                        true_original_tree_tipset:set[str])->tuple[list,dict]:
     """Match original author site id/YEAR to row of immutable phylo-tip W.
     Prevent silent reordering or replacement of original source field units.
     """
@@ -84,12 +85,12 @@ def construct_native_environment_cohort(original_roads:list,reg:str,source_phylo
     for road_name,rows in original_roads:
         # A row is retained by original source phylogenetic study if both
         # habitats contain >= threshold existing ORIGINAL backbone tip taxa.
-        # Source phylo pool includes only retained roads and may exclude some
-        # single-road taxa; for site match the true current pool works only
-        # if no new taxa occur on a different discarded road. Use source W
-        # as the final source species universe; if true-site row drops, fail.
+        # Define eligibility on ALL original tree species, exactly as the
+        # original v29.7 source panel does. The FINAL retained study source
+        # species pool can omit taxa from rejected roads; it must not be
+        # used to decide which original author sites were eligible.
         elig=[row for row in rows if min(
-            len(row[z]&source_name_set) for z in ("roadside","interior"))>=min_species]
+            len(row[z]&true_original_tree_tipset) for z in ("roadside","interior"))>=min_species]
         if len(elig)<MIN_PAIRED_SITES_PER_ROAD:
             continue
         if source_road_index>=len(source_phylo["roads"]):
@@ -333,7 +334,7 @@ def run(original_miren:Path,height:Path,seed:Path,tree_dir:Path,
                     "source_original_region_two_zone_effects"]["roadside_minus_interior"]["height"][
                     "observed_minus_trait_label_source_null"]
                 env_roads,envQA=construct_native_environment_cohort(
-                    roads,reg,original_tip,original_altitude,min_taxa)
+                    roads,reg,original_tip,original_altitude,min_taxa,set(lookup))
                 result=None
                 consistent=None
                 if envQA["original_environmental_altitude_support"]:
