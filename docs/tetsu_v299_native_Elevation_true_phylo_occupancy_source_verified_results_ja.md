@@ -1,6 +1,6 @@
 # v29.9 SOURCE VERIFIED — 標高に沿う草丈の群集交代は、系統と種の出現頻度を固定しても残る
 
-**元原著と数値の認証日：2026-11-20 JST。** [GitHub Actions #44658352848 SOURCE SUCCESS](https://github.com/zuizui0223/tetsu/actions/runs/44658352848)、[元原資料由来の効果・独立QA artifact #14594770935](https://github.com/zuizui0223/tetsu/actions/runs/44658352848/artifacts/14594770935) に実コード・原著入力SHA・元地域別効果値の正本がある。
+**元原著と数値の認証日：2026-11-20 JST。** [GitHub Actions #44659330637 SOURCE SUCCESS](https://github.com/zuizui0223/tetsu/actions/runs/44659330637)、[元原資料由来の効果・独立QA artifact #14594079180](https://github.com/zuizui0223/tetsu/actions/runs/44659330637/artifacts/14594079180) に実コード・原著入力SHA・元地域別効果値の正本がある。
 
 ## 0. 何を「原著データで測定した」のか
 
@@ -68,9 +68,9 @@ MIRENは**独立野外調査プログラム1件**。元source Region5/6は論文
 
 ## Source codeと正本
 
-GitHub Actions： https://github.com/zuizui0223/tetsu/actions/runs/44658352848
+GitHub Actions： https://github.com/zuizui0223/tetsu/actions/runs/44659330637
 
-真正元SOURCE artifact： https://github.com/zuizui0223/tetsu/actions/runs/44658352848/artifacts/14594770935
+真正元SOURCE artifact： https://github.com/zuizui0223/tetsu/actions/runs/44659330637/artifacts/14594079180
 
 コード：
 - scripts/audit_MIREN_original_native_elevation_source_v299.py
@@ -81,3 +81,6 @@ GitHub Actions： https://github.com/zuizui0223/tetsu/actions/runs/44658352848
 - .github/workflows/tetsu-v299-source-MIREN-native-Elevation-vs-true-phylo-occupancy-trait-null.yml
 
 元original source species×site行列、GPS、個別Elev値、LEDA植物別値やmega-treeの個別tipはGitHubに再配布していない。元のsource study/region/road/site件数と環境傾斜・帰無推定を元研究単位で保存する。
+## v29.9 最終Source公表数値照合（2026-11-20）
+
+**[最終原著再実行・元source集計独立検証 SUCCESS #44659330637](https://github.com/zuizui0223/tetsu/actions/runs/44659330637)**。真のMIREN元CSV MD5、LEDA元2表SHA、V.PhyloMaker2元3樹Git blob SHA、数学17テストに加え、前source v29.8の全6組の元対応群集baselineを再現し、v29.9元地域別の草丈・標高観測／条件付き帰無／差分・時間感度と地域除外の **2,256項目** を照合した。その上でGitHubブランチに凍結した読みやすい集計JSONと原sourceの**54項目**を独立照合し、すべてPASS。新しいSource効果量や閾値は前の成功runから変更していない。真正元source派生アーカイブ **[artifact #14594079180](https://github.com/zuizui0223/tetsu/actions/runs/44659330637/artifacts/14594079180)** が正本。元site個別Elevと元species/taxonは非公開。
