@@ -1,0 +1,95 @@
+{
+  "version": "v306",
+  "status": "SOURCE_VERIFIED",
+  "source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44746851895",
+  "source_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44746851895/artifacts/14633721347",
+  "full_source_json_sha256": "5d9cb0ba983d5718c2b25ad2498484e337087ae00f58a1d9e10fe99860725a1e",
+  "original_botanical_XLSX_sha256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+  "n_field_studies": 1,
+  "n_plant_sites": 89,
+  "n_mapped_plant_sites": 27,
+  "n_physical_traffic_segments": 9,
+  "n_rail_lines_with_traffic": 5,
+  "n_dependent_segment_pairs": 36,
+  "metric": "inter-segment Jaccard site-pair mean versus 2020 mean(log1p freight train counts) conditional on log1p geographical separation; this new attribution model is NOT urbanization-adjusted",
+  "rows": [
+    {
+      "zone": "BS",
+      "n_taxa": 229,
+      "real": 0.006309240624803664,
+      "global_frequency_excess": 0.0026416358040470766,
+      "global_technical_upper_rank": 0.38345864661654133,
+      "year_track_strict_excess": 0.0017872879024837442,
+      "strict_technical_upper_rank": 0.41102756892230574,
+      "within_line_48_traffic_label_rank": 0.125
+    },
+    {
+      "zone": "BT",
+      "n_taxa": 258,
+      "real": 0.008956324360794982,
+      "global_frequency_excess": 0.009216040528138297,
+      "global_technical_upper_rank": 0.06015037593984962,
+      "year_track_strict_excess": -0.002334550709377681,
+      "strict_technical_upper_rank": 0.6616541353383458,
+      "within_line_48_traffic_label_rank": 0.020833333333333332
+    },
+    {
+      "zone": "union",
+      "n_taxa": 285,
+      "real": 0.015538435429519083,
+      "global_frequency_excess": 0.009503679090164151,
+      "global_technical_upper_rank": 0.07518796992481203,
+      "year_track_strict_excess": -0.00001859410419709738,
+      "strict_technical_upper_rank": 0.5037593984962406,
+      "within_line_48_traffic_label_rank": 0.1875
+    }
+  ],
+  "union_guild_coefficient_sums": [
+    {
+      "source_category": "explicit alien",
+      "n_taxa": 29,
+      "signed_contribution": 0.010393830806346678
+    },
+    {
+      "source_category": "strict annual",
+      "n_taxa": 64,
+      "signed_contribution": 0.008486923247700194
+    },
+    {
+      "source_category": "source Epilobium or Phragmites archetype; NOT measured carried seed",
+      "n_taxa": 54,
+      "signed_contribution": 0.009250336086575165
+    },
+    {
+      "source_category": "source Bidens archetype; NOT measured physical attachment",
+      "n_taxa": 10,
+      "signed_contribution": -0.0017615251912575193
+    }
+  ],
+  "union_top_named_contributors": [
+    {
+      "taxon": "Erigeron annuus",
+      "slope": 0.004794111082866546,
+      "source_status": "invasive alien"
+    },
+    {
+      "taxon": "Erigeron canadensis",
+      "slope": 0.004041,
+      "source_status": "invasive alien"
+    },
+    {
+      "taxon": "Ambrosia artemisiifolia",
+      "slope": 0.003803,
+      "source_status": "invasive alien"
+    }
+  ],
+  "warnings": [
+    "BS and BT are both railway ground, not non-rail local flora",
+    "2020 traffic vs 2022-23 flora",
+    "one Slovenian study, nine actual physical segment exposures and dependent dyads",
+    "source year×track layout constrained taxon prevalence eliminates UNION apparent excess; this null may overcondition real trait sorting",
+    "398 correlated technical checkerboard samples are not independent field p-values",
+    "source nativeness unknown not equivalent to native",
+    "no live seed carriage/mowing/wind measured"
+  ]
+}
