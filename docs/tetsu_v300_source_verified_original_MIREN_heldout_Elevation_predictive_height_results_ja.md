@@ -67,3 +67,12 @@ v29.9は「高さCWMと標高の元現場内相関・傾きが、source clade×p
 - data/derived/tetsu_v300_original_MIREN_heldout_Elevation_predictability_summary.json
 
 元individual botanist site×plant、元Elevm数値の個別値、GPS/author plot names、種のLEDA medianは本リポ/artifactへ配布していない。
+
+
+## v30.0 最終の独立SOURCE検算（2026-11-20）
+
+[**真正原資料を全件再取得して元v29.9ベースラインを全6組再現、新v30の本物の未使用Site予測を再実行、さらに別のスクリプトで公開集計値を検算したGitHub Actions #44663286833：SUCCESS**](https://github.com/zuizui0223/tetsu/actions/runs/44663286833)。
+
+このsource実行では、元Zenodo MIREN 167804観察行の元MD5、元Elevation 6446 plot metadata、元Oldenburg LEDA 2つの原SHA、V.PhyloMaker2公開元3樹の元Git blob SHAを再照合し、17件以上の合成数理テスト・元v29.9の6つのtree×source support出現条件での環境傾斜を再現した。元真Roadごとにheld-out physical siteのOLS予測を再実行、398 source paired-trait technical null allocations per cohort を確認。**独立した第二source parserによる本物のfield Region/Road/Site年、元観測ΔRMSE−帰無、original label ranks、地域別正の符号、地域LOO、元同一年Road条件、および論文集計の計328項目がすべてPASS。** 初回の最終checkerは日本語集計のprimary/strictのlookupに辞書のキーと値を誤用して失敗したが、元科学的コードや結果の係数は変更せず修正し、原データから全工程を再実行して成功した。
+
+**最終の検証済みsource archiveは[artifact #14596327385](https://github.com/zuizui0223/tetsu/actions/runs/44663286833/artifacts/14596327385)**。元author site×taxon、個別Elevation/GPSやoriginal treeの種名は再配布していない。元source結果は前run #44661986353の値と同じであり、前記表の科学的主張に変化はない。独立な本物のMIREN研究は依然として1プログラムである。
