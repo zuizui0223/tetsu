@@ -1,0 +1,31 @@
+{
+  "extraction": {
+    "matrix_sites": 137,
+    "matrix_taxa": 354,
+    "incidences": 3509,
+    "duplicate_cells": [],
+    "metadata_sites": 138,
+    "matrix_without_metadata": [],
+    "metadata_without_matrix": [
+      "YAR01"
+    ],
+    "area_counts": {
+      "2500": 120,
+      "None": 18
+    },
+    "type_counts": {
+      "Q": 121,
+      "None": 2,
+      "R": 15
+    },
+    "missing_coords": 0
+  },
+  "dem_n": 138,
+  "dem_range_m": [
+    418.0,
+    512.0
+  ],
+  "leda_exact_binomial_covered_taxa": 3,
+  "austraits_adult_species_maximum_exact_name_taxa": 250,
+  "status": "provisional extraction; source discrepancies unresolved; no effect estimated"
+}

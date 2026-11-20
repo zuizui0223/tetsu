@@ -23,5 +23,14 @@
     "retrieved": "2026-11-20",
     "role": "published_report_with_plot_datasheets_and_species_matrix",
     "extraction_status": "pending"
+  },
+  {
+    "file": "austraits-7.0.0.zip",
+    "url": "https://zenodo.org/api/records/15718081/files/austraits-7.0.0.zip/content",
+    "bytes": 21100078,
+    "sha256": "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f",
+    "md5_verified": "f169a9bca41d847df4fb8c6011ee3ea8",
+    "retrieved": "2026-11-20",
+    "role": "independent_plant_trait_database"
   }
 ]
