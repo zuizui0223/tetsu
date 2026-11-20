@@ -4,7 +4,7 @@
 
 ## 出典を特定した新規ソース
 
-**チェコ Správa železnic公式「Mapy → Počty vlaků」**（https://provoz.spravazeleznic.cz/Portal/ViewArticle.aspx?oid=2104272）に、元サイトが明示する「**Skutečné počty všech vlaků v období 1. 1. až 31. 3. 2022**」と「2023」が存在。前者URLは \`https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_22.pdf\`、後者は末尾 \`_23.pdf\`。公式見出しは**当該年1～3月に通過した全列車の実数**であって、年度平均、通年貨物列車数、駅停車本数、鉄道のOD、駅構内での管理強度、野生種子輸送ではない。
+**チェコ Správa železnic公式「Mapy → Počty vlaků」**（https://provoz.spravazeleznic.cz/Portal/ViewArticle.aspx?oid=2104272）に、元サイトが明示する「**Skutečné počty všech vlaků v období 1. 1. až 31. 3. 2022**」と「2023」が存在。前者URLは \`https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_22.pdf\`、後者は末尾 \`_23.pdf\`。公式原図の脚注により、掲載数は**1～3月の「9番目に交通量が多い日（第9十分位）」の日当たり実運行列車本数**であり、**25本を超える数は5本刻みに丸め**られる。これは平均的な1日、全期間合計、通年貨物列車数、駅停車本数、鉄道OD、管理強度、野生種子輸送ではない。貨物・旅客は分離されない。
 
 チェコKutlvašr et al. 2024 Preslia DOI 10.23855/preslia.2024.247 の原著2020～22年39駅（原著駅名厳密照合による2026年SR70代表駅位置35/39）と、2022年のソースを優先して合わせる。両方を**同時期の観測期間が一部重なる**と言うにとどめ、各原駅の調査日がわからないのに「地点ごとの同時曝露」としない。2023年は調査後の時点を含む曝露年感度としてのみ使用可能。原著S1 761現代植物 taxa /39原駅のゾーン別種出現表、S2の修正erratumは既存v282の原著SHA監査を再使用する。
 
@@ -34,3 +34,12 @@
 **v307**は独立した外部交通ソースの実在性と内容・期間のゲート。元地図の存在だけで「独立国で二尺度の反転が再現した」等の生物学的結論にはしない。データ不適格なら \`NOT_IDENTIFIABLE_TRAFFIC_AT_ORIGINAL_BOTANICAL_STATION\` とし、観測にない0値や代用交通量を入れない。再解析に使用した原著の出現行列自体は過去v282/v283でSHA検証済み、組合せ解析の新規CIが完走するまでは科学的な新結果として公表しない。
 
 コード：\`scripts/audit_Czech_2022_2023_official_actual_train_traffic_maps_v307.py\`、数理試験：\`tests/test_Czech_2022_2023_official_train_maps_v307.py\`、原著ダウンロードQA Actions：\`.github/workflows/tetsu-v307-original-Czech-2022-2023-actual-train-map-source.yml\`。
+
+
+## 2022/2023 公式原図の実取得・視覚監査が成功（v307原資料CI）
+
+**[元ソース検算 Actions #44750002044 SUCCESS](https://github.com/zuizui0223/tetsu/actions/runs/44750002044)**。原図2022年SHA256 \`c4d2436a7e1950bc6c247926b12dbba16649491221c94fc7288e234c1c3830ee\`、155,604 bytes、1ページ、描画オブジェクト1950件。2023年 SHA256 \`4cbd4349814ac636bda74d3389810d6100ecc9e12daef237a12fa8b62eb25b57\`、530,744 bytes、1ページ、描画1951件。いずれも公式PDFを原URLから取得して真正のPDF構造とSHAを検証し、視覚レンダリングで意味を確認した。画像版プレビューは監査用GitHub Actions artifact内にのみ保存し、原PDF自体は配布していない。
+
+2022/2023の両原図とも原著チェコ39駅名のうち**20/39件がPDFテキストに正規化完全一致**。これは駅交通量の20駅照合ではない。残り19駅は表示省略・短縮・ローテーション・ブロック分割等の可能性があり、0本や対象外としない。この20の文字ラベルが駅のどの通過区間の数値へ対応するかを、現時点で断定していない。原PDFには駅名・実運行数の数字がベクタテキストで含まれるため、今後駅bbox・線路軌跡・数値bboxを照合する余地がある。
+
+**重要：高解像度の真正原図から「第9十分位」と「25本を超える5本刻み」を確認した後、スクリプトの指標を訂正し、元文字ラベルbboxと近接数値の参考候補のみを抽出する新しい検査を追加。** 近接数字を自動で駅別実交通値として採用しない。分岐・複線・通過線・図の数値の割当規則を独立に確かめた場合だけ、近接候補を植物データに結合する。
