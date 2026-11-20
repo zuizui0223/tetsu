@@ -1,0 +1,5033 @@
+{
+  "design": "v304 exploratory; national study holdout and within-Kashmir spatial holdout are distinct",
+  "replay": {
+    "input_sha256": {
+      "miren.csv": "e966419c14879861198c6c1e01c49ee0eca00c3905d784102d6e2c229ac56169",
+      "perth.bin": "baea2386655fd1ddcd02b9d2dfd3fe79fc2402e2ee4d488f2ae44fbd1d31ea14",
+      "tree1.xlsx": "6ce8e4ea068f644e9ad08eab97a4352e88c071fb46bea038d151f792eb8a21de",
+      "headers.csv": "19debc422230adff04ccb9209292833fcd5cb0e9e3fadae54ea2f926a68021af",
+      "species.csv": "5c992db97a53a2499cd8d2e127dbf7b435a91792a09c48d2a1a708cca73a04af",
+      "sk_urban.bin": "5c70e4b02a17b2886cafb0dde5221a6e7ad440780f55a51249b2fb95ff6d2f22",
+      "Matrix_plot.xlsx": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474"
+    },
+    "replayed_comparisons": 10,
+    "numeric_checks": 100,
+    "maximum_allowed_error": 1e-09
+  },
+  "national": [
+    {
+      "held_rail_study": "CZ",
+      "cz_reference": "urban",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 154,
+      "target_recorded_taxa": 144,
+      "target_incidence_coverage": 0.44786015672091645,
+      "training_studies": [
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "IT": 75,
+        "SI": 48,
+        "IN": 41,
+        "AD": 71
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.7680532188105978,
+          "brier": 0.28459147736698404,
+          "coefficients": [
+            -0.8058335727986322
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.7621260765832161,
+          "brier": 0.28185182035212786,
+          "coefficients": [
+            -0.8106116878759579,
+            0.16031302611968695
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.7799079618377488,
+          "brier": 0.2876970434011471,
+          "coefficients": [
+            -0.8435232234735027,
+            0.45183529437508424
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.7807083671440528,
+          "brier": 0.28780957911684907,
+          "coefficients": [
+            -0.8456337664356888,
+            0.08633322115475334,
+            0.43633140129378367
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.01858229056083671,
+        "brier": -0.0059577587647212105
+      }
+    },
+    {
+      "held_rail_study": "IT",
+      "cz_reference": "urban",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 153,
+      "target_recorded_taxa": 110,
+      "target_incidence_coverage": 0.43109540636042387,
+      "training_studies": [
+        "CZ",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 80,
+        "SI": 48,
+        "IN": 44,
+        "AD": 81
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6061386137032775,
+          "brier": 0.20750984496882857,
+          "coefficients": [
+            -0.6337467223075388
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6020273758001243,
+          "brier": 0.2057493060125415,
+          "coefficients": [
+            -0.6404394773431475,
+            0.21598188414198075
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5653263567395314,
+          "brier": 0.19029103511588794,
+          "coefficients": [
+            -0.6457977898827977,
+            0.27829950650040014
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5678388706059312,
+          "brier": 0.19126181079322058,
+          "coefficients": [
+            -0.6494982209386054,
+            0.15544309797789532,
+            0.23709197198241735
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.03418850519419314,
+        "brier": 0.014487495219320912
+      }
+    },
+    {
+      "held_rail_study": "SI",
+      "cz_reference": "urban",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 71,
+      "target_recorded_taxa": 48,
+      "target_incidence_coverage": 0.30007446016381223,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 92,
+        "IT": 93,
+        "IN": 46,
+        "AD": 91
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.5488858860892504,
+          "brier": 0.1789893376938242,
+          "coefficients": [
+            -0.45674840831686675
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5725347199457328,
+          "brier": 0.19132668073078715,
+          "coefficients": [
+            -0.468006827547716,
+            0.33377189565323623
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5105257402660496,
+          "brier": 0.16415336093930658,
+          "coefficients": [
+            -0.48189839078942975,
+            0.46606296369359707
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5331804352286199,
+          "brier": 0.17549358476508875,
+          "coefficients": [
+            -0.48660860557094415,
+            0.2254038938251183,
+            0.4009756763973982
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.039354284717112886,
+        "brier": 0.0158330959656984
+      }
+    },
+    {
+      "held_rail_study": "IN",
+      "cz_reference": "urban",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 50,
+      "target_recorded_taxa": 29,
+      "target_incidence_coverage": 0.46494464944649444,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 149,
+        "IT": 151,
+        "SI": 71,
+        "AD": 103
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6235397086723337,
+          "brier": 0.21598568769464582,
+          "coefficients": [
+            -0.8449898065711542
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6048278770840126,
+          "brier": 0.20768297990424447,
+          "coefficients": [
+            -0.8498780764048232,
+            0.15958417572593697
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5971648848695104,
+          "brier": 0.20555231455337314,
+          "coefficients": [
+            -0.8877400459679583,
+            0.46524971086835
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5954919299386678,
+          "brier": 0.20474397814154316,
+          "coefficients": [
+            -0.8877623152006142,
+            0.015362147531784531,
+            0.4598631851916369
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.009335947145344803,
+        "brier": 0.0029390017627013154
+      }
+    },
+    {
+      "held_rail_study": "AD",
+      "cz_reference": "urban",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 106,
+      "target_recorded_taxa": 63,
+      "target_incidence_coverage": 0.29318036966220523,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN"
+      ],
+      "training_sizes": {
+        "CZ": 117,
+        "IT": 125,
+        "SI": 63,
+        "IN": 49
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.603236770076702,
+          "brier": 0.20633485229929582,
+          "coefficients": [
+            -0.7710563027836586
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5973141297706318,
+          "brier": 0.2039191534328137,
+          "coefficients": [
+            -0.778667510688408,
+            0.2082987259386312
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5710818246353626,
+          "brier": 0.19276591737479384,
+          "coefficients": [
+            -0.7870902399143144,
+            0.2922055837436403
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5728440660565222,
+          "brier": 0.19391156486718192,
+          "coefficients": [
+            -0.7891855778497477,
+            0.11990884132687508,
+            0.24606705651147337
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.024470063714109647,
+        "brier": 0.010007588565631775
+      }
+    },
+    {
+      "held_rail_study": "AU",
+      "cz_reference": "urban",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 55,
+      "target_recorded_taxa": 11,
+      "target_incidence_coverage": 0.36585365853658536,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 154,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.43599544770601645,
+          "brier": 0.12732897544582358,
+          "coefficients": [
+            -0.836389148860724
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.43014942532132266,
+          "brier": 0.1259610721070997,
+          "coefficients": [
+            -0.8475378419774734,
+            0.24370113910652244
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.4479539031577357,
+          "brier": 0.1344694778636639,
+          "coefficients": [
+            -0.8824671206322456,
+            0.48354074247282625
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.4405003272141171,
+          "brier": 0.13083450342493194,
+          "coefficients": [
+            -0.8842205075370501,
+            0.10229096542549684,
+            0.44745721492386564
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.010350901892794417,
+        "brier": -0.004873431317832244
+      }
+    },
+    {
+      "held_rail_study": "CN",
+      "cz_reference": "urban",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 21,
+      "target_recorded_taxa": 3,
+      "target_incidence_coverage": 0.06382978723404256,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 154,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.39978812524451324,
+          "brier": 0.11021173003730772,
+          "coefficients": [
+            -0.836389148860724
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.39431771470904453,
+          "brier": 0.1084793525055801,
+          "coefficients": [
+            -0.8475378419774734,
+            0.24370113910652244
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.3732909822632143,
+          "brier": 0.10598287695082138,
+          "coefficients": [
+            -0.8824671206322456,
+            0.48354074247282625
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.37000165392497697,
+          "brier": 0.10389017905137496,
+          "coefficients": [
+            -0.8842205075370501,
+            0.10229096542549684,
+            0.44745721492386564
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.02431606078406756,
+        "brier": 0.004589173454205148
+      }
+    },
+    {
+      "held_rail_study": "CZ",
+      "cz_reference": "urban",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 154,
+      "target_recorded_taxa": 144,
+      "target_incidence_coverage": 0.44786015672091645,
+      "training_studies": [
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "IT": 75,
+        "SI": 48,
+        "IN": 41,
+        "AD": 71
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.7680532188105978,
+          "brier": 0.28459147736698404,
+          "coefficients": [
+            -0.8058335727986322
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.762058290384369,
+          "brier": 0.2818028954994784,
+          "coefficients": [
+            -0.8110066360759761,
+            0.1669221659239983
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.7824083323253053,
+          "brier": 0.2884108721991995,
+          "coefficients": [
+            -0.8472342300524549,
+            0.4746004492653728
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.7833090870888868,
+          "brier": 0.2885450021876658,
+          "coefficients": [
+            -0.8492894085108809,
+            0.08664784818098534,
+            0.45828833184569057
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.021250796704517794,
+        "brier": -0.006742106688187421
+      }
+    },
+    {
+      "held_rail_study": "IT",
+      "cz_reference": "urban",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 153,
+      "target_recorded_taxa": 110,
+      "target_incidence_coverage": 0.43109540636042387,
+      "training_studies": [
+        "CZ",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 80,
+        "SI": 48,
+        "IN": 44,
+        "AD": 81
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6061386137032775,
+          "brier": 0.20750984496882857,
+          "coefficients": [
+            -0.6337467223075388
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.601956927354078,
+          "brier": 0.20572569098782714,
+          "coefficients": [
+            -0.6409531024202904,
+            0.2244551414143695
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5640691209907265,
+          "brier": 0.18981341227270795,
+          "coefficients": [
+            -0.6468488952922793,
+            0.29020611671328367
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5667933439683885,
+          "brier": 0.1908618973368412,
+          "coefficients": [
+            -0.6505900596322526,
+            0.1593552672217006,
+            0.24626521115776626
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.03516358338568948,
+        "brier": 0.014863793650985946
+      }
+    },
+    {
+      "held_rail_study": "SI",
+      "cz_reference": "urban",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 71,
+      "target_recorded_taxa": 48,
+      "target_incidence_coverage": 0.30007446016381223,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 92,
+        "IT": 93,
+        "IN": 46,
+        "AD": 91
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.5488858860892504,
+          "brier": 0.1789893376938242,
+          "coefficients": [
+            -0.45674840831686675
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5739071511767342,
+          "brier": 0.19201915903123382,
+          "coefficients": [
+            -0.46884974665386003,
+            0.34684960428915607
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5096789263494677,
+          "brier": 0.16401806894737722,
+          "coefficients": [
+            -0.4841815198191894,
+            0.48691336345523145
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5330801625911455,
+          "brier": 0.17568152739955356,
+          "coefficients": [
+            -0.4887606449019411,
+            0.2302587253955334,
+            0.41756569466083326
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.04082698858558864,
+        "brier": 0.016337631631680255
+      }
+    },
+    {
+      "held_rail_study": "IN",
+      "cz_reference": "urban",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 50,
+      "target_recorded_taxa": 29,
+      "target_incidence_coverage": 0.46494464944649444,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 149,
+        "IT": 151,
+        "SI": 71,
+        "AD": 103
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6235397086723337,
+          "brier": 0.21598568769464582,
+          "coefficients": [
+            -0.8449898065711542
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6042483276081865,
+          "brier": 0.20741218079460563,
+          "coefficients": [
+            -0.8502786234764093,
+            0.1661526010453451
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5968210832539852,
+          "brier": 0.20549412902830153,
+          "coefficients": [
+            -0.8921159094791772,
+            0.48908319816447987
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5959452417388036,
+          "brier": 0.20507084921809826,
+          "coefficients": [
+            -0.8920899120859729,
+            0.007963274657052677,
+            0.48613817636955814
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.008303085869382887,
+        "brier": 0.0023413315765073717
+      }
+    },
+    {
+      "held_rail_study": "AD",
+      "cz_reference": "urban",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 106,
+      "target_recorded_taxa": 63,
+      "target_incidence_coverage": 0.29318036966220523,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN"
+      ],
+      "training_sizes": {
+        "CZ": 117,
+        "IT": 125,
+        "SI": 63,
+        "IN": 49
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.603236770076702,
+          "brier": 0.20633485229929582,
+          "coefficients": [
+            -0.7710563027836586
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5973259488309619,
+          "brier": 0.2039311109564584,
+          "coefficients": [
+            -0.7792821500325988,
+            0.21679641479541278
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5698913940459157,
+          "brier": 0.19228333404108902,
+          "coefficients": [
+            -0.7886023789286803,
+            0.30563404598318317
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5719107055462016,
+          "brier": 0.19354784064719546,
+          "coefficients": [
+            -0.790478560647494,
+            0.12096163053921774,
+            0.25692880032554394
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.025415243284760303,
+        "brier": 0.010383270309262949
+      }
+    },
+    {
+      "held_rail_study": "AU",
+      "cz_reference": "urban",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 55,
+      "target_recorded_taxa": 11,
+      "target_incidence_coverage": 0.36585365853658536,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 154,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.43599544770601645,
+          "brier": 0.12732897544582358,
+          "coefficients": [
+            -0.836389148860724
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.4301588453312198,
+          "brier": 0.12606163332764062,
+          "coefficients": [
+            -0.8484507580960322,
+            0.25382479966029475
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.44885338171918193,
+          "brier": 0.1350456859714434,
+          "coefficients": [
+            -0.8872690099757176,
+            0.5086672541572408
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.4413775939706583,
+          "brier": 0.13137877333295905,
+          "coefficients": [
+            -0.8885686048307054,
+            0.09929831192005675,
+            0.47175975084439975
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.011218748639438503,
+        "brier": -0.005317140005318438
+      }
+    },
+    {
+      "held_rail_study": "CN",
+      "cz_reference": "urban",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 21,
+      "target_recorded_taxa": 3,
+      "target_incidence_coverage": 0.06382978723404256,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 154,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.39978812524451324,
+          "brier": 0.11021173003730772,
+          "coefficients": [
+            -0.836389148860724
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.3940920921267428,
+          "brier": 0.10843328232790596,
+          "coefficients": [
+            -0.8484507580960322,
+            0.25382479966029475
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.37309376019118234,
+          "brier": 0.10651084151976485,
+          "coefficients": [
+            -0.8872690099757176,
+            0.5086672541572408
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.36972185107540245,
+          "brier": 0.10434820781800165,
+          "coefficients": [
+            -0.8885686048307054,
+            0.09929831192005675,
+            0.47175975084439975
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.024370241051340336,
+        "brier": 0.004085074509904307
+      }
+    },
+    {
+      "held_rail_study": "CZ",
+      "cz_reference": "urban",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 154,
+      "target_recorded_taxa": 144,
+      "target_incidence_coverage": 0.44786015672091645,
+      "training_studies": [
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "IT": 75,
+        "SI": 48,
+        "IN": 41,
+        "AD": 71
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.7680532188105978,
+          "brier": 0.28459147736698404,
+          "coefficients": [
+            -0.8058335727986322
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.7629705460530881,
+          "brier": 0.2823217104437579,
+          "coefficients": [
+            -0.8083072571910489,
+            0.11482850096887835
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.7681548488168664,
+          "brier": 0.2841321938867759,
+          "coefficients": [
+            -0.8239943489627538,
+            0.3101419918466006
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.7679538779230672,
+          "brier": 0.2839732251951075,
+          "coefficients": [
+            -0.8259107215994432,
+            0.07644452372205726,
+            0.30039028997463046
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.004983331869979124,
+        "brier": -0.0016515147513495587
+      }
+    },
+    {
+      "held_rail_study": "IT",
+      "cz_reference": "urban",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 153,
+      "target_recorded_taxa": 110,
+      "target_incidence_coverage": 0.43109540636042387,
+      "training_studies": [
+        "CZ",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 80,
+        "SI": 48,
+        "IN": 44,
+        "AD": 81
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6061386137032775,
+          "brier": 0.20750984496882857,
+          "coefficients": [
+            -0.6337467223075388
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6027107920591923,
+          "brier": 0.2060098383732926,
+          "coefficients": [
+            -0.637352206605877,
+            0.15692530260915538
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5747676791489913,
+          "brier": 0.19399879661278155,
+          "coefficients": [
+            -0.6398667418930599,
+            0.19837578985439905
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5757682581040452,
+          "brier": 0.19438954371100753,
+          "coefficients": [
+            -0.6427630465783735,
+            0.12368748393430991,
+            0.17450673989457358
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.02694253395514712,
+        "brier": 0.011620294662285063
+      }
+    },
+    {
+      "held_rail_study": "SI",
+      "cz_reference": "urban",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 71,
+      "target_recorded_taxa": 48,
+      "target_incidence_coverage": 0.30007446016381223,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 92,
+        "IT": 93,
+        "IN": 46,
+        "AD": 91
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.5488858860892504,
+          "brier": 0.1789893376938242,
+          "coefficients": [
+            -0.45674840831686675
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5639563196329833,
+          "brier": 0.186882364856443,
+          "coefficients": [
+            -0.4629202669500663,
+            0.2432788106284234
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5177461135691449,
+          "brier": 0.16600241371687283,
+          "coefficients": [
+            -0.46939785748205887,
+            0.3304886482525525
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5343033324165738,
+          "brier": 0.17449133864692962,
+          "coefficients": [
+            -0.4737713031474951,
+            0.18344403920021662,
+            0.2920966606959293
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.02965298721640952,
+        "brier": 0.012391026209513378
+      }
+    },
+    {
+      "held_rail_study": "IN",
+      "cz_reference": "urban",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 50,
+      "target_recorded_taxa": 29,
+      "target_incidence_coverage": 0.46494464944649444,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 149,
+        "IT": 151,
+        "SI": 71,
+        "AD": 103
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6235397086723337,
+          "brier": 0.21598568769464582,
+          "coefficients": [
+            -0.8449898065711542
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6092343046077106,
+          "brier": 0.20971615455838066,
+          "coefficients": [
+            -0.8475287895711368,
+            0.11429314410114967
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.6013503282561716,
+          "brier": 0.2068941453186879,
+          "coefficients": [
+            -0.8651383712012674,
+            0.3175769937456847
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5966169922318745,
+          "brier": 0.20464446126110392,
+          "coefficients": [
+            -0.8660350808904184,
+            0.04380170196500828,
+            0.3071383498777331
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.012617312375836076,
+        "brier": 0.005071693297276747
+      }
+    },
+    {
+      "held_rail_study": "AD",
+      "cz_reference": "urban",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 106,
+      "target_recorded_taxa": 63,
+      "target_incidence_coverage": 0.29318036966220523,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN"
+      ],
+      "training_sizes": {
+        "CZ": 117,
+        "IT": 125,
+        "SI": 63,
+        "IN": 49
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.603236770076702,
+          "brier": 0.20633485229929582,
+          "coefficients": [
+            -0.7710563027836586
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5977751952488062,
+          "brier": 0.20406437281568335,
+          "coefficients": [
+            -0.7750486933777521,
+            0.1497259291285069
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5794739461657652,
+          "brier": 0.19621920009253221,
+          "coefficients": [
+            -0.7788786571650366,
+            0.2044303362446427
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5793886402990651,
+          "brier": 0.19646900795329114,
+          "coefficients": [
+            -0.7814225269088226,
+            0.10342402421321399,
+            0.17651445667289198
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.018386554949741063,
+        "brier": 0.0075953648623922065
+      }
+    },
+    {
+      "held_rail_study": "AU",
+      "cz_reference": "urban",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 55,
+      "target_recorded_taxa": 11,
+      "target_incidence_coverage": 0.36585365853658536,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 154,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.43599544770601645,
+          "brier": 0.12732897544582358,
+          "coefficients": [
+            -0.836389148860724
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.4306391370640823,
+          "brier": 0.12561499873793563,
+          "coefficients": [
+            -0.8421950570030963,
+            0.1743412638302792
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.44297697455967316,
+          "brier": 0.1313031519477664,
+          "coefficients": [
+            -0.8579266879085947,
+            0.3290204198103076
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.4367245814411687,
+          "brier": 0.12838793344159086,
+          "coefficients": [
+            -0.8612273486968579,
+            0.10347330207732854,
+            0.30402786808728416
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.006085444377086413,
+        "brier": -0.002772934703655222
+      }
+    },
+    {
+      "held_rail_study": "CN",
+      "cz_reference": "urban",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 21,
+      "target_recorded_taxa": 3,
+      "target_incidence_coverage": 0.06382978723404256,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 154,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.39978812524451324,
+          "brier": 0.11021173003730772,
+          "coefficients": [
+            -0.836389148860724
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.3958826376086731,
+          "brier": 0.10885699502728301,
+          "coefficients": [
+            -0.8421950570030963,
+            0.1743412638302792
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.3768485805784686,
+          "brier": 0.10407540842373406,
+          "coefficients": [
+            -0.8579266879085947,
+            0.3290204198103076
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.3744071879042729,
+          "brier": 0.10267187546448134,
+          "coefficients": [
+            -0.8612273486968579,
+            0.10347330207732854,
+            0.30402786808728416
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.021475449704400185,
+        "brier": 0.006185119562801669
+      }
+    },
+    {
+      "held_rail_study": "CZ",
+      "cz_reference": "road",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 51,
+      "target_recorded_taxa": 49,
+      "target_incidence_coverage": 0.1820373719107896,
+      "training_studies": [
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "IT": 75,
+        "SI": 48,
+        "IN": 41,
+        "AD": 71
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.8587110084674796,
+          "brier": 0.32761690994016246,
+          "coefficients": [
+            -0.8058335727986322
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.8261540537218836,
+          "brier": 0.3130157284348333,
+          "coefficients": [
+            -0.8106116878759579,
+            0.16031302611968695
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.8961368043899407,
+          "brier": 0.3391301204110405,
+          "coefficients": [
+            -0.8435232234735027,
+            0.45183529437508424
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.871816850685066,
+          "brier": 0.32947263521394965,
+          "coefficients": [
+            -0.8456337664356888,
+            0.08633322115475334,
+            0.43633140129378367
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.04566279696318243,
+        "brier": -0.016456906779116376
+      }
+    },
+    {
+      "held_rail_study": "IT",
+      "cz_reference": "road",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 153,
+      "target_recorded_taxa": 110,
+      "target_incidence_coverage": 0.43109540636042387,
+      "training_studies": [
+        "CZ",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 26,
+        "SI": 48,
+        "IN": 44,
+        "AD": 81
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6224117234377788,
+          "brier": 0.2150991186087011,
+          "coefficients": [
+            -0.4404319715004019
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6083508641380214,
+          "brier": 0.20901350785658349,
+          "coefficients": [
+            -0.46124551616622333,
+            0.5106597938091987
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.580050464787302,
+          "brier": 0.19594230916559485,
+          "coefficients": [
+            -0.4458988167481112,
+            0.21955827701139694
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5794074201714369,
+          "brier": 0.19641718182017492,
+          "coefficients": [
+            -0.4683194047071995,
+            0.49479811648538685,
+            0.17591518392927868
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.028943443966584548,
+        "brier": 0.012596326036408562
+      }
+    },
+    {
+      "held_rail_study": "SI",
+      "cz_reference": "road",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 71,
+      "target_recorded_taxa": 48,
+      "target_incidence_coverage": 0.30007446016381223,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 28,
+        "IT": 93,
+        "IN": 46,
+        "AD": 91
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6017093685972482,
+          "brier": 0.2045429741237651,
+          "coefficients": [
+            -0.26987477524532416
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.610311004757389,
+          "brier": 0.2090451903433781,
+          "coefficients": [
+            -0.2803582174905217,
+            0.5079948295044533
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5545284238495058,
+          "brier": 0.18386731261221223,
+          "coefficients": [
+            -0.28147071974889964,
+            0.3889112693160463
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5786517497635605,
+          "brier": 0.19674293594084397,
+          "coefficients": [
+            -0.2932152300756481,
+            0.4643772767672508,
+            0.3320842621193274
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.03165925499382849,
+        "brier": 0.01230225440253413
+      }
+    },
+    {
+      "held_rail_study": "IN",
+      "cz_reference": "road",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 50,
+      "target_recorded_taxa": 29,
+      "target_incidence_coverage": 0.46494464944649444,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 151,
+        "SI": 71,
+        "AD": 103
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6233768367964069,
+          "brier": 0.21592100825919197,
+          "coefficients": [
+            -0.7214062706991475
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5960342126996896,
+          "brier": 0.20344771263880052,
+          "coefficients": [
+            -0.7389753609241657,
+            0.3404636065903305
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.602444226008698,
+          "brier": 0.2072926196064608,
+          "coefficients": [
+            -0.7464820909910422,
+            0.3773652810813526
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5806981346987147,
+          "brier": 0.19672897098271558,
+          "coefficients": [
+            -0.7614788112499785,
+            0.3254674263936165,
+            0.35773189618645296
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.015336078000974918,
+        "brier": 0.006718741656084937
+      }
+    },
+    {
+      "held_rail_study": "AD",
+      "cz_reference": "road",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 106,
+      "target_recorded_taxa": 63,
+      "target_incidence_coverage": 0.29318036966220523,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN"
+      ],
+      "training_sizes": {
+        "CZ": 45,
+        "IT": 125,
+        "SI": 63,
+        "IN": 49
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6056720993817825,
+          "brier": 0.20740239363064725,
+          "coefficients": [
+            -0.700699392034194
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6026269047217531,
+          "brier": 0.20604273116547833,
+          "coefficients": [
+            -0.7211460992025548,
+            0.37656428665764335
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5717176493012563,
+          "brier": 0.19281406510668203,
+          "coefficients": [
+            -0.7175272151152433,
+            0.30987283042081637
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5785519447846528,
+          "brier": 0.19724863846801666,
+          "coefficients": [
+            -0.7355809940010112,
+            0.3564691926573107,
+            0.27975856149887157
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.024074959937100293,
+        "brier": 0.008794092697461675
+      }
+    },
+    {
+      "held_rail_study": "AU",
+      "cz_reference": "road",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 55,
+      "target_recorded_taxa": 11,
+      "target_incidence_coverage": 0.36585365853658536,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.459269485628543,
+          "brier": 0.13734780367556904,
+          "coefficients": [
+            -0.7318167036775299
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.4334021350344874,
+          "brier": 0.12873543573430696,
+          "coefficients": [
+            -0.7543767910587738,
+            0.38200252522606903
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.4703466228669224,
+          "brier": 0.14398580001502845,
+          "coefficients": [
+            -0.7666671630841896,
+            0.4403979900095949
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.4390094287076254,
+          "brier": 0.1308113765980318,
+          "coefficients": [
+            -0.7838596636356047,
+            0.3448481214143672,
+            0.3997819459083033
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.005607293673138003,
+        "brier": -0.00207594086372484
+      }
+    },
+    {
+      "held_rail_study": "CN",
+      "cz_reference": "road",
+      "penalty": 0.01,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 21,
+      "target_recorded_taxa": 3,
+      "target_incidence_coverage": 0.06382978723404256,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.42758910884596574,
+          "brier": 0.12217864272086716,
+          "coefficients": [
+            -0.7318167036775299
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.39371241573480925,
+          "brier": 0.10893706911185953,
+          "coefficients": [
+            -0.7543767910587738,
+            0.38200252522606903
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.3991013652191291,
+          "brier": 0.11556515004134897,
+          "coefficients": [
+            -0.7666671630841896,
+            0.4403979900095949
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.369794356127528,
+          "brier": 0.10328943226765833,
+          "coefficients": [
+            -0.7838596636356047,
+            0.3448481214143672,
+            0.3997819459083033
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.023918059607281272,
+        "brier": 0.0056476368442012065
+      }
+    },
+    {
+      "held_rail_study": "CZ",
+      "cz_reference": "road",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 51,
+      "target_recorded_taxa": 49,
+      "target_incidence_coverage": 0.1820373719107896,
+      "training_studies": [
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "IT": 75,
+        "SI": 48,
+        "IN": 41,
+        "AD": 71
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.8587110084674796,
+          "brier": 0.32761690994016246,
+          "coefficients": [
+            -0.8058335727986322
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.825029378479829,
+          "brier": 0.31248671073110246,
+          "coefficients": [
+            -0.8110066360759761,
+            0.1669221659239983
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.9001449955167808,
+          "brier": 0.34018530570340855,
+          "coefficients": [
+            -0.8472342300524549,
+            0.4746004492653728
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.8753883018679879,
+          "brier": 0.33046291478000966,
+          "coefficients": [
+            -0.8492894085108809,
+            0.08664784818098534,
+            0.45828833184569057
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.05035892338815884,
+        "brier": -0.017976204048907207
+      }
+    },
+    {
+      "held_rail_study": "IT",
+      "cz_reference": "road",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 153,
+      "target_recorded_taxa": 110,
+      "target_incidence_coverage": 0.43109540636042387,
+      "training_studies": [
+        "CZ",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 26,
+        "SI": 48,
+        "IN": 44,
+        "AD": 81
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6224117234377788,
+          "brier": 0.2150991186087011,
+          "coefficients": [
+            -0.4404319715004019
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6083566924742079,
+          "brier": 0.20904769131118842,
+          "coefficients": [
+            -0.462718918258515,
+            0.5324073340703114
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5787147273856017,
+          "brier": 0.19538335959960795,
+          "coefficients": [
+            -0.44635079490307733,
+            0.22833017471845857
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5788268219000181,
+          "brier": 0.19623703902636888,
+          "coefficients": [
+            -0.47038417126334214,
+            0.5155137280725351,
+            0.1820197799689403
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.029529870574189765,
+        "brier": 0.012810652284819535
+      }
+    },
+    {
+      "held_rail_study": "SI",
+      "cz_reference": "road",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 71,
+      "target_recorded_taxa": 48,
+      "target_incidence_coverage": 0.30007446016381223,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 28,
+        "IT": 93,
+        "IN": 46,
+        "AD": 91
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6017093685972482,
+          "brier": 0.2045429741237651,
+          "coefficients": [
+            -0.26987477524532416
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6118989609897999,
+          "brier": 0.2097015830415985,
+          "coefficients": [
+            -0.28099944475547906,
+            0.5297991741164533
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5533401098908374,
+          "brier": 0.1834810402519558,
+          "coefficients": [
+            -0.28250172409495783,
+            0.4052400471635492
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5797236075018585,
+          "brier": 0.1973560496024563,
+          "coefficients": [
+            -0.2949561725644226,
+            0.4831261970486076,
+            0.3448864482685605
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.03217535348794143,
+        "brier": 0.012345533439142187
+      }
+    },
+    {
+      "held_rail_study": "IN",
+      "cz_reference": "road",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 50,
+      "target_recorded_taxa": 29,
+      "target_incidence_coverage": 0.46494464944649444,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 151,
+        "SI": 71,
+        "AD": 103
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6233768367964069,
+          "brier": 0.21592100825919197,
+          "coefficients": [
+            -0.7214062706991475
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5953979376732211,
+          "brier": 0.20316006236893638,
+          "coefficients": [
+            -0.7403183389438122,
+            0.35443302555698686
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.6020727391345755,
+          "brier": 0.20719523450513475,
+          "coefficients": [
+            -0.7488925559108561,
+            0.39521192162223495
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5800098421450213,
+          "brier": 0.19646307526907608,
+          "coefficients": [
+            -0.7648509312428332,
+            0.3386732724509022,
+            0.37409207627945995
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.015388095528199863,
+        "brier": 0.006696987099860302
+      }
+    },
+    {
+      "held_rail_study": "AD",
+      "cz_reference": "road",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 106,
+      "target_recorded_taxa": 63,
+      "target_incidence_coverage": 0.29318036966220523,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN"
+      ],
+      "training_sizes": {
+        "CZ": 45,
+        "IT": 125,
+        "SI": 63,
+        "IN": 49
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6056720993817825,
+          "brier": 0.20740239363064725,
+          "coefficients": [
+            -0.700699392034194
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6036374607958006,
+          "brier": 0.2064132426378388,
+          "coefficients": [
+            -0.7226963178697191,
+            0.3921448774334953
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5704747808230053,
+          "brier": 0.1923066638920904,
+          "coefficients": [
+            -0.7191199812915502,
+            0.3240632677772374
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5789250403639032,
+          "brier": 0.19745348638351307,
+          "coefficients": [
+            -0.7383397445378841,
+            0.37068340436817343,
+            0.29174135810881974
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.024712420431897364,
+        "brier": 0.00895975625432574
+      }
+    },
+    {
+      "held_rail_study": "AU",
+      "cz_reference": "road",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 55,
+      "target_recorded_taxa": 11,
+      "target_incidence_coverage": 0.36585365853658536,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.459269485628543,
+          "brier": 0.13734780367556904,
+          "coefficients": [
+            -0.7318167036775299
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.4329501575573631,
+          "brier": 0.12875435435288388,
+          "coefficients": [
+            -0.7561501563191614,
+            0.39805128693278724
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.4711207077320697,
+          "brier": 0.1444887161228829,
+          "coefficients": [
+            -0.7702005317113124,
+            0.4623601801313661
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.4387133449121959,
+          "brier": 0.1308650879247087,
+          "coefficients": [
+            -0.7882690809697173,
+            0.358298961019655,
+            0.4183442842724372
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.005763187354832777,
+        "brier": -0.0021107335718248132
+      }
+    },
+    {
+      "held_rail_study": "CN",
+      "cz_reference": "road",
+      "penalty": 0.001,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 21,
+      "target_recorded_taxa": 3,
+      "target_incidence_coverage": 0.06382978723404256,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.42758910884596574,
+          "brier": 0.12217864272086716,
+          "coefficients": [
+            -0.7318167036775299
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.39240004880562745,
+          "brier": 0.10849840682665134,
+          "coefficients": [
+            -0.7561501563191614,
+            0.39805128693278724
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.39866561826460273,
+          "brier": 0.11588674388414309,
+          "coefficients": [
+            -0.7702005317113124,
+            0.4623601801313661
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.36823444575123493,
+          "brier": 0.10311980194925992,
+          "coefficients": [
+            -0.7882690809697173,
+            0.358298961019655,
+            0.4183442842724372
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.024165603054392526,
+        "brier": 0.005378604877391419
+      }
+    },
+    {
+      "held_rail_study": "CZ",
+      "cz_reference": "road",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 51,
+      "target_recorded_taxa": 49,
+      "target_incidence_coverage": 0.1820373719107896,
+      "training_studies": [
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "IT": 75,
+        "SI": 48,
+        "IN": 41,
+        "AD": 71
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.8587110084674796,
+          "brier": 0.32761690994016246,
+          "coefficients": [
+            -0.8058335727986322
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.8343585806990117,
+          "brier": 0.3168261851640655,
+          "coefficients": [
+            -0.8083072571910489,
+            0.11482850096887835
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.8753140525603168,
+          "brier": 0.3331660636142855,
+          "coefficients": [
+            -0.8239943489627538,
+            0.3101419918466006
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.855454795698429,
+          "brier": 0.32483733274353555,
+          "coefficients": [
+            -0.8259107215994432,
+            0.07644452372205726,
+            0.30039028997463046
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.021096214999417273,
+        "brier": -0.008011147579470024
+      }
+    },
+    {
+      "held_rail_study": "IT",
+      "cz_reference": "road",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 153,
+      "target_recorded_taxa": 110,
+      "target_incidence_coverage": 0.43109540636042387,
+      "training_studies": [
+        "CZ",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 26,
+        "SI": 48,
+        "IN": 44,
+        "AD": 81
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6224117234377788,
+          "brier": 0.2150991186087011,
+          "coefficients": [
+            -0.4404319715004019
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6095686715744345,
+          "brier": 0.20935627026954715,
+          "coefficients": [
+            -0.452271716978121,
+            0.3668795907814717
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.589961942715927,
+          "brier": 0.20019391842004708,
+          "coefficients": [
+            -0.44328080701686345,
+            0.15920780719920832
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5854690125122033,
+          "brier": 0.19861430176243655,
+          "coefficients": [
+            -0.4560012662010853,
+            0.35739061325852567,
+            0.13324919773002442
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.024099659062231216,
+        "brier": 0.010741968507110594
+      }
+    },
+    {
+      "held_rail_study": "SI",
+      "cz_reference": "road",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 71,
+      "target_recorded_taxa": 48,
+      "target_incidence_coverage": 0.30007446016381223,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 28,
+        "IT": 93,
+        "IN": 46,
+        "AD": 91
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6017093685972482,
+          "brier": 0.2045429741237651,
+          "coefficients": [
+            -0.26987477524532416
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6023268734014465,
+          "brier": 0.20544452309714198,
+          "coefficients": [
+            -0.27621019017219084,
+            0.36473987987595163
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.5640064691629726,
+          "brier": 0.18734718737634265,
+          "coefficients": [
+            -0.2757344168517156,
+            0.2799076930676696
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5750771728889322,
+          "brier": 0.1939788753685113,
+          "coefficients": [
+            -0.2829368183689762,
+            0.3395657418053038,
+            0.2460777003472565
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.027249700512514297,
+        "brier": 0.011465647728630679
+      }
+    },
+    {
+      "held_rail_study": "IN",
+      "cz_reference": "road",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 50,
+      "target_recorded_taxa": 29,
+      "target_incidence_coverage": 0.46494464944649444,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 151,
+        "SI": 71,
+        "AD": 103
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6233768367964069,
+          "brier": 0.21592100825919197,
+          "coefficients": [
+            -0.7214062706991475
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.6013818536050219,
+          "brier": 0.2059062294618677,
+          "coefficients": [
+            -0.7309317664502467,
+            0.245252882758636
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.6060971310906295,
+          "brier": 0.20856157008396237,
+          "coefficients": [
+            -0.7335829649784231,
+            0.26282767771146326
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5875289620005446,
+          "brier": 0.19965594133101974,
+          "coefficients": [
+            -0.7423905274487833,
+            0.23607165955853668,
+            0.2521971509817737
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.013852891604477335,
+        "brier": 0.006250288130847964
+      }
+    },
+    {
+      "held_rail_study": "AD",
+      "cz_reference": "road",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": false,
+      "target_taxa": 106,
+      "target_recorded_taxa": 63,
+      "target_incidence_coverage": 0.29318036966220523,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN"
+      ],
+      "training_sizes": {
+        "CZ": 45,
+        "IT": 125,
+        "SI": 63,
+        "IN": 49
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.6056720993817825,
+          "brier": 0.20740239363064725,
+          "coefficients": [
+            -0.700699392034194
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.5980697725605941,
+          "brier": 0.2042699009823331,
+          "coefficients": [
+            -0.7118527607835288,
+            0.27102037318575123
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.58048433518229,
+          "brier": 0.19646118833927062,
+          "coefficients": [
+            -0.7089102319110598,
+            0.21729411472125992
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.5788165007262444,
+          "brier": 0.19685024986423064,
+          "coefficients": [
+            -0.7194977176790207,
+            0.25952700381240074,
+            0.20072265299402695
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.019253271834349772,
+        "brier": 0.007419651118102472
+      }
+    },
+    {
+      "held_rail_study": "AU",
+      "cz_reference": "road",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 55,
+      "target_recorded_taxa": 11,
+      "target_incidence_coverage": 0.36585365853658536,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.459269485628543,
+          "brier": 0.13734780367556904,
+          "coefficients": [
+            -0.7318167036775299
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.43781185962542823,
+          "brier": 0.1293738427391876,
+          "coefficients": [
+            -0.7439104670880828,
+            0.27379960137286014
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.4659412970331979,
+          "brier": 0.14115880442089662,
+          "coefficients": [
+            -0.7483367689940488,
+            0.303100224608929
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.44214738722501196,
+          "brier": 0.13109106544640767,
+          "coefficients": [
+            -0.7591321216047595,
+            0.25285794973923437,
+            0.2816830931361706
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": -0.004335527599583722,
+        "brier": -0.0017172227072200785
+      }
+    },
+    {
+      "held_rail_study": "CN",
+      "cz_reference": "road",
+      "penalty": 0.1,
+      "small_sample_external_diagnostic": true,
+      "target_taxa": 21,
+      "target_recorded_taxa": 3,
+      "target_incidence_coverage": 0.06382978723404256,
+      "training_studies": [
+        "CZ",
+        "IT",
+        "SI",
+        "IN",
+        "AD"
+      ],
+      "training_sizes": {
+        "CZ": 51,
+        "IT": 153,
+        "SI": 71,
+        "IN": 50,
+        "AD": 106
+      },
+      "models": {
+        "intercept": {
+          "log_loss": 0.42758910884596574,
+          "brier": 0.12217864272086716,
+          "coefficients": [
+            -0.7318167036775299
+          ]
+        },
+        "domestic": {
+          "log_loss": 0.4028729299854626,
+          "brier": 0.1121705519452282,
+          "coefficients": [
+            -0.7439104670880828,
+            0.27379960137286014
+          ]
+        },
+        "foreign": {
+          "log_loss": 0.4037871829069144,
+          "brier": 0.11474727068716024,
+          "coefficients": [
+            -0.7483367689940488,
+            0.303100224608929
+          ]
+        },
+        "domestic_foreign": {
+          "log_loss": 0.38207017488105083,
+          "brier": 0.10568104514722997,
+          "coefficients": [
+            -0.7591321216047595,
+            0.25285794973923437,
+            0.2816830931361706
+          ]
+        }
+      },
+      "foreign_increment": {
+        "log_loss": 0.020802755104411763,
+        "brier": 0.006489506797998229
+      }
+    }
+  ],
+  "local_kashmir": {
+    "source": {
+      "original_file_sha256": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474",
+      "original_file_size": 122187,
+      "all_spatial_sites": 31,
+      "station_sites_in_source": 16,
+      "between_sites_in_source": 15,
+      "plot_year_zone_rows": 248,
+      "source_taxon_columns": 123,
+      "source_missing_species_cells": 4,
+      "original_sheet": "Sheet1"
+    },
+    "panels": [
+      {
+        "year": 2014,
+        "panel": "foreign_two_study_support",
+        "penalty": 0.01,
+        "sites": 31,
+        "station_sites": 16,
+        "taxa": 58,
+        "block_sizes": [
+          7,
+          6,
+          6,
+          6,
+          6
+        ],
+        "target_recorded_incidences": 144,
+        "target_all_taxon_incidences": 190,
+        "incidence_coverage": 0.7578947368421053,
+        "foreign_beta_range": [
+          0.39500319459514927,
+          0.5842573851038976
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.2656707015419942,
+            "brier": 0.07114336093041392
+          },
+          "local_foreign": {
+            "log_loss": 0.2580270449802773,
+            "brier": 0.06937590860630466
+          },
+          "local_track": {
+            "log_loss": 0.15879094724243617,
+            "brier": 0.0443550042468777
+          },
+          "local_track_foreign": {
+            "log_loss": 0.15912778737888192,
+            "brier": 0.044226035822581194
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.265689223296949,
+            "brier": 0.07112228438178006
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.2654095944992885,
+            "brier": 0.07077671730867213
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.007643656561716885,
+              "block_gains": [
+                -0.0036853699157361713,
+                0.018776137536340776,
+                0.006087403816243074,
+                0.007773727251251264,
+                0.011154555200060992
+              ],
+              "leave_block_mean_range": [
+                0.004971861127807151,
+                0.010947955950974026
+              ],
+              "block_bootstrap_95_percentile": [
+                0.001096270499315574,
+                0.014037908735303332
+              ],
+              "station_gain": 0.009577432045224451,
+              "between_gain": 0.005580962712642148
+            },
+            "brier": {
+              "gain": 0.0017674523241092538,
+              "block_gains": [
+                -0.0002942208013617119,
+                0.0027708422677503474,
+                0.0018465494235594543,
+                0.002206962723128121,
+                0.0026507401950485524
+              ],
+              "leave_block_mean_range": [
+                0.0015266387376353912,
+                0.0023687736523716188
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0006522943430079654,
+                0.0025860051152048254
+              ],
+              "station_gain": 0.0024262310078999533,
+              "between_gain": 0.0010647550613991743
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": -0.0003368401364457158,
+              "block_gains": [
+                -0.0029504360211489006,
+                0.0026038695151970256,
+                -0.0008749117519931682,
+                -0.0008324927744626787,
+                0.0008053696642963404
+              ],
+              "leave_block_mean_range": [
+                -0.0010426104528399739,
+                0.0004254586632593798
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0018824816698522712,
+                0.001220840803827046
+              ],
+              "station_gain": 6.527124056882223e-05,
+              "between_gain": -0.0007657589385945564
+            },
+            "brier": {
+              "gain": 0.00012896842429650936,
+              "block_gains": [
+                -0.0007258382329404878,
+                0.0009606800396478252,
+                0.0001724774070383199,
+                6.655331440611675e-05,
+                0.000313437369536939
+              ],
+              "leave_block_mean_range": [
+                -7.064236338780644e-05,
+                0.0003782870326573002
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.00037354891613026336,
+                0.0006242141680775824
+              ],
+              "station_gain": 0.0002463768863828885,
+              "between_gain": 3.7327314043715996e-06
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": -0.0002796287976604954,
+              "block_gains": [
+                -0.004309829660403787,
+                0.005649911355878325,
+                -0.0024370311169182868,
+                -0.0021758401732039543,
+                0.0025463457501357736
+              ],
+              "leave_block_mean_range": [
+                -0.0017027184345098122,
+                0.0008958464539729644
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.003158433875800318,
+                0.0028024018281175337
+              ],
+              "station_gain": 0.0008180164005653166,
+              "between_gain": -0.0014504503424346948
+            },
+            "brier": {
+              "gain": -0.00034556707310792544,
+              "block_gains": [
+                -0.0009065800752789498,
+                0.00018860886067840685,
+                -0.0005016775989658088,
+                -0.0004513488570102193,
+                3.6664472065447984e-05
+              ],
+              "leave_block_mean_range": [
+                -0.0004737692972166452,
+                -0.00018193828080804333
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.000669385793236135,
+                -9.72289927606439e-06
+              ],
+              "station_gain": -0.00037288977108503474,
+              "between_gain": -0.0003164228619323422
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {}
+      },
+      {
+        "year": 2014,
+        "panel": "foreign_two_study_support",
+        "penalty": 0.001,
+        "sites": 31,
+        "station_sites": 16,
+        "taxa": 58,
+        "block_sizes": [
+          7,
+          6,
+          6,
+          6,
+          6
+        ],
+        "target_recorded_incidences": 144,
+        "target_all_taxon_incidences": 190,
+        "incidence_coverage": 0.7578947368421053,
+        "foreign_beta_range": [
+          0.46134747844715596,
+          0.6940668243821907
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.26568845338343144,
+            "brier": 0.07089984339725247
+          },
+          "local_foreign": {
+            "log_loss": 0.25809658790553625,
+            "brier": 0.06898256709217997
+          },
+          "local_track": {
+            "log_loss": 0.15580690801631059,
+            "brier": 0.0436075053725692
+          },
+          "local_track_foreign": {
+            "log_loss": 0.15593279826023373,
+            "brier": 0.04358878560285071
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.26581740394323694,
+            "brier": 0.07090426363216003
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.26548626772388767,
+            "brier": 0.0704661182465019
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.007591865477895182,
+              "block_gains": [
+                -0.005983550915319337,
+                0.02087703169485344,
+                0.006137651434049161,
+                0.007563200523526358,
+                0.011627564051235375
+              ],
+              "leave_block_mean_range": [
+                0.0044034255858252,
+                0.011551361925916083
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0003184842961556263,
+                0.015266389408427169
+              ],
+              "station_gain": 0.00938429932045679,
+              "between_gain": 0.005679936045829466
+            },
+            "brier": {
+              "gain": 0.001917276305072506,
+              "block_gains": [
+                -0.0006529142907441236,
+                0.003063178600853258,
+                0.0021156765834386797,
+                0.0025550997434289784,
+                0.002933705987688509
+              ],
+              "leave_block_mean_range": [
+                0.0016422597540851256,
+                0.002666915228852356
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0005261191212159099,
+                0.002883879261469553
+              ],
+              "station_gain": 0.00259817792789822,
+              "between_gain": 0.0011909812407250775
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": -0.00012589024392313923,
+              "block_gains": [
+                -0.0005730129720132217,
+                0.0006679491568509591,
+                -0.0003309613749146988,
+                -0.00038696836353724107,
+                6.806278868018666e-05
+              ],
+              "leave_block_mean_range": [
+                -0.0003164117001089228,
+                4.52055176980148e-06
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0004578615693787559,
+                0.00026838494414469595
+              ],
+              "station_gain": -3.5644262718159334e-05,
+              "between_gain": -0.00022215262387511776
+            },
+            "brier": {
+              "gain": 1.87197697184803e-05,
+              "block_gains": [
+                -0.00015548343101673016,
+                0.00023916268834485097,
+                3.917094463288621e-05,
+                -1.741880019459456e-05,
+                1.7201313615190783e-05
+              ],
+              "leave_block_mean_range": [
+                -3.418653075184866e-05,
+                6.952903659958335e-05
+              ],
+              "block_bootstrap_95_percentile": [
+                -8.869450005645065e-05,
+                0.00014345411569102983
+              ],
+              "station_gain": 5.422211862892226e-05,
+              "between_gain": -1.914940245265779e-05
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": -0.0003311362193492751,
+              "block_gains": [
+                -0.004750211894932228,
+                0.006187551643951299,
+                -0.002701945843833343,
+                -0.002577176423740659,
+                0.0029226140344057135
+              ],
+              "leave_block_mean_range": [
+                -0.001895621306541413,
+                0.0009577608526957528
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0035512737086543485,
+                0.003104924796777062
+              ],
+              "station_gain": 0.0008920784708845355,
+              "between_gain": -0.001635898555598673
+            },
+            "brier": {
+              "gain": -0.00043814538565812504,
+              "block_gains": [
+                -0.0010687997096652554,
+                0.00011462583751023954,
+                -0.0005927538203416837,
+                -0.0005703990629363347,
+                3.1708881143597406e-05
+              ],
+              "leave_block_mean_range": [
+                -0.0005708104792185325,
+                -0.0002542045411560454
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0007968323799072434,
+                -5.979332903274868e-05
+              ],
+              "station_gain": -0.0005073769177116978,
+              "between_gain": -0.00036429841813431416
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {}
+      },
+      {
+        "year": 2014,
+        "panel": "foreign_two_study_support",
+        "penalty": 0.1,
+        "sites": 31,
+        "station_sites": 16,
+        "taxa": 58,
+        "block_sizes": [
+          7,
+          6,
+          6,
+          6,
+          6
+        ],
+        "target_recorded_incidences": 144,
+        "target_all_taxon_incidences": 190,
+        "incidence_coverage": 0.7578947368421053,
+        "foreign_beta_range": [
+          0.1747528154457218,
+          0.25180114211993043
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.2690491337579504,
+            "brier": 0.07211996857985309
+          },
+          "local_foreign": {
+            "log_loss": 0.26371646657414904,
+            "brier": 0.07117337698280989
+          },
+          "local_track": {
+            "log_loss": 0.18998369403562146,
+            "brier": 0.05203700743401396
+          },
+          "local_track_foreign": {
+            "log_loss": 0.18885383888943813,
+            "brier": 0.05145289075148786
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.268641696795445,
+            "brier": 0.07204390653438283
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.26891404970454225,
+            "brier": 0.07202971694841505
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.005332667183801406,
+              "block_gains": [
+                0.0007628091354279062,
+                0.009864701916721499,
+                0.004395003349188594,
+                0.005508071595244783,
+                0.006894392930486497
+              ],
+              "leave_block_mean_range": [
+                0.004244978847900583,
+                0.006665542447910343
+              ],
+              "block_bootstrap_95_percentile": [
+                0.002740417545405264,
+                0.007899436138919575
+              ],
+              "station_gain": 0.006798672336638063,
+              "between_gain": 0.003768928354108971
+            },
+            "brier": {
+              "gain": 0.000946591597043215,
+              "block_gains": [
+                0.00017741183067991904,
+                0.0014419843800943532,
+                0.000908845958281485,
+                0.0010280144365357273,
+                0.0013048980073518065
+              ],
+              "leave_block_mean_range": [
+                0.0008276973291109418,
+                0.001170935695565843
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0005370643365940456,
+                0.0012817138314173025
+              ],
+              "station_gain": 0.001276918036399931,
+              "between_gain": 0.000594243395062718
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": 0.001129855146183306,
+              "block_gains": [
+                -0.0023926795055263755,
+                0.004670196514664174,
+                0.0005371916772904777,
+                0.0010458778136154142,
+                0.00237577833949112
+              ],
+              "leave_block_mean_range": [
+                0.0002801732177478977,
+                0.0021572610862652963
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0009004949302246873,
+                0.0031187318069796828
+              ],
+              "station_gain": 0.00186244250360546,
+              "between_gain": 0.00034842863159967503
+            },
+            "brier": {
+              "gain": 0.000584116682526108,
+              "block_gains": [
+                -0.00033625913073152033,
+                0.001362924792086546,
+                0.0005328145535292301,
+                0.0006165515724523499,
+                0.0008979475941702057
+              ],
+              "leave_block_mean_range": [
+                0.0003972027362316029,
+                0.0008525596280595829
+              ],
+              "block_bootstrap_95_percentile": [
+                6.138040164767901e-05,
+                0.0010476281004482438
+              ],
+              "station_gain": 0.0008221095912742875,
+              "between_gain": 0.0003302575798613832
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 0.0002723529090972696,
+              "block_gains": [
+                -0.0015728292907835934,
+                0.002837421193932451,
+                -0.0006968141475900506,
+                -0.0003224512548053911,
+                0.0014239684113797428
+              ],
+              "leave_block_mean_range": [
+                -0.0003432634792631739,
+                0.000810531050729188
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0009431943400628343,
+                0.0015768018832736353
+              ],
+              "station_gain": 0.000986393270218362,
+              "between_gain": -0.0004892901427652289
+            },
+            "brier": {
+              "gain": -1.418958596779313e-05,
+              "block_gains": [
+                -0.00026888039804212816,
+                0.00026755970120417974,
+                -0.00011229920139240133,
+                -5.120110918677955e-05,
+                0.00013632154625721946
+              ],
+              "leave_block_mean_range": [
+                -8.180941488906663e-05,
+                6.009523422055458e-05
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.00016934758263810273,
+                0.00014061822205276592
+              ],
+              "station_gain": 6.609818743650263e-05,
+              "between_gain": -9.982987759904194e-05
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {}
+      },
+      {
+        "year": 2014,
+        "panel": "all_original_binomials",
+        "penalty": 0.01,
+        "sites": 31,
+        "station_sites": 16,
+        "taxa": 122,
+        "block_sizes": [
+          7,
+          6,
+          6,
+          6,
+          6
+        ],
+        "target_recorded_incidences": 190,
+        "target_all_taxon_incidences": 190,
+        "incidence_coverage": 1.0,
+        "foreign_beta_range": [
+          0.44768748382486634,
+          0.5996730320204341
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.18883373981936355,
+            "brier": 0.04655779557357877
+          },
+          "local_foreign": {
+            "log_loss": 0.1806719097921657,
+            "brier": 0.04539335709143446
+          },
+          "local_track": {
+            "log_loss": 0.1281068929977115,
+            "brier": 0.03321798265447609
+          },
+          "local_track_foreign": {
+            "log_loss": 0.12816381349966105,
+            "brier": 0.03295125678560026
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.18406029320692727,
+            "brier": 0.04603070467235532
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.1889405590449692,
+            "brier": 0.046742904839783855
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.008161830027197857,
+              "block_gains": [
+                0.0029696992876790257,
+                0.018115379501127415,
+                0.00757022259563334,
+                0.0048456412249853155,
+                0.008173562649817334
+              ],
+              "leave_block_mean_range": [
+                0.005772978153454764,
+                0.009676201492890852
+              ],
+              "block_bootstrap_95_percentile": [
+                0.004535775634410318,
+                0.013352400464800181
+              ],
+              "station_gain": 0.009184663788688196,
+              "between_gain": 0.007070807348274833
+            },
+            "brier": {
+              "gain": 0.0011644384821443133,
+              "block_gains": [
+                0.0005265175008821509,
+                0.0019327234415088973,
+                0.0012023170021665346,
+                0.0008923685083724158,
+                0.0013745861213352618
+              ],
+              "leave_block_mean_range": [
+                0.0009800500918968132,
+                0.0013504987683457773
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0007745510545881156,
+                0.0015785711670131286
+              ],
+              "station_gain": 0.0015909648022080173,
+              "between_gain": 0.0007094770740763625
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": -5.6920501949565426e-05,
+              "block_gains": [
+                -0.001574627398197585,
+                0.0031935224816713598,
+                -8.147143821151993e-05,
+                -0.0019577497941528285,
+                0.0003886747885174166
+              ],
+              "leave_block_mean_range": [
+                -0.0008370268180185875,
+                0.00039927852817921774
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0014383315541834142,
+                0.0015739697294776091
+              ],
+              "station_gain": 8.005264705199071e-05,
+              "between_gain": -0.00020302519421789197
+            },
+            "brier": {
+              "gain": 0.000266725868875826,
+              "block_gains": [
+                -0.00022569811378380517,
+                0.0009004862936229907,
+                0.00036536007680354937,
+                0.0001259854951231685,
+                0.0002495662563898318
+              ],
+              "leave_block_mean_range": [
+                0.00011462336693650648,
+                0.0004103495304848851
+              ],
+              "block_bootstrap_95_percentile": [
+                -3.182128455453398e-05,
+                0.0006154021264763944
+              ],
+              "station_gain": 0.0003541069857064718,
+              "between_gain": 0.00017351934425647043
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 0.00488026583804198,
+              "block_gains": [
+                0.0019703554146547897,
+                0.010518854264452123,
+                0.0036721336833968146,
+                0.00344323632254293,
+                0.005281734575727772
+              ],
+              "leave_block_mean_range": [
+                0.0035270046157035453,
+                0.005728989711529911
+              ],
+              "block_bootstrap_95_percentile": [
+                0.002841691765563805,
+                0.0077343865598592226
+              ],
+              "station_gain": 0.00625207877486047,
+              "between_gain": 0.0034169987054355894
+            },
+            "brier": {
+              "gain": 0.0007122001674285276,
+              "block_gains": [
+                0.00035396425622057824,
+                0.0010422971479110063,
+                0.0005800452188859696,
+                0.0007282882750663701,
+                0.0009161119242600385
+              ],
+              "leave_block_mean_range": [
+                0.0006329768921127327,
+                0.0008166856415308461
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0004972785527123694,
+                0.0009170894047032842
+              ],
+              "station_gain": 0.0011214437708044443,
+              "between_gain": 0.000275673657160883
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {
+          "at_least_two_European_rail_studies": {
+            "taxa": 58,
+            "recorded_incidences": 144,
+            "models": {
+              "local": {
+                "log_loss": 0.2739708825219408,
+                "brier": 0.07279996936054649
+              },
+              "local_foreign": {
+                "log_loss": 0.2604504708046713,
+                "brier": 0.070606164686315
+              },
+              "local_track": {
+                "log_loss": 0.16058595918171134,
+                "brier": 0.04534957320409552
+              },
+              "local_track_foreign": {
+                "log_loss": 0.16058117396943564,
+                "brier": 0.044875939280724315
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.26842369277465916,
+                "brier": 0.0720396546353678
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.27514627553538945,
+                "brier": 0.07328036214072703
+              }
+            }
+          },
+          "fewer_than_two_European_rail_studies": {
+            "taxa": 64,
+            "recorded_incidences": 46,
+            "models": {
+              "local": {
+                "log_loss": 0.1116782042451529,
+                "brier": 0.022775825579139278
+              },
+              "local_foreign": {
+                "log_loss": 0.10837258887458247,
+                "brier": 0.022544250208573965
+              },
+              "local_track": {
+                "log_loss": 0.09867273926846161,
+                "brier": 0.022223728718883468
+              },
+              "local_track_foreign": {
+                "log_loss": 0.09878558057392786,
+                "brier": 0.022144513274394085
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.10760596234867013,
+                "brier": 0.022460093768375284
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.11081662847552591,
+                "brier": 0.022693334160804088
+              }
+            }
+          }
+        }
+      },
+      {
+        "year": 2014,
+        "panel": "all_original_binomials",
+        "penalty": 0.001,
+        "sites": 31,
+        "station_sites": 16,
+        "taxa": 122,
+        "block_sizes": [
+          7,
+          6,
+          6,
+          6,
+          6
+        ],
+        "target_recorded_incidences": 190,
+        "target_all_taxon_incidences": 190,
+        "incidence_coverage": 1.0,
+        "foreign_beta_range": [
+          0.528333031668449,
+          0.724324771654764
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.18873475126926026,
+            "brier": 0.04648675352548321
+          },
+          "local_foreign": {
+            "log_loss": 0.18064931078864213,
+            "brier": 0.04521105424176292
+          },
+          "local_track": {
+            "log_loss": 0.12671630803605183,
+            "brier": 0.032681736387525626
+          },
+          "local_track_foreign": {
+            "log_loss": 0.1267769428224078,
+            "brier": 0.03257042765095809
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.18409851958051543,
+            "brier": 0.04599123941131384
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.18893707463865356,
+            "brier": 0.046714085593210435
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.00808544048061809,
+              "block_gains": [
+                0.0015109760935034483,
+                0.020378757391789074,
+                0.007906766662552847,
+                0.0036495190909973524,
+                0.008076927228766831
+              ],
+              "leave_block_mean_range": [
+                0.005135044421937053,
+                0.010002992593526527
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0035121404492604244,
+                0.014538511585783485
+              ],
+              "station_gain": 0.00874075373003108,
+              "between_gain": 0.007386439681244234
+            },
+            "brier": {
+              "gain": 0.0012756992837202922,
+              "block_gains": [
+                0.0004653773955674622,
+                0.0021836764196782083,
+                0.001317835303802535,
+                0.0009806611760084522,
+                0.0015659997715702742
+              ],
+              "leave_block_mean_range": [
+                0.0010577847710903923,
+                0.0015120431677648673
+              ],
+              "block_bootstrap_95_percentile": [
+                0.000775362089471125,
+                0.0017699051477691227
+              ],
+              "station_gain": 0.0017602889310550378,
+              "between_gain": 0.0007588036598965633
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": -6.0634786355983735e-05,
+              "block_gains": [
+                -0.0007495717526687809,
+                0.0015830036891497437,
+                -9.833044656835932e-05,
+                -0.001308733262513152,
+                0.00038528066853942927
+              ],
+              "leave_block_mean_range": [
+                -0.00045510802047735833,
+                0.00023890884792173662
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0008545973220219879,
+                0.0007704890584081699
+              ],
+              "station_gain": 2.2573625821648534e-05,
+              "between_gain": -0.00014939042601212483
+            },
+            "brier": {
+              "gain": 0.0001113087365675313,
+              "block_gains": [
+                -0.00015963504678436036,
+                0.00044152530161151865,
+                0.0001961872911559337,
+                3.261790512665286e-05,
+                9.10055289532269e-05
+              ],
+              "leave_block_mean_range": [
+                3.205676095697434e-05,
+                0.00019033400671183303
+              ],
+              "block_bootstrap_95_percentile": [
+                -5.149276133441542e-05,
+                0.0002943224953381677
+              ],
+              "station_gain": 0.00015846842869444901,
+              "between_gain": 6.100506496548574e-05
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 0.004838555058138113,
+              "block_gains": [
+                0.0011300803597201936,
+                0.01192264676568061,
+                0.0036090543520981657,
+                0.002730323835813795,
+                0.005418749093780787
+              ],
+              "leave_block_mean_range": [
+                0.0031383730483279136,
+                0.005920193511843339
+              ],
+              "block_bootstrap_95_percentile": [
+                0.002194979286826164,
+                0.008421463696990757
+              ],
+              "station_gain": 0.005996914166886504,
+              "between_gain": 0.0036029720088064958
+            },
+            "brier": {
+              "gain": 0.000722846181896588,
+              "block_gains": [
+                0.00029535969407783587,
+                0.001136115406569619,
+                0.0005552270755744571,
+                0.000731355169444591,
+                0.0009674213117862295
+              ],
+              "leave_block_mean_range": [
+                0.0006236615679750607,
+                0.0008475297408437241
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0004648013302969295,
+                0.0009748106922043222
+              ],
+              "station_gain": 0.0011632749380543345,
+              "between_gain": 0.00025305550866165855
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {
+          "at_least_two_European_rail_studies": {
+            "taxa": 58,
+            "recorded_incidences": 144,
+            "models": {
+              "local": {
+                "log_loss": 0.2738937841755374,
+                "brier": 0.07262607269405556
+              },
+              "local_foreign": {
+                "log_loss": 0.2593495777715999,
+                "brier": 0.0701744410091981
+              },
+              "local_track": {
+                "log_loss": 0.15676450705288084,
+                "brier": 0.04402166966616096
+              },
+              "local_track_foreign": {
+                "log_loss": 0.15678632692305353,
+                "brier": 0.04389139065996767
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.2685124875821038,
+                "brier": 0.07195025264027807
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.27514935493894893,
+                "brier": 0.07319235832997342
+              }
+            }
+          },
+          "fewer_than_two_European_rail_studies": {
+            "taxa": 64,
+            "recorded_incidences": 46,
+            "models": {
+              "local": {
+                "log_loss": 0.11155937769794655,
+                "brier": 0.022797995528964526
+              },
+              "local_foreign": {
+                "log_loss": 0.10932719383533668,
+                "brier": 0.022587984983774782
+              },
+              "local_track": {
+                "log_loss": 0.09948512767705048,
+                "brier": 0.022404921853762364
+              },
+              "local_track_foreign": {
+                "log_loss": 0.0995809384811976,
+                "brier": 0.022310804924043158
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.10759836107907599,
+                "brier": 0.022465883672565017
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.11080719561651083,
+                "brier": 0.022718150925518973
+              }
+            }
+          }
+        }
+      },
+      {
+        "year": 2014,
+        "panel": "all_original_binomials",
+        "penalty": 0.1,
+        "sites": 31,
+        "station_sites": 16,
+        "taxa": 122,
+        "block_sizes": [
+          7,
+          6,
+          6,
+          6,
+          6
+        ],
+        "target_recorded_incidences": 190,
+        "target_all_taxon_incidences": 190,
+        "incidence_coverage": 1.0,
+        "foreign_beta_range": [
+          0.18981992686900023,
+          0.24236983024863845
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.19151897046181973,
+            "brier": 0.04690171336297319
+          },
+          "local_foreign": {
+            "log_loss": 0.18597791084049048,
+            "brier": 0.046270371184072394
+          },
+          "local_track": {
+            "log_loss": 0.14726940614561662,
+            "brier": 0.03782232035249447
+          },
+          "local_track_foreign": {
+            "log_loss": 0.1457449756729305,
+            "brier": 0.03729935621370459
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.18790638836498674,
+            "brier": 0.046511538791841424
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.19115889491223217,
+            "brier": 0.04690897581078827
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.005541059621329269,
+              "block_gains": [
+                0.0038193961636745527,
+                0.009062033051112571,
+                0.005023462071799013,
+                0.00451439379593332,
+                0.005572956933736009
+              ],
+              "leave_block_mean_range": [
+                0.004696025998181277,
+                0.006043211463145228
+              ],
+              "block_bootstrap_95_percentile": [
+                0.004303722931890683,
+                0.00734479100421401
+              ],
+              "station_gain": 0.006608218585370326,
+              "between_gain": 0.004402756726352142
+            },
+            "brier": {
+              "gain": 0.0006313421789007912,
+              "block_gains": [
+                0.00040969122195921214,
+                0.0009388862272166898,
+                0.0006573473123378052,
+                0.0005090278212835012,
+                0.0006787001378636779
+              ],
+              "leave_block_mean_range": [
+                0.0005575316073049756,
+                0.0006959903746754185
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0004933779636518067,
+                0.0007966067630542751
+              ],
+              "station_gain": 0.0008138754256439861,
+              "between_gain": 0.0004366400490413834
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": 0.0015244304726860969,
+              "block_gains": [
+                0.00011542845124813286,
+                0.004474946675765298,
+                0.0013381348168915012,
+                0.0002965116190066855,
+                0.0016319644707585266
+              ],
+              "leave_block_mean_range": [
+                0.0008163065839470884,
+                0.001935389395605503
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0004125920827157217,
+                0.0030118972926388163
+              ],
+              "station_gain": 0.0019504761736054569,
+              "between_gain": 0.0010699817250387795
+            },
+            "brier": {
+              "gain": 0.0005229641387898858,
+              "block_gains": [
+                0.00018278732953613372,
+                0.0009736908100459029,
+                0.0005368611503581781,
+                0.0004131957594655725,
+                0.000564981779419267
+              ],
+              "leave_block_mean_range": [
+                0.0004147897376884416,
+                0.0006221823748222301
+              ],
+              "block_bootstrap_95_percentile": [
+                0.00031644117702242985,
+                0.0007742258679922919
+              ],
+              "station_gain": 0.0006695498473146453,
+              "between_gain": 0.0003666060496968089
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 0.00325250654724547,
+              "block_gains": [
+                0.0023300524896487135,
+                0.004986456701034141,
+                0.002672145583798219,
+                0.0030606942557882314,
+                0.0033669260488908372
+              ],
+              "leave_block_mean_range": [
+                0.002836358510336189,
+                0.003521555647377857
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0025953327311059376,
+                0.004138441988537775
+              ],
+              "station_gain": 0.004306499194479674,
+              "between_gain": 0.0021282477235289856
+            },
+            "brier": {
+              "gain": 0.0003974370189468469,
+              "block_gains": [
+                0.00026396228704408795,
+                0.0005206274130164137,
+                0.0003626281990839429,
+                0.00039805006132971897,
+                0.000464162922910531
+              ],
+              "leave_block_mean_range": [
+                0.0003678713243701509,
+                0.0004363671490851516
+              ],
+              "block_bootstrap_95_percentile": [
+                0.00031946186256650634,
+                0.00047169295605648497
+              ],
+              "station_gain": 0.0005749218154962781,
+              "between_gain": 0.0002081199026274537
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {
+          "at_least_two_European_rail_studies": {
+            "taxa": 58,
+            "recorded_incidences": 144,
+            "models": {
+              "local": {
+                "log_loss": 0.2768112994471222,
+                "brier": 0.07338341199367161
+              },
+              "local_foreign": {
+                "log_loss": 0.26886766629390724,
+                "brier": 0.07231951498903727
+              },
+              "local_track": {
+                "log_loss": 0.19484278052298848,
+                "brier": 0.055047873861472044
+              },
+              "local_track_foreign": {
+                "log_loss": 0.19311428649306592,
+                "brier": 0.053994887552541074
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.2725291767376522,
+                "brier": 0.07282003446770556
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.27698560165364033,
+                "brier": 0.07347346808041672
+              }
+            }
+          },
+          "fewer_than_two_European_rail_studies": {
+            "taxa": 64,
+            "recorded_incidences": 46,
+            "models": {
+              "local": {
+                "log_loss": 0.11422279731888943,
+                "brier": 0.02290267397890275
+              },
+              "local_foreign": {
+                "log_loss": 0.11085906996083159,
+                "brier": 0.022663334610822986
+              },
+              "local_track": {
+                "log_loss": 0.10415603561612334,
+                "brier": 0.02221166248498355
+              },
+              "local_track_foreign": {
+                "log_loss": 0.10281653774218279,
+                "brier": 0.02216903093788402
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.11121698640225862,
+                "brier": 0.022669464585589546
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.11337844192783106,
+                "brier": 0.022834904691437504
+              }
+            }
+          }
+        }
+      },
+      {
+        "year": 2017,
+        "panel": "foreign_two_study_support",
+        "penalty": 0.01,
+        "sites": 27,
+        "station_sites": 15,
+        "taxa": 58,
+        "block_sizes": [
+          6,
+          6,
+          5,
+          5,
+          5
+        ],
+        "target_recorded_incidences": 65,
+        "target_all_taxon_incidences": 82,
+        "incidence_coverage": 0.7926829268292683,
+        "foreign_beta_range": [
+          0.4497738079346159,
+          0.7394886657405746
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.15223987850939225,
+            "brier": 0.037394606457387805
+          },
+          "local_foreign": {
+            "log_loss": 0.1469390623691811,
+            "brier": 0.03653058288933033
+          },
+          "local_track": {
+            "log_loss": 0.11111497857307187,
+            "brier": 0.02911213667445693
+          },
+          "local_track_foreign": {
+            "log_loss": 0.1115617464468281,
+            "brier": 0.028980639374977118
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.15243276728307603,
+            "brier": 0.03746201498052661
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.1515102513524814,
+            "brier": 0.03709512414554118
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.005300816140211139,
+              "block_gains": [
+                0.006663467108782863,
+                0.010779884085293479,
+                0.008872699682519136,
+                -0.007739608248820207,
+                0.0065592942905496054
+              ],
+              "leave_block_mean_range": [
+                0.003735368155901898,
+                0.00826454895590008
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0013382414232188421,
+                0.009291928788943004
+              ],
+              "station_gain": 0.009380172149624083,
+              "between_gain": 0.00020162112844495568
+            },
+            "brier": {
+              "gain": 0.0008640235680574738,
+              "block_gains": [
+                0.000631616150633473,
+                0.0009607540097133936,
+                0.000837790768940852,
+                -5.9452671303129864e-05,
+                0.001976544977456396
+              ],
+              "leave_block_mean_range": [
+                0.0006111777931940823,
+                0.0010739045315485201
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0003208307737975649,
+                0.0014519405786639682
+              ],
+              "station_gain": 0.0010996897787532735,
+              "between_gain": 0.000569440804687724
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": -0.00044676787375622036,
+              "block_gains": [
+                0.0009722980939567057,
+                0.0020290436020516194,
+                0.0011518432851533506,
+                -0.005384772290595655,
+                -0.0017812275480512756
+              ],
+              "leave_block_mean_range": [
+                -0.0011541425811298887,
+                0.0006755058573436511
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0032226454450690273,
+                0.0014893123085676133
+              ],
+              "station_gain": 0.0009532158500878569,
+              "between_gain": -0.002196747528561317
+            },
+            "brier": {
+              "gain": 0.00013149729947981552,
+              "block_gains": [
+                1.1917386663634738e-05,
+                0.0007452169041961866,
+                0.00042510607484955095,
+                -0.0010639709055705216,
+                0.00044038909888018883
+              ],
+              "leave_block_mean_range": [
+                -4.385115901057621e-05,
+                0.0004031946188094376
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0005263889911221181,
+                0.0005730379338297734
+              ],
+              "station_gain": 0.00030402109418189126,
+              "between_gain": -8.415744389777913e-05
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": -0.0009225159305946742,
+              "block_gains": [
+                -0.002225207164726057,
+                0.0006456293828090917,
+                3.250395552468477e-05,
+                -0.0032818723571392317,
+                0.00016327571470366452
+              ],
+              "leave_block_mean_range": [
+                -0.0013705574487100358,
+                -0.0003862985609254565
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0023755258017665415,
+                0.0003534381303099692
+              ],
+              "station_gain": 0.0009617817119046209,
+              "between_gain": -0.003277887983718793
+            },
+            "brier": {
+              "gain": -0.00036689083498542166,
+              "block_gains": [
+                -0.0004375513028377744,
+                -0.00030876491652961506,
+                -0.0004883545628854548,
+                -0.0004866013982470441,
+                -0.0001106750845479107
+              ],
+              "leave_block_mean_range": [
+                -0.0004251216873575832,
+                -0.00033928544228086866
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.00047561929250613773,
+                -0.00022868164456275273
+              ],
+              "station_gain": -0.00015498825000329687,
+              "between_gain": -0.0006317690662130776
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {}
+      },
+      {
+        "year": 2017,
+        "panel": "foreign_two_study_support",
+        "penalty": 0.001,
+        "sites": 27,
+        "station_sites": 15,
+        "taxa": 58,
+        "block_sizes": [
+          6,
+          6,
+          5,
+          5,
+          5
+        ],
+        "target_recorded_incidences": 65,
+        "target_all_taxon_incidences": 82,
+        "incidence_coverage": 0.7926829268292683,
+        "foreign_beta_range": [
+          0.5716626860926668,
+          1.0763594109483428
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.15265951649849216,
+            "brier": 0.0374027882903704
+          },
+          "local_foreign": {
+            "log_loss": 0.14812475911797723,
+            "brier": 0.036239021323756
+          },
+          "local_track": {
+            "log_loss": 0.11314619508038053,
+            "brier": 0.028811151301212364
+          },
+          "local_track_foreign": {
+            "log_loss": 0.11376116453687429,
+            "brier": 0.02878666742061453
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.1530068665793991,
+            "brier": 0.03751505467832442
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.1518196821825826,
+            "brier": 0.03699362909011817
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.0045347573805149255,
+              "block_gains": [
+                0.007533332169512959,
+                0.012719418842117415,
+                0.009769067579309487,
+                -0.015912862756897916,
+                0.0063281838184125775
+              ],
+              "leave_block_mean_range": [
+                0.002196282677199928,
+                0.009181943775381481
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.005563369632301676,
+                0.010554417675556487
+              ],
+              "station_gain": 0.010336142461223366,
+              "between_gain": -0.002716973970370624
+            },
+            "brier": {
+              "gain": 0.0011637669666144006,
+              "block_gains": [
+                0.0007960851587283857,
+                0.0011672907946416804,
+                0.001088941507267229,
+                -0.0002335253581109517,
+                0.0030728743265174066
+              ],
+              "leave_block_mean_range": [
+                0.0007298789302728083,
+                0.0014813334040519807
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0003065694573539304,
+                0.002165935899479522
+              ],
+              "station_gain": 0.0014690081721679294,
+              "between_gain": 0.0007822154596724896
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": -0.0006149694564937699,
+              "block_gains": [
+                0.0005580565010367735,
+                0.0014018982685126402,
+                0.000885118933039443,
+                -0.004715648393877258,
+                -0.0018422513276878383
+              ],
+              "leave_block_mean_range": [
+                -0.001191217377924173,
+                0.00031700302927520477
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0029460632130914395,
+                0.0010365109842416698
+              ],
+              "station_gain": 0.0005519039606813284,
+              "between_gain": -0.002073561227962643
+            },
+            "brier": {
+              "gain": 2.4483880597834983e-05,
+              "block_gains": [
+                -5.484281884491199e-06,
+                0.0005406551960198909,
+                0.0003198414363507453,
+                -0.000995516281037371,
+                0.0001656827029524549
+              ],
+              "leave_block_mean_range": [
+                -0.000122993638094181,
+                0.0002563020991512909
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0005140939509659148,
+                0.0003894329715003118
+              ],
+              "station_gain": 0.00016700731195159687,
+              "between_gain": -0.0001536704085943674
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": -0.0011871843968164996,
+              "block_gains": [
+                -0.0031611954516481584,
+                0.000655587904168,
+                0.0001644588996033036,
+                -0.004213031261860162,
+                0.000644505676423951
+              ],
+              "leave_block_mean_range": [
+                -0.0017136907685263564,
+                -0.0004994919274883945
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.003089503762007509,
+                0.0005547464257455301
+              ],
+              "station_gain": 0.0015161614636805946,
+              "between_gain": -0.004566366722437867
+            },
+            "brier": {
+              "gain": -0.0005214255882062535,
+              "block_gains": [
+                -0.000652991508809307,
+                -0.000449784674417627,
+                -0.0006169426344445443,
+                -0.0006653356476040804,
+                -0.00021008847439282357
+              ],
+              "leave_block_mean_range": [
+                -0.0005921840231638512,
+                -0.0004838353251768097
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0006508876945916744,
+                -0.0003529505154007122
+              ],
+              "station_gain": -0.00018321109645079274,
+              "between_gain": -0.0009441937029005795
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {}
+      },
+      {
+        "year": 2017,
+        "panel": "foreign_two_study_support",
+        "penalty": 0.1,
+        "sites": 27,
+        "station_sites": 15,
+        "taxa": 58,
+        "block_sizes": [
+          6,
+          6,
+          5,
+          5,
+          5
+        ],
+        "target_recorded_incidences": 65,
+        "target_all_taxon_incidences": 82,
+        "incidence_coverage": 0.7926829268292683,
+        "foreign_beta_range": [
+          0.16652378830203157,
+          0.22852981869653227
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.15712852060304144,
+            "brier": 0.03810544047015823
+          },
+          "local_foreign": {
+            "log_loss": 0.15356971695933921,
+            "brier": 0.037735090041677834
+          },
+          "local_track": {
+            "log_loss": 0.12309947212988427,
+            "brier": 0.03243884514418183
+          },
+          "local_track_foreign": {
+            "log_loss": 0.1221005144880165,
+            "brier": 0.03211236139958129
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.15702706229940297,
+            "brier": 0.038100782015307436
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.15712280365057302,
+            "brier": 0.03808778676159936
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.003558803643702263,
+              "block_gains": [
+                0.003802125676875973,
+                0.005267707977030608,
+                0.004724865416100612,
+                -0.0001580854002170784,
+                0.0037669592754207893
+              ],
+              "leave_block_mean_range": [
+                0.0030705452627513073,
+                0.004403551153683931
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0016035136981740333,
+                0.004788738750462125
+              ],
+              "station_gain": 0.0047929650789680705,
+              "between_gain": 0.0020161018496200034
+            },
+            "brier": {
+              "gain": 0.0003703504284803913,
+              "block_gains": [
+                0.0003233226877500288,
+                0.00048334926356641966,
+                0.00041407922081777707,
+                8.427546743461078e-05,
+                0.0005335312839619868
+              ],
+              "leave_block_mean_range": [
+                0.00033326387041639227,
+                0.000435367465081705
+              ],
+              "block_bootstrap_95_percentile": [
+                0.00022583555991651034,
+                0.0004891074113520663
+              ],
+              "station_gain": 0.0004432794970288504,
+              "between_gain": 0.0002791890927948174
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": 0.0009989576418677818,
+              "block_gains": [
+                0.0015743855394320602,
+                0.0026327695612441116,
+                0.0018811057243473123,
+                -0.0022621609171229627,
+                0.0007268403380502664
+              ],
+              "leave_block_mean_range": [
+                0.0005321542363316877,
+                0.0017401209507293147
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0005800219960967508,
+                0.0021375216148212437
+              ],
+              "station_gain": 0.001946518612073981,
+              "between_gain": -0.00018549357088996736
+            },
+            "brier": {
+              "gain": 0.0003264837446005407,
+              "block_gains": [
+                0.00018550021869354928,
+                0.0006295590790075635,
+                0.0004642268492156286,
+                -0.0002689630903224889,
+                0.0005896773047084448
+              ],
+              "leave_block_mean_range": [
+                0.00023989079191281992,
+                0.0004618125707194111
+              ],
+              "block_bootstrap_95_percentile": [
+                1.036210802545624e-06,
+                0.0005747557034903922
+              ],
+              "station_gain": 0.00042864984271001665,
+              "between_gain": 0.00019877612196369585
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 9.574135117004572e-05,
+              "block_gains": [
+                9.010167627937725e-05,
+                0.000569264274462869,
+                0.00020632494516012733,
+                -0.0006133587170137122,
+                0.00013279792728113638
+              ],
+              "leave_block_mean_range": [
+                -3.9550912627903776e-05,
+                0.00025690045757544526
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.0003001906557199746,
+                0.0003775992351894723
+              ],
+              "station_gain": 0.0005497803083510046,
+              "between_gain": -0.0004718073453061529
+            },
+            "brier": {
+              "gain": -1.2995253708085104e-05,
+              "block_gains": [
+                -1.2467508625056226e-05,
+                1.1900345792367414e-05,
+                -4.1629015322228875e-05,
+                -5.626218766853902e-05,
+                2.839742836633491e-05
+              ],
+              "leave_block_mean_range": [
+                -2.240268145227147e-05,
+                -3.161859626163759e-06
+              ],
+              "block_bootstrap_95_percentile": [
+                -4.052758006376986e-05,
+                1.2570477907907882e-05
+              ],
+              "station_gain": 2.4742082138577242e-05,
+              "between_gain": -6.0166923516413034e-05
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {}
+      },
+      {
+        "year": 2017,
+        "panel": "all_original_binomials",
+        "penalty": 0.01,
+        "sites": 27,
+        "station_sites": 15,
+        "taxa": 122,
+        "block_sizes": [
+          6,
+          6,
+          5,
+          5,
+          5
+        ],
+        "target_recorded_incidences": 82,
+        "target_all_taxon_incidences": 82,
+        "incidence_coverage": 1.0,
+        "foreign_beta_range": [
+          0.45333675982564003,
+          0.5494179226058753
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.10564897858291662,
+            "brier": 0.023292589814275868
+          },
+          "local_foreign": {
+            "log_loss": 0.10090268529365876,
+            "brier": 0.022844255100563506
+          },
+          "local_track": {
+            "log_loss": 0.07768203570469949,
+            "brier": 0.01874499978961218
+          },
+          "local_track_foreign": {
+            "log_loss": 0.07752878538876419,
+            "brier": 0.018658306167540207
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.10322479000767595,
+            "brier": 0.023097124928090206
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.10547245576194399,
+            "brier": 0.023355372828841547
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.00474629328925786,
+              "block_gains": [
+                0.0026389429511089794,
+                0.005744922235048914,
+                0.0046837997526482916,
+                0.0031934051947160313,
+                0.007692140591238653
+              ],
+              "leave_block_mean_range": [
+                0.004076782538807681,
+                0.005348393385871827
+              ],
+              "block_bootstrap_95_percentile": [
+                0.003222976523100353,
+                0.006377641086632825
+              ],
+              "station_gain": 0.00532085107885922,
+              "between_gain": 0.004028096052256162
+            },
+            "brier": {
+              "gain": 0.0004483347137123547,
+              "block_gains": [
+                0.00028492714567424543,
+                0.0005790797804848478,
+                0.0003980789775452888,
+                0.0002473485114279708,
+                0.0007387716536825441
+              ],
+              "leave_block_mean_range": [
+                0.00038232631826458444,
+                0.0004950225902946717
+              ],
+              "block_bootstrap_95_percentile": [
+                0.00029196317592952215,
+                0.0006074152325110424
+              ],
+              "station_gain": 0.0004533807779740288,
+              "between_gain": 0.0004420271333852621
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": 0.0001532503159352914,
+              "block_gains": [
+                0.00017378762844302378,
+                0.0006407231480294607,
+                0.00023947893165419953,
+                -0.0006480515398661444,
+                0.000258711382495537
+              ],
+              "leave_block_mean_range": [
+                1.397236390838589e-05,
+                0.00033536437407198134
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.00028408523755043977,
+                0.0004539489401948859
+              ],
+              "station_gain": 0.0002960324471019788,
+              "between_gain": -2.522734802306789e-05
+            },
+            "brier": {
+              "gain": 8.669362207197304e-05,
+              "block_gains": [
+                -5.0889675188872836e-05,
+                0.00025410240776798575,
+                0.0001914930834140443,
+                -0.0002014141702444988,
+                0.00023421136692417348
+              ],
+              "leave_block_mean_range": [
+                3.8862540444540847e-05,
+                0.0001521726657802621
+              ],
+              "block_bootstrap_95_percentile": [
+                -8.290360654537892e-05,
+                0.0002317419347844352
+              ],
+              "station_gain": 9.405382476236328e-05,
+              "between_gain": 7.749336870898524e-05
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 0.0022476657542680337,
+              "block_gains": [
+                0.0016380567954213526,
+                0.0028490891102692013,
+                0.002050947287472643,
+                0.0016869383982740876,
+                0.0030149343004719858
+              ],
+              "leave_block_mean_range": [
+                0.002073286539221681,
+                0.0024218397425099423
+              ],
+              "block_bootstrap_95_percentile": [
+                0.001732622295005938,
+                0.0027627092135301293
+              ],
+              "station_gain": 0.0024784281871688984,
+              "between_gain": 0.0019592127131419523
+            },
+            "brier": {
+              "gain": 0.00025824790075133997,
+              "block_gains": [
+                0.0002101969674605479,
+                0.000353594361048851,
+                0.0002607619004003119,
+                0.00014879311957987084,
+                0.0003084340498657745
+              ],
+              "leave_block_mean_range": [
+                0.00023100605495205112,
+                0.00028312398738121935
+              ],
+              "block_bootstrap_95_percentile": [
+                0.00019366341722270087,
+                0.0003196771234535377
+              ],
+              "station_gain": 0.00024267450966867498,
+              "between_gain": 0.00027771463960467123
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {
+          "at_least_two_European_rail_studies": {
+            "taxa": 58,
+            "recorded_incidences": 65,
+            "models": {
+              "local": {
+                "log_loss": 0.15726541644978173,
+                "brier": 0.03794194779393057
+              },
+              "local_foreign": {
+                "log_loss": 0.14925919941078647,
+                "brier": 0.03720144127772633
+              },
+              "local_track": {
+                "log_loss": 0.11172317712008345,
+                "brier": 0.029104878033473763
+              },
+              "local_track_foreign": {
+                "log_loss": 0.11117107306867735,
+                "brier": 0.02889505006436786
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.15434071250526607,
+                "brier": 0.03773972019457347
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.15779994051429294,
+                "brier": 0.0381623355201937
+              }
+            }
+          },
+          "fewer_than_two_European_rail_studies": {
+            "taxa": 64,
+            "recorded_incidences": 17,
+            "models": {
+              "local": {
+                "log_loss": 0.058871581766070075,
+                "brier": 0.010016609145213788
+              },
+              "local_foreign": {
+                "log_loss": 0.05707959437501175,
+                "brier": 0.009833055127509698
+              },
+              "local_track": {
+                "log_loss": 0.04683225129700778,
+                "brier": 0.00935636013111262
+              },
+              "local_track_foreign": {
+                "log_loss": 0.047040462178842904,
+                "brier": 0.009381257011040147
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.05690098524423491,
+                "brier": 0.009827272967839744
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.05805067270512777,
+                "brier": 0.009936562889803659
+              }
+            }
+          }
+        }
+      },
+      {
+        "year": 2017,
+        "panel": "all_original_binomials",
+        "penalty": 0.001,
+        "sites": 27,
+        "station_sites": 15,
+        "taxa": 122,
+        "block_sizes": [
+          6,
+          6,
+          5,
+          5,
+          5
+        ],
+        "target_recorded_incidences": 82,
+        "target_all_taxon_incidences": 82,
+        "incidence_coverage": 1.0,
+        "foreign_beta_range": [
+          0.5889941697916424,
+          0.7617061425310624
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.1060994491126301,
+            "brier": 0.02322006002473888
+          },
+          "local_foreign": {
+            "log_loss": 0.10123605117005832,
+            "brier": 0.02272983062301611
+          },
+          "local_track": {
+            "log_loss": 0.07974705756842382,
+            "brier": 0.01862414524100583
+          },
+          "local_track_foreign": {
+            "log_loss": 0.07965690079092236,
+            "brier": 0.018587087443181004
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.10361459664810412,
+            "brier": 0.023050548874205313
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.10592628695711197,
+            "brier": 0.023297760690723465
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.004863397942571797,
+              "block_gains": [
+                0.001775162933290923,
+                0.006421189739846866,
+                0.004447482275114253,
+                0.002688552017966192,
+                0.009290691389041913
+              ],
+              "leave_block_mean_range": [
+                0.0038571948865558617,
+                0.005745750802366333
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0026083291390638615,
+                0.007358856514020803
+              ],
+              "station_gain": 0.0055305965796951925,
+              "between_gain": 0.004029399646167553
+            },
+            "brier": {
+              "gain": 0.0004902294017227606,
+              "block_gains": [
+                0.00033226807104492617,
+                0.0006530707595017853,
+                0.0003931137607855378,
+                0.00014568053745111497,
+                0.0009260378744102009
+              ],
+              "leave_block_mean_range": [
+                0.00039118202156652424,
+                0.0005685359617844983
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0002739893158809462,
+                0.0007334296703493808
+              ],
+              "station_gain": 0.0004841391626241003,
+              "between_gain": 0.0004978422005960862
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": 9.015677750145243e-05,
+              "block_gains": [
+                0.00021525919828167123,
+                0.00032652746061965127,
+                0.00014021232463762786,
+                -0.0003890855949533117,
+                8.557587814193995e-05
+              ],
+              "leave_block_mean_range": [
+                2.2622296610538466e-05,
+                0.00019907549851389884
+              ],
+              "block_bootstrap_95_percentile": [
+                -0.00014783335043928883,
+                0.0002507066658679493
+              ],
+              "station_gain": 0.00018700859953763211,
+              "between_gain": -3.09080000437722e-05
+            },
+            "brier": {
+              "gain": 3.70577978248252e-05,
+              "block_gains": [
+                -3.275808999797427e-05,
+                0.00012374249907436304,
+                0.00013228351360328132,
+                -0.00014820198550329552,
+                0.00010684928926240379
+              ],
+              "leave_block_mean_range": [
+                1.2290740324957251e-05,
+                7.916229403576173e-05
+              ],
+              "block_bootstrap_95_percentile": [
+                -6.7621567481572e-05,
+                0.00012377746560137735
+              ],
+              "station_gain": 3.899168552600786e-05,
+              "between_gain": 3.4640438198346885e-05
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 0.0023116903090078856,
+              "block_gains": [
+                0.0008737585549649929,
+                0.003421873389885433,
+                0.002015855537791808,
+                0.0015461342952378665,
+                0.003766379501792397
+              ],
+              "leave_block_mean_range": [
+                0.001981079128829588,
+                0.002722527953020141
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0013342860481821341,
+                0.003289094569833637
+              ],
+              "station_gain": 0.002725488807408256,
+              "between_gain": 0.0017944421860074226
+            },
+            "brier": {
+              "gain": 0.0002472118165181502,
+              "block_gains": [
+                0.00019928290719572824,
+                0.00041512647358253114,
+                0.00020640610706131184,
+                5.0118413597662057e-05,
+                0.00034112803160512575
+              ],
+              "leave_block_mean_range": [
+                0.00019923620021404132,
+                0.000292005771727352
+              ],
+              "block_bootstrap_95_percentile": [
+                0.00013957787589188476,
+                0.0003490677234943774
+              ],
+              "station_gain": 0.00023148052784083284,
+              "between_gain": 0.00026687592736479685
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {
+          "at_least_two_European_rail_studies": {
+            "taxa": 58,
+            "recorded_incidences": 65,
+            "models": {
+              "local": {
+                "log_loss": 0.1576729125122389,
+                "brier": 0.037727430645112116
+              },
+              "local_foreign": {
+                "log_loss": 0.14820133789531573,
+                "brier": 0.03695528908543041
+              },
+              "local_track": {
+                "log_loss": 0.11503897122395737,
+                "brier": 0.028870731674476454
+              },
+              "local_track_foreign": {
+                "log_loss": 0.11457605982204995,
+                "brier": 0.028779240875702092
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.15439970139146117,
+                "brier": 0.03765603609193852
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.1581368747700932,
+                "brier": 0.03798946300803583
+              }
+            }
+          },
+          "fewer_than_two_European_rail_studies": {
+            "taxa": 64,
+            "recorded_incidences": 17,
+            "models": {
+              "local": {
+                "log_loss": 0.05936099790673465,
+                "brier": 0.010072755400025632
+              },
+              "local_foreign": {
+                "log_loss": 0.058673760075293756,
+                "brier": 0.009838008891453158
+              },
+              "local_track": {
+                "log_loss": 0.047763760818096516,
+                "brier": 0.009338176285673074
+              },
+              "local_track_foreign": {
+                "log_loss": 0.04801141291896297,
+                "brier": 0.00935044839495877
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.05759059547443676,
+                "brier": 0.009814326083134591
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.05861044175159775,
+                "brier": 0.009983405465659135
+              }
+            }
+          }
+        }
+      },
+      {
+        "year": 2017,
+        "panel": "all_original_binomials",
+        "penalty": 0.1,
+        "sites": 27,
+        "station_sites": 15,
+        "taxa": 122,
+        "block_sizes": [
+          6,
+          6,
+          5,
+          5,
+          5
+        ],
+        "target_recorded_incidences": 82,
+        "target_all_taxon_incidences": 82,
+        "incidence_coverage": 1.0,
+        "foreign_beta_range": [
+          0.153235053896027,
+          0.17152287158769658
+        ],
+        "models": {
+          "local": {
+            "log_loss": 0.10900612423184669,
+            "brier": 0.023756345786203423
+          },
+          "local_foreign": {
+            "log_loss": 0.10634595032245373,
+            "brier": 0.023556211029947087
+          },
+          "local_track": {
+            "log_loss": 0.08669561984449846,
+            "brier": 0.021053044764879063
+          },
+          "local_track_foreign": {
+            "log_loss": 0.08574825959784885,
+            "brier": 0.020836336586501275
+          },
+          "local_foreign_rail2": {
+            "log_loss": 0.10762756960437204,
+            "brier": 0.023653054187336032
+          },
+          "local_foreign_road2": {
+            "log_loss": 0.10862761797756759,
+            "brier": 0.023740263573137386
+          }
+        },
+        "comparisons": {
+          "foreign_beyond_local": {
+            "log_loss": {
+              "gain": 0.0026601739093929768,
+              "block_gains": [
+                0.0021075904438330414,
+                0.002973770760355108,
+                0.0027929786379753906,
+                0.0021260700064350546,
+                0.0033482570212858497
+              ],
+              "leave_block_mean_range": [
+                0.0025037913839627782,
+                0.002818054899552958
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0022413584659342223,
+                0.0030789893528517316
+              ],
+              "station_gain": 0.0027749707888067216,
+              "between_gain": 0.002516677810125796
+            },
+            "brier": {
+              "gain": 0.00020013475625634152,
+              "block_gains": [
+                0.00014750151926157164,
+                0.00023955322833601878,
+                0.00020544493834560341,
+                0.0001600931063205982,
+                0.00025072394200093413
+              ],
+              "leave_block_mean_range": [
+                0.0001886372140416614,
+                0.0002151728239691329
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0001628953328175133,
+                0.00023737417969516976
+              ],
+              "station_gain": 0.00019311089728553943,
+              "between_gain": 0.00020891457996984414
+            }
+          },
+          "foreign_beyond_local_and_track": {
+            "log_loss": {
+              "gain": 0.000947360246649638,
+              "block_gains": [
+                0.0005720680681044962,
+                0.0013931651878544167,
+                0.000949088033834436,
+                0.00041446036171049474,
+                0.0013939170292124187
+              ],
+              "leave_block_mean_range": [
+                0.0008199874063054154,
+                0.0010684738568630795
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0005835133556863363,
+                0.0013081994897878831
+              ],
+              "station_gain": 0.001059989668158618,
+              "between_gain": 0.0008065734697634131
+            },
+            "brier": {
+              "gain": 0.0002167081783777887,
+              "block_gains": [
+                8.317107422402212e-05,
+                0.00033532326541199235,
+                0.0002610672041734822,
+                8.093598954947365e-05,
+                0.0003260277619538857
+              ],
+              "leave_block_mean_range": [
+                0.00018281815351087335,
+                0.0002548616367074363
+              ],
+              "block_bootstrap_95_percentile": [
+                0.00011528699285371899,
+                0.00031568046317875575
+              ],
+              "station_gain": 0.00021030661979317861,
+              "between_gain": 0.00022471012660855126
+            }
+          },
+          "matched_foreign_rail_vs_road": {
+            "log_loss": {
+              "gain": 0.0010000483731955323,
+              "block_gains": [
+                0.0011141922738443337,
+                0.0010505518347581854,
+                0.0009290404082721526,
+                0.00085815939475537,
+                0.0010153684819053294
+              ],
+              "leave_block_mean_range": [
+                0.0009674358301530177,
+                0.0010322958682955693
+              ],
+              "block_bootstrap_95_percentile": [
+                0.0009179536175920749,
+                0.0010708197142329956
+              ],
+              "station_gain": 0.0009949071745858156,
+              "between_gain": 0.0010064748714576782
+            },
+            "brier": {
+              "gain": 8.720938580135312e-05,
+              "block_gains": [
+                9.336220806955107e-05,
+                9.68828379053404e-05,
+                9.167595791033414e-05,
+                6.990511349677097e-05,
+                8.105555675033197e-05
+              ],
+              "leave_block_mean_range": [
+                8.444554234307104e-05,
+                9.114217496148542e-05
+              ],
+              "block_bootstrap_95_percentile": [
+                7.746260517771272e-05,
+                9.452828762932306e-05
+              ],
+              "station_gain": 7.919837821206965e-05,
+              "between_gain": 9.722314528795746e-05
+            }
+          }
+        },
+        "posthoc_fixed_prediction_support_diagnostic": {
+          "at_least_two_European_rail_studies": {
+            "taxa": 58,
+            "recorded_incidences": 65,
+            "models": {
+              "local": {
+                "log_loss": 0.16336974417370329,
+                "brier": 0.039006324095218
+              },
+              "local_foreign": {
+                "log_loss": 0.15942353526242495,
+                "brier": 0.038662104938016924
+              },
+              "local_track": {
+                "log_loss": 0.125122696311654,
+                "brier": 0.03373186650794956
+              },
+              "local_track_foreign": {
+                "log_loss": 0.12391980262340765,
+                "brier": 0.03328250672382643
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.1617203327669669,
+                "brier": 0.03885250884472799
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.16318883236828427,
+                "brier": 0.039005562794088684
+              }
+            }
+          },
+          "fewer_than_two_European_rail_studies": {
+            "taxa": 64,
+            "recorded_incidences": 17,
+            "models": {
+              "local": {
+                "log_loss": 0.05973909365953916,
+                "brier": 0.00993605294365897
+              },
+              "local_foreign": {
+                "log_loss": 0.0582443889706048,
+                "brier": 0.009866494675758793
+              },
+              "local_track": {
+                "log_loss": 0.051871081796138765,
+                "brier": 0.009562862560221428
+              },
+              "local_track_foreign": {
+                "log_loss": 0.051155298730936154,
+                "brier": 0.009556994899550352
+              },
+              "local_foreign_rail2": {
+                "log_loss": 0.058606002988270484,
+                "brier": 0.009878548404074575
+              },
+              "local_foreign_road2": {
+                "log_loss": 0.059181517435980574,
+                "brier": 0.009906086154150272
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "rail_donor_sha256": {
+    "cz1.xlsx": "df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06",
+    "cz2.xlsx": "00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2",
+    "parma.pdf": "c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787",
+    "hrba.pdf": "90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956"
+  },
+  "slovenia_source_sha256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f"
+}

@@ -1,0 +1,12 @@
+﻿analysis,group,contrast,gain,lower,upper
+Kashmir_58_taxa,2014,foreign_beyond_local,0.007643656561716885,0.001096270499315574,0.014037908735303332
+Kashmir_58_taxa,2014,foreign_beyond_local_and_track,-0.0003368401364457158,-0.0018824816698522712,0.001220840803827046
+Kashmir_58_taxa,2014,matched_foreign_rail_vs_road,-0.0002796287976604954,-0.003158433875800318,0.0028024018281175337
+Kashmir_58_taxa,2017,foreign_beyond_local,0.005300816140211139,-0.0013382414232188421,0.009291928788943004
+Kashmir_58_taxa,2017,foreign_beyond_local_and_track,-0.00044676787375622036,-0.0032226454450690273,0.0014893123085676133
+Kashmir_58_taxa,2017,matched_foreign_rail_vs_road,-0.0009225159305946742,-0.0023755258017665415,0.0003534381303099692
+national_study_holdout,CZ,foreign_beyond_domestic,-0.01858229056083671,,
+national_study_holdout,IT,foreign_beyond_domestic,0.03418850519419314,,
+national_study_holdout,SI,foreign_beyond_domestic,0.039354284717112886,,
+national_study_holdout,IN,foreign_beyond_domestic,0.009335947145344803,,
+national_study_holdout,AD,foreign_beyond_domestic,0.024470063714109647,,

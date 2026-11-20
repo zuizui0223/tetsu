@@ -1,0 +1,11 @@
+{
+  "source_old_comparisons_verified": 100,
+  "new_numeric_consistency_checks": 228,
+  "national_panels": 42,
+  "local_panels": 12,
+  "missing_source_cells_not_zero_filled": 4,
+  "repeat_process_byte_identical": true,
+  "result_sha256": "1b6bd63ed65ad08bbe90155739cea4c95f48b15af3957453149cc337cbbe82ef",
+  "new_unit_tests": 6,
+  "independent_download_ci": false
+}
