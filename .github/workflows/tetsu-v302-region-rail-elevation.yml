@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/*v302.py'
       - 'tests/*v302.py'
+      - 'data/derived/v302*.json'
       - '.github/workflows/tetsu-v302-region-rail-elevation.yml'
   workflow_dispatch:
 permissions: {contents: read}
