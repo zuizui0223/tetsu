@@ -48,7 +48,7 @@ def verify(original:dict,published:dict)->dict:
     used=set();checks=0;src_regions=set()
     for derived in rows:
         tree=derived["original_tree"];label=derived["source_trait_support"]
-        if tree not in TREES or label not in SOURCE_PANELS or (tree,label) in used:
+        if tree not in TREES or label not in SOURCE_PANELS.values() or (tree,label) in used:
             raise ValueError("Non-source or duplicate phylogeny/field-support row")
         used.add((tree,label))
         panel=next(k for k,v in SOURCE_PANELS.items() if v==label)
