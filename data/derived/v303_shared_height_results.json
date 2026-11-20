@@ -7,15 +7,15 @@
         0.5461538461538461,
         0.8709677419354839
       ],
-      "slope_log_height_per_100m": 0.008501149298162602,
+      "slope_log_height_per_100m": 0.008501149298162612,
       "leave_station_out_range_per_100m": [
-        -0.011245320239557027,
+        -0.011245320239557014,
         0.02770900112651477
       ],
       "same_species_trait_source_sensitivity": {
         "n": 28,
         "austraits_slope_per_100m": 0.029315886619210203,
-        "leda_slope_per_100m": 0.016237171151885853
+        "leda_slope_per_100m": 0.01623717115188581
       }
     },
     "HR_BA15": {
@@ -31,8 +31,8 @@
       ],
       "same_species_trait_source_sensitivity": {
         "n": 15,
-        "austraits_slope_per_100m": -0.08621121770910581,
-        "leda_slope_per_100m": -0.06933221030271274
+        "austraits_slope_per_100m": -0.08621121770910578,
+        "leda_slope_per_100m": -0.06933221030271276
       }
     }
   },
@@ -44,14 +44,14 @@
         418.0,
         512.0
       ],
-      "slope_log_height_per_100m": -0.005153931716107705,
+      "slope_log_height_per_100m": -0.005153931716107596,
       "leave_block_out_range": [
-        -0.44240656139776213,
-        0.16854077574127346
+        -0.44240656139776185,
+        0.16854077574127357
       ],
       "block_bootstrap_percentile_95": [
         -0.6795408402207296,
-        0.3866809009548831
+        0.38668090095488306
       ],
       "valid_bootstraps": 999,
       "status": "exploratory_one_study",
@@ -64,14 +64,14 @@
         418.0,
         511.00000000000006
       ],
-      "slope_log_height_per_100m": 0.12650710998335718,
+      "slope_log_height_per_100m": 0.1265071099833573,
       "leave_block_out_range": [
-        -0.2328570935324595,
-        0.21675531686118812
+        -0.23285709353245942,
+        0.2167553168611882
       ],
       "block_bootstrap_percentile_95": [
         -0.39793260182969975,
-        0.4553433653751766
+        0.4553433653751767
       ],
       "valid_bootstraps": 999,
       "status": "exploratory_one_study",
@@ -84,14 +84,14 @@
         419.00000000000006,
         512.0
       ],
-      "slope_log_height_per_100m": -0.15452087043105547,
+      "slope_log_height_per_100m": -0.15452087043105533,
       "leave_block_out_range": [
-        -0.5453740144030849,
-        -0.03241164650279796
+        -0.5453740144030846,
+        -0.03241164650279792
       ],
       "block_bootstrap_percentile_95": [
-        -0.9132985669640623,
-        0.18316358179109082
+        -0.9132985669640621,
+        0.18316358179109085
       ],
       "valid_bootstraps": 999,
       "status": "exploratory_one_study",
@@ -104,14 +104,14 @@
         419.00000000000006,
         505.0
       ],
-      "slope_log_height_per_100m": -0.09400406916486952,
+      "slope_log_height_per_100m": -0.09400406916486924,
       "leave_block_out_range": [
-        -0.580103180544872,
-        0.08403325145407232
+        -0.5801031805448716,
+        0.08403325145407284
       ],
       "block_bootstrap_percentile_95": [
-        -0.8511504279842665,
-        0.422587131247221
+        -0.8511504279842668,
+        0.4225871312472212
       ],
       "valid_bootstraps": 999,
       "status": "exploratory_one_study",
@@ -128,10 +128,10 @@
         418.0,
         440.00000000000006
       ],
-      "slope_log_height_per_100m": -1.416542416198551,
+      "slope_log_height_per_100m": -1.4165424161985505,
       "leave_block_out_range": [
         -2.1807858726864358,
-        1.2642406762961993
+        1.264240676296199
       ],
       "block_bootstrap_percentile_95": [
         -2.344098835378423,
@@ -148,10 +148,10 @@
         429.0,
         501.99999999999994
       ],
-      "slope_log_height_per_100m": 0.21982632654046047,
+      "slope_log_height_per_100m": 0.2198263265404607,
       "leave_block_out_range": [
-        -0.24865933747745042,
-        0.5330646553464772
+        -0.24865933747745045,
+        0.5330646553464773
       ],
       "block_bootstrap_percentile_95": [
         -1.5258010080225544,
@@ -168,10 +168,10 @@
         418.0,
         512.0
       ],
-      "slope_log_height_per_100m": -0.0038603492343167387,
+      "slope_log_height_per_100m": -0.0038603492343166138,
       "leave_block_out_range": [
-        -0.511326714190108,
-        0.18560060705164808
+        -0.5113267141901079,
+        0.18560060705164821
       ],
       "block_bootstrap_percentile_95": [
         -0.8806545438505173,
@@ -180,6 +180,94 @@
       "valid_bootstraps": 885,
       "status": "exploratory_one_study",
       "habitat_adjusted": true
+    },
+    "elevation_band_400_450": {
+      "n": 79,
+      "blocks": 6,
+      "elevation_range_m": [
+        418.0,
+        448.00000000000006
+      ],
+      "slope_log_height_per_100m": -0.8781959785079185,
+      "leave_block_out_range": [
+        -1.7838388691285498,
+        -0.3089487221899304
+      ],
+      "block_bootstrap_percentile_95": [
+        -2.245449285224893,
+        0.859774045067959
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "elevation_band_400_450_habitat_adjusted": {
+      "n": 79,
+      "blocks": 6,
+      "elevation_range_m": [
+        418.0,
+        448.00000000000006
+      ],
+      "slope_log_height_per_100m": -0.6408974466486012,
+      "leave_block_out_range": [
+        -1.4918841091697232,
+        0.8708395095093063
+      ],
+      "block_bootstrap_percentile_95": [
+        -2.2165107574448926,
+        1.5395000222785884
+      ],
+      "valid_bootstraps": 635,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": true
+    },
+    "elevation_band_450_500": {
+      "n": 32,
+      "blocks": 4,
+      "elevation_range_m": [
+        451.99999999999994,
+        499.0
+      ],
+      "slope_log_height_per_100m": -0.21813012325330453,
+      "leave_block_out_range": [
+        -1.3250046040825443,
+        0.40001467189147993
+      ],
+      "block_bootstrap_percentile_95": [
+        -1.6285388318365355,
+        5.102905725211593
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "elevation_band_450_500_habitat_adjusted": {
+      "n": 32,
+      "blocks": 4,
+      "elevation_range_m": [
+        451.99999999999994,
+        499.0
+      ],
+      "slope_log_height_per_100m": -0.29874417059698827,
+      "leave_block_out_range": [
+        -1.3264851898327499,
+        0.23382649155854607
+      ],
+      "block_bootstrap_percentile_95": [
+        -1.6318137073973535,
+        5.548679282834218
+      ],
+      "valid_bootstraps": 997,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": true
+    },
+    "elevation_band_500_550": {
+      "n": 9,
+      "status": "fewer_than_10_plots"
+    },
+    "elevation_band_500_550_habitat_adjusted": {
+      "n": 9,
+      "status": "fewer_than_10_plots"
     }
   },
   "Europe_to_Australia": {
@@ -191,8 +279,8 @@
       "outside_training_elevation": 119
     },
     "median": {
-      "gain": -0.0030181267887429697,
-      "rmse": 0.43720974724965234,
+      "gain": -0.003018126788742914,
+      "rmse": 0.4372097472496523,
       "baseline_rmse": 0.43419162046090937,
       "evaluated_sites": 119,
       "outside_training_elevation": 119

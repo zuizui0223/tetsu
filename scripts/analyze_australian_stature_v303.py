@@ -71,6 +71,11 @@ def run(folder):
             'coverage_75pct':[r for r in rows if r['coverage']>=.75]}
     for g in sorted({r['habitat'] for r in rows}):panels['habitat_'+g]=[r for r in rows if r['habitat']==g]
     out={name:estimate(rr) for name,rr in panels.items()};out['all_habitat_adjusted']=estimate(rows,True)
+    # Fixed 50 m bands, retained regardless of estimated sign; no outcome-based cutpoints.
+    for lower in range(400,550,50):
+        band=[r for r in rows if lower<=r['elevation_m']<lower+50]
+        out[f'elevation_band_{lower}_{lower+50}']=estimate(band)
+        out[f'elevation_band_{lower}_{lower+50}_habitat_adjusted']=estimate(band,True)
     return dict(estimator='equal-presence mean log adult maximum height; AusTraits, contributor-balanced',
         area_m2=2500,unit='natural log metres per 100m elevation',source_studies=1,
         warning='railway reserve vegetation, not confirmed ballast; DEM elevation; exploratory associations',
