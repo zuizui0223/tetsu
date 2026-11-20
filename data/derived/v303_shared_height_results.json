@@ -1,0 +1,209 @@
+{
+  "definition": "AusTraits adult species maximum height, contributor-balanced; mean log m",
+  "European_railways": {
+    "IT28": {
+      "n": 28,
+      "coverage_range": [
+        0.5461538461538461,
+        0.8709677419354839
+      ],
+      "slope_log_height_per_100m": 0.008501149298162602,
+      "leave_station_out_range_per_100m": [
+        -0.011245320239557027,
+        0.02770900112651477
+      ],
+      "same_species_trait_source_sensitivity": {
+        "n": 28,
+        "austraits_slope_per_100m": 0.029315886619210203,
+        "leda_slope_per_100m": 0.016237171151885853
+      }
+    },
+    "HR_BA15": {
+      "n": 15,
+      "coverage_range": [
+        0.5057471264367817,
+        0.7605633802816901
+      ],
+      "slope_log_height_per_100m": -0.10139210182965666,
+      "leave_station_out_range_per_100m": [
+        -0.12356693198224218,
+        -0.0825990859697029
+      ],
+      "same_species_trait_source_sensitivity": {
+        "n": 15,
+        "austraits_slope_per_100m": -0.08621121770910581,
+        "leda_slope_per_100m": -0.06933221030271274
+      }
+    }
+  },
+  "Australian_fixed_area": {
+    "all_2500m2": {
+      "n": 120,
+      "blocks": 9,
+      "elevation_range_m": [
+        418.0,
+        512.0
+      ],
+      "slope_log_height_per_100m": -0.005153931716107705,
+      "leave_block_out_range": [
+        -0.44240656139776213,
+        0.16854077574127346
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.6795408402207296,
+        0.3866809009548831
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "matrix_sheet_fully_reconciled": {
+      "n": 85,
+      "blocks": 9,
+      "elevation_range_m": [
+        418.0,
+        511.00000000000006
+      ],
+      "slope_log_height_per_100m": 0.12650710998335718,
+      "leave_block_out_range": [
+        -0.2328570935324595,
+        0.21675531686118812
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.39793260182969975,
+        0.4553433653751766
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "coverage_75pct": {
+      "n": 75,
+      "blocks": 9,
+      "elevation_range_m": [
+        419.00000000000006,
+        512.0
+      ],
+      "slope_log_height_per_100m": -0.15452087043105547,
+      "leave_block_out_range": [
+        -0.5453740144030849,
+        -0.03241164650279796
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.9132985669640623,
+        0.18316358179109082
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "habitat_drainage_floodplain": {
+      "n": 30,
+      "blocks": 8,
+      "elevation_range_m": [
+        419.00000000000006,
+        505.0
+      ],
+      "slope_log_height_per_100m": -0.09400406916486952,
+      "leave_block_out_range": [
+        -0.580103180544872,
+        0.08403325145407232
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.8511504279842665,
+        0.422587131247221
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "habitat_other": {
+      "n": 4,
+      "status": "fewer_than_10_plots"
+    },
+    "habitat_other_plain": {
+      "n": 50,
+      "blocks": 4,
+      "elevation_range_m": [
+        418.0,
+        440.00000000000006
+      ],
+      "slope_log_height_per_100m": -1.416542416198551,
+      "leave_block_out_range": [
+        -2.1807858726864358,
+        1.2642406762961993
+      ],
+      "block_bootstrap_percentile_95": [
+        -2.344098835378423,
+        3.9065838232373498
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "habitat_sandplain": {
+      "n": 36,
+      "blocks": 6,
+      "elevation_range_m": [
+        429.0,
+        501.99999999999994
+      ],
+      "slope_log_height_per_100m": 0.21982632654046047,
+      "leave_block_out_range": [
+        -0.24865933747745042,
+        0.5330646553464772
+      ],
+      "block_bootstrap_percentile_95": [
+        -1.5258010080225544,
+        1.1860526740557438
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "all_habitat_adjusted": {
+      "n": 120,
+      "blocks": 9,
+      "elevation_range_m": [
+        418.0,
+        512.0
+      ],
+      "slope_log_height_per_100m": -0.0038603492343167387,
+      "leave_block_out_range": [
+        -0.511326714190108,
+        0.18560060705164808
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.8806545438505173,
+        0.42225606905805185
+      ],
+      "valid_bootstraps": 885,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": true
+    }
+  },
+  "Europe_to_Australia": {
+    "lowest": {
+      "gain": -0.01097180977380674,
+      "rmse": 0.6086684496161135,
+      "baseline_rmse": 0.5976966398423068,
+      "evaluated_sites": 119,
+      "outside_training_elevation": 119
+    },
+    "median": {
+      "gain": -0.0030181267887429697,
+      "rmse": 0.43720974724965234,
+      "baseline_rmse": 0.43419162046090937,
+      "evaluated_sites": 119,
+      "outside_training_elevation": 119
+    },
+    "none": {
+      "gain": -0.1412023260138895,
+      "rmse": 0.6890392885725717,
+      "baseline_rmse": 0.5478369625586822,
+      "evaluated_sites": 120,
+      "outside_training_elevation": 120
+    }
+  },
+  "limitation": "Same trait definition, but no shared strict elevation range or plot area; transfer is extrapolative and exploratory."
+}
