@@ -1,0 +1,55 @@
+name: v303 Australian railway reserve source replay
+on:
+  workflow_dispatch:
+  push:
+    branches: [research/tetsu-nonEurope-source-expansion-v303-20261120]
+    paths:
+      - 'scripts/*v303.py'
+      - 'tests/*v303.py'
+      - '.github/workflows/tetsu-v303-australian-source-replay.yml'
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install numpy pandas scipy openpyxl rdata==1.1.0 requests pyproj PyMuPDF==1.24.14
+      - run: python -m unittest discover -s tests -p test_australian_stature_v303.py
+      - run: python scripts/prepare_australian_sources_v303.py --data /tmp/v303/nonEurope_sources
+      - run: python scripts/analyze_australian_stature_v303.py --data /tmp/v303/nonEurope_sources --output /tmp/v303_result.json
+      - name: Obtain original European flora and LEDA
+        run: |
+          python - <<'PY'
+          import requests
+          from pathlib import Path
+          urls={'parma.pdf':'https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf','hrba.pdf':'https://hrcak.srce.hr/file/282429','canopy_height.txt':'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt'}
+          for name,url in urls.items():
+              r=requests.get(url,timeout=90);r.raise_for_status();Path('/tmp/v303',name).write_bytes(r.content)
+          PY
+      - run: python scripts/compare_shared_height_definition_v303.py --data /tmp/v303 --output /tmp/v303_shared.json
+      - name: Compare independently regenerated output
+        run: |
+          python - <<'PY'
+          import json, math
+          expected=json.load(open('data/derived/v303_australian_stature_results.json'))
+          actual=json.load(open('/tmp/v303_result.json'))
+          def compare(a,b):
+              if isinstance(a,dict):
+                  assert a.keys()==b.keys()
+                  for k in a: compare(a[k],b[k])
+              elif isinstance(a,list):
+                  assert len(a)==len(b)
+                  for x,y in zip(a,b):compare(x,y)
+              elif isinstance(a,float):assert math.isclose(a,b,rel_tol=1e-8,abs_tol=1e-10),(a,b)
+              else:assert a==b,(a,b)
+          compare(expected,actual)
+          compare(json.load(open('data/derived/v303_shared_height_results.json')),json.load(open('/tmp/v303_shared.json')))
+          print('All frozen estimates and QA reproduced from public sources.')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v303-aggregate-results
+          path: /tmp/v303_result.json

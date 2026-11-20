@@ -1,0 +1,42 @@
+[
+  {
+    "file": "lhasa.pdf",
+    "url": "https://zgstbckx.xml-journal.net/cn/article/pdf/preview/10.16843/j.sswc.2025251.pdf",
+    "bytes": 593350,
+    "sha256": "c77d4dd4c508421be33f9da8defca0ae85642503a9e836971236a88cc576a451",
+    "retrieved": "2026-11-20",
+    "role": "published_full_text_not_plot_matrix"
+  },
+  {
+    "file": "kumamoto2025.pdf",
+    "url": "https://geomatejournal.com/geomate/article/download/5001/3619",
+    "bytes": 712369,
+    "sha256": "143b33f54a3a369efdbfd9b2b7e74d4c0fe2f2e0d1b3614c92a304582baa5572",
+    "retrieved": "2026-11-20",
+    "role": "published_full_text_not_plot_matrix"
+  },
+  {
+    "file": "wa_rail_reserve.pdf",
+    "url": "https://ftp.dwer.wa.gov.au/permit/10292/CPS%2010292-1%20-%20Supporting%20information%20-%20Flora%20%26%20Vegetation%20assesment.pdf",
+    "bytes": 6210402,
+    "sha256": "5e392a5ff5f705fa01e728d19e8a0b8257dfb62bfb5235388ccf07952c4f50bd",
+    "retrieved": "2026-11-20",
+    "role": "published_report_with_plot_datasheets_and_species_matrix",
+    "extraction_status": "replayed_in_CI_with_out_of_plot_exclusions"
+  },
+  {
+    "file": "austraits-7.0.0.zip",
+    "url": "https://zenodo.org/api/records/15718081/files/austraits-7.0.0.zip/content",
+    "bytes": 21100078,
+    "sha256": "2995fb9e5eebf9271f9241b5a6c2e2cbb7b45e8eda5ce4db43c14c68f95e2f3f",
+    "md5_verified": "f169a9bca41d847df4fb8c6011ee3ea8",
+    "retrieved": "2026-11-20",
+    "role": "independent_plant_trait_database"
+  },
+  {
+    "file": "perth.bin",
+    "url": "https://mdpi-res.com/d_attachment/land/land-15-00714/article_deploy/land-15-00714-s001.zip",
+    "sha256": "baea2386655fd1ddcd02b9d2dfd3fe79fc2402e2ee4d488f2ae44fbd1d31ea14",
+    "role": "site_species_lists_and_year_specific_coordinates"
+  }
+]
