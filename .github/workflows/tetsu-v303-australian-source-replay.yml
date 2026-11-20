@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: pip install numpy pandas requests pyproj PyMuPDF==1.24.14
+      - run: pip install numpy pandas scipy openpyxl rdata==1.1.0 requests pyproj PyMuPDF==1.24.14
       - run: python -m unittest discover -s tests -p test_australian_stature_v303.py
       - run: python scripts/prepare_australian_sources_v303.py --data /tmp/v303/nonEurope_sources
       - run: python scripts/analyze_australian_stature_v303.py --data /tmp/v303/nonEurope_sources --output /tmp/v303_result.json
