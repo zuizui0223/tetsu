@@ -66,7 +66,7 @@ jobs:
             --map-2022 source_original/v308/official_2022.pdf \
             --map-2023 source_original/v308/official_2023.pdf \
             --output results/audit/v308/Czech_original_Preslia39_official_Q1_traffic_glyph_identifiability.json
-      - name: Hard gate: never assign annual passenger or freight flow by text proximity
+      - name: "Hard gate: never assign annual passenger or freight flow by text proximity"
         run: |
           python - <<'PY'
           from pathlib import Path
