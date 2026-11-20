@@ -1,0 +1,45 @@
+{
+  "version": "v307",
+  "status": "OFFICIAL_SOURCE_PDF_VERIFIED_NUMERIC_BOTANICAL_EXPOSURE_NOT_YET_IDENTIFIED",
+  "canonical_source_CI": "https://github.com/zuizui0223/tetsu/actions/runs/44751055520",
+  "original_public_operator": "Správa železnic Czech rail infrastructure operator",
+  "official_landing_page": "https://provoz.spravazeleznic.cz/Portal/ViewArticle.aspx?oid=2104272",
+  "source_period_metric": "daily actual ALL trains on ninth-busiest day (publisher labels this 9th decile) during Jan 1 - Mar 31; counts above 25 rounded to 5; NOT year total or period mean; NOT freight-specific",
+  "published_original_maps": {
+    "2022": {
+      "sha256": "c4d2436a7e1950bc6c247926b12dbba16649491221c94fc7288e234c1c3830ee",
+      "bytes": 155604,
+      "pages": 1,
+      "vector_drawing_count": 1950,
+      "source_url": "https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_22.pdf",
+      "botanical_original_station_names_exact_normalized_text": 20,
+      "botanical_original_station_names_pdf_search_bbox": 33
+    },
+    "2023": {
+      "sha256": "4cbd4349814ac636bda74d3389810d6100ecc9e12daef237a12fa8b62eb25b57",
+      "bytes": 530744,
+      "pages": 1,
+      "vector_drawing_count": 1951,
+      "source_url": "https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_23.pdf",
+      "botanical_original_station_names_exact_normalized_text": 20,
+      "botanical_original_station_names_pdf_search_bbox": 33
+    }
+  },
+  "original_botanical_study": {
+    "paper": "Kutlvašr et al 2024 Preslia",
+    "DOI": "10.23855/preslia.2024.247",
+    "real_original_station_count": 39,
+    "original_survey_year_span": "2020-2022",
+    "stations_with_previous_independent_SR70_registry_centroid": 35
+  },
+  "new_station_level_numeric_traffic_values_approved": 0,
+  "new_2022_2023_actual_train_exposure_to_original_flora_regression_fitted": false,
+  "independent_ecological_replications_of_Slovenia_v305_v306_added": 0,
+  "no_claims": [
+    "2022/2023 original peak-ish ninth decile traffic is NOT mean or annual freight train counts",
+    "33 station labels found in PDF glyph geometry do not certify which official mainline or siding value traverses their vegetation site",
+    "nearest number glyph to any station text can represent the wrong track, branch or map inset",
+    "yearly traffic maps are not independent botanical surveys",
+    "Czech tracks/embankments and station surroundings are not physical nonrail vegetation reference with same plot grain"
+  ]
+}
