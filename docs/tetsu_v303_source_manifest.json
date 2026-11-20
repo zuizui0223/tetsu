@@ -14,5 +14,14 @@
     "sha256": "143b33f54a3a369efdbfd9b2b7e74d4c0fe2f2e0d1b3614c92a304582baa5572",
     "retrieved": "2026-11-20",
     "role": "published_full_text_not_plot_matrix"
+  },
+  {
+    "file": "wa_rail_reserve.pdf",
+    "url": "https://ftp.dwer.wa.gov.au/permit/10292/CPS%2010292-1%20-%20Supporting%20information%20-%20Flora%20%26%20Vegetation%20assesment.pdf",
+    "bytes": 6210402,
+    "sha256": "5e392a5ff5f705fa01e728d19e8a0b8257dfb62bfb5235388ccf07952c4f50bd",
+    "retrieved": "2026-11-20",
+    "role": "published_report_with_plot_datasheets_and_species_matrix",
+    "extraction_status": "pending"
   }
 ]
