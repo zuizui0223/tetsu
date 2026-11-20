@@ -339,6 +339,8 @@ def run(original:Path,height:Path,seed:Path,tree_dir:Path,
                         "status":"NOT_IDENTIFIABLE_PAIRED_ORIGINAL_SITES_FOR_HELDOUT_PREDICTION",
                         "source_original_phylo_tip_quality":phylo_q,
                         "source_environmental_slope_reproduced":True,
+                        "source_previous_v299_environmental_slopes":prior_environment,
+                        "source_native_elevation_cohort_QA":envqa,
                         "source_CV_site_support":cvQA,
                         "new_predictive_heldout_effects":None}
                     continue
