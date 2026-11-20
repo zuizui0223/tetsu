@@ -4,6 +4,8 @@ on:
     branches: [research/tetsu-MIREN-LOOCV-elevation-stature-v300-20261120]
     paths:
       - 'scripts/evaluate_MIREN_native_elevation_heldout_stature_predictability_v300.py'
+      - 'scripts/validate_MIREN_v300_heldout_predictive_source_aggregate_v300.py'
+      - 'data/derived/tetsu_v300_original_MIREN_heldout_Elevation_predictability_summary.json'
       - 'tests/test_MIREN_true_site_elevation_LOOCV_v300.py'
       - 'data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json'
       - '.github/workflows/tetsu-v300-original-MIREN-LOOsite-Elevation-phylo-occ-source.yml'
@@ -114,6 +116,12 @@ jobs:
                           assert metrics['n_technical_label_draws_NOT_field_studies']==398
           print('v30.0 real original Road and Inland source, exact 75% phylo + occupancy, holdout-predictive skill QA PASS')
           PY
+      - name: Independent second-parser original tree x first-year source region and real heldout RMSE predictions versus published summary QA
+        run: |
+          python -u scripts/validate_MIREN_v300_heldout_predictive_source_aggregate_v300.py \
+            --source results/audit/v300_original_MIREN_heldout_Elevation_stature_source_phylo_occ_null.json \
+            --derived data/derived/tetsu_v300_original_MIREN_heldout_Elevation_predictability_summary.json \
+            --output results/audit/v300_original_MIREN_heldout_Elevation_independent_source_QA.json
       - name: Archive only original field programme, source region / anonymized road counts and site heldout prediction gain aggregates (no original plant table, elevations, GPS, mega-tree tips)
         if: always()
         uses: actions/upload-artifact@v4
@@ -122,4 +130,5 @@ jobs:
           path: |
             results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json
             results/audit/v300_original_MIREN_heldout_Elevation_stature_source_phylo_occ_null.json
+            results/audit/v300_original_MIREN_heldout_Elevation_independent_source_QA.json
           if-no-files-found: warn
