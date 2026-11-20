@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 try:
     import fitz
-    from audit_Czech_original_station_to_traffic_map_glpyh_identifiability_v308 import (
+    from audit_Czech_original_station_to_traffic_map_glyph_identifiability_v308 import (
         glyph_pairs_for_station,number_glyphs,normalize_source_map_name,
         ORIGINAL_CZECH_BOTANICAL_STATIONS,
     )
