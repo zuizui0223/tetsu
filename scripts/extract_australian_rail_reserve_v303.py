@@ -38,7 +38,7 @@ def extract(path):
             for h in headers:
                 sites.add(h[4])
             for cell in rows:
-                if abs(cell[1] - name[1]) < 2 and cell[0] >= left - 5:
+                if abs(cell[1] - name[1]) < 2 and cell[0] >= left - 20:
                     if re.fullmatch(r'\+|[\d.]+%', cell[4]):
                         h = min(headers, key=lambda h: abs((h[0]+h[2])/2-(cell[0]+cell[2])/2))
                         records.append(dict(site=h[4], taxon=name[4], cover_raw=cell[4], pdf_page=page_no+1))
@@ -62,6 +62,28 @@ def extract(path):
             habitat=grab(r'Habitat\s+(.*?)\s+Soil'),
             condition=grab(r'\nVeg\s+(.*?)\s+Fire'),
             location=grab(r'Location\s+(.*?)\s+MGA'))
+    sheets = []
+    site = None
+    for page_no in range(193, 380):
+        page = doc[page_no]
+        text = page.get_text()
+        if 'Appendix G' not in text:
+            continue
+        found = re.search(r'Site\s+([A-Z]{2,3}\d+[A-Za-z]?)', text)
+        if found:
+            site = found[1]
+        rr = lines(page)
+        for cover in rr:
+            if not (320 < cover[0] < 360 and re.fullmatch(r'\+|[\d.]+%', cover[4])):
+                continue
+            row = [r for r in rr if abs(r[1]-cover[1]) < 1.5]
+            names = [r[4] for r in row if r[0] < 120 and re.match(r'^[A-Z][a-z]+\s',r[4])]
+            if len(names) != 1:
+                raise ValueError(('Unresolved sheet row',page_no+1,cover,row))
+            notes = ' '.join(r[4] for r in rr if r[0] > 480 and abs((r[1]+r[3]-cover[1]-cover[3])/2)<4)
+            height = ' '.join(r[4] for r in row if 390 < r[0] < 435)
+            sheets.append(dict(site=site,taxon=names[0],cover_raw=cover[4],height_raw=height,
+                notes=notes,out_of_plot=bool(re.search(r'\bOP\b',notes)),pdf_page=page_no+1))
     pairs = [(r['site'], r['taxon']) for r in records]
     duplicates = [p for p,c in Counter(pairs).items() if c>1]
     summary = dict(matrix_sites=len(sites), matrix_taxa=len(taxa), incidences=len(records),
@@ -72,7 +94,7 @@ def extract(path):
         type_counts=dict(Counter(str(m['type']) for m in metadata.values())),
         missing_coords=sum(m['easting'] is None for m in metadata.values()))
     return dict(source_sha256=hashlib.sha256(Path(path).read_bytes()).hexdigest(),
-        summary=summary, matrix=records, metadata=list(metadata.values()), taxa=sorted(taxa))
+        summary=summary, matrix=records, metadata=list(metadata.values()), taxa=sorted(taxa),sheet_records=sheets)
 
 
 if __name__ == '__main__':

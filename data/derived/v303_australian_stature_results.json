@@ -1,0 +1,183 @@
+{
+  "estimator": "equal-presence mean log adult maximum height; AusTraits, contributor-balanced",
+  "area_m2": 2500,
+  "unit": "natural log metres per 100m elevation",
+  "source_studies": 1,
+  "warning": "railway reserve vegetation, not confirmed ballast; DEM elevation; exploratory associations",
+  "qa": {
+    "extraction": {
+      "matrix_sites": 137,
+      "matrix_taxa": 354,
+      "incidences": 3819,
+      "duplicate_cells": [],
+      "metadata_sites": 138,
+      "matrix_without_metadata": [],
+      "metadata_without_matrix": [
+        "YAR01"
+      ],
+      "area_counts": {
+        "2500": 120,
+        "None": 18
+      },
+      "type_counts": {
+        "Q": 121,
+        "None": 2,
+        "R": 15
+      },
+      "missing_coords": 0
+    },
+    "included": 120,
+    "excluded": 18,
+    "coverage_range": [
+      0.5555555555555556,
+      0.9130434782608695
+    ],
+    "fully_reconciled": 85
+  },
+  "results": {
+    "all_2500m2": {
+      "n": 120,
+      "blocks": 9,
+      "elevation_range_m": [
+        418.0,
+        512.0
+      ],
+      "slope_log_height_per_100m": -0.005153931716107623,
+      "leave_block_out_range": [
+        -0.44240656139776197,
+        0.16854077574127355
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.6795408402207296,
+        0.3866809009548831
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "matrix_sheet_fully_reconciled": {
+      "n": 85,
+      "blocks": 9,
+      "elevation_range_m": [
+        418.0,
+        511.00000000000006
+      ],
+      "slope_log_height_per_100m": 0.12650710998335724,
+      "leave_block_out_range": [
+        -0.23285709353245945,
+        0.2167553168611882
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.3979326018296998,
+        0.4553433653751767
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "coverage_75pct": {
+      "n": 75,
+      "blocks": 9,
+      "elevation_range_m": [
+        419.00000000000006,
+        512.0
+      ],
+      "slope_log_height_per_100m": -0.15452087043105536,
+      "leave_block_out_range": [
+        -0.5453740144030848,
+        -0.03241164650279787
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.9132985669640623,
+        0.18316358179109085
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "habitat_drainage_floodplain": {
+      "n": 30,
+      "blocks": 8,
+      "elevation_range_m": [
+        419.00000000000006,
+        505.0
+      ],
+      "slope_log_height_per_100m": -0.09400406916486953,
+      "leave_block_out_range": [
+        -0.5801031805448721,
+        0.08403325145407238
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.8511504279842667,
+        0.4225871312472212
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "habitat_other": {
+      "n": 4,
+      "status": "fewer_than_10_plots"
+    },
+    "habitat_other_plain": {
+      "n": 50,
+      "blocks": 4,
+      "elevation_range_m": [
+        418.0,
+        440.00000000000006
+      ],
+      "slope_log_height_per_100m": -1.4165424161985507,
+      "leave_block_out_range": [
+        -2.1807858726864358,
+        1.264240676296199
+      ],
+      "block_bootstrap_percentile_95": [
+        -2.344098835378423,
+        3.9065838232373498
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "habitat_sandplain": {
+      "n": 36,
+      "blocks": 6,
+      "elevation_range_m": [
+        429.0,
+        501.99999999999994
+      ],
+      "slope_log_height_per_100m": 0.2198263265404606,
+      "leave_block_out_range": [
+        -0.24865933747745034,
+        0.5330646553464773
+      ],
+      "block_bootstrap_percentile_95": [
+        -1.5258010080225544,
+        1.186052674055744
+      ],
+      "valid_bootstraps": 999,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": false
+    },
+    "all_habitat_adjusted": {
+      "n": 120,
+      "blocks": 9,
+      "elevation_range_m": [
+        418.0,
+        512.0
+      ],
+      "slope_log_height_per_100m": -0.0038603492343166554,
+      "leave_block_out_range": [
+        -0.5113267141901079,
+        0.1856006070516482
+      ],
+      "block_bootstrap_percentile_95": [
+        -0.8806545438505173,
+        0.42225606905805185
+      ],
+      "valid_bootstraps": 885,
+      "status": "exploratory_one_study",
+      "habitat_adjusted": true
+    }
+  }
+}

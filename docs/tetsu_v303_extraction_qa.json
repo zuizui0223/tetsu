@@ -2,7 +2,7 @@
   "extraction": {
     "matrix_sites": 137,
     "matrix_taxa": 354,
-    "incidences": 3509,
+    "incidences": 3819,
     "duplicate_cells": [],
     "metadata_sites": 138,
     "matrix_without_metadata": [],
@@ -27,5 +27,5 @@
   ],
   "leda_exact_binomial_covered_taxa": 3,
   "austraits_adult_species_maximum_exact_name_taxa": 250,
-  "status": "provisional extraction; source discrepancies unresolved; no effect estimated"
+  "status": "left-column and out-of-plot parsing corrected; source reconciliation sensitivity included; effect estimates available"
 }
