@@ -1,0 +1,64 @@
+name: "v29.9 SOURCE MIREN original native Elevation metadata field and paired same-site gradient QA"
+on:
+  push:
+    branches: [research/tetsu-MIREN-native-elevation-phylo-occ-stature-v299-20261120]
+    paths:
+      - 'scripts/audit_MIREN_original_native_elevation_source_v299.py'
+      - 'tests/test_MIREN_original_Elevation_source_v299.py'
+      - '.github/workflows/tetsu-v299-original-MIREN-plot-Elevation-source-gate.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v299-miren-original-elevation-source-QA
+  cancel-in-progress: true
+jobs:
+  MIREN-original-first-party-plot-native-elevation-source-availability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install only stable Python original floristic source readers (never R apt installation)
+        run: python -m pip install 'numpy>=1.26,<3' 'openpyxl==3.1.5' 'PyMuPDF==1.24.14' 'rdata==1.1.0'
+      - name: Seven original author MIREN source elevation and same site/year threshold mathematical tests
+        run: python -m unittest discover -s tests -p 'test_MIREN_original_Elevation_source_v299.py' -v
+      - name: Download authentic published mountain ROADS v3 MIREN original source and verify immutable original MD5
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v299/MIREN source_original/v299/LEDA source_original/v299/MEGATREES results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 350 \
+            'https://zenodo.org/records/15749536/files/MIREN_road_survey_%282007-2023%29_zen_v3_002507.csv?download=1' \
+            -o source_original/v299/MIREN/original.csv
+          test "$(stat -c%s source_original/v299/MIREN/original.csv)" = '17899241'
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' \
+            source_original/v299/MIREN/original.csv | md5sum --check
+      - name: Download original Oldenburg LEDA height and seed mass for genuine botanically observed species only
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v299/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v299/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v299/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v299/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: First-party ORIGINAL 2007-23 MIREN author Elevation metadata and matched source site gradient provenance
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+        run: |
+          python -u scripts/audit_MIREN_original_native_elevation_source_v299.py \
+            --miren source_original/v299/MIREN/original.csv \
+            --height source_original/v299/LEDA/canopy_height.txt \
+            --seed source_original/v299/LEDA/seed_mass.txt \
+            --output results/audit/v299_author_original_MIREN_perplot_Elevation_source_availability_QA.json
+      - name: Publish only source region and anonymous road metadata support counts; never plot elevations, taxon lists or GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v299-original-MIREN-native-Elevation-source-availability-gate
+          path: results/audit/v299_author_original_MIREN_perplot_Elevation_source_availability_QA.json
+          if-no-files-found: warn

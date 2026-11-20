@@ -1,0 +1,143 @@
+name: "v29.9 ORIGINAL MIREN native Elevation and phylogeny75 x occupancy trait-null source"
+on:
+  push:
+    branches: [research/tetsu-MIREN-native-elevation-phylo-occ-stature-v299-20261120]
+    paths:
+      - 'scripts/audit_MIREN_original_native_elevation_source_v299.py'
+      - 'scripts/test_MIREN_source_elevation_phylo_occ_stature_v299.py'
+      - 'scripts/validate_MIREN_native_Elevation_environmental_source_v299.py'
+      - 'scripts/validate_MIREN_v299_published_summary_source_consistency.py'
+      - 'data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json'
+      - 'tests/test_MIREN_original_Elevation_source_v299.py'
+      - 'tests/test_MIREN_native_elevation_phylo_occ_mechanism_v299.py'
+      - 'data/derived/tetsu_v298_rail_vs_miren_joint_phylo75_occupancy_stature_macro_summary.json'
+      - '.github/workflows/tetsu-v299-source-MIREN-native-Elevation-vs-true-phylo-occupancy-trait-null.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v299-MIREN-native-Elevation-phylo-occupancy
+  cancel-in-progress: true
+jobs:
+  source-genuine-MIREN-field-Elevation-and-phylo-occupancy-null:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 54
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install only stable Python original floristic source readers (never R apt installation)
+        run: python -m pip install 'numpy>=1.26,<3' 'openpyxl==3.1.5' 'PyMuPDF==1.24.14' 'rdata==1.1.0'
+      - name: Original Elevation QA 7 tests, real source site native height slopes 10 mathematical tests
+        run: |
+          python -m unittest discover -s tests -p 'test_MIREN_original_Elevation_source_v299.py' -v
+          python -m unittest discover -s tests -p 'test_MIREN_native_elevation_phylo_occ_mechanism_v299.py' -v
+          python -u scripts/analyze_four_rail_actual_3phylo_clade_null_python_v296.py --self-test
+      - name: Download authentic published mountain ROADS v3 MIREN original source and verify immutable original MD5
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v299/MIREN source_original/v299/LEDA source_original/v299/MEGATREES results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 350 \
+            'https://zenodo.org/records/15749536/files/MIREN_road_survey_%282007-2023%29_zen_v3_002507.csv?download=1' \
+            -o source_original/v299/MIREN/original.csv
+          test "$(stat -c%s source_original/v299/MIREN/original.csv)" = '17899241'
+          printf '%s  %s\n' 'b640195cc44f252ccb6ddb28eb6fff13' \
+            source_original/v299/MIREN/original.csv | md5sum --check
+      - name: Download original Oldenburg LEDA height and seed mass for genuine botanically observed species only
+        run: |
+          set -euo pipefail
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/canopy_height.txt' \
+            -o source_original/v299/LEDA/canopy_height.txt
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://uol.de/f/5/inst/biologie/ag/landeco/download/LEDA/Data_files/seed_mass.txt' \
+            -o source_original/v299/LEDA/seed_mass.txt
+          printf '%s  %s\n' \
+            'cbf5e761390d78a843512dfc1139acfc1154d46d6c1995a827354840a9f78a92' source_original/v299/LEDA/canopy_height.txt \
+            '34aa12c333fc1ba6de2e560a495ac5d693aa0722a09ecf68418ad94ac1c19cef' source_original/v299/LEDA/seed_mass.txt \
+            | sha256sum --check
+      - name: Restore original published LCVP WP TPL no-grafted phylo RData author trees from immutable Git commit
+        run: |
+          set -euo pipefail
+          PREFIX='https://raw.githubusercontent.com/jinyizju/V.PhyloMaker2/7af3fb5152f691af2e4ec9d5e2e467d1b50505e9/data'
+          for TREE in LCVP WP TPL; do
+            curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+              "$PREFIX/GBOTB.extended.$TREE.rda" -o "source_original/v299/MEGATREES/GBOTB.extended.$TREE.rda"
+          done
+          test "$(git hash-object source_original/v299/MEGATREES/GBOTB.extended.LCVP.rda)" = '0d761cb0bf36392cc13759a7ac9026db564217eb'
+          test "$(git hash-object source_original/v299/MEGATREES/GBOTB.extended.WP.rda)" = '8d3777762cb32a80e8c6ea097a0456e2b63a94c6'
+          test "$(git hash-object source_original/v299/MEGATREES/GBOTB.extended.TPL.rda)" = 'd7bc9b69bf3cb11c3c3d090282723b6e73b1de55'
+      - name: Source-only verify original MIREN Plot 1 and 3 native Elevation metadata and original physical site-year support
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+        run: |
+          python -u scripts/audit_MIREN_original_native_elevation_source_v299.py \
+            --miren source_original/v299/MIREN/original.csv \
+            --height source_original/v299/LEDA/canopy_height.txt \
+            --seed source_original/v299/LEDA/seed_mass.txt \
+            --output results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json
+      - name: Reproduce v29.8 original MIREN 6 source study/tree panel phylo-occ results BEFORE native elevation slope analysis
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+        run: |
+          python -u scripts/test_MIREN_source_elevation_phylo_occ_stature_v299.py \
+            --miren source_original/v299/MIREN/original.csv \
+            --height source_original/v299/LEDA/canopy_height.txt \
+            --seed source_original/v299/LEDA/seed_mass.txt \
+            --tree-dir source_original/v299/MEGATREES \
+            --original-v298-summary data/derived/tetsu_v298_rail_vs_miren_joint_phylo75_occupancy_stature_macro_summary.json \
+            --draws 199 \
+            --output results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json
+      - name: Check source original 3 backbones x two plot support strata, no unidentifiable effects masquerading as zero
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json, math
+          q=json.loads(Path('results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json').read_text())
+          d=json.loads(Path('results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json').read_text())
+          assert q['version']=='v29.9_SOURCE_ONLY_ELEVATION_QA'
+          assert q['source_original_plant_Elevation_data']['n_source_plots_with_qualified_original_Elevation']==6446
+          assert d['version']=='v29.9' and d['original_v298_joint_phylo_occupancy_height_effects_reproduced_for_all_6_tree_panel_cohorts']
+          assert d['original_MIREN_is_ONE_field_program_not_EIGHT_independent_studies']
+          assert set(d['source_original_study_tree_region_year_and_environmental_support'])=={'LCVP','WP','TPL'}
+          for tree,entry in d['source_original_study_tree_region_year_and_environmental_support'].items():
+              assert len(entry['panels'])==2
+              for panel,z in entry['panels'].items():
+                  assert 0<=z['number_original_regions_with_native_altitude_slopes']<=z['number_original_regions_with_joint_phylo_occupancy_source']<=8
+                  for region,one in z['regions'].items():
+                      vals=one.get('source_original_region_signed_effects')
+                      if vals is None:
+                          assert one['source_status'].startswith('NOT_IDENTIFIABLE')
+                          continue
+                      for zone,stats in vals.items():
+                          for metric,x in stats.items():
+                              a=x['source_original_observed_environmental_slope']
+                              b=x['source_true_phylo_and_occupancy_trait_null_mean_slope']
+                              diff=x['original_observed_minus_conditional_null_environmental_slope']
+                              assert all(map(math.isfinite,(a,b,diff)))
+                              assert abs(a-b-diff)<1e-10
+          print('v29.9 original field source native Elevation + true phylo × source occupancy slope QA PASS')
+          PY
+      - name: Independently revalidate EVERY original Region Roadside/Inland native Elevation slope, null subtraction, sign, LOO and survey-year gate
+        run: |
+          python -u scripts/validate_MIREN_native_Elevation_environmental_source_v299.py \
+            --source results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json \
+            --metadata results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json \
+            --output results/audit/v299_original_Elevation_independent_source_math_field_year_QA.json
+      - name: Verify all twelve year/phylo source effect partitions and 54 frozen human-facing macro values against the original author source artifact
+        run: |
+          python -u scripts/validate_MIREN_v299_published_summary_source_consistency.py \
+            --source results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json \
+            --derived data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json \
+            --output results/audit/v299_MIREN_original_source_to_frozen_macro_summary_consistency_QA.json
+      - name: Archive original plot provenance and only field programme / region / anonymous road environmental effects (no original Elevations/GPS/taxa)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v299-original-MIREN-native-Elevation-phylogenetic-occupancy-environmental-slopes
+          path: |
+            results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json
+            results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json
+            results/audit/v299_original_Elevation_independent_source_math_field_year_QA.json
+            results/audit/v299_MIREN_original_source_to_frozen_macro_summary_consistency_QA.json
+          if-no-files-found: warn

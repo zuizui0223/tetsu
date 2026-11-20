@@ -1,0 +1,206 @@
+{
+  "version": "v29.9",
+  "empirical_status": "AUTHENTIC_SOURCE_DATA_AND_2256_INDEPENDENT_NUMERIC_COHORT_REGION_AND_LOO_CHECKS_PASS",
+  "source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44659330637",
+  "original_source_audit_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44659330637/artifacts/14594079180",
+  "source_original_pub_DOI": "10.1111/geb.70284",
+  "source_original_data_DOI": "10.5281/zenodo.15749536",
+  "source_original_occurrence_rows": 167804,
+  "original_MIREN_plant_plots_with_valid_native_Elevation_metadata": 6446,
+  "source_first_party_study_programmes_n": 1,
+  "original_study_type": "MIREN MOUNTAIN ROADSIDE AND SAME-SITE INLAND original 100m2 vegetation surveys; NOT RAILWAY field plot data",
+  "original_study_panel_before_phylo_and_environment": {
+    "primary": {
+      "source_region_codes": 8,
+      "source_actual_roads": 22,
+      "source_road_inland_site_pairs": 272,
+      "source_trait_known_min_species_per_plot": 5,
+      "original_min_trait_fraction": 0.25
+    },
+    "strict": {
+      "source_region_codes": 5,
+      "source_actual_roads": 13,
+      "source_road_inland_site_pairs": 192,
+      "source_trait_known_min_species_per_plot": 10,
+      "original_min_trait_fraction": 0.5
+    }
+  },
+  "source_mega_trees": [
+    "LCVP",
+    "WP",
+    "TPL"
+  ],
+  "original_phylogeny_root_to_tip_median_branch_depth_fraction": 0.75,
+  "original_plant_species_occurrence_quintiles": 5,
+  "source_Oldenburg_LEDA_canopy_height_seed_mass_always_paired": true,
+  "original_source_species_by_site_occurrence_FIXED": true,
+  "original_habitat_original_same_site_year_Elevation_fixed": true,
+  "effect_units": "standardized log(original LE DA canopy height) / 1000m original plot Elevation",
+  "original_road_equal_then_original_region_equal_descriptive_slope": true,
+  "original_phylo_plus_species_occ_technical_permutations_per_source_region": 398,
+  "original_all_six_prior_v298_true_phylo_occ_community_beta_effects_reproduced": true,
+  "independent_original_data_QA_checks": 2256,
+  "source_original_plot_or_individual_Elevation_GPS_species_vector_NOT_reexported": true,
+  "source_by_original_tree_panel": [
+    {
+      "original_tree": "LCVP",
+      "source_trait_support": "primary",
+      "source_original_regions_n": 5,
+      "original_real_roads_n": 14,
+      "original_paired_real_sites_n": 210,
+      "signed_CWM_height_elevation_slope_zlog_per_km_observed": {
+        "roadside": -0.4085090702635495,
+        "inland": -0.609979868403487
+      },
+      "signed_CWM_height_elevation_slope_zlog_per_km_excess_vs_original_phylo75_occupancy_null": {
+        "roadside": -0.26655088422406964,
+        "inland": -0.32800248390917786,
+        "roadside_minus_inland": 0.061451599685108216
+      },
+      "gap_abs_CWM_height_distance_vs_abs_native_elevation_difference_excess": {
+        "roadside": 0.13802511331827003,
+        "inland": 0.2868841160111854
+      },
+      "single_survey_year_roads_only": {
+        "original_regions_supported": 5,
+        "extra_elevation_slope_over_joint_null_roadside": -0.282348420184128,
+        "extra_elevation_slope_over_joint_null_inland": -0.3443009856923369
+      }
+    },
+    {
+      "original_tree": "WP",
+      "source_trait_support": "primary",
+      "source_original_regions_n": 5,
+      "original_real_roads_n": 14,
+      "original_paired_real_sites_n": 210,
+      "signed_CWM_height_elevation_slope_zlog_per_km_observed": {
+        "roadside": -0.42889666636276036,
+        "inland": -0.6565022903930496
+      },
+      "signed_CWM_height_elevation_slope_zlog_per_km_excess_vs_original_phylo75_occupancy_null": {
+        "roadside": -0.2960258624984326,
+        "inland": -0.350703804760399,
+        "roadside_minus_inland": 0.05467794226196637
+      },
+      "gap_abs_CWM_height_distance_vs_abs_native_elevation_difference_excess": {
+        "roadside": 0.14958334608862234,
+        "inland": 0.32182247237573564
+      },
+      "single_survey_year_roads_only": {
+        "original_regions_supported": 5,
+        "extra_elevation_slope_over_joint_null_roadside": -0.29720002110899224,
+        "extra_elevation_slope_over_joint_null_inland": -0.35285237529491587
+      }
+    },
+    {
+      "original_tree": "TPL",
+      "source_trait_support": "primary",
+      "source_original_regions_n": 6,
+      "original_real_roads_n": 16,
+      "original_paired_real_sites_n": 224,
+      "signed_CWM_height_elevation_slope_zlog_per_km_observed": {
+        "roadside": -0.39680852874511785,
+        "inland": -0.6102869645887656
+      },
+      "signed_CWM_height_elevation_slope_zlog_per_km_excess_vs_original_phylo75_occupancy_null": {
+        "roadside": -0.2127485657933304,
+        "inland": -0.3647245777136921,
+        "roadside_minus_inland": 0.1519760119203617
+      },
+      "gap_abs_CWM_height_distance_vs_abs_native_elevation_difference_excess": {
+        "roadside": 0.10525652826956955,
+        "inland": 0.12608490938538186
+      },
+      "single_survey_year_roads_only": {
+        "original_regions_supported": 5,
+        "extra_elevation_slope_over_joint_null_roadside": -0.23327708208513856,
+        "extra_elevation_slope_over_joint_null_inland": -0.2872771333840095
+      }
+    },
+    {
+      "original_tree": "LCVP",
+      "source_trait_support": "strict",
+      "source_original_regions_n": 5,
+      "original_real_roads_n": 13,
+      "original_paired_real_sites_n": 185,
+      "signed_CWM_height_elevation_slope_zlog_per_km_observed": {
+        "roadside": -0.4256798433401239,
+        "inland": -0.6169919707906475
+      },
+      "signed_CWM_height_elevation_slope_zlog_per_km_excess_vs_original_phylo75_occupancy_null": {
+        "roadside": -0.2729180958615152,
+        "inland": -0.3426227115921118,
+        "roadside_minus_inland": 0.06970461573059655
+      },
+      "gap_abs_CWM_height_distance_vs_abs_native_elevation_difference_excess": {
+        "roadside": 0.13828610253020496,
+        "inland": 0.3062264299928296
+      },
+      "single_survey_year_roads_only": {
+        "original_regions_supported": 4,
+        "extra_elevation_slope_over_joint_null_roadside": -0.3078275441732179,
+        "extra_elevation_slope_over_joint_null_inland": -0.42089788611312323
+      }
+    },
+    {
+      "original_tree": "WP",
+      "source_trait_support": "strict",
+      "source_original_regions_n": 4,
+      "original_real_roads_n": 10,
+      "original_paired_real_sites_n": 129,
+      "signed_CWM_height_elevation_slope_zlog_per_km_observed": {
+        "roadside": -0.2836320656669033,
+        "inland": -0.39252325078792155
+      },
+      "signed_CWM_height_elevation_slope_zlog_per_km_excess_vs_original_phylo75_occupancy_null": {
+        "roadside": -0.23409756362344014,
+        "inland": -0.29085840337329716,
+        "roadside_minus_inland": 0.05676083974985702
+      },
+      "gap_abs_CWM_height_distance_vs_abs_native_elevation_difference_excess": {
+        "roadside": 0.0974542476789339,
+        "inland": 0.2098662054697485
+      },
+      "single_survey_year_roads_only": {
+        "original_regions_supported": 3,
+        "extra_elevation_slope_over_joint_null_roadside": -0.28241558468564676,
+        "extra_elevation_slope_over_joint_null_inland": -0.3840686000775827
+      }
+    },
+    {
+      "original_tree": "TPL",
+      "source_trait_support": "strict",
+      "source_original_regions_n": 5,
+      "original_real_roads_n": 13,
+      "original_paired_real_sites_n": 186,
+      "signed_CWM_height_elevation_slope_zlog_per_km_observed": {
+        "roadside": -0.41376439016431693,
+        "inland": -0.601118069681854
+      },
+      "signed_CWM_height_elevation_slope_zlog_per_km_excess_vs_original_phylo75_occupancy_null": {
+        "roadside": -0.23165437098055466,
+        "inland": -0.2862447590042338,
+        "roadside_minus_inland": 0.05459038802367913
+      },
+      "gap_abs_CWM_height_distance_vs_abs_native_elevation_difference_excess": {
+        "roadside": 0.11496937032029628,
+        "inland": 0.2450687994534028
+      },
+      "single_survey_year_roads_only": {
+        "original_regions_supported": 4,
+        "extra_elevation_slope_over_joint_null_roadside": -0.2577848663062949,
+        "extra_elevation_slope_over_joint_null_inland": -0.34262413668076885
+      }
+    }
+  ],
+  "scope_limits": [
+    "Observational altitudinal sorting; temperature/moisture/open habitat and management covary with native elevation",
+    "One independent MIREN mountain road field programme; region codes are not independent articles",
+    "Three original phylogeny nomenclatures are sensitivity analyses not separate field studies",
+    "Original traits from species medians not local measured phenotypic plasticity or genetic adaptation",
+    "No active railway ballast-versus-matched-nonrail open gravel original plot environmental comparison",
+    "No field permutation p-value, no global ecological random-effects prediction interval"
+  ],
+  "additional_published_source_machine_summary_QA_checks": 54,
+  "all_six_frozen_macro_derived_panels_verified_against_original_source": true
+}
