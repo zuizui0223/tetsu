@@ -1,5 +1,9 @@
 # tetsu — Railway-mediated plant redistribution
 
+## 交通量・都市化と二つの群集類似性（v305、2026-11-20）
+
+[解析結果](docs/tetsu_v305_traffic_urbanization_results_ja.md)：Slovenia89原地点に2021衛星人工被覆を結合。実交通量対応9区間では、人工被覆調整後も局所BS–BT共有は交通量に対して負、複数ゾーン合成群集の区間間類似性は正の関連。主対象BS単独の区間間貨物関連は不安定。G/Rの生の局所類似性と頻度帰無からの超過共有は逆方向であり、幹線区分と実交通量を区別する。一国の探索的関連で、列車散布・風・草刈りの因果実証ではない。[解析前仕様](docs/tetsu_v305_traffic_urbanization_analysis_plan_ja.md)・[衛星取得監査](docs/tetsu_v305_urbanization_source_audit_ja.md)。
+
 ## 外国鉄道頻度の追加予測を原データで検証（v304、2026-11-20）
 
 [結果と図](docs/tetsu_v304_incremental_foreign_rail_prediction_results_ja.md)：国内背景を条件とした原研究留保では外国鉄道頻度の追加が5研究中4研究で予測を改善。カシミールの同面積局所比較でも改善したが、国内の別地点の鉄道頻度を含めると追加価値は小さく、外国道路に対する優位は学習種集合に依存した。[計画](docs/tetsu_v304_incremental_foreign_rail_prediction_plan_ja.md)・[全42全国/12局所パネル](data/derived/v304_incremental_foreign_rail.json)。広域的情報の有用性と鉄道特異性を区別する。
