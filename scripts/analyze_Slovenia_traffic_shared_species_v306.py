@@ -187,7 +187,7 @@ def swap_communities(sets,rng,proposals,strata):
         a=sets[i]-sets[j]
         b=sets[j]-sets[i]
         if not a or not b:continue
-        u=rng.choice(tuple(a));v=rng.choice(tuple(b))
+        u=rng.choice(tuple(sorted(a)));v=rng.choice(tuple(sorted(b)))
         sets[i].remove(u);sets[i].add(v)
         sets[j].remove(v);sets[j].add(u)
         accepted+=1
