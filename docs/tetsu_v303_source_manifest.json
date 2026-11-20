@@ -1,0 +1,18 @@
+[
+  {
+    "file": "lhasa.pdf",
+    "url": "https://zgstbckx.xml-journal.net/cn/article/pdf/preview/10.16843/j.sswc.2025251.pdf",
+    "bytes": 593350,
+    "sha256": "c77d4dd4c508421be33f9da8defca0ae85642503a9e836971236a88cc576a451",
+    "retrieved": "2026-11-20",
+    "role": "published_full_text_not_plot_matrix"
+  },
+  {
+    "file": "kumamoto2025.pdf",
+    "url": "https://geomatejournal.com/geomate/article/download/5001/3619",
+    "bytes": 712369,
+    "sha256": "143b33f54a3a369efdbfd9b2b7e74d4c0fe2f2e0d1b3614c92a304582baa5572",
+    "retrieved": "2026-11-20",
+    "role": "published_full_text_not_plot_matrix"
+  }
+]
