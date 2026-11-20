@@ -6,6 +6,8 @@ on:
       - 'scripts/audit_MIREN_original_native_elevation_source_v299.py'
       - 'scripts/test_MIREN_source_elevation_phylo_occ_stature_v299.py'
       - 'scripts/validate_MIREN_native_Elevation_environmental_source_v299.py'
+      - 'scripts/validate_MIREN_v299_published_summary_source_consistency.py'
+      - 'data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json'
       - 'tests/test_MIREN_original_Elevation_source_v299.py'
       - 'tests/test_MIREN_native_elevation_phylo_occ_mechanism_v299.py'
       - 'data/derived/tetsu_v298_rail_vs_miren_joint_phylo75_occupancy_stature_macro_summary.json'
@@ -122,6 +124,12 @@ jobs:
             --source results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json \
             --metadata results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json \
             --output results/audit/v299_original_Elevation_independent_source_math_field_year_QA.json
+      - name: Verify all twelve year/phylo source effect partitions and 54 frozen human-facing macro values against the original author source artifact
+        run: |
+          python -u scripts/validate_MIREN_v299_published_summary_source_consistency.py \
+            --source results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json \
+            --derived data/derived/tetsu_v299_MIREN_native_Elevation_community_stature_macro_summary.json \
+            --output results/audit/v299_MIREN_original_source_to_frozen_macro_summary_consistency_QA.json
       - name: Archive original plot provenance and only field programme / region / anonymous road environmental effects (no original Elevations/GPS/taxa)
         if: always()
         uses: actions/upload-artifact@v4
@@ -131,4 +139,5 @@ jobs:
             results/audit/v299_original_MIREN_true_plot_Elevation_source_QA.json
             results/audit/v299_original_MIREN_native_Elevation_joint_phylo_occ_stature_effects.json
             results/audit/v299_original_Elevation_independent_source_math_field_year_QA.json
+            results/audit/v299_MIREN_original_source_to_frozen_macro_summary_consistency_QA.json
           if-no-files-found: warn
