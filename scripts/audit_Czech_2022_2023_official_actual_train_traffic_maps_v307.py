@@ -15,6 +15,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import unicodedata
 import fitz
 
 AUTHORITY="Správa železnic"
@@ -28,6 +29,47 @@ ORIGINAL_PUBLISHED_PERIOD={
     "2023":"1 January–31 March 2023",
 }
 MAX_SIZE_MB=60
+
+# Official botanical station names per corrected 2024 publication; these
+# names are only searched as GLYPH LABELS, not linked to train exposure.
+ORIGINAL_CZECH_BOTANICAL_STATIONS=[
+"Břeclav","Zaječí","Hrušovany u Brna","Brno dolní nádraží",
+"Brno-Maloměřice","Skalice nad Svitavou","Svitavy","Česká Třebová",
+"Ústí nad Orlicí","Choceň","Pardubice","Přelouč","Tišnov",
+"Křižanov","Žďár nad Sázavou","Havlíčkův Brod","Světlá nad Sázavou",
+"Čáslav","Kutná Hora","Kolín","Velký Osek","Nymburk",
+"Lysá nad Labem","Všetaty","Praha-Horní Měcholupy",
+"Praha-Malešice","Praha-Libeň","Praha-Modřany","Praha-Bubny",
+"Kralupy nad Vltavou","Mělník","Roudnice nad Labem",
+"Lovosice","Velké Žernoseky","Ústí nad Labem západ",
+"Ústí nad Labem-Střekov","Děčín","Děčín-Prostřední Žleb",
+"Děčín východ"
+]
+
+def normalize_source_map_name(value:str)->str:
+    v=unicodedata.normalize("NFKD",value)
+    v="".join(c for c in v if not unicodedata.combining(c))
+    return " ".join(re.findall(r"[a-z0-9]+",v.casefold()))
+
+def audit_botanical_name_glyph_coverage(pdf_pages_text:list[str])->dict:
+    """Only determine exact normalized TEXT appearance in official page.
+
+    A matched city name is not a mapped original station, track segment,
+    survey year or numerical traffic measurement.
+    """
+    raw=normalize_source_map_name(" ".join(pdf_pages_text))
+    labels={}
+    for station in ORIGINAL_CZECH_BOTANICAL_STATIONS:
+        tokens=normalize_source_map_name(station)
+        labels[station]=bool(re.search(r"(?<![a-z0-9])"+re.escape(tokens)+r"(?![a-z0-9])",raw))
+    return {
+        "n_original_botanical_station_names_in_corrected_publisher_roster":len(labels),
+        "n_exact_normalized_station_label_text_occurrences":sum(labels.values()),
+        "matched_text_labels_NOT_exposure_or_station_position":[x for x,v in labels.items() if v],
+        "unmatched_not_proof_absent_from_visual_map":[x for x,v in labels.items() if not v],
+        "original_station_numeric_pass_counts_still_unidentified":True,
+    }
+
 
 def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
     if year not in SOURCE_URLS:
@@ -64,7 +106,7 @@ def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
     if render_dir is not None:
         render_dir.mkdir(parents=True,exist_ok=True)
         page=d[0]
-        pix=page.get_pixmap(matrix=fitz.Matrix(.75,.75),alpha=False)
+        pix=page.get_pixmap(matrix=fitz.Matrix(2.0,2.0),alpha=False)
         pix.save(render_dir/f"czech_traffic_{year}_firstpage_source_visual_inspection.png")
     d.close()
     num_tokens=re.findall(r"(?<!\w)(?:\d+(?:[.,]\d+)?)(?!\w)",full)
@@ -75,7 +117,7 @@ def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
         "official_original_source_url":SOURCE_URLS[year],
         "original_official_public_landing_page":PUBLIC_SOURCE_PAGE,
         "official_map_infrastructure_operator":AUTHORITY,
-        "published_measure":"actual number of ALL trains, not verified freight-only or passenger-only",
+        "published_measure":"daily counts of actually running ALL trains over the publisher-specified first-quarter period, not annual freight/passenger-specific trains",
         "published_months":ORIGINAL_PUBLISHED_PERIOD[year],
         "publisher_original_pdf_sha256":hashlib.sha256(raw).hexdigest(),
         "publisher_original_pdf_bytes":len(raw),
@@ -88,6 +130,7 @@ def inspect(path: Path, year: str, render_dir: Path|None=None)->dict:
         "page_text_sha256":text_digest,
         "numeric_text_tokens_unassigned_count":len(num_tokens),
         "has_extractable_glyph_text":any(n>0 for n in chars),
+        "botanical_station_NAME_glyph_match_not_numeric_exposure":audit_botanical_name_glyph_coverage(parts),
         "railway_vegetation_2020_2022_station_specific_passes_identified":False,
         "real_year_specific_botanical_site_linkage_performed":False,
         "freight_passenger_split_proven":False,
