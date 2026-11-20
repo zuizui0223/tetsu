@@ -43,5 +43,22 @@
     "2026 registered station centroid is not botanical plot GPS",
     "Original stations selected partly by passenger/freight throughput, not random across Czech network"
   ],
-  "v306_Slovenia_traffic_intersegment_union_strict_year_layout_freq_null_excess": -0.00001859410419709738
+  "v306_Slovenia_traffic_intersegment_union_strict_year_layout_freq_null_excess": -0.00001859410419709738,
+  "station_registry_centroid_AND_official_PDF_station_name_bbox_match": 29,
+  "station_registry_centroid_AND_PDF_name_glyph_by_publisher_stretch": {
+    "I.": 5,
+    "II.": 6,
+    "III.": 6,
+    "IV.": 8,
+    "V.": 4
+  },
+  "not_found_by_exact_PDF_search_original_names": [
+    "Praha-Horní Měcholupy",
+    "Praha-Modřany",
+    "Roudnice nad Labem",
+    "Ústí nad Labem-Střekov",
+    "Ústí nad Labem západ",
+    "Velké Žernoseky"
+  ],
+  "n_station_specific_REAL_train_counts_verified": 0
 }
