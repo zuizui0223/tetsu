@@ -1,0 +1,198 @@
+{
+  "source_studies": 1,
+  "panels": [
+    {
+      "city": "Perth",
+      "year": 2024,
+      "n": 3,
+      "elevation_range_m": [
+        10.0,
+        301.0
+      ],
+      "descriptive_slope_per_100m": 0.028225142027811713,
+      "n_5species_50pct_supported": 2
+    },
+    {
+      "city": "Perth",
+      "year": 2025,
+      "n": 3,
+      "elevation_range_m": [
+        7.0,
+        301.0
+      ],
+      "descriptive_slope_per_100m": -0.09377559863237224,
+      "n_5species_50pct_supported": 2
+    },
+    {
+      "city": "Beijing",
+      "year": 2024,
+      "n": 3,
+      "elevation_range_m": [
+        32.0,
+        56.0
+      ],
+      "descriptive_slope_per_100m": 2.589788105981998,
+      "n_5species_50pct_supported": 2
+    },
+    {
+      "city": "Beijing",
+      "year": 2025,
+      "n": 3,
+      "elevation_range_m": [
+        32.0,
+        56.0
+      ],
+      "descriptive_slope_per_100m": -1.7054855202968824,
+      "n_5species_50pct_supported": 0
+    }
+  ],
+  "changed_coordinates": [
+    {
+      "city": "Perth",
+      "site": 2
+    },
+    {
+      "city": "Perth",
+      "site": 3
+    },
+    {
+      "city": "Beijing",
+      "site": 1
+    }
+  ],
+  "warning": "Descriptive only: three sites, typology confounding, limited trait coverage; years not all same locations.",
+  "site_summaries": [
+    {
+      "city": "Perth",
+      "year": 2025,
+      "site": 1,
+      "typology": "Abandoned urban railway corridor",
+      "elevation_m": 301.0,
+      "n_taxa": 17,
+      "known": 7,
+      "coverage": 0.4117647058823529,
+      "mean_log_leda": -1.676759098150028
+    },
+    {
+      "city": "Perth",
+      "year": 2025,
+      "site": 2,
+      "typology": "Redesigned urban railway corridor",
+      "elevation_m": 25.0,
+      "n_taxa": 20,
+      "known": 12,
+      "coverage": 0.6,
+      "mean_log_leda": -1.6189134401157512
+    },
+    {
+      "city": "Perth",
+      "year": 2025,
+      "site": 3,
+      "typology": "In-use urban railway corridor",
+      "elevation_m": 7.0,
+      "n_taxa": 10,
+      "known": 7,
+      "coverage": 0.7,
+      "mean_log_leda": -1.2348679775897777
+    },
+    {
+      "city": "Perth",
+      "year": 2024,
+      "site": 1,
+      "typology": "Abandoned urban railway corridor",
+      "elevation_m": 301.0,
+      "n_taxa": 14,
+      "known": 5,
+      "coverage": 0.35714285714285715,
+      "mean_log_leda": -1.56600417119949
+    },
+    {
+      "city": "Perth",
+      "year": 2024,
+      "site": 2,
+      "typology": "Redesigned urban railway corridor",
+      "elevation_m": 26.0,
+      "n_taxa": 21,
+      "known": 12,
+      "coverage": 0.5714285714285714,
+      "mean_log_leda": -1.73138605720637
+    },
+    {
+      "city": "Perth",
+      "year": 2024,
+      "site": 3,
+      "typology": "In-use urban railway corridor",
+      "elevation_m": 10.0,
+      "n_taxa": 18,
+      "known": 10,
+      "coverage": 0.5555555555555556,
+      "mean_log_leda": -1.5740984515477392
+    },
+    {
+      "city": "Beijing",
+      "year": 2025,
+      "site": 1,
+      "typology": "Abandoned urban railway corridor",
+      "elevation_m": 40.0,
+      "n_taxa": 9,
+      "known": 4,
+      "coverage": 0.4444444444444444,
+      "mean_log_leda": -1.039470895756647
+    },
+    {
+      "city": "Beijing",
+      "year": 2025,
+      "site": 2,
+      "typology": "Redesigned urban railway corridor",
+      "elevation_m": 32.0,
+      "n_taxa": 20,
+      "known": 6,
+      "coverage": 0.3,
+      "mean_log_leda": -1.049769716937393
+    },
+    {
+      "city": "Beijing",
+      "year": 2025,
+      "site": 3,
+      "typology": "Redesigned urban railway corridor",
+      "elevation_m": 56.0,
+      "n_taxa": 20,
+      "known": 8,
+      "coverage": 0.4,
+      "mean_log_leda": -1.4297387092477452
+    },
+    {
+      "city": "Beijing",
+      "year": 2024,
+      "site": 1,
+      "typology": "Abandoned urban railway corridor",
+      "elevation_m": 41.0,
+      "n_taxa": 8,
+      "known": 6,
+      "coverage": 0.75,
+      "mean_log_leda": -1.3979765119321093
+    },
+    {
+      "city": "Beijing",
+      "year": 2024,
+      "site": 2,
+      "typology": "Redesigned urban railway corridor",
+      "elevation_m": 32.0,
+      "n_taxa": 11,
+      "known": 3,
+      "coverage": 0.2727272727272727,
+      "mean_log_leda": -2.088633797603247
+    },
+    {
+      "city": "Beijing",
+      "year": 2024,
+      "site": 3,
+      "typology": "Redesigned urban railway corridor",
+      "elevation_m": 56.0,
+      "n_taxa": 20,
+      "known": 10,
+      "coverage": 0.5,
+      "mean_log_leda": -1.396688289685605
+    }
+  ]
+}

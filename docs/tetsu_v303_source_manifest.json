@@ -22,7 +22,7 @@
     "sha256": "5e392a5ff5f705fa01e728d19e8a0b8257dfb62bfb5235388ccf07952c4f50bd",
     "retrieved": "2026-11-20",
     "role": "published_report_with_plot_datasheets_and_species_matrix",
-    "extraction_status": "pending"
+    "extraction_status": "replayed_in_CI_with_out_of_plot_exclusions"
   },
   {
     "file": "austraits-7.0.0.zip",
@@ -32,5 +32,11 @@
     "md5_verified": "f169a9bca41d847df4fb8c6011ee3ea8",
     "retrieved": "2026-11-20",
     "role": "independent_plant_trait_database"
+  },
+  {
+    "file": "perth.bin",
+    "url": "https://mdpi-res.com/d_attachment/land/land-15-00714/article_deploy/land-15-00714-s001.zip",
+    "sha256": "baea2386655fd1ddcd02b9d2dfd3fe79fc2402e2ee4d488f2ae44fbd1d31ea14",
+    "role": "site_species_lists_and_year_specific_coordinates"
   }
 ]
