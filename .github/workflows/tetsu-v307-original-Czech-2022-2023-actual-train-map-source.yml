@@ -1,0 +1,70 @@
+name: "v307 source verify Czech official original 2022/2023 Q1 REAL train passage maps"
+on:
+  push:
+    branches: [research/tetsu-v307-Czech-2022-2023-traffic-map-source-gate-20261120]
+    paths:
+      - 'scripts/audit_Czech_2022_2023_official_actual_train_traffic_maps_v307.py'
+      - 'tests/test_Czech_2022_2023_official_train_maps_v307.py'
+      - '.github/workflows/tetsu-v307-original-Czech-2022-2023-actual-train-map-source.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v307-Czech-operator-Q1-actual-train-maps
+  cancel-in-progress: true
+jobs:
+  official-Czech-railway-traffic-Q1-source-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install PDF glyph and vector reader without OCR
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Mathematical source authenticity, no annual fabricated counts
+        run: python -m unittest discover -s tests -p 'test_Czech_2022_2023_official_train_maps_v307.py' -v
+      - name: Download OFFICIAL 2022 and 2023 JAN–MAR real ALL trains maps
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v307/CZ results/audit/v307
+          curl -fL --retry 3 --retry-delay 3 --connect-timeout 15 --max-time 120 \
+            -A 'Mozilla/5.0 (compatible; academic-rail-ecology-source-validation/1.0)' \
+            'https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_22.pdf' \
+            -o source_original/v307/CZ/official_alltrains_Q1_2022.pdf
+          curl -fL --retry 3 --retry-delay 3 --connect-timeout 15 --max-time 120 \
+            -A 'Mozilla/5.0 (compatible; academic-rail-ecology-source-validation/1.0)' \
+            'https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_23.pdf' \
+            -o source_original/v307/CZ/official_alltrains_Q1_2023.pdf
+          test "$(head -c 5 source_original/v307/CZ/official_alltrains_Q1_2022.pdf)" = '%PDF-'
+          test "$(head -c 5 source_original/v307/CZ/official_alltrains_Q1_2023.pdf)" = '%PDF-'
+      - name: Audit original Czech station train map source and visual PDFs, no inferred site counts
+        run: |
+          python -u scripts/audit_Czech_2022_2023_official_actual_train_traffic_maps_v307.py \
+            --map-2022 source_original/v307/CZ/official_alltrains_Q1_2022.pdf \
+            --map-2023 source_original/v307/CZ/official_alltrains_Q1_2023.pdf \
+            --output results/audit/v307/official_Czech_2022_2023_Q1_train_maps_source_QA.json \
+            --render-dir results/audit/v307/visual-review
+      - name: Verify exact non-equivalence to annual freight station traffic
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('results/audit/v307/official_Czech_2022_2023_Q1_train_maps_source_QA.json').read_text())
+          assert j['status']=='PUBLIC_ORIGINAL_CZECH_MAPS_2022_AND_2023_SOURCE_FILES_AVAILABLE'
+          assert j['n_source_botanical_station_exposures_linked']==0
+          assert j['cannot_claim_annual_freight_trains']
+          for k,v in j['source_maps'].items():
+              assert k in ('2022','2023')
+              assert v['station_level_numeric_traffic_values_output']==0
+              assert v['original_pdf_pages']>0
+              assert v['publisher_original_pdf_bytes']>10000
+              assert not v['freight_passenger_split_proven']
+          print('Genuine original Czech official source PDFs Q1 verified, zero invented 39 station traffic values.')
+          PY
+      - name: Archive audit and preview ONLY; never original operator PDFs or individual botanical records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v307-Czech-original-2022-2023-Q1-actual-ALL-train-maps-source-gate
+          path: results/audit/v307/
+          if-no-files-found: warn
