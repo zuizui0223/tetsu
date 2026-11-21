@@ -1,0 +1,87 @@
+{
+  "version": "v312",
+  "date_JST": "2026-11-21",
+  "publication": {
+    "doi": "10.1016/j.flora.2025.152780",
+    "title": "Climate and traffic volume control plant species richness in railway areas",
+    "journal": "Flora",
+    "volume": 330,
+    "article": 152780,
+    "year": 2025
+  },
+  "status": "PUBLISHED_AGGREGATE_SUPPLEMENTS_VERIFIED_STATION_JOINT_DATA_NOT_OBTAINED",
+  "sources": [
+    {
+      "id": "table_S1",
+      "url": "https://ars.els-cdn.com/content/image/1-s2.0-S0367253025001094-mmc2.pdf",
+      "media_type": "application/pdf",
+      "bytes": 200397,
+      "pages": 9,
+      "sha256": "ff8271a396ecda01d92bba9817721577bcdd44fdac1309cc4884240c9e3c9838",
+      "verified_contents": {
+        "column_headers": [
+          "Taxon",
+          "Frequency"
+        ],
+        "n_taxon_rows": 413,
+        "n_distinct_printed_taxa": 413,
+        "n_stations_in_caption": 30,
+        "frequency_unit": "integer percentage of stations",
+        "percent_range": [
+          3,
+          100
+        ],
+        "all_percentages_compatible_with_rounding_counts_out_of_30": true,
+        "taxon_with_100_percent_frequency": "Bromus tectorum",
+        "station_identifiers_present": false,
+        "station_by_taxon_matrix_present": false,
+        "station_train_counts_present": false,
+        "per_taxon_alien_status_column_present": false
+      }
+    },
+    {
+      "id": "figure_S1",
+      "url": "https://ars.els-cdn.com/content/image/1-s2.0-S0367253025001094-mmc1.pdf",
+      "media_type": "application/pdf",
+      "bytes": 92797,
+      "pages": 1,
+      "sha256": "c703a52d14cb4470023e4f5643d769a6a3dab87537fab98ccdec3a01caf2afab",
+      "verified_contents": {
+        "description": "Spearman correlations among initial explanatory variables",
+        "visible_traffic_variable_labels": [
+          "Train_Cargo",
+          "Train_Passenger",
+          "Total_Trains"
+        ],
+        "station_level_measurement_rows_present": false,
+        "predictor_correlations_do_not_recover_station_values": true
+      }
+    }
+  ],
+  "verification": {
+    "local_pdf_bytes_and_hash_verified": true,
+    "page1_of_both_sources_visually_inspected": true,
+    "table_S1_all_pages_text_parsed": true,
+    "table_S1_independent_text_and_word_position_row_counts_agree": 413,
+    "original_raw_supplements_republished": false
+  },
+  "identification": {
+    "species_occupancy_marginals_available": true,
+    "site_richness_vector_available_from_these_supplements": false,
+    "which_stations_share_each_species_available": false,
+    "station_species_and_cargo_joint_data_available": false,
+    "pairwise_sharing_vs_traffic_effect_identifiable_from_these_supplements": false,
+    "lack_of_retrieved_raw_data_does_not_prove_nonexistence": true,
+    "n_new_ecological_effect_estimates": 0
+  },
+  "remaining_inputs": [
+    "30-station identifiers and station-by-taxon presence/absence matrix",
+    "Taxon-specific native/archaeophyte/neophyte or alien status used in the article",
+    "Station freight and passenger values with units, years, and movement definitions",
+    "Survey dates and sampling areas, source location/environment/management covariates",
+    "Check physical site overlap with the 2012–2014 Poprad–Plaveč survey before claiming independent field cohorts"
+  ],
+  "full_article_pdf_obtained_this_turn": false,
+  "institutional_fulltext_lead": "https://www.library.sk/arl-sav/sk/detail-sav_un_epca-313514-Climate-and-traffic-volume-control-plant-species-richness-in-railway-areas/",
+  "author_correspondence_created_or_sent_this_turn": false
+}

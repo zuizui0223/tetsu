@@ -1,0 +1,116 @@
+{
+  "version": "v312",
+  "date_JST": "2026-11-21",
+  "status": "MANUALLY_TRACED_PUBLISHED_SECTION_VALUES",
+  "data_file": "tetsu_v312_Czech_Q1_2022_2023_manually_traced_sections.csv",
+  "n_published_sections": 7,
+  "n_section_year_rows": 14,
+  "n_independent_ecological_studies_added": 0,
+  "operator": "Správa železnic",
+  "landing_page": "https://provoz.spravazeleznic.cz/Portal/ViewArticle.aspx?oid=2104272",
+  "measure": {
+    "field": "published_all_train_daily_statistic",
+    "scope": "all train types on the labelled line section",
+    "published_description": "daily train count on the ninth busiest day of 1 January–31 March, described by the publisher as the ninth decile",
+    "publisher_decile": 9,
+    "period_is_annual": false,
+    "period_is_calendar_Q1": true,
+    "is_mean_daily_count": false,
+    "is_freight_only": false,
+    "is_station_total": false,
+    "is_synchronous_botanical_exposure_verified": false,
+    "rounding": "values above 25 rounded to nearest multiple of 5",
+    "rounded_step_above_25": 5,
+    "two_tracks_rule": "one count on a double-track section drawn as separate tracks is the sum for both tracks",
+    "cannot_sum_section_quantiles_into_station_totals": true,
+    "endpoint_order_is_not_a_flow_direction": true
+  },
+  "original_pdf_sources": [
+    {
+      "year": 2022,
+      "url": "https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_22.pdf",
+      "bytes": 155604,
+      "sha256": "c4d2436a7e1950bc6c247926b12dbba16649491221c94fc7288e234c1c3830ee",
+      "pages": 1,
+      "rotation_degrees": 90,
+      "fetched_again_2026_11_21": true
+    },
+    {
+      "year": 2023,
+      "url": "https://provoz.spravazeleznic.cz/Portal/Show.aspx?path=%2FData%2FMapy%2Fpocty_vse_23.pdf",
+      "bytes": 530744,
+      "sha256": "4cbd4349814ac636bda74d3389810d6100ecc9e12daef237a12fa8b62eb25b57",
+      "pages": 1,
+      "rotation_degrees": 90,
+      "fetched_again_2026_11_21": true
+    }
+  ],
+  "inspection_images": [
+    {
+      "year": 2022,
+      "file_name": "hires_czech_traffic_2022_firstpage_source_visual_inspection.png",
+      "sha256": "637763d85ad005935ef1a1c8ca4767ea16088a7558b6dbc02632d729299d4467",
+      "width_px": 1684,
+      "height_px": 1191
+    },
+    {
+      "year": 2023,
+      "file_name": "hires_czech_traffic_2023_firstpage_source_visual_inspection.png",
+      "sha256": "60ff9380c39b1b3e502c4d6bd4d74ca870c308060db5fded8ff72b5b8a7e9303",
+      "width_px": 1684,
+      "height_px": 1191
+    }
+  ],
+  "transcription": {
+    "method": "trace continuous depicted main line and count-change nodes, then read its printed value; no nearest-station-number assignment",
+    "model_readings": 2,
+    "human_review_completed": false,
+    "reviewers": "one model reading followed by parent model visual verification",
+    "primary_pdf_numeric_labels_checked_against_trace_bboxes": 14,
+    "primary_pdf_numeric_label_matches": 14,
+    "numeric_bbox_match_alone_does_not_prove_line_assignment": true,
+    "bbox_definition": "approximate segment-trace inspection rectangle in source-image pixels; x right, y down; not geographic coordinates",
+    "pdf_to_pixel_transform": "word bbox * page.rotation_matrix * Matrix(2,2)",
+    "default_automated_station_join_authorized": false
+  },
+  "section_interpretation": [
+    {
+      "section_id": "CZ-Q1-05",
+      "through": "Žďár nad Sázavou",
+      "note": "One printed main-line count covers Havlíčkův Brod–Křižanov through the unshaded Žďár junction; do not treat the two sides as independent count measurements."
+    },
+    {
+      "section_ids": [
+        "CZ-Q1-06",
+        "CZ-Q1-07"
+      ],
+      "note": "Vlkov u Tišnova is a marked count-change node. Křižanov–Tišnov must not receive a single interpolated or nearest value."
+    }
+  ],
+  "botanical_linkage": {
+    "relevant_publication_DOI": "10.23855/preslia.2024.247",
+    "botanical_roster_name_candidates": [
+      "Kolín",
+      "Kutná Hora",
+      "Čáslav",
+      "Světlá nad Sázavou",
+      "Havlíčkův Brod",
+      "Žďár nad Sázavou",
+      "Křižanov",
+      "Tišnov"
+    ],
+    "n_name_candidates": 8,
+    "exact_station_track_survey_polygon_crosswalk_verified": false,
+    "n_plot_specific_traffic_exposures_verified": 0,
+    "missing": [
+      "station-level botanical survey year/date",
+      "plot/yard/main-line spatial crosswalk",
+      "freight/passenger split",
+      "station movement definition"
+    ],
+    "caution": "Kutná Hora in the botanical roster is not automatically equated with the map node Kutná Hora hl. n.; branch traffic is not assigned to the surveyed flora."
+  },
+  "no_new_ecological_regression_fitted": true,
+  "interpretation": "14 repeated source-year records are seven sections from one corridor, not 14 independent ecology replications.",
+  "full_source_pdfs_or_images_republished": false
+}
