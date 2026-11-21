@@ -1,0 +1,52 @@
+{
+  "review": "Independent numerical verification of v313 retrospective spatial holdout",
+  "provenance": "Repeated registered source adapter under PyMuPDF 1.24.14. Independently constructed model matrices row by row from the recovered cohort/foreign predictor. Separate Newton gradient/Hessian logistic fitter, independent of v313 make_rows and v304 fit_predict.",
+  "scope": "Numerical check conditional on the original project source parsers, exact-binomial mapping and frozen cohort definitions.",
+  "unit_tests": {
+    "v313": 6,
+    "v304": 6,
+    "passed": 12,
+    "also_passed_after_abundance_label_correction": true
+  },
+  "reconstructed_fits": 120,
+  "endpoints": 2,
+  "penalties": 3,
+  "spatial_holdout_blocks": 5,
+  "nested_models": 4,
+  "per_habitat_loss_comparisons": {
+    "n": 720,
+    "max_absolute_delta": 1.207701387895277e-06
+  },
+  "balanced_loss_comparisons": {
+    "n": 240,
+    "max_absolute_delta": 9.452925411324031e-07
+  },
+  "raw_scale_slope_comparisons": {
+    "n": 180,
+    "max_absolute_delta": 8.871985406055938e-06
+  },
+  "all_fold_and_habitat_risk_set_and_event_counts_match_exactly": true,
+  "recomputed_comparison_summaries": {
+    "n": 144,
+    "means_block_values_positive_counts_valid_counts_deletion_ranges_match": true
+  },
+  "figure_csv_points": {
+    "n": 100,
+    "all_match_json_exactly": true
+  },
+  "source_checks": {
+    "paired_transects": 27,
+    "baseline_eligible_taxa": 51,
+    "raw_baseline_taxon_columns_positive": 102,
+    "mapped_baseline_taxa_positive": 101,
+    "incomplete_2017_rows": 4,
+    "missing_cells": 4,
+    "source_transects_with_variable_latitude_longitude_or_altitude_between_rows": 0
+  },
+  "not_assessed": [
+    "Human peer review",
+    "independent field detection, true survival or arrival",
+    "rail-specific causal transport",
+    "transfer to unobserved taxa or a new independent corridor"
+  ]
+}

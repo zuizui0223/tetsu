@@ -1,0 +1,101 @@
+endpoint,penalty,quantity,scope,block,value
+persistence,0.01,M0_minus_M1_log_loss,Track,0,-0.04718382864438242
+persistence,0.01,M0_minus_M1_log_loss,Track,1,0.05730706498399313
+persistence,0.01,M0_minus_M1_log_loss,Track,2,0.04310199976566931
+persistence,0.01,M0_minus_M1_log_loss,Track,3,-0.12973853179716266
+persistence,0.01,M0_minus_M1_log_loss,Track,4,0.04046178049804089
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 1,0,0.026273916043886625
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 1,1,0.009507785926553769
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 1,2,0.02870088896094647
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 1,3,0.04232746316817698
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 1,4,0.044219597011231515
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 2,0,0.05820288600212564
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 2,1,0.021252657484532922
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 2,2,0.04992549695993298
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 2,3,0.019051081481482934
+persistence,0.01,M0_minus_M1_log_loss,Interior Plot 2,4,0.05891740934225492
+persistence,0.01,M0_minus_M1_log_loss,balanced,0,-0.002472713810688143
+persistence,0.01,M0_minus_M1_log_loss,balanced,1,0.036343643344768195
+persistence,0.01,M0_minus_M1_log_loss,balanced,2,0.041207596363054544
+persistence,0.01,M0_minus_M1_log_loss,balanced,3,-0.049524629736166226
+persistence,0.01,M0_minus_M1_log_loss,balanced,4,0.04601514183739208
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,0,-0.8884504725704623
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,1,-0.9821259013233445
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,2,-0.9907436048662621
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,3,-0.7199685880720912
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,4,-0.9355956213032812
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,0,-0.35527246104183363
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,1,-0.48249061977535673
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,2,-0.4636900752423749
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,3,-0.20597728418361408
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,4,-0.3508891256441877
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,0,0.07051890540523026
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,1,-0.0038905846367780286
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,2,0.023914554096761863
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,3,0.13705674756505282
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,4,0.06186625278515938
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,0,-0.6741320407586426
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,1,-1.1050725003157884
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,2,-0.8441873405485836
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,3,-1.377723994018519
+persistence,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,4,-1.114696375906077
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,0,-0.33601601258958935
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,1,-0.5942125934666174
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,2,-0.4526177256938719
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,3,-0.52672105339611
+persistence,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,4,-0.5073499762570332
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,0,0.04817859415316241
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,1,-0.04343192362658748
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,2,-0.010716165495891317
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,3,0.06890909908405009
+persistence,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,4,0.027439652171745894
+new_record,0.01,M0_minus_M1_log_loss,Track,0,0.00902485370942857
+new_record,0.01,M0_minus_M1_log_loss,Track,1,0.0022803957655484694
+new_record,0.01,M0_minus_M1_log_loss,Track,2,0.004175172525019255
+new_record,0.01,M0_minus_M1_log_loss,Track,3,-0.002261412060118012
+new_record,0.01,M0_minus_M1_log_loss,Track,4,0.0021394983671743084
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 1,0,0.009779484892518564
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 1,1,0.018732261786683385
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 1,2,0.004923642445634313
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 1,3,0.006909105535546051
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 1,4,0.021717741894278275
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 2,0,0.009029571530178582
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 2,1,0.010917028788711286
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 2,2,0.00601663823984952
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 2,3,0.006425872248689429
+new_record,0.01,M0_minus_M1_log_loss,Interior Plot 2,4,0.0036576348303408723
+new_record,0.01,M0_minus_M1_log_loss,balanced,0,0.009214690960388572
+new_record,0.01,M0_minus_M1_log_loss,balanced,1,0.008552520526622906
+new_record,0.01,M0_minus_M1_log_loss,balanced,2,0.004822656433880579
+new_record,0.01,M0_minus_M1_log_loss,balanced,3,0.002203038415999864
+new_record,0.01,M0_minus_M1_log_loss,balanced,4,0.0074135933647418994
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,0,-0.3235789119952251
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,1,-0.011587851803308423
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,2,-0.1359150560091425
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,3,0.14549115606267737
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,4,0.14486695900254587
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,0,0.0185633652284128
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,1,0.14089055300612252
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,2,0.08560371494906226
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,3,0.19696518382837602
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,4,0.2292741381926896
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,0,0.07552014741798894
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,1,0.10157129153410126
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,2,0.0877930456655047
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,3,0.11043418156326096
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_1,4,0.1164873549218962
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,0,-0.18999298799902503
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,1,0.11190693860056464
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,2,0.00868417842313235
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,3,0.3560918317608103
+new_record,0.001,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,4,0.06516914286691447
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,0,0.10555660605709198
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,1,0.21629445599993524
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,2,0.1815976557875429
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,3,0.31179756726197605
+new_record,0.01,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,4,0.1968097491752629
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,0,0.0910151479063633
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,1,0.11394531856182853
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,2,0.10939354319031033
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,3,0.13166548615945012
+new_record,0.1,M2_foreign_raw_slope_difference,Track_minus_Interior_Plot_2,4,0.10038469273968924
