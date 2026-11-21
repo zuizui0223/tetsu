@@ -1,0 +1,101 @@
+name: "v310 source-authentic 318 taxa x 19 Slovak stations index and geographic distance-decay original source"
+on:
+  push:
+    branches: [research/tetsu-v310-Slovakia19-original-rail-flora-matrix-20261121]
+    paths:
+      - 'scripts/audit_Slovakia2016_original_19station_318taxa_pdf_preflight_v310.py'
+      - 'tests/test_Slovakia2016_original_19station_pdf_source_v310.py'
+      - 'scripts/analyze_Slovakia2016_19station_original_taxon_incidence_v310.py'
+      - 'tests/test_Slovakia2016_19station_source_taxon_incidence_v310.py'
+      - 'scripts/analyze_Slovakia2016_19station_original_physical_distance_v310.py'
+      - 'tests/test_Slovakia2016_physical_DMS_geography_v310.py'
+      - '.github/workflows/tetsu-v310-original-Slovakia-19stations-source-preflight.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v310-Slovakia2016-publisher-19stations-318taxa-PDF-source
+  cancel-in-progress: true
+jobs:
+  genuine-original-Slovakia-19station-paper:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install PDF original vector glyph reader, no OCR
+        run: python -m pip install 'PyMuPDF==1.24.14' 'numpy>=1.26,<3'
+      - name: Synthetic original paper consistency QA
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovakia2016_original_19station_pdf_source_v310.py' -v
+          python -m unittest discover -s tests -p 'test_Slovakia2016_19station_source_taxon_incidence_v310.py' -v
+          python -m unittest discover -s tests -p 'test_Slovakia2016_physical_DMS_geography_v310.py' -v
+      - name: Download author original 2016 railway paper 19 original sites, 318 taxa
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v310 results/audit/v310
+          curl -fLsS --retry 4 --retry-all-errors --retry-delay 4 --connect-timeout 20 --max-time 150 \
+            -A 'academic tetsu-Slovakia2016-publisher-original/1.0' \
+            'https://cbrb.sav.sk/usr/Janka/docs/BulletinSBS_2016_Majekova-Limanek.pdf' \
+            -o source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf
+          test "$(head -c 5 source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf)" = '%PDF-'
+          sha256sum source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf
+      - name: Check original 318 taxa and 19-numbered-station list before any ecological analysis
+        run: |
+          python -u scripts/audit_Slovakia2016_original_19station_318taxa_pdf_preflight_v310.py \
+            --pdf source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf \
+            --out results/audit/v310/Slovakia2016_original_19station_318taxa_source_preflight.json
+      - name: Original numbered list text evidence excerpt to CI log only, never raw original paper artifact
+        run: |
+          python - <<'PY'
+          import fitz,re
+          d=fitz.open('source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf')
+          for i,p in enumerate(d):
+              t=p.get_text('text',sort=True)
+              m=re.search('Zoznam zisten',t,re.I)
+              if m:
+                  print('FIRST TAXON LIST printed page',i+37)
+                  print('SOURCE PREVIEW FIRST 950 chars:')
+                  print(repr(t[m.start():m.start()+950]))
+          d.close()
+          PY
+      - name: Original 318 taxa x 19 stations exact author site-richness validation and constrained site-frequency similarity
+        run: |
+          python -u scripts/analyze_Slovakia2016_19station_original_taxon_incidence_v310.py \
+            --pdf source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf \
+            --out results/audit/v310/Slovakia2016_original_318taxa_19station_rail_beta_fixed_margins.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('results/audit/v310/Slovakia2016_original_318taxa_19station_rail_beta_fixed_margins.json')
+          d=json.loads(p.read_text())
+          assert d["author_published_numbers_validated_from_original_rows"]["n_pub_source_total_taxa"]==318
+          assert d["author_published_numbers_validated_from_original_rows"]["n_author_numbered_rail_stations"]==19
+          assert d["author_published_numbers_validated_from_original_rows"]["nine_original_universal_taxa_strict_source_list_verified"]
+          assert d["source_rail_single_line_taxon_identity_spatial_structure"]["n_dependent_original_station_pairs_NOT_independent"]==171
+          assert d["n_real_original_freight_or_passenger_train_exposure_values"]==0
+          print("Genuine Slovak2016 318 original species × 19 true railway stations QA PASS")
+          PY
+      - name: True author original coordinates and geographically measured railway-station species distance decay
+        run: |
+          python -u scripts/analyze_Slovakia2016_19station_original_physical_distance_v310.py \
+            --pdf source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf \
+            --out results/audit/v310/Slovakia2016_original_true_19station_DMS_geographic_flora_decay.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          q=json.loads(Path('results/audit/v310/Slovakia2016_original_true_19station_DMS_geographic_flora_decay.json').read_text())
+          assert q['original_stations_DMS_true_in_author_source']==19
+          assert q['original_botanical_taxa_strict_original_incidence_qa']==318
+          assert q['n_source_dyads_depend_on_only_19_stations']==171
+          assert q['strict_source_original_19_sites_318_taxa_margins_maintained']
+          assert q['original_freight_and_passenger_train_count_data_not_recorded']
+          print('Original Slovak railway 19 station source geodesic DMS and 318 taxon QA PASS')
+          PY
+      - name: Archive only source QA, not original PDF or 318-taxa incidence matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v310-original-2016-Slovak19station-318taxa-source-evidence-qa
+          path: results/audit/v310/
+          if-no-files-found: warn
