@@ -35,7 +35,7 @@ def parse_source_dms(text):
         lat=int(d["latd"])+int(d["latm"])/60+int(d["lats"])/3600
         lon=int(d["lond"])+int(d["lonm"])/60+int(d["lons"])/3600
         altitude=int(d["alt"])
-        if not (48<=lat<51 and 18<=lon<23 and 300<=alt<=1200):
+        if not (48<=lat<51 and 18<=lon<23 and 300<=altitude<=1200):
             raise ValueError("Original station source DMS outside Slovakia valley bounds")
         coords[idx]=(lat,lon,alt,d["name"].strip())
     if len(coords)!=19 or sorted(coords)!=list(range(1,20)):
