@@ -1,0 +1,137 @@
+{
+  "version": "v311",
+  "label": "Slovakia2016: 19 numbered botanical sampling units, named invasive contributions, and confounded geography/elevation",
+  "original_source_author": "Májeková & Limánek (2016) Bulletin Slovenskej botanickej spoločnosti 38:37–45",
+  "source_pdf_url": "https://cbrb.sav.sk/usr/Janka/docs/BulletinSBS_2016_Majekova-Limanek.pdf",
+  "source_original_pdf_SHA256": "99465bdd7ed56985e65b1163f16eca4f702fc821619d84c89bf986d4d3736ae1",
+  "original_data_CI": "https://github.com/zuizui0223/tetsu/actions/runs/44903366378",
+  "original_data_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44903366378/artifacts/14706991035",
+  "source_verified_json_sha256": "3f8032c3295381e00be72e6dc5b950350dce45d2549e4603a83fc3d9128c9ff6",
+  "sampling": {
+    "n_site_taxon_occurrence": 1763,
+    "original_source_taxa": 318,
+    "author_reported_invasive_taxa": 15,
+    "author_explicitly_named_invasive_taxa_verified": 14,
+    "other_taxa_cannot_assume_native": true,
+    "station_pair_dyads_dependent": 171,
+    "source_field_period": "2012–2014",
+    "train_traffic_values_verified": 0,
+    "original_plots_nonrail_control_present": false,
+    "source_publications": 1,
+    "numbered_botanical_sampling_units": 19,
+    "physical_railway_stations_and_stops_before_author_pooling": 21,
+    "author_pooled_pairs": [
+      [
+        "Kežmarok",
+        "Kežmarok zastávka"
+      ],
+      [
+        "Strážky",
+        "Strážky zastávka"
+      ]
+    ],
+    "numbered_units_are_not_independent_study_replications": true,
+    "source_unit_definition_reference": "Original PDF printed p38; two close station/stop pairs pooled"
+  },
+  "source_geo": {
+    "source_station_km_minmax": [
+      1.0690227687100222,
+      46.62872963423686
+    ],
+    "source_elevation_m_minmax": [
+      484,
+      673
+    ],
+    "correlation_abs_station_elev_diff_vs_geo_km": 0.9924341447670917,
+    "standardized_geography_and_altitude_difference_condition_number": 16.227924343153685,
+    "standardized_geography_altitude_gap_mean_altitude_condition_number": 16.53158356459172,
+    "protocol_condition_number_threshold": 30,
+    "protocol_condition_number_threshold_exceeded": false,
+    "caution_basis": "r=0.9924, adjusted coefficient sign changes, and whole-unit deletion instability; not a cond>30 threshold exceedance",
+    "elevation_rank_matches_numbered_unit_order": true,
+    "last_tertile_coincides_with_source_phytogeographic_district_29": true
+  },
+  "observed_source_same_species_jaccard_geographic_km_slopes": {
+    "all_taxa": -0.0020021839482198068,
+    "author_explicit_invasive_14": 0.000002001250850573552,
+    "other_not_author_explicit_invasive": -0.002004185199070381
+  },
+  "global_taxon_site_richness_fixed_null": {
+    "all_taxa": {
+      "mean": -0.00033282625628536206,
+      "observed_excess": -0.0016693576919344446,
+      "technical_lower_rank": 0.002506265664160401
+    },
+    "author_explicit_invasive_14": {
+      "mean": -0.000010210586299243108,
+      "observed_excess": 0.00001221183714981666,
+      "technical_upper_rank": 0.43358395989974935
+    }
+  },
+  "source_elevation_tertile_taxon_site_frequency_fixed_null": {
+    "original_station_strata_size": [
+      6,
+      6,
+      7
+    ],
+    "all_taxa": {
+      "mean": -0.001530512573094589,
+      "observed_excess": -0.0004716713751252177,
+      "technical_lower_rank": 0.010025062656641603
+    },
+    "author_explicit_invasive_14": {
+      "mean": 0.000018900073816032705,
+      "observed_excess": -0.000016898822965459153,
+      "technical_upper_rank": 0.6591478696741855
+    }
+  },
+  "multiple_regression_geographic_km_slopes_conditional_on_abs_elevation_gap_100m": {
+    "all_taxa": 0.00025375551772028183,
+    "author_explicit_invasive_14": -0.00010194047004001675,
+    "all_taxa_whole_site_LOO_minmax": [
+      -0.0025209304775749173,
+      0.003273304633919345
+    ],
+    "all_taxa_whole_site_LOO_negative": 8,
+    "invasive_14_whole_site_LOO_minmax": [
+      -0.0009645649062560575,
+      0.00028049050762438333
+    ]
+  },
+  "mean_elevation_plus_altitude_gap_adjusted_km_slope_all_taxa": -0.001474245212976291,
+  "source_tests": {
+    "chains_per_null_mode": 2,
+    "draws_per_chain": 199,
+    "correlated_draws_per_null_mode": 398,
+    "null_modes": 2,
+    "correlated_draws_across_both_modes": 796,
+    "chain_start_state": "same observed incidence matrix for both chains; different PRNG seeds",
+    "original_unit_richness_row_sums_fixed": true,
+    "original_taxon_occupancy_column_sums_fixed": true,
+    "incidence_cell_arrangement_fixed": false,
+    "original_taxon_frequency_within_tertiles_fixed_in_strict_null": true,
+    "mcmc_mixing_and_effective_sample_size_assessed": false
+  },
+  "inference_limits": [
+    "The 15th reported invasive taxon was not publicly named in the author's explicit list; NOT invented.",
+    "The 14 observed named invasive taxa are not all 98 alien taxa.",
+    "Local species sharing contribution is calculated with ALL plant taxa Jaccard denominator, NOT invasive-only Jaccard.",
+    "Distance and elevation are confounded (r=+0.9924) and cannot identify causal geography or altitude selection.",
+    "19 stations are all on one Poprad river valley rail line, not 19 independent study replications.",
+    "2×199 MCMC draws correlated; ranks are technical relative to fixed margins, NOT ecological randomized field p values.",
+    "No actual 2012-14 train traffic, seed carriage, mowing, local nonrail vegetation or railway vs road experiment.",
+    "Does NOT replicate Slovenian 2020 freight vs local/intra-line opposite slopes or Májeková 2025 30-station freight richness.",
+    "19 numbered botanical sampling units pool two pairs among 21 physical stations/stops; representative source coordinates do not unpool their floras.",
+    "The two group contributions are additive responses with a common denominator, not statistically independent groups.",
+    "398 technical draws are collected separately for each of two null modes; both seeded chains start at the observed matrix.",
+    "Central technical ranks do not establish equivalence or absence of an ecological effect.",
+    "The altitude-tertile reference also conditions on spatial position and the source phytogeographic district boundary."
+  ],
+  "metadata_correction_date_JST": "2026-11-21",
+  "response_definition": {
+    "denominator": "all-taxa union for each pair of numbered sampling units",
+    "group_contributions": "shared named invasive taxa / all-taxa union + shared other taxa / same union = full Jaccard",
+    "contributions_are_statistically_independent": false,
+    "pooled_group_slope_is_not_a_per_taxon_effect": true
+  }
+}

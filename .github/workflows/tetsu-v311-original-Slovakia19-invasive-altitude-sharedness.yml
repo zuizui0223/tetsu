@@ -1,0 +1,76 @@
+name: "v311 source-authentic 2016 Slovak 19 station invasive identity sharing and altitude null"
+on:
+  push:
+    branches: [research/tetsu-v311-SK19-invasive-identity-elevation-control-20261121]
+    paths:
+      - 'scripts/analyze_Slovakia2016_invasive_shared_species_altitude_v311.py'
+      - 'tests/test_Slovakia2016_author_invasive_altitude_v311.py'
+      - '.github/workflows/tetsu-v311-original-Slovakia19-invasive-altitude-sharedness.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v311-original-SK19-invasives-altitude-reference
+  cancel-in-progress: true
+jobs:
+  true-2016-19-station-14-named-invasive-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install first-party PDF source and matrix numerics, no OCR
+        run: python -m pip install 'PyMuPDF==1.24.14' 'numpy>=1.26,<3'
+      - name: Test exact author names, group Jaccard additivity and altitude collinearity
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovakia2016_author_invasive_altitude_v311.py' -v
+          python -m unittest discover -s tests -p 'test_Slovakia2016_19station_source_taxon_incidence_v310.py' -v
+          python -m unittest discover -s tests -p 'test_Slovakia2016_physical_DMS_geography_v310.py' -v
+      - name: Original-author 2016 station species PDF fetch and SHA
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v311 results/audit/v311
+          curl -fLfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 150 \
+            -A 'academic Slovak2016 flora original station v311 audit' \
+            'https://cbrb.sav.sk/usr/Janka/docs/BulletinSBS_2016_Majekova-Limanek.pdf' \
+            -o source_original/v311/Majekova_Limanek_2016_19station_source.pdf
+          printf '%s  %s\n' \
+            '99465bdd7ed56985e65b1163f16eca4f702fc821619d84c89bf986d4d3736ae1' \
+            source_original/v311/Majekova_Limanek_2016_19station_source.pdf | sha256sum --check
+          test "$(stat -c%s source_original/v311/Majekova_Limanek_2016_19station_source.pdf)" = '249373'
+      - name: Source-original 318 taxa, 19 station DMS, 14 author named invasives and elevation-conditioned field null
+        run: |
+          python -u scripts/analyze_Slovakia2016_invasive_shared_species_altitude_v311.py \
+            --pdf source_original/v311/Majekova_Limanek_2016_19station_source.pdf \
+            --output results/audit/v311/SK2016_original19stations_author14_invasives_elevation_fixed_frequency.json
+      - name: Required source biological and exact geometry group constraints, no traffic inference
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,math
+          p=Path('results/audit/v311/SK2016_original19stations_author14_invasives_elevation_fixed_frequency.json')
+          j=json.loads(p.read_text())
+          assert j['n_source_stations']==19
+          assert j['n_source_station_pairs_which_are_dependent']==171
+          assert j['n_source_author_invasive_names_explicitly_listed']==14
+          assert j['source_source_historical_railway_plant_field_units']['n_pub_source_total_taxa']==318
+          assert j['source_source_historical_railway_plant_field_units']['n_original_station_taxon_presence']==1763
+          assert abs(j['observed_source_distance_only_coefficients_by_group']['all']+0.0020021839482198068)<1e-10
+          for mode,q in j['null_modes'].items():
+              assert q['n_correlated_technical_null_draws_NOT_independent_field_studies']==398
+              assert q['preserves_original_field_site_richness']
+              assert len(q['original_source_taxon_group_spatial_slopes'])==3
+              if mode=='source_elevation_tertiles':
+                  assert q['preserves_original_taxon_incidence_frequency_within_elevation_tertiles']
+                  assert q['strata_station_counts']==[6,6,7]
+          assert j['actual_2012_2014_passenger_freight_traffic_source_records']==0
+          assert not j['field_plot_nonrail_native_reference']
+          print('v311 SOURCE ORIGINAL fully verified: biology/phylo group metrics/altitude null all PASS')
+          PY
+      - name: Archive only aggregated science and metadata, never publisher original PDF or site x taxon matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v311-authentic-Slovakia2016-19stations-14named-invasives-altitude-source-null
+          path: results/audit/v311/SK2016_original19stations_author14_invasives_elevation_fixed_frequency.json
+          if-no-files-found: warn
