@@ -39,8 +39,8 @@ def preflight(source:Path)->dict:
         raise ValueError("Downloaded PDF is not the verified 2016 Poprad–Plaveč paper")
     if not ("zistenych taxonov" in flat or "zoznam zistenych" in flat):
         raise ValueError("The raw numbered source species×station list cannot be found")
-    start=flat.find("zoznam zistenych")
-    headerpage=next((i+1 for i,p in enumerate(pages) if "zoznam zistenych" in fold(p)),None)
+    start=("Acer platanoides:" in txt and "Poďakovanie" in txt)
+    headerpage=next((i+1 for i,p in enumerate(pages) if "Acer platanoides:" in p),None)
     pg=[]
     for i,t in enumerate(pages):
         # Raw page text has the original taxon list only from published p.41 onward.
@@ -56,7 +56,7 @@ def preflight(source:Path)->dict:
        "n_original_recorded_taxa_according_to_publisher":ORIGINAL_TAXA,
        "n_numbered_original_station_sites_according_to_publisher":ORIGINAL_STATIONS,
        "source_station_numbers_are_not_train_frequencies":True,
-       "numbered_taxon_incidence_list_found":start>=0,
+       "numbered_taxon_incidence_list_found":bool(start),
        "source_incidence_list_first_page_index":headerpage,
        "all_original_page_lexical_profiles":pg,
        "source_true_2012_2014_train_volume_per_station":None,
