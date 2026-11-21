@@ -29,10 +29,10 @@
       "explicit_alien": 25,
       "observed_total_beta": 0.0063092406248036505,
       "observed_alien_beta": 0.00433452741165898,
-      "global_taxon_frequency_alien_excess": 0.0035317957,
+      "global_taxon_frequency_alien_excess": 0.003531729899675648,
       "global_null_alien_technical_upper_rank": 0.12030075,
-      "strict_source_year_track_alien_excess": 0.002461,
-      "strict_null_alien_technical_upper_rank": 0.1704261,
+      "strict_source_year_track_alien_excess": 0.0024612288245042914,
+      "strict_null_alien_technical_upper_rank": 0.17042606516290726,
       "within_line_48_original_traffic_labels_alien_upper": 0.375
     },
     {
@@ -41,10 +41,10 @@
       "explicit_alien": 28,
       "observed_total_beta": 0.008956324360794975,
       "observed_alien_beta": 0.010674501141555132,
-      "global_taxon_frequency_alien_excess": 0.010407,
+      "global_taxon_frequency_alien_excess": 0.010406969914802488,
       "global_null_alien_technical_upper_rank": 0.00501253,
-      "strict_source_year_track_alien_excess": 0.003896,
-      "strict_null_alien_technical_upper_rank": 0.1453634,
+      "strict_source_year_track_alien_excess": 0.003896262171798442,
+      "strict_null_alien_technical_upper_rank": 0.14536340852130325,
       "within_line_48_original_traffic_labels_alien_upper": 0.20833333333333334
     },
     {
@@ -55,12 +55,12 @@
       "observed_alien_beta": 0.01039383080634668,
       "observed_non_explicit_alien_beta": 0.005144604623172389,
       "global_taxon_frequency_all_excess": 0.009503679090164151,
-      "global_taxon_frequency_alien_excess": 0.00967,
+      "global_taxon_frequency_alien_excess": 0.009670159534880016,
       "global_null_alien_technical_upper_rank": 0.0075188,
       "strict_source_year_track_all_excess": -0.00001859410419709738,
-      "strict_source_year_track_alien_excess": 0.003922,
-      "strict_source_year_track_non_explicit_alien_excess": -0.00394,
-      "strict_null_alien_technical_upper_rank": 0.1403509,
+      "strict_source_year_track_alien_excess": 0.003921689556083292,
+      "strict_source_year_track_non_explicit_alien_excess": -0.003940283660280392,
+      "strict_null_alien_technical_upper_rank": 0.14035087719298245,
       "strict_alien_technical_null_2p5_97p5": [
         -0.000846,
         0.012787
