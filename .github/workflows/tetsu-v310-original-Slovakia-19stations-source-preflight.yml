@@ -1,10 +1,12 @@
-name: "v310 source preflight 2016 original Slovak 19-station and 318-taxa railway flora PDF"
+name: "v310 source-authentic Slovak 2016 318 taxa in 19 railway stations original fixed-margin Jaccard"
 on:
   push:
     branches: [research/tetsu-v310-Slovakia19-original-rail-flora-matrix-20261121]
     paths:
       - 'scripts/audit_Slovakia2016_original_19station_318taxa_pdf_preflight_v310.py'
       - 'tests/test_Slovakia2016_original_19station_pdf_source_v310.py'
+      - 'scripts/analyze_Slovakia2016_19station_original_taxon_incidence_v310.py'
+      - 'tests/test_Slovakia2016_19station_source_taxon_incidence_v310.py'
       - '.github/workflows/tetsu-v310-original-Slovakia-19stations-source-preflight.yml'
   workflow_dispatch:
 permissions: {contents: read}
@@ -20,9 +22,11 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - name: Install PDF original vector glyph reader, no OCR
-        run: python -m pip install 'PyMuPDF==1.24.14'
+        run: python -m pip install 'PyMuPDF==1.24.14' 'numpy>=1.26,<3'
       - name: Synthetic original paper consistency QA
-        run: python -m unittest discover -s tests -p 'test_Slovakia2016_original_19station_pdf_source_v310.py' -v
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovakia2016_original_19station_pdf_source_v310.py' -v
+          python -m unittest discover -s tests -p 'test_Slovakia2016_19station_source_taxon_incidence_v310.py' -v
       - name: Download author original 2016 railway paper 19 original sites, 318 taxa
         run: |
           set -euo pipefail
@@ -51,6 +55,23 @@ jobs:
                   print('SOURCE PREVIEW FIRST 950 chars:')
                   print(repr(t[m.start():m.start()+950]))
           d.close()
+          PY
+      - name: Original 318 taxa x 19 stations exact author site-richness validation and constrained site-frequency similarity
+        run: |
+          python -u scripts/analyze_Slovakia2016_19station_original_taxon_incidence_v310.py \
+            --pdf source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf \
+            --out results/audit/v310/Slovakia2016_original_318taxa_19station_rail_beta_fixed_margins.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('results/audit/v310/Slovakia2016_original_318taxa_19station_rail_beta_fixed_margins.json')
+          d=json.loads(p.read_text())
+          assert d["author_published_numbers_validated_from_original_rows"]["n_pub_source_total_taxa"]==318
+          assert d["author_published_numbers_validated_from_original_rows"]["n_author_numbered_rail_stations"]==19
+          assert d["author_published_numbers_validated_from_original_rows"]["nine_original_universal_taxa_strict_source_list_verified"]
+          assert d["source_rail_single_line_taxon_identity_spatial_structure"]["n_dependent_original_station_pairs_NOT_independent"]==171
+          assert d["n_real_original_freight_or_passenger_train_exposure_values"]==0
+          print("Genuine Slovak2016 318 original species × 19 true railway stations QA PASS")
           PY
       - name: Archive only source QA, not original PDF or 318-taxa incidence matrix
         if: always()
