@@ -1,0 +1,77 @@
+{
+  "reference_commit": "5bca2827f1df6d74ea52bbc578e89abe5aff9ca3",
+  "files": [
+    {
+      "study": "CZ39",
+      "path": "cz1.xlsx",
+      "source_url": "https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx",
+      "bytes": 79261,
+      "sha256": "df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06",
+      "verification_source": "https://github.com/zuizui0223/tetsu/blob/5bca2827f1df6d74ea52bbc578e89abe5aff9ca3/scripts/analyze_Czech_2024_rail_station_area_aliens_v108.py"
+    },
+    {
+      "study": "CZ39",
+      "path": "cz2.xlsx",
+      "source_url": "https://preslia.cz/appendix/file?id=540",
+      "bytes": 13533,
+      "sha256": "00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2",
+      "verification_source": "https://github.com/zuizui0223/tetsu/blob/5bca2827f1df6d74ea52bbc578e89abe5aff9ca3/scripts/analyze_Czech_2024_rail_station_area_aliens_v108.py"
+    },
+    {
+      "study": "IT28",
+      "path": "parma.pdf",
+      "source_url": "https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf",
+      "bytes": 763828,
+      "sha256": "c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787",
+      "verification_source": "https://github.com/zuizui0223/tetsu/blob/5bca2827f1df6d74ea52bbc578e89abe5aff9ca3/scripts/validate_Europe_3studies_82stations_original_LEDA_2D_trait_beta_v245.py"
+    },
+    {
+      "study": "HR_BA15",
+      "path": "hrba.pdf",
+      "source_url": "https://hrcak.srce.hr/file/282429",
+      "bytes": 1347646,
+      "sha256": "90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956",
+      "verification_source": "https://github.com/zuizui0223/tetsu/blob/5bca2827f1df6d74ea52bbc578e89abe5aff9ca3/scripts/validate_Europe_3studies_82stations_original_LEDA_2D_trait_beta_v245.py"
+    },
+    {
+      "study": "SI89",
+      "path": "si/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx",
+      "source_url": "https://github.com/zuizui0223/tetsu/actions/runs/43538799032/artifacts/14090917979",
+      "bytes": 401279,
+      "sha256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+      "verification_source": "https://github.com/zuizui0223/tetsu/blob/5bca2827f1df6d74ea52bbc578e89abe5aff9ca3/research/validation_20261117/rail_frequency_sources.py"
+    },
+    {
+      "study": "SI89",
+      "path": "si/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json",
+      "source_url": "https://github.com/zuizui0223/tetsu/actions/runs/43538799032/artifacts/14090917979",
+      "bytes": 1456,
+      "sha256": "c3973ab0bc55740de019b470e1a2768562267d5df3a54c1916962ca112b603d1",
+      "verification_source": "Archive entry checked byte for byte against the SHA-verified Actions archive"
+    },
+    {
+      "study": "Kashmir",
+      "path": "Matrix_plot.xlsx",
+      "source_url": "https://datadryad.org/api/v2/versions/99735/download",
+      "bytes": 122187,
+      "sha256": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474",
+      "verification_source": "https://datadryad.org/api/v2/versions/99735/files"
+    }
+  ],
+  "slovenia_archive_sha256": "f26498d5432b8f90d3cbfe01222748a40a0615bfa4cfd579e426f861e597de39",
+  "kashmir_source": {
+    "doi": "10.5061/dryad.0p2ngf20h",
+    "dryad_version": 99735,
+    "dryad_file": 546003,
+    "earlier_source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/44103312398/job/134108840958",
+    "individual_download_status": {
+      "api": 401,
+      "publisher_link": 403
+    }
+  },
+  "slovenia_publisher_original_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1007%2Fs44473-026-00155-z/MediaObjects/44473_2026_155_MOESM1_ESM.xlsx",
+  "parser_runtime": {
+    "PyMuPDF": "1.24.14",
+    "reason": "Historical original-table extraction and row/station checks; 1.26.6 rejected by inherited guards."
+  }
+}
