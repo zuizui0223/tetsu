@@ -1,0 +1,15 @@
+section_id,from_map_node,to_map_node,through_map_node,year,period_start,period_end,published_all_train_daily_statistic,bbox_left_px,bbox_top_px,bbox_right_px,bbox_bottom_px
+CZ-Q1-01,Kolín,Kutná Hora hl. n.,,2022,2022-01-01,2022-03-31,175,779,539,806,566
+CZ-Q1-01,Kolín,Kutná Hora hl. n.,,2023,2023-01-01,2023-03-31,165,787,543,814,570
+CZ-Q1-02,Kutná Hora hl. n.,Čáslav,,2022,2022-01-01,2022-03-31,165,800,560,831,587
+CZ-Q1-02,Kutná Hora hl. n.,Čáslav,,2023,2023-01-01,2023-03-31,155,808,564,839,590
+CZ-Q1-03,Čáslav,Světlá nad Sázavou,,2022,2022-01-01,2022-03-31,155,823,581,845,682
+CZ-Q1-03,Čáslav,Světlá nad Sázavou,,2023,2023-01-01,2023-03-31,145,831,585,852,683
+CZ-Q1-04,Světlá nad Sázavou,Havlíčkův Brod,,2022,2022-01-01,2022-03-31,175,834,675,879,709
+CZ-Q1-04,Světlá nad Sázavou,Havlíčkův Brod,,2023,2023-01-01,2023-03-31,160,842,677,887,711
+CZ-Q1-05,Havlíčkův Brod,Křižanov,Žďár nad Sázavou,2022,2022-01-01,2022-03-31,155,871,699,1000,788
+CZ-Q1-05,Havlíčkův Brod,Křižanov,Žďár nad Sázavou,2023,2023-01-01,2023-03-31,145,879,701,1006,789
+CZ-Q1-06,Křižanov,Vlkov u Tišnova,,2022,2022-01-01,2022-03-31,150,993,780,1029,806
+CZ-Q1-06,Křižanov,Vlkov u Tišnova,,2023,2023-01-01,2023-03-31,140,999,781,1034,806
+CZ-Q1-07,Vlkov u Tišnova,Tišnov,,2022,2022-01-01,2022-03-31,160,1022,787,1082,806
+CZ-Q1-07,Vlkov u Tišnova,Tišnov,,2023,2023-01-01,2023-03-31,145,1027,787,1087,806
