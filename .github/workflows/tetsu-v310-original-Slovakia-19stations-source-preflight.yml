@@ -1,4 +1,4 @@
-name: "v310 source-authentic Slovak 2016 318 taxa in 19 railway stations original fixed-margin Jaccard"
+name: "v310 source-authentic 318 taxa x 19 Slovak stations index and geographic distance-decay original source"
 on:
   push:
     branches: [research/tetsu-v310-Slovakia19-original-rail-flora-matrix-20261121]
@@ -7,6 +7,8 @@ on:
       - 'tests/test_Slovakia2016_original_19station_pdf_source_v310.py'
       - 'scripts/analyze_Slovakia2016_19station_original_taxon_incidence_v310.py'
       - 'tests/test_Slovakia2016_19station_source_taxon_incidence_v310.py'
+      - 'scripts/analyze_Slovakia2016_19station_original_physical_distance_v310.py'
+      - 'tests/test_Slovakia2016_physical_DMS_geography_v310.py'
       - '.github/workflows/tetsu-v310-original-Slovakia-19stations-source-preflight.yml'
   workflow_dispatch:
 permissions: {contents: read}
@@ -27,6 +29,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_Slovakia2016_original_19station_pdf_source_v310.py' -v
           python -m unittest discover -s tests -p 'test_Slovakia2016_19station_source_taxon_incidence_v310.py' -v
+          python -m unittest discover -s tests -p 'test_Slovakia2016_physical_DMS_geography_v310.py' -v
       - name: Download author original 2016 railway paper 19 original sites, 318 taxa
         run: |
           set -euo pipefail
@@ -72,6 +75,22 @@ jobs:
           assert d["source_rail_single_line_taxon_identity_spatial_structure"]["n_dependent_original_station_pairs_NOT_independent"]==171
           assert d["n_real_original_freight_or_passenger_train_exposure_values"]==0
           print("Genuine Slovak2016 318 original species × 19 true railway stations QA PASS")
+          PY
+      - name: True author original coordinates and geographically measured railway-station species distance decay
+        run: |
+          python -u scripts/analyze_Slovakia2016_19station_original_physical_distance_v310.py \
+            --pdf source_original/v310/BulletinSBS_2016_Majekova-Limanek.pdf \
+            --out results/audit/v310/Slovakia2016_original_true_19station_DMS_geographic_flora_decay.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          q=json.loads(Path('results/audit/v310/Slovakia2016_original_true_19station_DMS_geographic_flora_decay.json').read_text())
+          assert q['original_stations_DMS_true_in_author_source']==19
+          assert q['original_botanical_taxa_strict_original_incidence_qa']==318
+          assert q['n_source_dyads_depend_on_only_19_stations']==171
+          assert q['strict_source_original_19_sites_318_taxa_margins_maintained']
+          assert q['original_freight_and_passenger_train_count_data_not_recorded']
+          print('Original Slovak railway 19 station source geodesic DMS and 318 taxon QA PASS')
           PY
       - name: Archive only source QA, not original PDF or 318-taxa incidence matrix
         if: always()
