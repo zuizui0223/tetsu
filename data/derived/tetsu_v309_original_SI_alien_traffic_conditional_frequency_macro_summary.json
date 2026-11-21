@@ -1,0 +1,86 @@
+{
+  "version": "v309",
+  "original_source_status": "GITHUB_ACTIONS_SUCCESS_FULL_FIRST_PARTY_REPLAY",
+  "run_url": "https://github.com/zuizui0223/tetsu/actions/runs/44847574827",
+  "original_source_aggregate": "https://github.com/zuizui0223/tetsu/actions/runs/44847574827/artifacts/14683651810",
+  "original_derived_json_sha256": "63bd374ab6a1e443838a359809675d301434f98c413bd7dd163057d84f9d3ba8",
+  "source_publisher_botanical_sha256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+  "source_v306_derived_sha256": "5d9cb0ba983d5718c2b25ad2498484e337087ae00f58a1d9e10fe99860725a1e",
+  "sampling": {
+    "original_independent_source_studies": 1,
+    "source_botanical_sites": 89,
+    "original_source_lines": 15,
+    "actual_source_historical_traffic_sites": 27,
+    "actual_source_2020_traffic_segments": 9,
+    "traffic_rail_lines": 5,
+    "intersegment_dyads_sharing_the_same_9_vertices": 36,
+    "botanical_year": "2022-23",
+    "train_year": 2020
+  },
+  "no_urban_covariate_in_v309": true,
+  "outcome": "species-specific contribution to all-taxa Jaccard inter-physical-traffic segment site-pair mean, regressed on pair mean log1p 2020 freight plus log1p geo km",
+  "synthetic_numeric_tests_passed": 5,
+  "n_null_MCMC_draws_per_mode": 398,
+  "source_year_x_single_double_track_occupancy_conditioned": true,
+  "results": [
+    {
+      "zone": "BS",
+      "all_species": 229,
+      "explicit_alien": 25,
+      "observed_total_beta": 0.0063092406248036505,
+      "observed_alien_beta": 0.00433452741165898,
+      "global_taxon_frequency_alien_excess": 0.003531729899675648,
+      "global_null_alien_technical_upper_rank": 0.12030075,
+      "strict_source_year_track_alien_excess": 0.0024612288245042914,
+      "strict_null_alien_technical_upper_rank": 0.17042606516290726,
+      "within_line_48_original_traffic_labels_alien_upper": 0.375
+    },
+    {
+      "zone": "BT",
+      "all_species": 258,
+      "explicit_alien": 28,
+      "observed_total_beta": 0.008956324360794975,
+      "observed_alien_beta": 0.010674501141555132,
+      "global_taxon_frequency_alien_excess": 0.010406969914802488,
+      "global_null_alien_technical_upper_rank": 0.00501253,
+      "strict_source_year_track_alien_excess": 0.003896262171798442,
+      "strict_null_alien_technical_upper_rank": 0.14536340852130325,
+      "within_line_48_original_traffic_labels_alien_upper": 0.20833333333333334
+    },
+    {
+      "zone": "union",
+      "all_species": 285,
+      "explicit_alien": 29,
+      "observed_total_beta": 0.01553843542951907,
+      "observed_alien_beta": 0.01039383080634668,
+      "observed_non_explicit_alien_beta": 0.005144604623172389,
+      "global_taxon_frequency_all_excess": 0.009503679090164151,
+      "global_taxon_frequency_alien_excess": 0.009670159534880016,
+      "global_null_alien_technical_upper_rank": 0.0075188,
+      "strict_source_year_track_all_excess": -0.00001859410419709738,
+      "strict_source_year_track_alien_excess": 0.003921689556083292,
+      "strict_source_year_track_non_explicit_alien_excess": -0.003940283660280392,
+      "strict_null_alien_technical_upper_rank": 0.14035087719298245,
+      "strict_alien_technical_null_2p5_97p5": [
+        -0.000846,
+        0.012787
+      ],
+      "within_line_48_original_traffic_labels_alien_upper": 0.375,
+      "within_line_48_alien_beta_minmax": [
+        0.009944224515793167,
+        0.010847002430791248
+      ]
+    }
+  ],
+  "caveats": [
+    "39/36 pair counts cannot be treated as independent studies; sample is one original Slovenian research program",
+    "Technical 2×199 swap draws correlated; ranks are NOT independent p-values",
+    "Source year×single/double frequency null may overcondition a real ecological response",
+    "Nativeness blank on 249/285 combined taxa is UNKNOWN, not native",
+    "Year 2020 train volumes COVID era precede botanical 2022-23",
+    "Main v309 attribution has NO original urban raster covariate, so cannot claim urban-adjusted species decomposition",
+    "BS and BT are BOTH railway habitats, no true external nonrail local flora",
+    "Only 9 physical traffic segments 5 actual train lines, linewise relabels do not remove between-line differences",
+    "No train seed carriage, wind stress, mowing management, train OD, dispersal or causal sorting has been directly demonstrated"
+  ]
+}

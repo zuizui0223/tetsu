@@ -1,0 +1,94 @@
+name: "v309 source-authentic Slovenia alien shared species freight conditional frequency null"
+on:
+  push:
+    branches: [research/tetsu-v309-SI-alien-vs-background-traffic-null-20261121]
+    paths:
+      - 'scripts/analyze_Slovenia_explicit_alien_traffic_conditional_frequency_null_v309.py'
+      - 'tests/test_Slovenia_explicit_alien_conditional_frequency_null_v309.py'
+      - '.github/workflows/tetsu-v309-original-Slovenia-explicit-alien-traffic-conditional-null.yml'
+  workflow_dispatch:
+permissions: {contents: read, actions: read}
+concurrency:
+  group: tetsu-v309-SI-explicit-alien-source-traffic-null
+  cancel-in-progress: true
+jobs:
+  source-original-SI-alien-versus-species-frequency:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install exact source PDF and numeric dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'pdfplumber==0.11.7'
+      - name: Test Jaccard guild decomposition and year-layout-stratified source frequency conservation
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_explicit_alien_conditional_frequency_null_v309.py' -v
+          python -m unittest discover -s tests -p 'test_Slovenia_traffic_shared_species_v306.py' -v
+      - name: Restore genuine source original Slovenian botanical survey and provenance
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v309/Slovenia
+      - name: Restore frozen independently executed v306 source result as exact baseline
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v306-original-SI-traffic-shared-species-frequency-null
+          run-id: 44746851895
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v309/v306
+      - name: Authenticate original publisher and frozen original biological results SHA
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' source/v309/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            '5d9cb0ba983d5718c2b25ad2498484e337087ae00f58a1d9e10fe99860725a1e' source/v309/v306/v306_source_Slovenia_traffic_shared_species.json \
+            | sha256sum --check
+          test "$(stat -c%s source/v309/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx)" = '401279'
+      - name: Reacquire operator 2023 original physical station route-km PDF
+        run: |
+          set -euo pipefail
+          mkdir -p source/v309/official results/audit/v309
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 20 --max-time 120 \
+            -A 'academic tetsu-v309 source flora-freight/1.0' \
+            'https://infrastruktura.sz.si/wp-content/uploads/2023/02/NS_2023_1.2_Annex_2B_Stations.pdf' \
+            -o source/v309/official/NS_2023_1.2_Annex_2B_Stations.pdf
+          test "$(stat -c%s source/v309/official/NS_2023_1.2_Annex_2B_Stations.pdf)" -gt 50000
+      - name: Run original explicit-alien source traffic result against constrained year-layout frequency null
+        run: |
+          python -u scripts/analyze_Slovenia_explicit_alien_traffic_conditional_frequency_null_v309.py \
+            --source-xlsx source/v309/Slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v309/Slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --station-pdf source/v309/official/NS_2023_1.2_Annex_2B_Stations.pdf \
+            --v306-source source/v309/v306/v306_source_Slovenia_traffic_shared_species.json \
+            --output results/audit/v309/Slovenia_original_explicit_alien_traffic_strict_year_layout_frequency_null.json
+      - name: Hard gate exact source support, decomposition, fixed year-layout source margins and 48 traffic relabels
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          x=json.loads(Path('results/audit/v309/Slovenia_original_explicit_alien_traffic_strict_year_layout_frequency_null.json').read_text())
+          assert (x['n_original_botanical_sites'],x['n_sites_with_true_official_traffic'],x['n_true_national_2020_traffic_segments'],x['n_dependent_dyads_NOT_independent'])==(89,27,9,36)
+          assert len(x['zones'])==3
+          for zone,v in x['zones'].items():
+              assert v['original_v306_source_and_technical_full_taxa_exact_replay']
+              q=v['real_source_shared_species_group_freight_slopes']
+              assert math.isclose(q['all'],q['explicit_alien']+q['not_explicit_alien'],abs_tol=1e-10)
+              assert v['source_2020_official_48_within_line_freight_reassignments_EXPLICIT_ALIEN']['n_permuted_traffic_assignments_within_true_lines']==48
+              for mode,z in v['source_technical_taxon_incidence_margin_nulls'].items():
+                  assert z['n_correlated_technical_source_draws_NOT_field_studies']==398
+                  k=z['source_guild_coefficient_results']
+                  assert math.isclose(k['all']['actual_minus_source_NULL'],k['explicit_alien']['actual_minus_source_NULL']+k['not_explicit_alien']['actual_minus_source_NULL'],abs_tol=1e-10)
+                  assert z['fixed_original_taxon_89_site_occupancy']
+                  if mode=='source_year_track_layout':assert z['fixed_taxon_source_year_x_track_layout_frequency']
+          print('v309 authentic source fixed taxon frequency and exact alien Jaccard decomposition PASS')
+          PY
+      - name: Archive only original-source aggregate, not raw species site/GPS/traffic vectors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v309-real-SI-original-alien-shared-species-freight-conditional-frequency-null
+          path: results/audit/v309/Slovenia_original_explicit_alien_traffic_strict_year_layout_frequency_null.json
+          if-no-files-found: warn
