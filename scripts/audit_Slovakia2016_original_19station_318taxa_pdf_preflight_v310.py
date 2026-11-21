@@ -22,7 +22,7 @@ def fold(s):
 
 def clean_text(t):
     t=t.replace("\u00ad","").replace("\xa0"," ").replace("\u200b","")
-    t=re.sub(r"(?<=[a-zA-ZÀ-ž])-\\s*\\n\\s*(?=[a-zA-ZÀ-ž])","",t)
+    t=re.sub(r"(?<=[a-zA-ZÀ-ž])-\s*\n\s*(?=[a-zA-ZÀ-ž])","",t)
     return t
 
 def preflight(source:Path)->dict:
