@@ -4,6 +4,7 @@ on:
     branches: [research/tetsu-v317-global-rail-verge-meta-original-eligible-20261122]
     paths:
       - 'scripts/audit_Mell2024_original_316_study_screening_railway_v317.py'
+      - 'scripts/identify_Mell2024_railway_studies_316_source_v317.py'
       - '.github/workflows/tetsu-v317-Mell-316-original-study-matrix.yml'
   workflow_dispatch:
 permissions: {contents: read}
@@ -32,6 +33,20 @@ jobs:
           python -u scripts/audit_Mell2024_original_316_study_screening_railway_v317.py \
             --xlsx source_original/v317/13750_2024_328_MOESM5_ESM.xlsx \
             --out results/audit/v317/Mell2024_original_316_primary_screened_studies_railway_source.json
+      - name: Identify exact original 316 included study IDs with Railway LTI, flora reference and risk
+        run: |
+          python -u scripts/identify_Mell2024_railway_studies_316_source_v317.py \
+            --xlsx source_original/v317/13750_2024_328_MOESM5_ESM.xlsx \
+            --out results/audit/v317/Mell2024_original_included_railway_study_identity_and_designs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('results/audit/v317/Mell2024_original_included_railway_study_identity_and_designs.json').read_text())
+          assert x['source_file5_original_study_rows']==316
+          assert x['n_unique_original_review_document_IDs_railway_LTI']>=4
+          assert x['no_railway_meta_effect_pooled']
+          print('v317 railway primary studies ID identity original source review verified')
+          PY
       - name: Keep explicit non-meta-effect source gate
         run: |
           python - <<'PY'
@@ -50,5 +65,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tetsu-v317-Mell2024-original-316-study-source-railway-scope
-          path: results/audit/v317/Mell2024_original_316_primary_screened_studies_railway_source.json
+          path: results/audit/v317/*railway*.json
           if-no-files-found: warn
