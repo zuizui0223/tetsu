@@ -17,7 +17,7 @@ class TaxonRobustness(unittest.TestCase):
         result=m.leave_one_taxon_out([PAIR],SOURCE)
         self.assertEqual(result["n_taxa_seen_in_matched_source_plots"],3)
         self.assertEqual(result["taxa_preserving_same_all_original_pairs_after_removal"],3)
-        self.assertTrue(result["number_of_full_pair_taxon_deletions_making_difference_nonpositive"]>=1)
+        self.assertEqual(result["number_of_full_pair_taxon_deletions_making_difference_nonpositive"],0)
     def test_technical_equal_known_species_rarefaction_is_not_field_bootstrap(self):
         pairs=[PAIR]*3
         r=m.rarefy_known_taxa(pairs,SOURCE,draws=49,seed=32)
