@@ -1,0 +1,54 @@
+name: "v324 original MIREN road EIVE genus position-vs-width decomposition"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_MIREN_EIVE_genus_position_width_v324.py'
+      - 'tests/test_MIREN_EIVE_genus_position_width_v324.py'
+      - '.github/workflows/tetsu-v324-MIREN-road-EIVE-genus-position-width.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-MIREN-road-genera-not-railway:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test regional road hierarchy and additive taxon decomposition
+        run: python -m unittest discover -s tests -p 'test_MIREN_EIVE_genus_position_width_v324.py' -v
+      - name: Read source-authenticated MIREN 2007-23 original roadside/inland plant plots
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/MIREN98
+      - name: Acquire verified EIVE 1.0 original temperature niche position and width table
+        run: |
+          set -euo pipefail
+          mkdir -p source/EIVE
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            'source/EIVE/EIVE_Paper_1.0_SM_08.xlsx' | md5sum --check
+      - name: Run original-source 4-region road-versus-interior genus thermal and width decomposition
+        run: |
+          python -u scripts/analyze_MIREN_EIVE_genus_position_width_v324.py \
+            --miren-csv source/MIREN98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --eive-xlsx source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v324_MIREN_4Euro_regions_road_EIVE_genus_width_position.json
+      - name: Archive aggregate only; no source plot data republished
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v324-real-MIREN-road-EIVE-genus-thermal-width-aggregate
+          path: results/audit/v324_MIREN_4Euro_regions_road_EIVE_genus_width_position.json
+          if-no-files-found: warn
