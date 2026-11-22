@@ -1,0 +1,114 @@
+name: "v316 SOURCE Kashmir 31 plot-level paired thermal affinity vs actual altitude"
+on:
+  push:
+    branches: [research/tetsu-v316-Kashmir-paired-altitude-thermal-gradient-20261122]
+    paths:
+      - 'scripts/audit_Kashmir_original_site_elevation_metadata_v316.py'
+      - 'scripts/analyze_Kashmir_paired_thermal_altitude_v316.py'
+      - 'scripts/validate_Kashmir_paired_thermal_elevation_cells_v316.py'
+      - 'tests/test_Kashmir_original_paired_altitude_v316.py'
+      - '.github/workflows/tetsu-v316-Kashmir-original-site-elevation.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v316-source-original-Kashmir-31site-altitude
+  cancel-in-progress: true
+jobs:
+  original-kashmir-site-altitude-source-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install exact original workbook audit dependencies
+        run: python -m pip install 'pandas==2.2.3' 'openpyxl==3.1.5' 'scipy==1.16.3'
+      - name: Get original public Dryad version and verify exact prior source SHA256
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v316 results/audit/v316
+          curl -fL --retry 4 --retry-delay 4 --connect-timeout 20 --max-time 180 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source_original/v316/Dryad_0p2ngf20h_original_99735.zip
+          # Zip container bytes may change after re-packaging; only the exact original
+          # published XLSX content hash is an acceptance gate. Audit archive separately.
+          sha256sum source_original/v316/Dryad_0p2ngf20h_original_99735.zip
+          file source_original/v316/Dryad_0p2ngf20h_original_99735.zip
+          python - <<'PY'
+          import zipfile,hashlib
+          from pathlib import Path
+          d=Path('source_original/v316')
+          with zipfile.ZipFile(d/'Dryad_0p2ngf20h_original_99735.zip') as z:
+              candidates=[name for name in z.namelist() if name.endswith('/Matrix_plot.xlsx') or name=='Matrix_plot.xlsx']
+              assert len(candidates)==1, f'Genuine original book identification invalid: {candidates}'
+              content=z.read(candidates[0])
+          target=d/'Matrix_plot.xlsx'
+          target.write_bytes(content)
+          assert hashlib.sha256(content).hexdigest()=='529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474'
+          print('ORIGINAL publisher Dryad 2014 & 2017 physical quadrat workbook SHA256 verified')
+          PY
+      - name: First-party original 2014 Kashmir altitude metadata availability gate
+        run: |
+          python -u scripts/audit_Kashmir_original_site_elevation_metadata_v316.py \
+            --xlsx source_original/v316/Matrix_plot.xlsx \
+            --output results/audit/v316/Kashmir_original_2014_2017_plot_metadata_31site_altitude_QA.json
+      - name: Test source site-level ecological model and shared-taxa mask before full original data replay
+        run: |
+          python -m unittest discover -s tests -p 'test_Kashmir_original_paired_altitude_v316.py' -v
+          python -m unittest discover -s tests -p 'test_source_thermal_affinity_v315.py' -v
+          python -m unittest discover -s tests -p 'test_thermal_affinity_reference_v315.py' -v
+      - name: Download checksum-pinned first-party Zenodo thermal indicator workbooks
+        run: |
+          set -euo pipefail
+          curl -fL --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/api/records/7427088/files/Indicator.values-tables-2022-11-07-Zenodo.v2.xlsx/content' \
+            -o source_original/v316/tichy_2023_zenodo_v2.xlsx
+          curl -fL --retry 4 --retry-delay 3 --connect-timeout 20 --max-time 180 \
+            'https://zenodo.org/api/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx/content' \
+            -o source_original/v316/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            'b3fa7c3a6e9d356e52a45472549f807967bd0c3189e58e7e8a22e0389c29cc4e' source_original/v316/tichy_2023_zenodo_v2.xlsx \
+            '9551b585ba13dfe3fddbd2287f65fc98ac9f4ec5f80b9ae6f6b985bed73fb4a6' source_original/v316/EIVE_Paper_1.0_SM_08.xlsx | sha256sum --check
+      - name: Reproduce original Kashmir paired v315 values and test 31 transects against altitude with blocked source permutations
+        run: |
+          python -u scripts/analyze_Kashmir_paired_thermal_altitude_v316.py \
+            --data source_original/v316 \
+            --traits source_original/v316 \
+            --baseline data/derived/v315_thermal_affinity_reference.json \
+            --output results/audit/v316/Kashmir_2014_2017_original_paired_thermal_altitude_31transects.json
+      - name: Independently read original openpyxl 248 quadrats and verify both years and both thermal indices
+        run: |
+          python -u scripts/validate_Kashmir_paired_thermal_elevation_cells_v316.py \
+            --source source_original/v316/Matrix_plot.xlsx \
+            --traits source_original/v316 \
+            --result results/audit/v316/Kashmir_2014_2017_original_paired_thermal_altitude_31transects.json \
+            --output results/audit/v316/Kashmir_paired_thermal_altitude_source_independent_validation.json
+      - name: Exact publisher and source-site ecology hard gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/audit/v316/Kashmir_2014_2017_original_paired_thermal_altitude_31transects.json').read_text())
+          assert d['n_publisher_original_transects']==31
+          assert (d['original_station_n'],d['original_between_n'])==(16,15)
+          assert d['same_original_source_altitude_all_2014_2017_plots']
+          assert d['v315_original_16_station_baseline_replayed']['tichy_numeric']['strict_legacy_replay_passed']
+          assert d['v315_original_16_station_baseline_replayed']['eive_all']['strict_legacy_replay_passed']
+          for year in ('main_2014','year_2017_sensitivity'):
+            for scenario,v in d[year].items():
+                assert 25<=v['original_rows_after_require_all_4_source_plots']<=31
+                assert v['model']['n_transects']<=v['original_rows_after_require_all_4_source_plots']
+                if v['model']['estimable']:
+                    assert v['permutation']['n_permutations']==4999
+                    assert v['permutation']['n_original_transects']==v['model']['n_transects']
+                    assert v['permutation']['whole_site_LOO_n']==v['model']['n_transects']
+          assert not d['local_source_climate_temperature_measured']
+          print('v316 source-authentic 31 original transects, two fixed-scale indices and cluster permutation QA PASS')
+          PY
+      - name: Archive aggregate metadata only and never original site IDs or coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v316-original-Kashmir-31transect-paired-thermal-altitude-reference
+          path: results/audit/v316/
+          if-no-files-found: warn
