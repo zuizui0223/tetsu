@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/audit_Delbaere_2015_FR_BE_original_24site_railway_flora_report_v320.py'
       - 'scripts/audit_Delbaere_2015_six_railway_site_chapter_flora_source_v320.py'
+      - 'scripts/audit_Delbaere_2015_railway_six_flora_narrative_source_v320.py'
       - '.github/workflows/tetsu-v320-original-Likoto-24-site-full-PDF.yml'
   workflow_dispatch:
 permissions: {contents: read}
@@ -51,6 +52,20 @@ jobs:
           assert not j['no_true_matched_railway_vs_local_nonrail_effect_estimated'] is False
           assert j['n_verified_railway_site_by_taxon_incidence']==0
           print('Exact source six railway locality page/glyph audit PASS; no ecological pseudo-pairs')
+          PY
+      - name: Distinguish author flora narrative subsections from complete species-by-original-plot evidence in all six railway chapters
+        run: |
+          python -u scripts/audit_Delbaere_2015_railway_six_flora_narrative_source_v320.py \
+            --pdf source_original/v320/En_Marge_2015_full_original_final_report.pdf \
+            --out results/audit/v320/Delbaere2015_six_original_railway_chapter_floristic_text_support.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('results/audit/v320/Delbaere2015_six_original_railway_chapter_floristic_text_support.json').read_text())
+          assert x['source_report_original_railway_site_chapter_count_checked']==6
+          assert x['eligible_original_rail_vs_local_nature_plant_plot_pairs']==0
+          assert x['do_not_call_0_verified_pairs_0_actual_pairs_in_source']
+          print('Original railway six source chapters authentic; no fabricated original species identity incidence')
           PY
       - name: Original source study and matched-control identity hard checks
         run: |
