@@ -1,0 +1,69 @@
+name: "v317 source-authentic 316-study Mell2024 inclusion matrix: original railway primary-study search"
+on:
+  push:
+    branches: [research/tetsu-v317-global-rail-verge-meta-original-eligible-20261122]
+    paths:
+      - 'scripts/audit_Mell2024_original_316_study_screening_railway_v317.py'
+      - 'scripts/identify_Mell2024_railway_studies_316_source_v317.py'
+      - '.github/workflows/tetsu-v317-Mell-316-original-study-matrix.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v317-original-full-316-source-inclusion-matrix
+  cancel-in-progress: true
+jobs:
+  Mell2024-source-316-primary-publications:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Retrieve source author's original full 316 study screening book Additional file 5
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v317 results/audit/v317
+          curl -fL --retry 4 --retry-all-errors --retry-delay 3 --connect-timeout 20 --max-time 150 \
+            'https://media.springernature.com/original/springer-static/esm/art%3A10.1186%2Fs13750-024-00328-3/MediaObjects/13750_2024_328_MOESM5_ESM.xlsx' \
+            -o source_original/v317/13750_2024_328_MOESM5_ESM.xlsx
+          test "$(stat -c%s source_original/v317/13750_2024_328_MOESM5_ESM.xlsx)" -gt 250000
+          sha256sum source_original/v317/13750_2024_328_MOESM5_ESM.xlsx
+      - name: Audit publisher 316 screening study source, rail-only rows and original bias metadata
+        run: |
+          python -u scripts/audit_Mell2024_original_316_study_screening_railway_v317.py \
+            --xlsx source_original/v317/13750_2024_328_MOESM5_ESM.xlsx \
+            --out results/audit/v317/Mell2024_original_316_primary_screened_studies_railway_source.json
+      - name: Identify exact original 316 included study IDs with Railway LTI, flora reference and risk
+        run: |
+          python -u scripts/identify_Mell2024_railway_studies_316_source_v317.py \
+            --xlsx source_original/v317/13750_2024_328_MOESM5_ESM.xlsx \
+            --out results/audit/v317/Mell2024_original_included_railway_study_identity_and_designs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('results/audit/v317/Mell2024_original_included_railway_study_identity_and_designs.json').read_text())
+          assert x['source_file5_original_study_rows']==316
+          assert x['n_unique_original_review_document_IDs_railway_LTI']>=4
+          assert x['no_railway_meta_effect_pooled']
+          print('v317 railway primary studies ID identity original source review verified')
+          PY
+      - name: Keep explicit non-meta-effect source gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('results/audit/v317/Mell2024_original_316_primary_screened_studies_railway_source.json')
+          j=json.loads(p.read_text())
+          assert j['source_screening_eligibility_not_meta_effects']
+          assert j['source_all_study_sheet_structure']
+          assert j['original_XLSX_sha_and_structure']['bytes']>250000
+          assert j['source_taxon_site_or_GPS_exported'] is False
+          print('v317 original source all study screening, no synthetic new railway effects')
+          PY
+      - name: Archive only original source study metadata QAs not source 316-study spreadsheet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v317-Mell2024-original-316-study-source-railway-scope
+          path: results/audit/v317/*railway*.json
+          if-no-files-found: warn
