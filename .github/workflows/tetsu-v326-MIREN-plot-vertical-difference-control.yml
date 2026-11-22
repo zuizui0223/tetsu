@@ -1,0 +1,54 @@
+name: "v326 original MIREN plot vertical elevation difference thermal confound"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_original_MIREN_plot_altitude_confounds_v326.py'
+      - 'tests/test_original_MIREN_plot_altitude_confounds_v326.py'
+      - '.github/workflows/tetsu-v326-MIREN-plot-vertical-difference-control.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-road-plot-elevation-confounding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source elevation joins and filtering without EIVE outcome selection
+        run: python -m unittest discover -s tests -p 'test_original_MIREN_plot_altitude_confounds_v326.py' -v
+      - name: Read original authentic MIREN road surveys and actual Plot1/Plot3 elevations
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/MIREN98
+      - name: Get independent EIVE original thermal ecology traits
+        run: |
+          set -euo pipefail
+          mkdir -p source/EIVE
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            'source/EIVE/EIVE_Paper_1.0_SM_08.xlsx' | md5sum --check
+      - name: Recompute real MIREN roadside-inland EIVE thermal difference at controlled physical plot altitude displacement
+        run: |
+          python -u scripts/analyze_original_MIREN_plot_altitude_confounds_v326.py \
+            --miren-csv source/MIREN98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --eive-xlsx source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v326_MIREN_4Euro_road_plot_elevation_difference_EIVE_sensitivity.json
+      - name: Archive source-authenticated aggregates only, not plot elevation addresses or original species rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v326-original-MIREN-road-plot-elevation-confound-audit
+          path: results/audit/v326_MIREN_4Euro_road_plot_elevation_difference_EIVE_sensitivity.json
+          if-no-files-found: warn
