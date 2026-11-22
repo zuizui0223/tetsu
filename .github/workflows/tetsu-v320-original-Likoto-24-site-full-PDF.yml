@@ -1,0 +1,58 @@
+name: "v320 authentic original full 2015 FR-BE Likoto 24 infrastructure-verge sites railway flora source audit"
+on:
+  push:
+    branches: [research/tetsu-v320-Likoto-2015-FRBE-24sites-original-source-20261122]
+    paths:
+      - 'scripts/audit_Delbaere_2015_FR_BE_original_24site_railway_flora_report_v320.py'
+      - '.github/workflows/tetsu-v320-original-Likoto-24-site-full-PDF.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v320-full-delbaere-2015-original-24-sites
+  cancel-in-progress: true
+jobs:
+  original-French-Belgian-report-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install source original PDF renderer, no OCR
+        run: python -m pip install 'PyMuPDF==1.24.14'
+      - name: Reacquire original public full French-Belgian report (not partial last chapter)
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v320 results/audit/v320
+          curl -fLsS --retry 4 --retry-all-errors --retry-delay 4 --connect-timeout 20 --max-time 280 \
+            -A 'Academic original ecological scientific report source audit' \
+            'https://ittecop.fr/images/docman-files/docman-files/rapport-final/2008/RF_2008_En_marge.pdf' \
+            -o source_original/v320/En_Marge_2015_full_original_final_report.pdf
+          test "$(head -c 5 source_original/v320/En_Marge_2015_full_original_final_report.pdf)" = '%PDF-'
+          test "$(stat -c%s source_original/v320/En_Marge_2015_full_original_final_report.pdf)" -gt 250000
+          sha256sum source_original/v320/En_Marge_2015_full_original_final_report.pdf
+      - name: Scan original physical report site headings, rail habitats and flora field-data support
+        run: |
+          python -u scripts/audit_Delbaere_2015_FR_BE_original_24site_railway_flora_report_v320.py \
+            --pdf source_original/v320/En_Marge_2015_full_original_final_report.pdf \
+            --output results/audit/v320/Delbaere2015_full_24_infrastructure_sites_original_railway_biology_support.json
+      - name: Original source study and matched-control identity hard checks
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          q=json.loads(Path('results/audit/v320/Delbaere2015_full_24_infrastructure_sites_original_railway_biology_support.json').read_text())
+          assert q['source_original_project_infrastructure_sites_in_TOC']==24
+          assert q['source_railway_site_candidate_count_FROM_TOC_NOT_PLOT_MATRIX']==6
+          assert q['source_title_and_cross_border_region_authenticated']
+          assert q['approved_independent_railway_vs_local_control_plant_pairs']==0
+          assert q['no_new_phylogenetic_or_rail_biodiversity_effect_computed']
+          print('v320 original FR BE site-list source QA passed; no synthetic rail vs nature control')
+          PY
+      - name: Archive aggregate original source eligibility, never full PDF or original plot species lists
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v320-FRBE-Likoto-full-2015-original-report-source-site-support
+          path: results/audit/v320/
+          if-no-files-found: warn
