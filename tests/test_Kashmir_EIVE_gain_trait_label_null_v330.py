@@ -2,7 +2,7 @@
 import sys,unittest,random
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
-import test_Kashmir_EIVE_gain_trait_label_null_v330 as m
+import analyze_Kashmir_EIVE_gain_trait_label_null_v330 as m
 
 NAMES=["genus alpha","genus beta","genus gamma","other delta"]
 EIVE={s:{"position":float(i+3),"width":float(i+1),"systems":3}
