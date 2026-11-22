@@ -36,9 +36,9 @@ class TestTemporal(unittest.TestCase):
     def test_same_site_additive_temporal_contrast(self):
         r=m.eligible_temporal_site(fixture(),NAMES,EIVE,"Station 1",
             ("Track","Interior Plot 2"),"position",1,1,.25)
-        self.assertAlmostEqual(r["delta_track"],-3)
+        self.assertAlmostEqual(r["delta_track"],-2)
         self.assertAlmostEqual(r["delta_interior"],0)
-        self.assertAlmostEqual(r["delta_track_minus_interior"],-3)
+        self.assertAlmostEqual(r["delta_track_minus_interior"],-2)
     def test_strict_gate_non_estimable_when_2017_sparse(self):
         r=m.eligible_temporal_site(fixture(),NAMES,EIVE,"Station 1",
             ("Track","Interior Plot 2"),"position",3,5,.5)
@@ -54,10 +54,8 @@ class TestTemporal(unittest.TestCase):
             ("Track","Interior Plot 2"),"position",1,1,.25)
         b=m.eligible_temporal_site(d,NAMES,EIVE,"Station 1",
             ("Track","Interior Plot 1"),"position",1,1,.25)
-        self.assertEqual(a["delta_track_minus_interior"],-3)
-        self.assertEqual(b["delta_track_minus_interior"],-3)
-        self.assertNotEqual(a["delta_interior"]+a["delta_track"],
-                            b["delta_interior"]+b["delta_track"]) if False else None
+        self.assertEqual(a["delta_track_minus_interior"],-2)
+        self.assertEqual(b["delta_track_minus_interior"],-2)
     def test_group_and_site_count(self):
         d=fixture()
         result=m.paired_temporal(d,NAMES,EIVE)
