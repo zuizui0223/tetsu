@@ -4,7 +4,7 @@ on:
     branches:
       - research/tetsu-typical-species-climate-hypotheses-20261122
     paths:
-      - 'scripts/test_Kashmir_EIVE_gain_trait_label_null_v330.py'
+      - 'scripts/analyze_Kashmir_EIVE_gain_trait_label_null_v330.py'
       - 'tests/test_Kashmir_EIVE_gain_trait_label_null_v330.py'
       - '.github/workflows/tetsu-v330-Kashmir-temporal-EIVE-trait-shuffle.yml'
   workflow_dispatch:
@@ -53,7 +53,7 @@ jobs:
             source/EIVE/EIVE_Paper_1.0_SM_08.xlsx | md5sum --check
       - name: Original two-source trait-label fixed site-year conditional null, including genus-constrained controls
         run: |
-          python -u scripts/test_Kashmir_EIVE_gain_trait_label_null_v330.py \
+          python -u scripts/analyze_Kashmir_EIVE_gain_trait_label_null_v330.py \
             --kashmir-original source/Kashmir/Matrix_plot.xlsx \
             --eive-original source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
             --output results/audit/v330_Kashmir_source_EIVE_gain_vs_rail_genus_shuffles.json
