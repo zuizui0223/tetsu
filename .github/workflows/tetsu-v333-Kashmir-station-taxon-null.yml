@@ -1,0 +1,65 @@
+name: "v333 original Kashmir matched station-between thermal taxon sensitivity and genus null"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_Kashmir_EIVE_matched_station_taxon_null_v333.py'
+      - 'tests/test_Kashmir_EIVE_matched_station_taxon_null_v333.py'
+      - '.github/workflows/tetsu-v333-Kashmir-station-taxon-null.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-Kashmir-source-fixed-station-between-traits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install publisher read-only XLSX and deterministic v332 matching solver
+        run: python -m pip install 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'scipy>=1.13,<2'
+      - name: Run eight source-matched taxon-omission and trait randomization tests
+        run: python -m unittest discover -s tests -p 'test_Kashmir_EIVE_matched_station_taxon_null_v333.py' -v
+      - name: Verify Kashmir authentic Dryad original 2014-2017 plant plots
+        run: |
+          set -euo pipefail
+          mkdir -p source/Kashmir source/EIVE results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/Kashmir/official_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import shutil,zipfile
+          with zipfile.ZipFile('source/Kashmir/official_99735.zip') as z:
+              members=[f for f in z.infolist() if not f.is_dir() and f.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(members)!=1:raise ValueError('Original Dryad workbook missing or duplicated')
+              with z.open(members[0]) as src,Path('source/Kashmir/Matrix_plot.xlsx').open('wb') as dst:
+                  shutil.copyfileobj(src,dst)
+          PY
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/Kashmir/Matrix_plot.xlsx | sha256sum --check
+      - name: Authenticate independent EIVE temperature traits SM08
+        run: |
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            source/EIVE/EIVE_Paper_1.0_SM_08.xlsx | md5sum --check
+      - name: Exact original station-between matched taxa, EIVE conditional null, leaveout, rarefaction
+        run: |
+          python -u scripts/analyze_Kashmir_EIVE_matched_station_taxon_null_v333.py \
+            --kashmir-original source/Kashmir/Matrix_plot.xlsx \
+            --eive-original source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v333_Kashmir_station_between_taxon_null_and_richness.json
+      - name: Archive derived-only source ecological summary, not original GPS or site×taxon table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v333-original-Kashmir-station-thermal-taxon-robustness
+          path: results/audit/v333_Kashmir_station_between_taxon_null_and_richness.json
+          if-no-files-found: warn
