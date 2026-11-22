@@ -5,6 +5,7 @@ on:
     paths:
       - 'scripts/audit_Kashmir_original_site_elevation_metadata_v316.py'
       - 'scripts/analyze_Kashmir_paired_thermal_altitude_v316.py'
+      - 'scripts/validate_Kashmir_paired_thermal_elevation_cells_v316.py'
       - 'tests/test_Kashmir_original_paired_altitude_v316.py'
       - '.github/workflows/tetsu-v316-Kashmir-original-site-elevation.yml'
   workflow_dispatch:
@@ -75,6 +76,13 @@ jobs:
             --traits source_original/v316 \
             --baseline data/derived/v315_thermal_affinity_reference.json \
             --output results/audit/v316/Kashmir_2014_2017_original_paired_thermal_altitude_31transects.json
+      - name: Independently read original openpyxl 248 quadrats and verify both years and both thermal indices
+        run: |
+          python -u scripts/validate_Kashmir_paired_thermal_elevation_cells_v316.py \
+            --source source_original/v316/Matrix_plot.xlsx \
+            --traits source_original/v316 \
+            --result results/audit/v316/Kashmir_2014_2017_original_paired_thermal_altitude_31transects.json \
+            --output results/audit/v316/Kashmir_paired_thermal_altitude_source_independent_validation.json
       - name: Exact publisher and source-site ecology hard gates
         run: |
           python - <<'PY'
