@@ -70,10 +70,10 @@ class TestTruePairedThermalAltitude(unittest.TestCase):
                     "C species":"C species","C species agg.":None}.get(n)
         # An unresolved source name "C species agg." masks even its
         # valid counterpart, and does so in every habitat and year.
-        sets={(2014,"S","Track"):{"A species","C species agg."},
-              (2014,"S","Embankment"):{"B species"},
-              (2014,"S","Interior Plot 1"):{"B species","C species"},
-              (2014,"S","Interior Plot 2"):{"A species"}}
+        sets={("S",2014,"Track"):{"A species","C species agg."},
+              ("S",2014,"Embankment"):{"B species"},
+              ("S",2014,"Interior Plot 1"):{"B species","C species"},
+              ("S",2014,"Interior Plot 2"):{"A species"}}
         out=build_normalized_plot_pairs(sets,norm)
         self.assertEqual(out[2014]["S"],({"A species","B species"},{"A species","B species"}))
     def test_numerical_thermometer_is_not_the_trait_index(self):
