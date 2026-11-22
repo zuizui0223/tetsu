@@ -57,7 +57,25 @@ def audit(path:Path):
     report=[x for x in items if "rapport final" in x["published_link_text"].casefold()
                           and x["official_same_host"]]
     if not annex or not report:
-        raise ValueError("Project report and Annexes RF must both have official source links")
+        snippets=[text[max(0,m.start()-450):min(len(text),m.end()+700)]
+                  for m in list(re.finditer(r"annexes\\s*rf|rapport\\s+final",text,re.I))[:12]]
+        return {
+            "version":"v321_ittecop_project_link_diagnosis",
+            "original_project_url":PROJECT,
+            "project_html_sha256":hashlib.sha256(body).hexdigest(),
+            "project_html_bytes":len(body),
+            "source_is_original_ittecop_project_page":True,
+            "source_link_status":"OFFICIAL_HTML_PAGE_HAS_VISIBLE_LABEL_BUT_ANCHOR_MISSING_OR_NONOFFICIAL",
+            "source_exact_official_annex_links":annex,
+            "source_exact_official_main_report_links":report,
+            "source_all_related_link_targets":items[:35],
+            "source_annex_label_html_contexts":snippets,
+            "n_original_html_anchor_tags":len(p.links),
+            "source_all_anchor_href_near_annex_label":[x for x in p.links
+                if "annexe" in (x.get("href","")+" "+x.get("text","")).lower()][:25],
+            "appendix_plant_by_rail_matrix_NOT_yet_verified":True,
+            "no_new_independent_rail_comparison_claimed":True
+        }
     return {
        "version":"v321_ittecop_project_link_diagnosis",
        "original_project_url":PROJECT,
