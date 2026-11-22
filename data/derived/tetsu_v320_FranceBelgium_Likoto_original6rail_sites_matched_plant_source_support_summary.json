@@ -117,7 +117,7 @@
   "n_source_verified_same_area_railway_vs_local_matrix_species_biological_plot_pairs": 0,
   "n_source_verified_railway_species_by_plot_incidence_cells": 0,
   "no_new_railway_climate_or_transport_effect_estimated": true,
-  "n_original_published_studies_added": 1,
+  "n_original_published_studies_added": 0,
   "source_original_GitHub_actions_full_420page_audit": "https://github.com/zuizui0223/tetsu/actions/runs/45013059824",
   "source_original_aggregate_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/45013059824/artifacts/14750288502",
   "raw_study_taxon_by_plot_missing": "Need original plot IDs, rail or surrounding matrix status, survey date/season, plot area, species presence and cover, and field survey provenance from original botany team at Conservatoire botanique national de Bailleul",
@@ -129,5 +129,7 @@
     "Other highway/canal sites are not same-site nonrail controls for the railway site locations.",
     "Railway source type is not a measured freight or passenger traffic exposure, not a train seed dispersal study.",
     "No raw plot GPS, original full PDF or species-by-plot workbook was redistributed."
-  ]
+  ],
+  "n_previously_identified_publications_now_source_audited": 1,
+  "original_report_is_same_program_identified_in_v317_and_not_new_independent_study": true
 }
