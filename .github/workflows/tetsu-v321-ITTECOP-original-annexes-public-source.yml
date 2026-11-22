@@ -1,0 +1,87 @@
+name: "v321 original ITTECOP En marge botanical Annexes RF public publisher attachment discovery"
+on:
+  push:
+    branches: [research/tetsu-v321-FRBE-EnMarge-original-annex-botanical-plots-20261122]
+    paths:
+      - 'scripts/audit_ITTECOP_EnMarge_2015_Annexes_RF_links_v321.py'
+      - '.github/workflows/tetsu-v321-ITTECOP-original-annexes-public-source.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v321-ITTECOP-2015-AnnexesRF-botanical-original
+  cancel-in-progress: true
+jobs:
+  original-Annexes-RF-source-discovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Fetch original government project page and preserve final source URL
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v321 results/audit/v321
+          curl -fLsS --retry 3 --retry-all-errors --retry-delay 3 --connect-timeout 20 --max-time 120 \
+            -A 'Academic floristic original-public-source/1.0' \
+            'https://www.ittecop.fr/fr/tous-les-projets/recherches-2008-2009/item/33-en-marge' \
+            -o source_original/v321/ITTECOP_EnMarge_original_project.html
+          test "$(stat -c%s source_original/v321/ITTECOP_EnMarge_original_project.html)" -gt 8000
+          sha256sum source_original/v321/ITTECOP_EnMarge_original_project.html
+      - name: Extract only original same-publisher Annexes RF href and compare final report
+        run: |
+          python scripts/audit_ITTECOP_EnMarge_2015_Annexes_RF_links_v321.py \
+            --source-html source_original/v321/ITTECOP_EnMarge_original_project.html \
+            --output results/audit/v321/ITTECOP_EnMarge_original_Rapport_AnnexesRF_link_targets.json
+      - name: Attempt to acquire exact publisher Annexes RF target if publicly accessible
+        run: |
+          python - <<'PY'
+          import json,subprocess,hashlib,os
+          from pathlib import Path
+          j=json.loads(Path('results/audit/v321/ITTECOP_EnMarge_original_Rapport_AnnexesRF_link_targets.json').read_text())
+          a=j['source_exact_official_annex_links']
+          d=Path('source_original/v321')
+          records=[]
+          for i,x in enumerate(a[:3]):
+              p=d/f'official_EnMarge_AnnexesRF_target_{i+1}.bin'
+              cmd=['curl','-L','-f','-sS','--retry','2','--retry-all-errors','--retry-delay','2',
+                   '--connect-timeout','15','--max-time','150','--max-filesize','170000000',
+                   '--user-agent','academic original botanical appendix source audit',x['resolved_publisher_url'],'-o',str(p)]
+              try:
+                  z=subprocess.run(cmd,timeout=160,text=True,capture_output=True)
+                  ok=z.returncode==0 and p.exists()
+                  body=p.read_bytes() if ok else b''
+                  kind=('pdf' if body.startswith(b'%PDF') else 'zip' if body.startswith(b'PK\x03\x04')
+                      else 'html' if b'<html' in body[:1500].lower() else 'other')
+                  records.append({'official_url':x['resolved_publisher_url'],
+                      'accessible_publicly':ok,'size_bytes':len(body),
+                      'source_content_kind':kind,
+                      'publisher_attachment_sha256':hashlib.sha256(body).hexdigest() if body else None,
+                      'curl_error_summary':z.stderr[-220:] if not ok else None})
+                  # Never republish the downloaded original document as a CI artifact.
+                  if ok and len(body)>=15000 and kind=='pdf':
+                      import fitz
+                      with fitz.open(stream=body,filetype='pdf') as pdf:
+                          probe=' '.join(pdf[k].get_text('text') for k in range(min(len(pdf),3)))
+                          records[-1]['pdf_pages']=len(pdf)
+                          records[-1]['title_text_early_pdf']=probe[:450]
+                  if ok and len(body)>=15000 and kind=='zip':
+                      import zipfile
+                      with zipfile.ZipFile(p) as archive:
+                          records[-1]['archive_members_first_60']=[{'name':s.filename[:180],'bytes':s.file_size}
+                              for s in archive.infolist()[:60]]
+              except Exception as exc:
+                  records.append({'official_url':x['resolved_publisher_url'],'source_error':str(exc)[:250]})
+          out=Path('results/audit/v321/ITTECOP_EnMarge_original_AnnexesRF_real_attachment_QA.json')
+          out.write_text(json.dumps({'version':'v321','annex_attempts':records,
+                'source_primary_species_x_plot_matrix_confirmed':False,
+                'plot_matched_railroad_vs_matrix_effect_verified':False},indent=2,ensure_ascii=False)+'\n')
+          print(out.read_text()[:12000])
+          PY
+      - name: Archive metadata only, never the original PDF/XLSX/ZIP or site records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v321-ITTECOP-EnMarge-original-AnnexesRF-link-and-public-source-audit
+          path: results/audit/v321/
+          if-no-files-found: warn
