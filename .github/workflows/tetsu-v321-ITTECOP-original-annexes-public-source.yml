@@ -18,6 +18,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
+      - name: Install original PDF attachment renderer when needed
+        run: python -m pip install 'PyMuPDF==1.24.14'
       - name: Fetch original government project page and preserve final source URL
         run: |
           set -euo pipefail
