@@ -1,0 +1,44 @@
+name: "v318 genuine Slovenia railway within-location thermal EIV and missingness"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_Slovenia_thermal_EIV_paired_v318.py'
+      - 'tests/test_Slovenia_thermal_EIV_paired_v318.py'
+      - '.github/workflows/tetsu-v318-Slovenia-source-thermal-EIV-pairs.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-thermal-gradient:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic tests for EIV missingness and true location grouping
+        run: python -m unittest discover -s tests -p 'test_Slovenia_thermal_EIV_paired_v318.py' -v
+      - name: Retrieve already SHA-verified original publisher Slovenian source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Recompute original observed same-site same-side temperature preference BS minus BT
+        run: |
+          python -u scripts/analyze_Slovenia_thermal_EIV_paired_v318.py \
+            --source-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --verified-v102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v318_Slovenia_thermal_EIV_BS_BT_original_source.json
+      - name: Archive derived-only audit and thermal summary without copying source rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v318-source-thermal-EIV-BS-BT-aggregate-only
+          path: results/audit/v318_Slovenia_thermal_EIV_BS_BT_original_source.json
+          if-no-files-found: warn
