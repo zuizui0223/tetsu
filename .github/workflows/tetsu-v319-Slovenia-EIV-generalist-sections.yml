@@ -1,0 +1,44 @@
+name: "v319 original Slovenia thermal-generalist section robustness"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_Slovenia_thermal_generalist_section_v319.py'
+      - 'tests/test_Slovenia_thermal_generalist_section_v319.py'
+      - '.github/workflows/tetsu-v319-Slovenia-EIV-generalist-sections.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-section-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run v319 synthetic QA
+        run: python -m unittest discover -s tests -p 'test_Slovenia_thermal_generalist_section_v319.py' -v
+      - name: Retrieve SHA-verified original Slovenian publisher XLSX from v102 archive
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Run original-source v319 section sign-flips, leave-section-out and species-omission QA
+        run: |
+          python -u scripts/analyze_Slovenia_thermal_generalist_section_v319.py \
+            --source-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --verified-v102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v319_original_Slovenia_EIV_temperature_generalists_section_inference.json
+      - name: Archive aggregate only, excluding original species and station source rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v319-original-Slovenia-EIV-sections-and-generalists-aggregate
+          path: results/audit/v319_original_Slovenia_EIV_temperature_generalists_section_inference.json
+          if-no-files-found: warn
