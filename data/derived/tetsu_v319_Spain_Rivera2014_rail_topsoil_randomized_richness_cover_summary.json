@@ -1,0 +1,126 @@
+{
+  "version": "v319",
+  "source_verified_original_PLOS_JATS_xml": true,
+  "original_paper_doi": "10.1371/journal.pone.0101413",
+  "original_PMCID": "PMC4077791",
+  "original_country": "Spain",
+  "original_true_habitat": "railway embankment under construction near Navalcarnero west of Madrid",
+  "review_original_316study_country": "USA",
+  "review_original_LTI": "Waterway",
+  "source_original_PLOS_JATS_sha256": "9bde18652919b138d6667bed07c444528cc71dd2d8dd008bde44fc2ca3f23b64",
+  "original_field_design": "randomized five blocks each with three original treatment plots, 6x9m=54m² per plot, 2010 and 2011 same 15 plots",
+  "original_independent_randomized_blocks": 5,
+  "original_field_plots": 15,
+  "source_published_treatment_group_means": {
+    "2010": {
+      "Control": {
+        "cover_percent": 40.8,
+        "richness": 7.2,
+        "equitability": 0.77
+      },
+      "T10": {
+        "cover_percent": 21.7,
+        "richness": 6.9,
+        "equitability": 0.84
+      },
+      "T30": {
+        "cover_percent": 17.3,
+        "richness": 6.2,
+        "equitability": 0.85
+      }
+    },
+    "2011": {
+      "Control": {
+        "cover_percent": 62,
+        "richness": 14.6,
+        "equitability": 0.83
+      },
+      "T10": {
+        "cover_percent": 52.2,
+        "richness": 17.8,
+        "equitability": 0.81
+      },
+      "T30": {
+        "cover_percent": 61.7,
+        "richness": 19.5,
+        "equitability": 0.82
+      }
+    }
+  },
+  "source_published_means_standard_errors_cover": {
+    "2010": {
+      "Control": 3.5,
+      "T10": 2,
+      "T30": 2.1
+    },
+    "2011": {
+      "Control": 3.3,
+      "T10": 3.8,
+      "T30": 3.2
+    }
+  },
+  "source_published_means_standard_errors_richness": {
+    "2010": {
+      "Control": 1,
+      "T10": 0.8,
+      "T30": 1.3
+    },
+    "2011": {
+      "Control": 1.63,
+      "T10": 1.95,
+      "T30": 1.89
+    }
+  },
+  "descriptive_changes_2011_minus_2010": {
+    "Control": {
+      "cover_percentage_points": 21.2,
+      "richness_species_per_plot": 7.4
+    },
+    "T10": {
+      "cover_percentage_points": 30.5,
+      "richness_species_per_plot": 10.9
+    },
+    "T30": {
+      "cover_percentage_points": 44.4,
+      "richness_species_per_plot": 13.3
+    }
+  },
+  "descriptive_difference_in_differences_vs_Control": {
+    "T10": {
+      "cover_percentage_points": 9.3,
+      "richness_species_per_plot": 3.5
+    },
+    "T30": {
+      "cover_percentage_points": 23.2,
+      "richness_species_per_plot": 5.9
+    }
+  },
+  "source_published_interaction_tests_not_recomputed": {
+    "cover_treatment_by_year": {
+      "F": 9.36,
+      "p": "<0.001"
+    },
+    "richness_treatment_by_year": {
+      "F": 10.46,
+      "p": "<0.001"
+    },
+    "equitability_treatment_by_year": {
+      "F": 3.6,
+      "p": "0.03"
+    }
+  },
+  "source_original_soil_OM_g_per_kg": {
+    "untreated_substrate": 1.2,
+    "imported_topsoil": 10.4
+  },
+  "inference_limits": [
+    "All differences are arithmetic of original paper treatment means and are not estimated with block-level repeated measures.",
+    "No SE or 95% CI for descriptive DID can be obtained from published marginal SE without within-plot year covariance.",
+    "Original study gives within railway embankment management randomized treatments, NOT railway vs adjacent natural habitat contrast.",
+    "Trial is one original location and five blocks, not a global railway climate experiment, and no train numbers were manipulated or recorded.",
+    "More native or alien vs all taxon composition cannot be reconstructed from the reported Table2 means; authors examined 121 taxa across two years.",
+    "Imported topsoil changes several parameters including seed pool, not just nutrients; source soil chemistry is not independent mediation manipulation."
+  ],
+  "source_ci": "https://github.com/zuizui0223/tetsu/actions/runs/45010557617",
+  "source_original_output_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/45010557617/artifacts/14749667465"
+}
