@@ -1,0 +1,87 @@
+{
+  "checked_date": "2026-11-22",
+  "article_doi": "10.1016/j.jenvman.2026.130380",
+  "title": "Railway station habitats are associated with altered soil-fungal communities and higher alien plant dominance along the China-Laos Railway",
+  "target": "Public original plant-by-plot community matrix and station climate covariates",
+  "status": "not_located",
+  "ecological_data_acquired": false,
+  "format_and_community_vs_fungal_content_verified": false,
+  "located_repository_lead": "https://figshare.com/s/0a7d857ba7c0a746ba4b",
+  "lead_provenance": {
+    "url": "https://api.crossref.org/works/10.1016/j.jenvman.2026.130380",
+    "field": "message.relation.is-supplemented-by[0]",
+    "metadata_bytes": 22818,
+    "metadata_sha256": "0e56b98af2126191b398ac89527977e76ba20c4e1b3221a0f2aa5c51f94e33ff",
+    "verification_note": "Original Crossref JSON checked and hashed in scratch; original metadata is not redistributed."
+  },
+  "routes": [
+    {
+      "route": "Publisher primary article and abstract",
+      "urls": [
+        "https://www.sciencedirect.com/science/article/pii/S0301479726018402",
+        "https://www.sciencedirect.com/science/article/abs/pii/S0301479726018402"
+      ],
+      "result": "Search-indexed primary abstract found; direct opens returned HTTP 403. No verified supporting-file link in accessible result."
+    },
+    {
+      "route": "Crossref publication metadata",
+      "url": "https://api.crossref.org/works/10.1016/j.jenvman.2026.130380",
+      "result": "HTTP 200. Public metadata provides is-supplemented-by Figshare share link."
+    },
+    {
+      "route": "Publication-linked Figshare share",
+      "url": "https://figshare.com/s/0a7d857ba7c0a746ba4b",
+      "result": "Direct GET HTTP 403; search service also could not access. No login or access workaround attempted."
+    },
+    {
+      "route": "Figshare public API resource DOI lookup",
+      "url": "https://api.figshare.com/v2/articles?resource_doi=10.1016%2Fj.jenvman.2026.130380&page_size=100",
+      "result": "HTTP 200, empty list."
+    },
+    {
+      "route": "Figshare public article search",
+      "url": "https://api.figshare.com/v2/articles/search",
+      "query": {
+        "search_for": "Railway station habitats",
+        "page_size": 100
+      },
+      "result": "HTTP 200; two unrelated results, no matching article dataset."
+    },
+    {
+      "route": "DataCite exact DOI API search",
+      "url": "https://api.datacite.org/dois?query=%2210.1016%2Fj.jenvman.2026.130380%22&page%5Bsize%5D=25",
+      "result": "HTTP 200; total 0."
+    },
+    {
+      "route": "Zenodo exact DOI API search",
+      "url": "https://zenodo.org/api/records?q=%2210.1016%2Fj.jenvman.2026.130380%22&size=10",
+      "result": "HTTP 200; total 0."
+    },
+    {
+      "route": "Mendeley Data, Zenodo, DataCite indexed searches",
+      "queries": [
+        "\"10.1016/j.jenvman.2026.130380\" data",
+        "\"China-Laos\" railway Li Zheng data"
+      ],
+      "result": "No matching data record located; Mendeley result 10.17632/7ff9f7s2tc.1 is a different urban-spillover study by Dongxue Li and Qiao Hu."
+    },
+    {
+      "route": "Author institutions and repositories",
+      "urls": [
+        "https://english.xtbg.cas.cn/rh/rp/202607/t20260710_1176960.html",
+        "https://www.biologie.uni-konstanz.de/kleunen/research/publications/lab-publications/"
+      ],
+      "searched_domains": [
+        "kops.uni-konstanz.de",
+        "ir.xtbg.org.cn",
+        "xtbg.cas.cn",
+        "xtbg.ac.cn"
+      ],
+      "result": "Official XTBG news confirms 14 stations and 84 vegetation/soil/fungi plots, but no community-data download located. Author-lab bibliography lists the article. Direct pages were timeout/restricted in search service."
+    }
+  ],
+  "limits": "Bounded public search. Not located is not a claim that data are unavailable everywhere or permanently. The publicly cited Figshare link remains a concrete unresolved repository lead.",
+  "author_contact": false,
+  "login": false,
+  "effects_computed": false
+}
