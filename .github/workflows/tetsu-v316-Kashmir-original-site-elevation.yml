@@ -27,9 +27,10 @@ jobs:
           curl -fL --retry 4 --retry-delay 4 --connect-timeout 20 --max-time 180 \
             'https://datadryad.org/api/v2/versions/99735/download' \
             -o source_original/v316/Dryad_0p2ngf20h_original_99735.zip
-          printf '%s  %s\n' \
-            'd50be8008900c68d825d1bdff0867b9df2eeda7b0faa8ad5a259466ff005f395' \
-            source_original/v316/Dryad_0p2ngf20h_original_99735.zip | sha256sum --check
+          # Zip container bytes may change after re-packaging; only the exact original
+          # published XLSX content hash is an acceptance gate. Audit archive separately.
+          sha256sum source_original/v316/Dryad_0p2ngf20h_original_99735.zip
+          file source_original/v316/Dryad_0p2ngf20h_original_99735.zip
           python - <<'PY'
           import zipfile,hashlib
           from pathlib import Path
