@@ -1,24 +1,25 @@
-# v318 source-recomputed Slovenian BS–BT thermal indicator result (2026-11-22)
+# v318：スロベニア鉄道の温度選好差を原著データから再計算（2026-11-22）
 
-**Status: ORIGINAL-SOURCE WORKFLOW SUCCESS**, GitHub Actions run [45029366861](https://github.com/zuizui0223/tetsu/actions/runs/45029366861), exact analysis commit a7e866ee00e4718bfada0727648d83b5994f132d. Five synthetic tests passed. Original supplementary XLSX: Šabić et al. (2026) doi:10.1007/s44473-026-00155-z, SHA256 `26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f`. Source-verified v102 archive was reused; no original plot-by-species rows republished. Derived JSON artifact ID [14756709292](https://github.com/zuizui0223/tetsu/actions/runs/45029366861/artifacts/14756709292), SHA256 `9863ed2b3b26ad7dfe3b1fcf8c0a74162195735a95b449d7aaccd4aff586c010`.
+**原著データによる再計算 SUCCESS**：[GitHub Actions #45029366861](https://github.com/zuizui0223/tetsu/actions/runs/45029366861)。分析コミット `a7e866ee00e4718bfada0727648d83b5994f132d`、合成テスト5/5成功。Šabić et al. (2026), DOI [10.1007/s44473-026-00155-z](https://doi.org/10.1007/s44473-026-00155-z) のオリジナルXLSXを既存v102監査結果と照合した。元ファイルSHA256 `26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f`。集計JSONの [GitHub artifact #14756709292](https://github.com/zuizui0223/tetsu/actions/runs/45029366861/artifacts/14756709292)、artifact SHA256 `9863ed2b3b26ad7dfe3b1fcf8c0a74162195735a95b449d7aaccd4aff586c010`。
 
-## Actual result
-Same railway survey location + same side pairs: 173; distinct field locations: 89; line sections: 15. Source temperature trait field: `EIV_T` (312 taxa: exactly 142 numeric, 135 `x`, 35 empty). Mean **observed incidence-based thermal trait coverage** among paired track sides: shoulder BS 0.480563, toe BT 0.503328. A zone pair is eligible only when both communities have at least one numeric trait. Each station/location's left/right differences are averaged **before** site-level inference.
+## 何を検定したか
+スロベニア鉄道の**同じ調査地点・同じ線路側**のバラスト肩（BS）と法尻（BT）を比較した。173対（89実地点、15路線区間）。温度指標は原表の `EIV_T`。312分類群中、数値142、`x` 135、空欄35。二つの群集とも数値が1種以上ある地点側ペアを対象とし、左右の差を**地点内で平均してから**89地点を集計した。
 
-| Minimum observed incidence EIV_T coverage in BOTH habitats | Eligible side pairs | Locations | Sections | Mean BS minus BT EIV_T | Shoulder warmer sites | Exploratory section-block bootstrap percentile 95% |
+| 両群集それぞれの指標被覆率の下限 | 有効左右ペア | 地点 | 区間 | BS−BT（温度指標） | BSが高い地点 | 路線区間ブートストラップ95%区間 |
 |---|---:|---:|---:|---:|---:|---|
-| 0 | 171 | 89 | 15 | **+0.129208** | 59/89 | [+0.064880, +0.201071] |
-| 0.5 | 60 | 47 | 11 | **+0.140544** | 28/47 | [+0.049958, +0.245322] |
-| 0.7 | 3 | 3 | 3 | +0.017778 | 1/3 | [−0.206667, +0.380000] |
-| 0.9 | 1 | 1 | 1 | −0.120000 | 0/1 | not estimable |
+| 制限なし | 171 | 89 | 15 | **+0.129208** | 59/89 | [+0.064880, +0.201071] |
+| 50% | 60 | 47 | 11 | **+0.140544** | 28/47 | [+0.049958, +0.245322] |
+| 70% | 3 | 3 | 3 | +0.017778 | 1/3 | [−0.206667, +0.380000] |
+| 90% | 1 | 1 | 1 | −0.120000 | 0/1 | 算出不可 |
 
-Bootstraps: 2500 fixed-seed draws resampling **entire original line sections**, averaging retained location-level contrasts. 95% percentiles are exploratory, conditional on source and eligibility; not country/study replication CIs. No standalone field p-value asserted. Full sample shoulder warmer in 59 locations, toe warmer in 30.
+観測された分類群のうち温度指標が数値の割合は、左右ペアでBS平均 **48.06%**、BT平均 **50.33%**。探索的区間は乱数固定2500回、**路線区間ごと**の再標本化による百分位区間であり、独立した国・研究間で再現する予測区間ではない。野外の独立p値を算出したわけではない。
 
-## Scientific inference
-1. **Observed within-rail habitat filtering**: shoulder plants' recorded temperature indicator is higher on average than toe plants' under unrestricted and >=50% coverage comparisons. This is **consistent with** the original paper's inner-vs-outer thermophily description, not a newly independent country replication.
-2. **Key obstacle**: requiring >=70% indicator coverage leaves just 3/89 locations. A high-coverage-only effect cannot be estimated reliably here. The +0.129 difference is an ordinal indicator-scale contrast, not +0.129 degrees Celsius or evidence of local microclimate magnitude.
-3. **The climate-offset hypothesis (A) is NOT tested**: both BS and BT belong to the railway, there are no matched nonrail vegetation plots or exogenous regional thermal gradient in this source test. Study design and sampling widths are not proven equal. Neither temperature causality, train-carriage dispersal, persistence beyond climatic limits nor plant adaptation can be concluded.
-4. New local/nonrail alternatives identified: Winkler et al. (2026) four Czech localities include real railway versus field margin/arable plots but publisher explicitly withholds original plot-level data; Dylewski et al. (2024/2025) 25 abandoned-railway plus 25 matched grassland reference plots are **on author request**. Rakotoson et al. (2025) RATP track/embankment original plot data also on request and both habitats are in railway environment. Details in [source-access audit](tetsu_v318_local_control_data_access_evidence.md).
+## 解釈と限界
+- 指標欠測を無制限、または50%まで許容すると、肩の種群は法尻より暖地性寄りの温度選好を示した。これは**原著にある鉄道内温度選好勾配と整合**する再解析結果で、独立研究による新発見とは呼ばない。
+- **高被覆率70%を要求すると89地点中3地点のみ**。厳格な条件で傾向が確認できたとは言えない。温度指標は順序的な選好度であって、差+0.129は気温+0.129℃を意味しない。
+- BSもBTも鉄道敷地内である。**鉄道対非鉄道の差でも、寒冷地での気候制約緩和でもない**。区画面積の厳密な一致は確認されていない。列車の種子散布、個体群持続、実測微気候、進化的適応は推定できない。
 
-## Reproducibility
-`scripts/analyze_Slovenia_thermal_EIV_paired_v318.py`, `tests/test_Slovenia_thermal_EIV_paired_v318.py` and `.github/workflows/tetsu-v318-Slovenia-source-thermal-EIV-pairs.yml`, original source parser `scripts/analyze_Slovenia_rail_microhabitats_v103.py`. CI step **Recompute original observed same-site same-side temperature preference BS minus BT** succeeded. File names and source hashes are machine-checked. Source-derived aggregate only; no author original species-by-plot data redistributed.
+## 再現方法・次段
+コード：`scripts/analyze_Slovenia_thermal_EIV_paired_v318.py`、`tests/test_Slovenia_thermal_EIV_paired_v318.py`、`.github/workflows/tetsu-v318-Slovenia-source-thermal-EIV-pairs.yml`。元のXLSX読取り・監査関数は`scripts/analyze_Slovenia_rail_microhabitats_v103.py`。著者が公開した生の種×地点の行列はリポに再配布しない。
+
+仮説A（寒冷地ほど鉄道と**近隣の非鉄道**で温度選好差が拡大するか）に必要な原データの状況は[対応調査・公開条件の監査](tetsu_v318_local_control_data_access_evidence.md)へ記録。チェコ2026の局所対応研究は元個票非公開、ポーランド廃線25対とフランスRATP調査は著者請求であり、現状のデータだけで地域間交互作用を推定してはいけない。
