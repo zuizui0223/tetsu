@@ -19,20 +19,18 @@ class Anchors(HTMLParser):
         self.stack=[]
         self.links=[]
     def handle_starttag(self,tag,attrs):
+        kv=dict(attrs)
         if tag=="a":
-            kv=dict(attrs)
             self.stack.append({"href":kv.get("href",""),"title":kv.get("title",""),
                 "text":"","attributes":{k:v for k,v in kv.items() if k in ("href","title","class")}})
-    def handle_data(self,data):
-        for a in self.stack:
-            a["text"]+=data
+        elif tag=="img" and self.stack:
+            self.stack[-1]["text"]+=" "+str(kv.get("alt") or "")
     def handle_startendtag(self,tag,attrs):
-        if tag=="img" and self.stack:
-            alt=dict(attrs).get("alt","")
-            if alt:self.stack[-1]["text"]+=" "+alt
-        def handle_endtag(self,tag):
-        if tag=="a" and self.stack:
-            self.links.append(self.stack.pop())
+        if tag=="img":self.handle_starttag(tag,attrs)
+    def handle_data(self,data):
+        for a in self.stack:a["text"]+=data
+    def handle_endtag(self,tag):
+        if tag=="a" and self.stack:self.links.append(self.stack.pop())
 
 def official(url):
     u=urlparse(url)
