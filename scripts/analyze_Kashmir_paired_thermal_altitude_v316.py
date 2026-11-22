@@ -159,11 +159,11 @@ def build_normalized_plot_pairs(sets,normalize):
     labels=set().union(*(x for x in sets.values() if x is not None))
     audit=audit_names(labels,normalize)
     blocked=unresolved_keys(audit,labels,normalize)
-    all_sites=sorted({site for year,site,zone in sets})
+    all_sites=sorted({site for site,year,zone in sets})
     res={year:{} for year in YEARS}
     for year in YEARS:
         for site in all_sites:
-            source=[sets.get((year,site,zone)) for zone in KASHMIR_ZONES]
+            source=[sets.get((site,year,zone)) for zone in KASHMIR_ZONES]
             if any(x is None for x in source):
                 continue
             rail=source[0]|source[1]
@@ -284,6 +284,11 @@ def analyze(data,traitdir,baseline,draws=PERMUTATIONS):
     altitude,raw,origqa=genuine_source_site_metadata(original)
     traits=load_traits(Path(traitdir),normalize_name)
     pairs=build_normalized_plot_pairs(raw,normalize_name)
+    # Strong semantic gate: a correct original (site,year,zone) key must
+    # reconstruct the same 31 transects, not merely replay the station-only
+    # v315 baseline through an independent adapter while primary data are 0.
+    if len(pairs[2014])<25 or len(pairs[2017])<25:
+        raise ValueError("Genuine original Kashmir site/year/zone key mismatch or unexpected missing quadrats")
     legacy=replay_legacy_v315(data,traits,baseline)
     ret={
       "version":"v316",
