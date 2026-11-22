@@ -1,0 +1,54 @@
+name: "v325 original MIREN road elevation and thermal-affinity contrast"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_MIREN_road_elevation_thermal_offset_v325.py'
+      - 'tests/test_MIREN_road_elevation_thermal_offset_v325.py'
+      - '.github/workflows/tetsu-v325-MIREN-road-elevation-thermal-offset.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-road-elevation-thermal-gradient:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source elevation matching, within-road slopes and original region support
+        run: python -m unittest discover -s tests -p 'test_MIREN_road_elevation_thermal_offset_v325.py' -v
+      - name: Fetch prior source-authenticated MIREN field records and audit
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/MIREN98
+      - name: Download exact source EIVE thermal centre and breadth table
+        run: |
+          set -euo pipefail
+          mkdir -p source/EIVE
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            'source/EIVE/EIVE_Paper_1.0_SM_08.xlsx' | md5sum --check
+      - name: Real original MIREN road elevation versus matched road-inland temperature indicator differences
+        run: |
+          python -u scripts/analyze_MIREN_road_elevation_thermal_offset_v325.py \
+            --miren-csv source/MIREN98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --eive-xlsx source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v325_MIREN_4Euro_road_elevation_thermal_difference.json
+      - name: Publish aggregate audit, no raw MIREN site coordinates or original species rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v325-MIREN-road-elevation-thermal-offset-exploratory
+          path: results/audit/v325_MIREN_4Euro_road_elevation_thermal_difference.json
+          if-no-files-found: warn
