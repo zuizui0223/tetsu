@@ -1,0 +1,55 @@
+name: "v321 genuine Slovenia railway EIVE temperature centre and niche-width cross-source"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_Slovenia_EIVE_temperature_width_v321.py'
+      - 'tests/test_Slovenia_EIVE_temperature_width_v321.py'
+      - '.github/workflows/tetsu-v321-EIVE-temperature-breadth-rail-original.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  two-original-source-temperatures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic strict cross-source taxon join and habitat aggregation tests
+        run: python -m unittest discover -s tests -p 'test_Slovenia_EIVE_temperature_width_v321.py' -v
+      - name: Get unchanged source-verified Slovenian original publisher workbook
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Download publisher Zenodo EIVE 1.0 original niche-width table and confirm exact checksum
+        run: |
+          set -euo pipefail
+          mkdir -p source/EIVE
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            'source/EIVE/EIVE_Paper_1.0_SM_08.xlsx' | md5sum --check
+      - name: Original Slovenian incidence times independent European temperature position-width sensitivity
+        run: |
+          python -u scripts/analyze_Slovenia_EIVE_temperature_width_v321.py \
+            --source-slovenia-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --verified-v102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --eive-xlsx source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v321_Slovenia_original_rail_EIVE_T_position_niche_width_aggregates.json
+      - name: Preserve aggregate source-backed EIVE sensitivity without redistributing original plot and taxon rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v321-original-EIVE-temperature-width-cross-rail-aggregate
+          path: results/audit/v321_Slovenia_original_rail_EIVE_T_position_niche_width_aggregates.json
+          if-no-files-found: warn
