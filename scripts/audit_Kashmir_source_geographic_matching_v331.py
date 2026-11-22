@@ -42,8 +42,17 @@ def audit(path):
         for site,rr in meta.items():
             vals=[num(r[idx]) for r in rr]
             if None in vals:
+                import re
+                shapes=sorted({
+                     re.sub(r"[0-9]", "#", str(rec[idx]))[:100]
+                     for recs in meta.values() for rec in recs})
+                stable=sum(len({str(row[idx]).strip() for row in recs})==1
+                           for recs in meta.values())
                 variables[idx]={"numeric_complete":False,
-                     "header":str(header[idx])};break
+                     "header":str(header[idx]),
+                     "string_pattern_examples_without_any_digits":shapes[:14],
+                     "number_of_different_string_shapes":len(shapes),
+                     "site_count_with_exactly_stable_coordinate_text":stable};break
             if max(vals)-min(vals)>1e-7:
                 variables[idx]={"numeric_complete":True,
                      "stable_by_source_site":False,
