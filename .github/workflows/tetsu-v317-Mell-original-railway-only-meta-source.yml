@@ -1,0 +1,54 @@
+name: "v317 source-authentic Mell2024 205-case LTI meta database: railway-only effect eligibility"
+on:
+  push:
+    branches: [research/tetsu-v317-global-rail-verge-meta-original-eligible-20261122]
+    paths:
+      - 'scripts/audit_Mell_2024_railway_meta_original_xlsx_v317.py'
+      - '.github/workflows/tetsu-v317-Mell-original-railway-only-meta-source.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v317-Mell2024-original-railway-only-meta
+  cancel-in-progress: true
+jobs:
+  original-Mell2024-meta-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Download publisher 205-case original supplementary workbook, not third-party summaries
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v317 results/audit/v317
+          curl -fL --retry 4 --retry-all-errors --retry-delay 3 --connect-timeout 20 --max-time 150 \
+            'https://media.springernature.com/original/springer-static/esm/art%3A10.1186%2Fs13750-024-00328-3/MediaObjects/13750_2024_328_MOESM8_ESM.xlsx' \
+            -o source_original/v317/13750_2024_328_MOESM8_ESM.xlsx
+          test "$(stat -c%s source_original/v317/13750_2024_328_MOESM8_ESM.xlsx)" -gt 30000
+          sha256sum source_original/v317/13750_2024_328_MOESM8_ESM.xlsx
+      - name: Audit exact original Q2 railway/nonrail cases and original study labels
+        run: |
+          python -u scripts/audit_Mell_2024_railway_meta_original_xlsx_v317.py \
+            --xlsx source_original/v317/13750_2024_328_MOESM8_ESM.xlsx \
+            --out results/audit/v317/Mell2024_original_205case_LTI_railway_source_structure.json
+      - name: Hard source guardrails
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('results/audit/v317/Mell2024_original_205case_LTI_railway_source_structure.json').read_text())
+          assert x['source_source_sha_and_workbook']['bytes']>30000
+          assert x['study_cases_reported_by_2024_review']==205
+          assert x['independent_primary_studies_reported_by_review']==47
+          assert x['status']=='SOURCE_STRUCTURAL_GATE_ONLY_NO_EFFECT_INFERENCE'
+          assert x['sheets']
+          print('Genuine original reviewed Supplementary Additional file 8 ZIP/XML source gate PASS; no pseudometa')
+          PY
+      - name: Archive publisher aggregate QA, never original XLSX
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v317-original-Mell2024-205case-source-QA-rail-only-eligibility
+          path: results/audit/v317/
+          if-no-files-found: warn
