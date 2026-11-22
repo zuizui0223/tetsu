@@ -168,8 +168,9 @@ def analyze(original):
         out["thresholds"].append(obj)
     # Exclude one taxon with an actual numeric indicator across all plots,
     # not an arbitrary source "x" generalist or blank-coded taxon.
-    covered=sorted(c for c,t in traits.items()
-                   if trait_class(t.get("EIV_T"))=="numeric")
+    source_present=set().union(*(p["BS"]|p["BT"] for p in pairs))
+    covered=sorted(c for c in source_present
+                   if trait_class(traits[c].get("EIV_T"))=="numeric")
     for thresh in (0,0.5):
         estimates=[]
         for code in covered:
@@ -177,7 +178,7 @@ def analyze(original):
             estimates.append((code,s["mean_eiv_difference"],s["n_sites"]))
         valid=[(code,val,n) for code,val,n in estimates if val is not None]
         out["single_taxon_omit"].append({
-            "threshold":thresh,"eligible_numeric_taxa_considered":len(covered),
+            "threshold":thresh,"numeric_taxa_observed_in_BS_or_BT":len(covered),
             "results_with_estimable_mean":len(valid),
             "min_delta":min(x[1] for x in valid) if valid else None,
             "max_delta":max(x[1] for x in valid) if valid else None,
