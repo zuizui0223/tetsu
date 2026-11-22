@@ -19,9 +19,9 @@ def inspect(path):
     original,qa=source_original_workbook(path)
     if qa["sha256"]!=SOURCE_SHA:
         raise ValueError("Original review file5 SHA mismatch; no unsupported railway cohort accepted")
-    if "Sheet D - Systematic review table" not in original:
+    if "D - Systematic review table" not in original:
         raise ValueError("Missing original review's 316-study full inclusion sheet D")
-    source=original["Sheet D - Systematic review table"]
+    source=original["D - Systematic review table"]
     header=source[0]
     keys={str(value):i for i,value in header.items()}
     if any(k not in keys for k in REQUIRED):
