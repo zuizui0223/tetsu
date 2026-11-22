@@ -4,6 +4,8 @@ on:
     branches: [research/tetsu-v319-Spain-rail-topsoil-randomized-study-20261122]
     paths:
       - 'scripts/audit_Rivera2014_Spain_rail_topsoil_original_JATS_v319.py'
+      - 'scripts/analyze_Rivera2014_rail_topsoil_richness_cover_interactions_v319.py'
+      - 'tests/test_Rivera2014_rail_randomized_topsoil_source_mean_v319.py'
       - '.github/workflows/tetsu-v319-Rivera2014-original-Spain-rail-RCT-JATS.yml'
   workflow_dispatch:
 permissions: {contents: read}
@@ -32,6 +34,24 @@ jobs:
           python -u scripts/audit_Rivera2014_Spain_rail_topsoil_original_JATS_v319.py \
             --xml source_original/v319/Rivera2014_original_PLOS_RCT_rail_embankment_JATS.xml \
             --output results/audit/v319/Rivera2014_original_Spain_railway_RCT_publication_JATS_tables.json
+      - name: Pure arithmetic regression tests for original randomized source cover and richness changes
+        run: python -m unittest discover -s tests -p 'test_Rivera2014_rail_randomized_topsoil_source_mean_v319.py' -v
+      - name: Reproduce source author's 2010/2011 randomized five-block Table2 mean cover and species changes
+        run: |
+          python -u scripts/analyze_Rivera2014_rail_topsoil_richness_cover_interactions_v319.py \
+            --source results/audit/v319/Rivera2014_original_Spain_railway_RCT_publication_JATS_tables.json \
+            --output results/audit/v319/Rivera2014_original_15plot_2010_2011_cover_richness_DID_means.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/audit/v319/Rivera2014_original_15plot_2010_2011_cover_richness_DID_means.json').read_text())
+          assert d['n_original_randomization_blocks']==5
+          assert d['n_original_treatment_plots']==15
+          assert len(d['source_original_table2_treatment_group_year_mean_and_SE'])==6
+          assert d['no_source_randomization_p_values_or_new_95_CI_reestimated']
+          assert d['new_rail_vs_adjacent_nonrail_source_field_studies_added']==0
+          print('True Spain railway randomized five-block source means and no-pseudoinference validated')
+          PY
       - name: Structural original-data guards
         run: |
           python - <<'PY'
