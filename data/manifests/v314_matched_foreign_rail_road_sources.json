@@ -1,0 +1,295 @@
+{
+  "version": "v314",
+  "reference_commit": "4add07c1c974bbe77af40ba90fa050a3dae9b504",
+  "adapter": "scripts/source_matched_rail_road_v314.py",
+  "doi_convention": "A null publication_doi indicates that a DOI was not identified in the consulted materials.",
+  "studies": {
+    "CZ39": {
+      "citation": "Kutlvašr et al. (2024), Preslia, 96",
+      "publication_doi": "10.23855/preslia.2024.247",
+      "role": "Foreign railway donor",
+      "selection": "39 contemporary station columns (rec) from Table S1, checked against station codes in corrected Table S2. Historical columns are excluded.",
+      "counts": {
+        "stations": 39,
+        "source_taxon_rows_all_periods": 1053,
+        "contemporary_taxon_labels": 761,
+        "contemporary_station_taxon_records": 6941
+      }
+    },
+    "IT28": {
+      "citation": "M. Adorni and L. Ghillani (2020). Indagine floristica nelle stazioni ferroviarie della provincia di Parma (Emilia-Romagna, Italia). Annali del Museo Civico di Rovereto 36, 149–200.",
+      "publication_doi": null,
+      "role": "Foreign railway donor",
+      "selection": "Reconstruct station lists from enumerated station codes in the published flora.",
+      "counts": {
+        "stations": 28,
+        "original_taxa": 438
+      }
+    },
+    "MIREN": {
+      "citation": "MIREN survey of plant species in mountains, dataset v3",
+      "dataset_doi": "10.5281/zenodo.15749536",
+      "role": "Foreign roadside donors in Czechia and Italy, supplementary receiving-country road reference in India",
+      "selection": "Select roadside Plot 1 under protocols v.2017 or v.2022 and retain the first qualifying survey year per region, road and site. Give sites equal weight within a road and roads equal weight within each country.",
+      "counts": {
+        "source_occurrence_rows": 167804,
+        "regions": {
+          "CZE": {
+            "role": "donor",
+            "roads": 1,
+            "sites": 21,
+            "years": [
+              2022
+            ]
+          },
+          "ITA": {
+            "role": "donor",
+            "roads": 3,
+            "sites": 60,
+            "years": [
+              2022
+            ]
+          },
+          "IND": {
+            "role": "recipient reference",
+            "roads": 3,
+            "sites": 28,
+            "years": [
+              2017
+            ]
+          }
+        }
+      },
+      "publisher_file": "MIREN_road_survey_(2007-2023)_zen_v3_002507.csv",
+      "publisher_md5": "b640195cc44f252ccb6ddb28eb6fff13"
+    },
+    "SI89": {
+      "citation": "Šabić et al. (2026), study of Slovenian railway vegetation and microhabitats",
+      "publication_doi": "10.1007/s44473-026-00155-z",
+      "role": "Recipient railway survey",
+      "selection": "Use the union of ballast shoulder and toe records at the 89 retained sites. Map observed EPPO codes through the publisher’s taxon codebook.",
+      "counts": {
+        "original_sites": 92,
+        "retained_sites": 89,
+        "original_rail_segments": 15,
+        "original_codebook_rows": 312,
+        "retained_observed_codes": 285,
+        "retained_site_code_incidences": 2814
+      },
+      "survey_years": [
+        2022,
+        2023
+      ]
+    },
+    "HR_BA15": {
+      "citation": "N. Jasprica, M. Milović, K. Dolina and A. Lasić (2017). Analyses of the flora of railway stations in the Mediterranean and sub-Mediterranean areas of Croatia and Bosnia and Herzegovina. Natura Croatica 26, 271–303.",
+      "publication_doi": "10.20302/NC.2017.26.21",
+      "role": "Recipient railway survey",
+      "selection": "Retain all 15 stations in the original species-by-station table as one study.",
+      "counts": {
+        "stations": 15,
+        "stations_by_country": {
+          "HR": 13,
+          "BA": 2
+        },
+        "original_taxa": 359
+      }
+    },
+    "SK30": {
+      "citation": "Climate and traffic volume control plant species richness in railway areas (2025), Flora 330, 152780.",
+      "publication_doi": "10.1016/j.flora.2025.152780",
+      "role": "Recipient railway survey",
+      "selection": "Use printed occupancy percentages in Table S1. Each printed value maps uniquely to an occupied-station count out of 30. Mask ambiguous taxon-key marginals. Station-level species combinations are unavailable.",
+      "counts": {
+        "stations": 30,
+        "area_ha_per_station": 1,
+        "distinct_printed_taxon_rows": 413
+      }
+    },
+    "Kashmir": {
+      "citation": "Rashid et al. (2021), Journal of Applied Ecology, and accompanying Dryad data, version 99735.",
+      "publication_doi": "10.1111/1365-2664.13961",
+      "dataset_doi": "10.5061/dryad.0p2ngf20h",
+      "role": "Recipient railway survey and local interior reference",
+      "selection": "Use 2014 station transects with all four quadrats observed. For each station, combine Track and Embankment for the railway frequency and Interior Plot 1 and Interior Plot 2 for the paired reference.",
+      "counts": {
+        "original_transects": 31,
+        "original_plot_year_zone_rows": 248,
+        "original_taxon_columns": 123,
+        "missing_species_cells_across_entire_workbook": 4,
+        "retained_stations": 16,
+        "selected_2014_quadrats": 64,
+        "area_m2_per_quadrat": 100,
+        "area_m2_per_habitat_union": 200
+      }
+    },
+    "TreePits": {
+      "citation": "Tree-circles spontaneous vegetation over a long climatic gradient (2020), Urban Ecosystems.",
+      "publication_doi": "10.1007/s11252-020-00987-3",
+      "role": "Urban references for Slovenia and the Adriatic recipient",
+      "selection": "Use published marginal frequencies in the four selected city columns. For the Adriatic recipient, average the two Croatian cities and weight the Croatian and Bosnian frequencies 13:2 to match the railway survey’s station allocation.",
+      "counts": {
+        "table_taxon_rows": 337,
+        "plots_by_city": {
+          "Ljubljana": 50,
+          "Zagreb": 50,
+          "Split": 50,
+          "Sarajevo": 50
+        }
+      }
+    },
+    "Malacky": {
+      "citation": "A. Rendeková (2016). Overview of ruderal plant communities of Malacky city. Acta Botanica Universitatis Comenianae 51, Table 1.",
+      "publication_doi": null,
+      "role": "Urban reference for Slovakia",
+      "selection": "Parse the 18 relevés in Table 1, including the separately listed singleton records, and exclude relevé 15, identified as a railway plot.",
+      "counts": {
+        "original_releves": 18,
+        "eligible_releves": 17,
+        "table_taxon_rows": 24,
+        "singleton_entries": 8
+      }
+    },
+    "WA": {
+      "citation": "ENV Australia Pty Ltd (2008). Rapid Growth Project 5: Jimblebar Junction to Yandi Junction Railway Reserve Flora and Vegetation Assessment. Final report 08.165 RP001.",
+      "publication_doi": null,
+      "role": "Geographic extension using Western Australian railway-reserve vegetation",
+      "selection": "Intersect the individually documented 2,500 m² plots with Appendix I matrix site identifiers and Appendix G sheets containing in-plot observations. Use taxon records from Appendix G, excluding records flagged outside the plot (OP).",
+      "counts": {
+        "original_appendix_I_sites": 137,
+        "original_appendix_I_taxon_labels": 354,
+        "original_appendix_I_nonempty_cells": 3819,
+        "original_metadata_sheets": 138,
+        "retained_plots": 120,
+        "area_m2_per_plot": 2500,
+        "retained_source_taxon_labels": 320,
+        "retained_plot_label_records": 3412,
+        "excluded_outside_only_plot_label_pairs_in_cohort": 103
+      },
+      "cohort_id_sha256": "d0931d3377df1f08b3a4b1bb5393d8198bf4dcdde0bf1dd9d0e97290a0c51a0f",
+      "cohort_hash_encoding": "UTF-8 of sorted original plot IDs, newline separated, including a final newline."
+    }
+  },
+  "archives": {
+    "slovenia_v102": {
+      "url": "https://github.com/zuizui0223/tetsu/actions/runs/43538799032/artifacts/14090917979",
+      "bytes": 387641,
+      "sha256": "f26498d5432b8f90d3cbfe01222748a40a0615bfa4cfd579e426f861e597de39"
+    },
+    "dryad_version_99735": {
+      "url": "https://datadryad.org/api/v2/versions/99735/download",
+      "bytes": 122429,
+      "sha256": "d50be8008900c68d825d1bdff0867b9df2eeda7b0faa8ad5a259466ff005f395"
+    }
+  },
+  "files": [
+    {
+      "path": "cz1.xlsx",
+      "study": "CZ39",
+      "file_role": "Published contemporary and historical occurrence workbook, Table S1",
+      "source_url": "https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx",
+      "bytes": 79261,
+      "sha256": "df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06"
+    },
+    {
+      "path": "cz2.xlsx",
+      "study": "CZ39",
+      "file_role": "Corrected publisher Table S2, ancillary station metadata",
+      "source_url": "https://preslia.cz/appendix/file?id=540",
+      "bytes": 13533,
+      "sha256": "00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2"
+    },
+    {
+      "path": "parma.pdf",
+      "study": "IT28",
+      "file_role": "Published article with station-coded flora",
+      "source_url": "https://www.museocivico.rovereto.tn.it/UploadDocs/21188_Art08_Adorni_C_agg_min.pdf",
+      "bytes": 763828,
+      "sha256": "c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787"
+    },
+    {
+      "path": "hrba.pdf",
+      "study": "HR_BA15",
+      "file_role": "Published article with station-by-taxon table",
+      "source_url": "https://hrcak.srce.hr/file/282429",
+      "bytes": 1347646,
+      "sha256": "90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956"
+    },
+    {
+      "path": "si/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx",
+      "study": "SI89",
+      "file_role": "Primary publisher supplementary workbook",
+      "source_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1007%2Fs44473-026-00155-z/MediaObjects/44473_2026_155_MOESM1_ESM.xlsx",
+      "bytes": 401279,
+      "sha256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+      "recovery": {
+        "archive": "slovenia_v102",
+        "member": "source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx"
+      }
+    },
+    {
+      "path": "si/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json",
+      "study": "SI89",
+      "file_role": "Ancillary project-generated provenance audit of the publisher workbook",
+      "source_url": "https://github.com/zuizui0223/tetsu/actions/runs/43538799032/artifacts/14090917979",
+      "bytes": 1456,
+      "sha256": "c3973ab0bc55740de019b470e1a2768562267d5df3a54c1916962ca112b603d1",
+      "recovery": {
+        "archive": "slovenia_v102",
+        "member": "results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json"
+      }
+    },
+    {
+      "path": "sk30_2.pdf",
+      "study": "SK30",
+      "file_role": "Published supplementary Table S1",
+      "source_url": "https://ars.els-cdn.com/content/image/1-s2.0-S0367253025001094-mmc2.pdf",
+      "bytes": 200397,
+      "sha256": "ff8271a396ecda01d92bba9817721577bcdd44fdac1309cc4884240c9e3c9838"
+    },
+    {
+      "path": "Matrix_plot.xlsx",
+      "study": "Kashmir",
+      "file_role": "Deposited primary data workbook",
+      "source_url": "https://datadryad.org/api/v2/versions/99735/download",
+      "bytes": 122187,
+      "sha256": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474",
+      "recovery": {
+        "archive": "dryad_version_99735",
+        "member": "Matrix_plot.xlsx"
+      }
+    },
+    {
+      "path": "miren.csv",
+      "study": "MIREN",
+      "file_role": "Deposited primary occurrence dataset v3",
+      "source_url": "https://zenodo.org/api/records/15749536/files/MIREN_road_survey_(2007-2023)_zen_v3_002507.csv/content",
+      "bytes": 17899241,
+      "sha256": "e966419c14879861198c6c1e01c49ee0eca00c3905d784102d6e2c229ac56169"
+    },
+    {
+      "path": "tree1.xlsx",
+      "study": "TreePits",
+      "file_role": "Publisher supplementary workbook of city frequencies",
+      "source_url": "https://static-content.springer.com/esm/art%3A10.1007%2Fs11252-020-00987-3/MediaObjects/11252_2020_987_MOESM1_ESM.xlsx",
+      "bytes": 29295,
+      "sha256": "6ce8e4ea068f644e9ad08eab97a4352e88c071fb46bea038d151f792eb8a21de"
+    },
+    {
+      "path": "sk_urban.bin",
+      "study": "Malacky",
+      "file_role": "Published journal issue PDF containing the source table",
+      "source_url": "https://fns.uniba.sk/fileadmin/prif/biol/kbo/ACTA_BOTANICA/ACTA_BOTANICA_2016-51.pdf",
+      "bytes": 1901778,
+      "sha256": "5c70e4b02a17b2886cafb0dde5221a6e7ad440780f55a51249b2fb95ff6d2f22"
+    },
+    {
+      "path": "wa_rail_reserve.pdf",
+      "study": "WA",
+      "file_role": "Published survey report with Appendix G field sheets and Appendix I matrix",
+      "source_url": "https://ftp.dwer.wa.gov.au/permit/10292/CPS%2010292-1%20-%20Supporting%20information%20-%20Flora%20%26%20Vegetation%20assesment.pdf",
+      "bytes": 6210402,
+      "sha256": "5e392a5ff5f705fa01e728d19e8a0b8257dfb62bfb5235388ccf07952c4f50bd"
+    }
+  ]
+}

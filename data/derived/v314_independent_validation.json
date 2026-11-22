@@ -1,0 +1,439 @@
+{
+  "method": "Direct scipy.stats.spearmanr with average ties, raw per-site rail incidences and first-eligible-year MIREN donor scores independently recomputed using fractions.Fraction.",
+  "shared_inputs": "Reuses historical rail-table parsers, strict name normalizer, and source adapter recipient frequency and uncertainty mappings. This independently verifies scoring and donor weighting. It does not constitute separate transcription of every source or independent field collection.",
+  "tolerance": 1e-12,
+  "maximum_absolute_panel_statistic_or_background_contrast_difference": 1.1102230246251565e-16,
+  "scipy_version": "1.17.0",
+  "analysis_json_sha256": "880de50ec802d2ad2076677b03a04b1f50630427ef62e4b470bd23b7c3faf672",
+  "shared_donor_keys": 350,
+  "union_donor_keys": 1303,
+  "panels_tested": 25,
+  "panels_estimable": 20,
+  "backgrounds_tested": 5,
+  "panels": [
+    {
+      "study": "SI",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 348,
+      "n_recorded": 139,
+      "positive_levels": 41,
+      "estimable": true,
+      "rho_rail": 0.4936437076958658,
+      "rho_road": 0.2988102323237697,
+      "delta_rho": 0.1948334753720961
+    },
+    {
+      "study": "SI",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": true,
+      "n_evaluated": 139,
+      "n_recorded": 139,
+      "positive_levels": 41,
+      "estimable": true,
+      "rho_rail": 0.4410911674524963,
+      "rho_road": 0.24249940512669282,
+      "delta_rho": 0.1985917623258035
+    },
+    {
+      "study": "SI",
+      "pool": "union",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 1300,
+      "n_recorded": 218,
+      "positive_levels": 46,
+      "estimable": true,
+      "rho_rail": 0.4293910170780991,
+      "rho_road": 0.20200619501651942,
+      "delta_rho": 0.2273848220615797
+    },
+    {
+      "study": "SI",
+      "pool": "shared",
+      "donor": "CZ",
+      "recorded_only": false,
+      "n_evaluated": 348,
+      "n_recorded": 139,
+      "positive_levels": 41,
+      "estimable": true,
+      "rho_rail": 0.5067063765365485,
+      "rho_road": 0.195112508374716,
+      "delta_rho": 0.3115938681618325
+    },
+    {
+      "study": "SI",
+      "pool": "shared",
+      "donor": "IT",
+      "recorded_only": false,
+      "n_evaluated": 348,
+      "n_recorded": 139,
+      "positive_levels": 41,
+      "estimable": true,
+      "rho_rail": 0.27422332590293236,
+      "rho_road": 0.2478433467715392,
+      "delta_rho": 0.026379979131393144
+    },
+    {
+      "study": "HRBA",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 120,
+      "positive_levels": 15,
+      "estimable": true,
+      "rho_rail": 0.3923107767278108,
+      "rho_road": -0.044556988419660035,
+      "delta_rho": 0.43686776514747083
+    },
+    {
+      "study": "HRBA",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": true,
+      "n_evaluated": 120,
+      "n_recorded": 120,
+      "positive_levels": 15,
+      "estimable": true,
+      "rho_rail": 0.29020337304229793,
+      "rho_road": -0.012403544355311526,
+      "delta_rho": 0.3026069173976095
+    },
+    {
+      "study": "HRBA",
+      "pool": "union",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 1303,
+      "n_recorded": 240,
+      "positive_levels": 15,
+      "estimable": true,
+      "rho_rail": 0.361925461239198,
+      "rho_road": 0.04616831028692916,
+      "delta_rho": 0.31575715095226886
+    },
+    {
+      "study": "HRBA",
+      "pool": "shared",
+      "donor": "CZ",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 120,
+      "positive_levels": 15,
+      "estimable": true,
+      "rho_rail": 0.10051214333467716,
+      "rho_road": -0.24714104486349944,
+      "delta_rho": 0.3476531881981766
+    },
+    {
+      "study": "HRBA",
+      "pool": "shared",
+      "donor": "IT",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 120,
+      "positive_levels": 15,
+      "estimable": true,
+      "rho_rail": 0.5185150108584491,
+      "rho_road": 0.2780285073055823,
+      "delta_rho": 0.24048650355286677
+    },
+    {
+      "study": "SK",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 342,
+      "n_recorded": 175,
+      "positive_levels": 29,
+      "estimable": true,
+      "rho_rail": 0.7083337000563819,
+      "rho_road": 0.19060671470726384,
+      "delta_rho": 0.517726985349118
+    },
+    {
+      "study": "SK",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": true,
+      "n_evaluated": 175,
+      "n_recorded": 175,
+      "positive_levels": 29,
+      "estimable": true,
+      "rho_rail": 0.7057045720170465,
+      "rho_road": 0.20149678844066943,
+      "delta_rho": 0.5042077835763771
+    },
+    {
+      "study": "SK",
+      "pool": "union",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 1292,
+      "n_recorded": 308,
+      "positive_levels": 29,
+      "estimable": true,
+      "rho_rail": 0.6043819474144915,
+      "rho_road": 0.08951903098507498,
+      "delta_rho": 0.5148629164294165
+    },
+    {
+      "study": "SK",
+      "pool": "shared",
+      "donor": "CZ",
+      "recorded_only": false,
+      "n_evaluated": 342,
+      "n_recorded": 175,
+      "positive_levels": 29,
+      "estimable": true,
+      "rho_rail": 0.717626529145546,
+      "rho_road": 0.1305187512135564,
+      "delta_rho": 0.5871077779319896
+    },
+    {
+      "study": "SK",
+      "pool": "shared",
+      "donor": "IT",
+      "recorded_only": false,
+      "n_evaluated": 342,
+      "n_recorded": 175,
+      "positive_levels": 29,
+      "estimable": true,
+      "rho_rail": 0.3541832222252648,
+      "rho_road": 0.24165829495476995,
+      "delta_rho": 0.11252492727049487
+    },
+    {
+      "study": "IN",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 32,
+      "positive_levels": 13,
+      "estimable": true,
+      "rho_rail": 0.31832022218134043,
+      "rho_road": 0.11209063996356755,
+      "delta_rho": 0.20622958221777288
+    },
+    {
+      "study": "IN",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": true,
+      "n_evaluated": 32,
+      "n_recorded": 32,
+      "positive_levels": 13,
+      "estimable": true,
+      "rho_rail": -0.0008297364990076316,
+      "rho_road": -0.12816366764264944,
+      "delta_rho": 0.1273339311436418
+    },
+    {
+      "study": "IN",
+      "pool": "union",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 1303,
+      "n_recorded": 48,
+      "positive_levels": 14,
+      "estimable": true,
+      "rho_rail": 0.22996230629498163,
+      "rho_road": 0.08202967394340083,
+      "delta_rho": 0.1479326323515808
+    },
+    {
+      "study": "IN",
+      "pool": "shared",
+      "donor": "CZ",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 32,
+      "positive_levels": 13,
+      "estimable": true,
+      "rho_rail": 0.2591458623543589,
+      "rho_road": 0.06370296884668102,
+      "delta_rho": 0.19544289350767785
+    },
+    {
+      "study": "IN",
+      "pool": "shared",
+      "donor": "IT",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 32,
+      "positive_levels": 13,
+      "estimable": true,
+      "rho_rail": 0.26792960052030124,
+      "rho_road": 0.17052967042463016,
+      "delta_rho": 0.09739993009567108
+    },
+    {
+      "study": "AU_WA",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 2,
+      "positive_levels": 2,
+      "estimable": false,
+      "rho_rail": null,
+      "rho_road": null,
+      "delta_rho": null
+    },
+    {
+      "study": "AU_WA",
+      "pool": "shared",
+      "donor": "both",
+      "recorded_only": true,
+      "n_evaluated": 2,
+      "n_recorded": 2,
+      "positive_levels": 2,
+      "estimable": false,
+      "rho_rail": null,
+      "rho_road": null,
+      "delta_rho": null
+    },
+    {
+      "study": "AU_WA",
+      "pool": "union",
+      "donor": "both",
+      "recorded_only": false,
+      "n_evaluated": 1303,
+      "n_recorded": 5,
+      "positive_levels": 5,
+      "estimable": false,
+      "rho_rail": null,
+      "rho_road": null,
+      "delta_rho": null
+    },
+    {
+      "study": "AU_WA",
+      "pool": "shared",
+      "donor": "CZ",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 2,
+      "positive_levels": 2,
+      "estimable": false,
+      "rho_rail": null,
+      "rho_road": null,
+      "delta_rho": null
+    },
+    {
+      "study": "AU_WA",
+      "pool": "shared",
+      "donor": "IT",
+      "recorded_only": false,
+      "n_evaluated": 350,
+      "n_recorded": 2,
+      "positive_levels": 2,
+      "estimable": false,
+      "rho_rail": null,
+      "rho_road": null,
+      "delta_rho": null
+    }
+  ],
+  "background_contrasts": [
+    {
+      "study": "SI",
+      "background": "urban",
+      "n_evaluated": 344,
+      "estimable": true,
+      "difference_in_advantage": -0.040487229364242094
+    },
+    {
+      "study": "HRBA",
+      "background": "urban",
+      "n_evaluated": 346,
+      "estimable": true,
+      "difference_in_advantage": 0.09036901566801209
+    },
+    {
+      "study": "SK",
+      "background": "urban",
+      "n_evaluated": 342,
+      "estimable": true,
+      "difference_in_advantage": 0.3849093690402189
+    },
+    {
+      "study": "IN",
+      "background": "interior",
+      "n_evaluated": 350,
+      "estimable": true,
+      "difference_in_advantage": 0.06926153706406257
+    },
+    {
+      "study": "IN",
+      "background": "miren_road",
+      "n_evaluated": 350,
+      "estimable": true,
+      "difference_in_advantage": 0.0012780673529874664
+    }
+  ],
+  "publication_summaries": [
+    {
+      "donor": "both",
+      "pool": "shared",
+      "recorded_only": false,
+      "n_studies": 4,
+      "n_positive": 4,
+      "mean_delta_rho": 0.33891445202161447,
+      "leave_one_study_mean_range": [
+        0.27931027424578,
+        0.38694144423812055
+      ]
+    },
+    {
+      "donor": "both",
+      "pool": "shared",
+      "recorded_only": true,
+      "n_studies": 4,
+      "n_positive": 4,
+      "mean_delta_rho": 0.28318509861085794,
+      "leave_one_study_mean_range": [
+        0.20951087028901824,
+        0.33513548776659663
+      ]
+    },
+    {
+      "donor": "both",
+      "pool": "union",
+      "recorded_only": false,
+      "n_studies": 4,
+      "n_positive": 4,
+      "mean_delta_rho": 0.3014843804487115,
+      "leave_one_study_mean_range": [
+        0.23035820178847652,
+        0.3526682964810884
+      ]
+    },
+    {
+      "donor": "CZ",
+      "pool": "shared",
+      "recorded_only": false,
+      "n_studies": 4,
+      "n_positive": 4,
+      "mean_delta_rho": 0.3604494319499192,
+      "leave_one_study_mean_range": [
+        0.2848966499558957,
+        0.4154516114306663
+      ]
+    },
+    {
+      "donor": "IT",
+      "pool": "shared",
+      "recorded_only": false,
+      "n_studies": 4,
+      "n_positive": 4,
+      "mean_delta_rho": 0.11919783501260647,
+      "leave_one_study_mean_range": [
+        0.0787682788325197,
+        0.15013712030634427
+      ]
+    }
+  ]
+}
