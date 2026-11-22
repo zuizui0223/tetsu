@@ -60,7 +60,7 @@ class TestTemporal(unittest.TestCase):
         d=fixture()
         result=m.paired_temporal(d,NAMES,EIVE)
         p=[x for x in result if x["zone_pair"]==("Track","Interior Plot 2")
-           and x["metric"]=="position" and x["source_systems"]==1][0]
+           and x["metric"]=="position" and x["source_systems"]==3 and x["min_numeric_taxa_each_zone"]==1][0]
         self.assertEqual(p["paired_field_site_year_changes"]["all"]["n_same_source_sites"],31)
         self.assertEqual(p["paired_field_site_year_changes"]["station"]["n_same_source_sites"],16)
         self.assertEqual(p["paired_field_site_year_changes"]["between"]["n_same_source_sites"],15)
