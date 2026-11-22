@@ -1,0 +1,53 @@
+name: "v319 original Spain 5-block railroad embankment RCT published PLOS JATS source"
+on:
+  push:
+    branches: [research/tetsu-v319-Spain-rail-topsoil-randomized-study-20261122]
+    paths:
+      - 'scripts/audit_Rivera2014_Spain_rail_topsoil_original_JATS_v319.py'
+      - '.github/workflows/tetsu-v319-Rivera2014-original-Spain-rail-RCT-JATS.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v319-original-Spain-2014-rail-topsoil-RCT
+  cancel-in-progress: true
+jobs:
+  authentic-original-Spain-railway-RCT:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Reacquire only public original OA archival JATS XML with source DOI
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v319 results/audit/v319
+          curl -fL --retry 4 --retry-all-errors --connect-timeout 20 --max-time 180 \
+            'https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4077791/fullTextXML' \
+            -o source_original/v319/Rivera2014_original_PLOS_RCT_rail_embankment_JATS.xml
+          test "$(stat -c%s source_original/v319/Rivera2014_original_PLOS_RCT_rail_embankment_JATS.xml)" -gt 25000
+          sha256sum source_original/v319/Rivera2014_original_PLOS_RCT_rail_embankment_JATS.xml
+      - name: Extract original 2010-2011 source publication tabulated cover/richness without making up plot-level response
+        run: |
+          python -u scripts/audit_Rivera2014_Spain_rail_topsoil_original_JATS_v319.py \
+            --xml source_original/v319/Rivera2014_original_PLOS_RCT_rail_embankment_JATS.xml \
+            --output results/audit/v319/Rivera2014_original_Spain_railway_RCT_publication_JATS_tables.json
+      - name: Structural original-data guards
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('results/audit/v319/Rivera2014_original_Spain_railway_RCT_publication_JATS_tables.json').read_text())
+          assert j['original_source_doi_verified']
+          assert j['original_source_tables']
+          assert j['no_fake_new_DID_precision_or_confidence_interval']
+          assert j['original_individual_15_plot_values_verified'] is False
+          print('Spain real railway embankment RCT original-source record reproduced')
+          PY
+      - name: Export only original-source table QA, no source XML or full original articles
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v319-PLOS2014-original-Spain-rail-randomized-topsoil-table-scope
+          path: results/audit/v319/
+          if-no-files-found: warn
