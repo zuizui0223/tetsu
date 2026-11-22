@@ -1,0 +1,97 @@
+{
+  "version": "v317",
+  "source_title": "Mell et al (2024) Can linear transportation infrastructure verges constitute a habitat and/or a corridor for vascular plants in temperate ecosystems? A systematic review",
+  "publication_doi": "10.1186/s13750-024-00328-3",
+  "supplementary_original_filename": "13750_2024_328_MOESM8_ESM.xlsx",
+  "original_publisher_full_xlsx_bytes": 64630,
+  "original_publisher_full_xlsx_sha256": "0fd8ff9922c1138d5abd5289e743058b10be3b52c73d4d338cc9b9d2505def17",
+  "source_original_Q2_cases": 205,
+  "source_original_studies": 47,
+  "original_LTI_category_case_counts": {
+    "Road": 127,
+    "Powerline": 40,
+    "Pipeline": 35,
+    "Railway": 3
+  },
+  "railway_source_comparisons": 3,
+  "railway_source_distinct_publications": 2,
+  "railway_cases": [
+    {
+      "id": "Agence_Gaiadomo_2012_1",
+      "country": "France",
+      "original_continent_cell": "North_America",
+      "continent_typographical_warning": true,
+      "source_study_type": "Grey_litt",
+      "risk_of_bias": "Medium",
+      "replicates": "Pseudoreplicates",
+      "plant_status": "Unknown",
+      "response": "Species_richness",
+      "n_treatment": 20,
+      "n_control": 20,
+      "treatment": "Railway_embankments",
+      "reference": "adjacent_site_with_similar_vegetation",
+      "Hedges_d": 0.643905442565144,
+      "Hedges_var1982": 0.101402959909166,
+      "case_level_naive_wald_CI_95": [
+        0.01977,
+        1.26804
+      ]
+    },
+    {
+      "id": "Everingham_2019_3",
+      "country": "Australia",
+      "original_continent_cell": "Oceania",
+      "risk_of_bias": "Low",
+      "replicates": "Yes spatial",
+      "plant_status": "Native",
+      "response": "Species_richness",
+      "n_treatment": 24,
+      "n_control": 24,
+      "treatment": "Railway_embankment",
+      "reference": "fire_trail_in_sclerophyll_woodland",
+      "Hedges_d": -1.63326905465261,
+      "Hedges_var1982": 0.0842881923236667,
+      "case_level_naive_wald_CI_95": [
+        -2.2023,
+        -1.06424
+      ]
+    },
+    {
+      "id": "Everingham_2019_6",
+      "country": "Australia",
+      "original_continent_cell": "Oceania",
+      "risk_of_bias": "Low",
+      "replicates": "Yes spatial",
+      "plant_status": "Native",
+      "response": "Abundance",
+      "original_raw_outcome": "Cover_cm2",
+      "n_treatment": 24,
+      "n_control": 24,
+      "treatment": "Railway_embankment",
+      "reference": "fire_trail_in_sclerophyll_woodland",
+      "Hedges_d": -0.516972129076364,
+      "Hedges_var1982": 0.0842881923236667,
+      "case_level_naive_wald_CI_95": [
+        -1.08601,
+        0.05206
+      ]
+    }
+  ],
+  "meta_analysis_recommended": false,
+  "rail_richness_examples_not_comparable_because_plant_status_and_control_differ": true,
+  "new_original_raw_source": "https://onlinelibrary.wiley.com/doi/abs/10.1111/aec.12719",
+  "raw_new_source_filename": "aec12719-sup-0002-AppendixS4.xlsx",
+  "raw_new_source_includes": "Actual species collected in Everingham et al. 2019 NSW Australia railway verge/fire trail/roadside fieldwork",
+  "raw_source_already_acquired": false,
+  "source_run": "https://github.com/zuizui0223/tetsu/actions/runs/45009162011",
+  "source_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/45009162011/artifacts/14748957100",
+  "inference_limits": [
+    "Only 2 original independent railway primary publications (3 rows), insufficient for rail-specific random-effects meta-analysis or climate-regression",
+    "Australia two rows share original sampling units and are different outcomes (native richness vs native cover)",
+    "French outcome is Unknown nativeness, reference is adjacent similar vegetation, medium risk of bias with pseudoreplicates",
+    "Australian outcome native only, compared with woodland fire trails, not locally matched natural plot baseline",
+    "Review's French case has original 'Continent=North_America' despite France; do not use column without data QA",
+    "No independent rail-only prediction interval, climate interaction, and no physical train seed dispersal inference"
+  ],
+  "independent_raw_followup": "Retrieve Everingham 2019 original Appendix S4 workbook to analyse same-region native community transitions across railway/road/fire-trail habitats (if true sample data identifiable)."
+}
