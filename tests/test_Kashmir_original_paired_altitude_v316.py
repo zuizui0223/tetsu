@@ -81,7 +81,7 @@ class TestTruePairedThermalAltitude(unittest.TestCase):
                       {"values":{"A species":2.0,"B species":8.0,"C species":4.0},
                        "statuses":{"A species":"numeric","B species":"numeric","C species":"numeric"},
                        "limits":[1,12]})
-        self.assertAlmostEqual(one["difference"],2.0,places=10)
+        self.assertIsNone(one["difference"])
         self.assertEqual(one["n_rail_numeric"],2)
         self.assertEqual(one["n_interior_numeric"],2)
         self.assertFalse(one["estimable"])
