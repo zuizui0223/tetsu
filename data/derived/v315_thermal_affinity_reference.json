@@ -1,0 +1,5015 @@
+{
+  "design_commit": "12688cc91aab2a3844c47d512f3ce2b90e9086b8",
+  "primary_estimand": "Recorded-frequency weighted regional mean among taxa with numeric Tichy T",
+  "source_metadata": {
+    "source_sha256": {
+      "cz1.xlsx": "df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06",
+      "cz2.xlsx": "00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2",
+      "parma.pdf": "c09bd96ff7307a936030195cc4510bf2591576a713de54019625c04aa9333787",
+      "hrba.pdf": "90d489ca8cbc29464d3e6a2b1d8b5d9568c9940e953b1ce720964991366ab956",
+      "si/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+      "si/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json": "c3973ab0bc55740de019b470e1a2768562267d5df3a54c1916962ca112b603d1",
+      "sk30_2.pdf": "ff8271a396ecda01d92bba9817721577bcdd44fdac1309cc4884240c9e3c9838",
+      "Matrix_plot.xlsx": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474",
+      "miren.csv": "e966419c14879861198c6c1e01c49ee0eca00c3905d784102d6e2c229ac56169",
+      "tree1.xlsx": "6ce8e4ea068f644e9ad08eab97a4352e88c071fb46bea038d151f792eb8a21de",
+      "sk_urban.bin": "5c70e4b02a17b2886cafb0dde5221a6e7ad440780f55a51249b2fb95ff6d2f22",
+      "wa_rail_reserve.pdf": "5e392a5ff5f705fa01e728d19e8a0b8257dfb62bfb5235388ccf07952c4f50bd"
+    },
+    "rail": {
+      "CZ": {
+        "grain": "railway station",
+        "original_table_taxa": 761,
+        "sites": 39,
+        "raw_site_label_incidences": 6941,
+        "raw_labels": 761,
+        "raw_labels_with_key": 688,
+        "raw_labels_without_key": 73,
+        "unavailable_keys": 20,
+        "frequency_keys": 669
+      },
+      "IT": {
+        "grain": "railway station",
+        "original_table_taxa": 438,
+        "sites": 28,
+        "raw_site_label_incidences": 2864,
+        "raw_labels": 438,
+        "raw_labels_with_key": 431,
+        "raw_labels_without_key": 7,
+        "unavailable_keys": 1,
+        "frequency_keys": 429
+      },
+      "HRBA": {
+        "grain": "railway station",
+        "original_table_taxa": 359,
+        "sites": 15,
+        "raw_site_label_incidences": 1569,
+        "raw_labels": 359,
+        "raw_labels_with_key": 358,
+        "raw_labels_without_key": 1,
+        "unavailable_keys": 1,
+        "frequency_keys": 355
+      },
+      "SI": {
+        "grain": "matched ballast shoulder/toe site union",
+        "original_site_code_incidences": 2814,
+        "original_observed_codes": 285,
+        "observed_codes_without_codebook_row": 1,
+        "publisher_codebook_rows": 312,
+        "sites": 89,
+        "raw_site_label_incidences": 2812,
+        "raw_labels": 549,
+        "raw_labels_with_key": 525,
+        "raw_labels_without_key": 24,
+        "unavailable_keys": 7,
+        "frequency_keys": 258,
+        "field_codebook_scope": "occurrence labels only in matched same-side BS and BT zones",
+        "field_codebook_matched_zones": 346,
+        "field_codebook_occurrence_rows": 4794,
+        "field_codebook_conflicting_codes": 3,
+        "field_codebook_unmatched_strict_codes": 1,
+        "field_codebook_conflict_occurrence_rows": 55,
+        "field_codebook_conflict_site_code_incidences": 34,
+        "field_codebook_conflict_sites": 30,
+        "field_codebook_unavailable_keys": 7
+      },
+      "SK": {
+        "original_marginal_rows": 413,
+        "duplicate_key_marginals": 0,
+        "raw_labels": 413,
+        "raw_labels_with_key": 368,
+        "raw_labels_without_key": 45,
+        "unavailable_keys": 19,
+        "frequency_keys": 368,
+        "sites": 30,
+        "grain": "railway station marginals",
+        "inferred_occupied_station_incidence": 2605
+      },
+      "IN": {
+        "year": 2014,
+        "original_species_columns": 123,
+        "source_missing_species_cells_all_years": 4,
+        "grain": "station Track + Embankment union",
+        "sites": 16,
+        "raw_site_label_incidences": 544,
+        "raw_labels": 77,
+        "raw_labels_with_key": 76,
+        "raw_labels_without_key": 1,
+        "unavailable_keys": 0,
+        "frequency_keys": 76
+      },
+      "AU_WA": {
+        "grain": "2500 m² railway-reserve quadrats, Appendix G, OP excluded",
+        "year": 2008,
+        "original_area_m2": 2500,
+        "cohort_sha256": "d0931d3377df1f08b3a4b1bb5393d8198bf4dcdde0bf1dd9d0e97290a0c51a0f",
+        "strata": {
+          "YA": 63,
+          "YB": 57
+        },
+        "sites": 120,
+        "raw_site_label_incidences": 3412,
+        "raw_labels": 320,
+        "raw_labels_with_key": 282,
+        "raw_labels_without_key": 38,
+        "unavailable_keys": 4,
+        "frequency_keys": 257
+      }
+    },
+    "road": {
+      "CZ": {
+        "grain": "roadside plot 1, first eligible year per site",
+        "region": "CZE",
+        "roads": 1,
+        "years": [
+          2022
+        ],
+        "weighting": "equal sites within roads, then equal roads",
+        "sites": 21,
+        "raw_site_label_incidences": 1001,
+        "raw_labels": 242,
+        "raw_labels_with_key": 241,
+        "raw_labels_without_key": 1,
+        "unavailable_keys": 0,
+        "frequency_keys": 241
+      },
+      "IT": {
+        "grain": "roadside plot 1, first eligible year per site",
+        "region": "ITA",
+        "roads": 3,
+        "years": [
+          2022
+        ],
+        "weighting": "equal sites within roads, then equal roads",
+        "sites": 60,
+        "raw_site_label_incidences": 2966,
+        "raw_labels": 650,
+        "raw_labels_with_key": 648,
+        "raw_labels_without_key": 2,
+        "unavailable_keys": 0,
+        "frequency_keys": 648
+      },
+      "IN": {
+        "grain": "roadside plot 1, first eligible year per site",
+        "region": "IND",
+        "roads": 3,
+        "years": [
+          2017
+        ],
+        "weighting": "equal sites within roads, then equal roads",
+        "sites": 28,
+        "raw_site_label_incidences": 714,
+        "raw_labels": 174,
+        "raw_labels_with_key": 169,
+        "raw_labels_without_key": 5,
+        "unavailable_keys": 0,
+        "frequency_keys": 169
+      }
+    },
+    "background": {
+      "SI": {
+        "urban": {
+          "original_marginal_rows": 337,
+          "duplicate_key_marginals": 4,
+          "raw_labels": 337,
+          "raw_labels_with_key": 314,
+          "raw_labels_without_key": 23,
+          "unavailable_keys": 4,
+          "frequency_keys": 94,
+          "plots": 50,
+          "cities": 1,
+          "grain": "urban tree-pit printed frequencies"
+        }
+      },
+      "HRBA": {
+        "urban": {
+          "grain": "urban tree-pit printed frequencies",
+          "plots": 150,
+          "cities": 3,
+          "country_weights": {
+            "HR": 13,
+            "BA": 2
+          },
+          "original_marginal_rows": 337,
+          "duplicate_key_marginals": 4,
+          "raw_labels": 337,
+          "raw_labels_with_key": 314,
+          "raw_labels_without_key": 23,
+          "unavailable_keys": 4,
+          "frequency_keys": 185
+        }
+      },
+      "SK": {
+        "urban": {
+          "grain": "Malacky Table 1 urban relevés, excluding the railway relevé",
+          "original_releves": 18,
+          "original_table_taxa": 32,
+          "sites": 17,
+          "raw_site_label_incidences": 162,
+          "raw_labels": 32,
+          "raw_labels_with_key": 30,
+          "raw_labels_without_key": 2,
+          "unavailable_keys": 1,
+          "frequency_keys": 30
+        }
+      },
+      "IN": {
+        "interior": {
+          "year": 2014,
+          "original_species_columns": 123,
+          "source_missing_species_cells_all_years": 4,
+          "grain": "same-station Interior 1 + 2 union",
+          "sites": 16,
+          "raw_site_label_incidences": 245,
+          "raw_labels": 59,
+          "raw_labels_with_key": 58,
+          "raw_labels_without_key": 1,
+          "unavailable_keys": 0,
+          "frequency_keys": 58
+        },
+        "miren_road": {
+          "grain": "roadside plot 1, first eligible year per site",
+          "region": "IND",
+          "roads": 3,
+          "years": [
+            2017
+          ],
+          "weighting": "equal sites within roads, then equal roads",
+          "sites": 28,
+          "raw_site_label_incidences": 714,
+          "raw_labels": 174,
+          "raw_labels_with_key": 169,
+          "raw_labels_without_key": 5,
+          "unavailable_keys": 0,
+          "frequency_keys": 169
+        }
+      }
+    }
+  },
+  "trait_metadata": {
+    "design_commit": "12688cc91aab2a3844c47d512f3ce2b90e9086b8",
+    "sources": {
+      "tichy": {
+        "filename": "tichy_2023_zenodo_v2.xlsx",
+        "published_filename": "Indicator.values-tables-2022-11-07-Zenodo.v2.xlsx",
+        "sha256": "b3fa7c3a6e9d356e52a45472549f807967bd0c3189e58e7e8a22e0389c29cc4e",
+        "url": "https://zenodo.org/api/records/7427088/files/Indicator.values-tables-2022-11-07-Zenodo.v2.xlsx/content",
+        "dataset_doi": "10.5281/zenodo.7427088",
+        "publication_doi": "10.1111/jvs.13168",
+        "license": "CC BY 4.0",
+        "sheet": "Tab-IVs-Tichy-et-al2023",
+        "limits": [
+          1,
+          12
+        ],
+        "source_rows": 8908,
+        "source_status_counts": {
+          "indifferent": 1147,
+          "missing": 359,
+          "numeric": 7402
+        },
+        "bytes": 19503599,
+        "sha256_verified": true
+      },
+      "eive": {
+        "filename": "EIVE_Paper_1.0_SM_08.xlsx",
+        "published_filename": "EIVE_Paper_1.0_SM_08.xlsx",
+        "sha256": "9551b585ba13dfe3fddbd2287f65fc98ac9f4ec5f80b9ae6f6b985bed73fb4a6",
+        "url": "https://zenodo.org/api/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx/content",
+        "dataset_doi": "10.5281/zenodo.7534792",
+        "publication_doi": "10.3897/VCS.98324",
+        "license": "CC BY 4.0",
+        "sheet": "mainTable",
+        "limits": [
+          0,
+          10
+        ],
+        "source_rows": 14835,
+        "source_status_counts": {
+          "missing": 339,
+          "numeric": 14496
+        },
+        "bytes": 2900881,
+        "sha256_verified": true
+      }
+    },
+    "matching": "Strict species names; no inferred synonyms or infraspecific averaging",
+    "duplicate_policy": "Identical values/statuses collapse; conflicts remain unknown",
+    "scale_policy": "One fixed value per species and definition, shared across habitats",
+    "tichy_x_policy": "Indifferent; never converted to zero, missing, or a midpoint",
+    "eive_policy": "Separate consensus index retaining the original regional-indifference treatment"
+  },
+  "trait_audits": {
+    "tichy": {
+      "source_rows": 8908,
+      "source_status_counts": {
+        "indifferent": 1147,
+        "missing": 359,
+        "numeric": 7402
+      },
+      "excluded_taxon_rows": 251,
+      "eligible_species_rows": 8657,
+      "normalized_keys": 8657,
+      "duplicate_normalized_keys": 0,
+      "conflicting_normalized_keys": 0,
+      "retained_status_counts": {
+        "indifferent": 1083,
+        "missing": 357,
+        "numeric": 7217
+      }
+    },
+    "eive": {
+      "source_rows": 14835,
+      "source_status_counts": {
+        "missing": 339,
+        "numeric": 14496
+      },
+      "excluded_taxon_rows": 4146,
+      "eligible_species_rows": 10689,
+      "normalized_keys": 10689,
+      "duplicate_normalized_keys": 0,
+      "conflicting_normalized_keys": 0,
+      "retained_status_counts": {
+        "missing": 291,
+        "numeric": 10398
+      },
+      "source_rank_counts": {
+        "Species": 11148,
+        "Subspecies": 2899,
+        "Species Aggregate": 664,
+        "Species Aggregate s. l.": 60,
+        "Variety": 42,
+        "Section": 22
+      }
+    }
+  },
+  "climate_hypothesis_A": {
+    "status": "not_identified",
+    "local_paired_independent_regions": 1,
+    "fitted": false,
+    "reason": "Only IN has eligible paired local rail/nonrail data; regional references are not climate-matched and no common site climate is linked"
+  },
+  "assemblages": [
+    {
+      "dataset": "rail:CZ",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 669,
+      "n_numeric": 322,
+      "mean": 5.7392882065596655,
+      "total_frequency_mass": 164.1025641025641,
+      "numeric_frequency_mass": 73.48717948717949,
+      "numeric_weight_sum": 73.48717948717949,
+      "numeric_taxon_coverage": 0.4813153961136024,
+      "numeric_frequency_coverage": 0.44781250000000006,
+      "status_taxon_counts": {
+        "indifferent": 204,
+        "numeric": 322,
+        "unmatched": 143
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.39265625,
+        "numeric": 0.44781250000000006,
+        "unmatched": 0.15953125
+      },
+      "indifferent_fraction_among_known_status": 0.4671872095184979,
+      "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+      "numeric_taxon_sha256": "8a3cb7d019728325c2dd3a3a38a660bb88f76eb785c8ca2c0c3687e997dd3adf"
+    },
+    {
+      "dataset": "rail:IT",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 429,
+      "n_numeric": 185,
+      "mean": 6.53556658395368,
+      "total_frequency_mass": 100.71428571428571,
+      "numeric_frequency_mass": 43.17857142857143,
+      "numeric_weight_sum": 43.17857142857143,
+      "numeric_taxon_coverage": 0.43123543123543123,
+      "numeric_frequency_coverage": 0.4287234042553192,
+      "status_taxon_counts": {
+        "indifferent": 163,
+        "numeric": 185,
+        "unmatched": 81
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4297872340425532,
+        "numeric": 0.4287234042553192,
+        "unmatched": 0.14148936170212767
+      },
+      "indifferent_fraction_among_known_status": 0.5006195786864931,
+      "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+      "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+    },
+    {
+      "dataset": "rail:HRBA",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 355,
+      "n_numeric": 173,
+      "mean": 7.431198910081744,
+      "total_frequency_mass": 103.93333333333334,
+      "numeric_frequency_mass": 48.93333333333333,
+      "numeric_weight_sum": 48.93333333333333,
+      "numeric_taxon_coverage": 0.48732394366197185,
+      "numeric_frequency_coverage": 0.4708146247594611,
+      "status_taxon_counts": {
+        "indifferent": 134,
+        "numeric": 173,
+        "unmatched": 48
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4150096215522771,
+        "numeric": 0.4708146247594611,
+        "unmatched": 0.1141757536882617
+      },
+      "indifferent_fraction_among_known_status": 0.46850108616944247,
+      "named_taxon_sha256": "578c5dca2a3f00de6994b64106af4a4b4d505223f5e5dfffefaae05861a83543",
+      "numeric_taxon_sha256": "0ffb21a7959f57f4fad0f6b9ace0150e51c313443e107cc402d8963390fc0fa1"
+    },
+    {
+      "dataset": "rail:SI",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 258,
+      "n_numeric": 103,
+      "mean": 5.788420019627085,
+      "total_frequency_mass": 29.775280898876403,
+      "numeric_frequency_mass": 11.44943820224719,
+      "numeric_weight_sum": 11.44943820224719,
+      "numeric_taxon_coverage": 0.3992248062015504,
+      "numeric_frequency_coverage": 0.38452830188679243,
+      "status_taxon_counts": {
+        "indifferent": 114,
+        "numeric": 103,
+        "unmatched": 41
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.47622641509433966,
+        "numeric": 0.38452830188679243,
+        "unmatched": 0.13924528301886793
+      },
+      "indifferent_fraction_among_known_status": 0.5532661113546691,
+      "named_taxon_sha256": "05f3a3fdefe26bc5634dd72ea5c329de2b1d7ee9130b658fef5f7f5c5b917903",
+      "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+    },
+    {
+      "dataset": "rail:SK",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 368,
+      "n_numeric": 170,
+      "mean": 5.790219560878244,
+      "total_frequency_mass": 78.53333333333333,
+      "numeric_frequency_mass": 33.4,
+      "numeric_weight_sum": 33.4,
+      "numeric_taxon_coverage": 0.46195652173913043,
+      "numeric_frequency_coverage": 0.42529711375212226,
+      "status_taxon_counts": {
+        "indifferent": 148,
+        "numeric": 170,
+        "unmatched": 50
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4325127334465196,
+        "numeric": 0.42529711375212226,
+        "unmatched": 0.14219015280135824
+      },
+      "indifferent_fraction_among_known_status": 0.5042058386937159,
+      "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+      "numeric_taxon_sha256": "109449d2ccf2c0cefe6b2d56df594088e0a6849fe5eaae873462e59e2f3f9acf"
+    },
+    {
+      "dataset": "rail:IN",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 76,
+      "n_numeric": 30,
+      "mean": 6.089669421487604,
+      "total_frequency_mass": 33.875,
+      "numeric_frequency_mass": 15.125,
+      "numeric_weight_sum": 15.125,
+      "numeric_taxon_coverage": 0.39473684210526316,
+      "numeric_frequency_coverage": 0.44649446494464945,
+      "status_taxon_counts": {
+        "indifferent": 23,
+        "numeric": 30,
+        "unmatched": 23
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.2878228782287823,
+        "numeric": 0.44649446494464945,
+        "unmatched": 0.2656826568265683
+      },
+      "indifferent_fraction_among_known_status": 0.39195979899497485,
+      "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+      "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+    },
+    {
+      "dataset": "rail:AU_WA",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": false,
+      "support_failures": [
+        "insufficient_numeric_taxa"
+      ],
+      "weighting": "recorded_frequency",
+      "n_named": 257,
+      "n_numeric": 4,
+      "mean": null,
+      "total_frequency_mass": 24.625,
+      "numeric_frequency_mass": 0.9583333333333333,
+      "numeric_weight_sum": 0.9583333333333333,
+      "numeric_taxon_coverage": 0.01556420233463035,
+      "numeric_frequency_coverage": 0.03891708967851099,
+      "status_taxon_counts": {
+        "indifferent": 1,
+        "numeric": 4,
+        "unmatched": 252
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.016243654822335026,
+        "numeric": 0.03891708967851099,
+        "unmatched": 0.9448392554991539
+      },
+      "indifferent_fraction_among_known_status": 0.294478527607362,
+      "named_taxon_sha256": "ceb32b45950d39013a41030c3893914c825dd568a384aadb630d0af2d8ec969a",
+      "numeric_taxon_sha256": "f788a376ed264cef95a5dfe658448298200bc07e64c19a5f842a6b73f0138b80"
+    },
+    {
+      "dataset": "road:CZ",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 241,
+      "n_numeric": 124,
+      "mean": 4.625111111111111,
+      "total_frequency_mass": 46.666666666666664,
+      "numeric_frequency_mass": 21.428571428571427,
+      "numeric_weight_sum": 21.428571428571427,
+      "numeric_taxon_coverage": 0.5145228215767634,
+      "numeric_frequency_coverage": 0.45918367346938777,
+      "status_taxon_counts": {
+        "indifferent": 67,
+        "numeric": 124,
+        "unmatched": 50
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.28877551020408165,
+        "numeric": 0.45918367346938777,
+        "unmatched": 0.2520408163265306
+      },
+      "indifferent_fraction_among_known_status": 0.3860845839017735,
+      "named_taxon_sha256": "17fd4f067602a799e79bdece4b617a391ae4655b2dfe430a8d06ef7d7f3c5cc8",
+      "numeric_taxon_sha256": "5050f5e749536abf7a478a731fdd521b5dc39266f4d76a2923f7cb0c3e982d81"
+    },
+    {
+      "dataset": "road:IT",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 648,
+      "n_numeric": 347,
+      "mean": 5.817520215633422,
+      "total_frequency_mass": 49.13333333333333,
+      "numeric_frequency_mass": 24.733333333333334,
+      "numeric_weight_sum": 24.733333333333334,
+      "numeric_taxon_coverage": 0.5354938271604939,
+      "numeric_frequency_coverage": 0.5033921302578019,
+      "status_taxon_counts": {
+        "indifferent": 204,
+        "numeric": 347,
+        "unmatched": 97
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.3439620081411126,
+        "numeric": 0.5033921302578019,
+        "unmatched": 0.15264586160108548
+      },
+      "indifferent_fraction_among_known_status": 0.4059247397918334,
+      "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+      "numeric_taxon_sha256": "56e38aa4cb12961cab15280d419cc289af274181ed085c3f6265ad1047c499e7"
+    },
+    {
+      "dataset": "road:IN",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 169,
+      "n_numeric": 45,
+      "mean": 5.407407407407407,
+      "total_frequency_mass": 24.25925925925926,
+      "numeric_frequency_mass": 8.034090909090908,
+      "numeric_weight_sum": 8.034090909090908,
+      "numeric_taxon_coverage": 0.26627218934911245,
+      "numeric_frequency_coverage": 0.33117626648160997,
+      "status_taxon_counts": {
+        "indifferent": 36,
+        "numeric": 45,
+        "unmatched": 88
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.22517349063150588,
+        "numeric": 0.33117626648160997,
+        "unmatched": 0.4436502428868841
+      },
+      "indifferent_fraction_among_known_status": 0.404733690906823,
+      "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+      "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+    },
+    {
+      "dataset": "background:SI:urban",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 94,
+      "n_numeric": 46,
+      "mean": 5.585920577617329,
+      "total_frequency_mass": 11.16,
+      "numeric_frequency_mass": 5.54,
+      "numeric_weight_sum": 5.54,
+      "numeric_taxon_coverage": 0.48936170212765956,
+      "numeric_frequency_coverage": 0.496415770609319,
+      "status_taxon_counts": {
+        "indifferent": 40,
+        "numeric": 46,
+        "unmatched": 8
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.3888888888888889,
+        "numeric": 0.496415770609319,
+        "unmatched": 0.11469534050179211
+      },
+      "indifferent_fraction_among_known_status": 0.4392712550607288,
+      "named_taxon_sha256": "a6f3f8ed72e4bda2f5c6cfd82cabd5e51ce8df771a8327ef7748b524ef468b41",
+      "numeric_taxon_sha256": "f0aa4e9a6cf88e63200e248741736e9a6aca452d5325284513e4a849ae1aca59"
+    },
+    {
+      "dataset": "background:HRBA:urban",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 185,
+      "n_numeric": 93,
+      "mean": 6.104070710347064,
+      "total_frequency_mass": 9.567333333333334,
+      "numeric_frequency_mass": 4.110666666666667,
+      "numeric_weight_sum": 4.110666666666667,
+      "numeric_taxon_coverage": 0.5027027027027027,
+      "numeric_frequency_coverage": 0.4296564699324089,
+      "status_taxon_counts": {
+        "indifferent": 80,
+        "numeric": 93,
+        "unmatched": 12
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4813601839593059,
+        "numeric": 0.4296564699324089,
+        "unmatched": 0.08898334610828514
+      },
+      "indifferent_fraction_among_known_status": 0.5283769313140584,
+      "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+      "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+    },
+    {
+      "dataset": "background:SK:urban",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 30,
+      "n_numeric": 15,
+      "mean": 5.8211538461538455,
+      "total_frequency_mass": 8.294117647058824,
+      "numeric_frequency_mass": 3.058823529411765,
+      "numeric_weight_sum": 3.058823529411765,
+      "numeric_taxon_coverage": 0.5,
+      "numeric_frequency_coverage": 0.36879432624113473,
+      "status_taxon_counts": {
+        "indifferent": 10,
+        "numeric": 15,
+        "unmatched": 5
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.38297872340425526,
+        "numeric": 0.36879432624113473,
+        "unmatched": 0.24822695035460987
+      },
+      "indifferent_fraction_among_known_status": 0.5094339622641509,
+      "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+      "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+    },
+    {
+      "dataset": "background:IN:interior",
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 58,
+      "n_numeric": 26,
+      "mean": 6.134166666666667,
+      "total_frequency_mass": 15.125,
+      "numeric_frequency_mass": 7.5,
+      "numeric_weight_sum": 7.5,
+      "numeric_taxon_coverage": 0.4482758620689655,
+      "numeric_frequency_coverage": 0.49586776859504134,
+      "status_taxon_counts": {
+        "indifferent": 15,
+        "numeric": 26,
+        "unmatched": 17
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.25206611570247933,
+        "numeric": 0.49586776859504134,
+        "unmatched": 0.25206611570247933
+      },
+      "indifferent_fraction_among_known_status": 0.3370165745856354,
+      "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+      "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+    },
+    {
+      "dataset": "rail:CZ",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 669,
+      "n_numeric": 605,
+      "mean": 4.577591616227453,
+      "total_frequency_mass": 164.1025641025641,
+      "numeric_frequency_mass": 150.71794871794873,
+      "numeric_weight_sum": 150.71794871794873,
+      "numeric_taxon_coverage": 0.9043348281016442,
+      "numeric_frequency_coverage": 0.9184375000000001,
+      "status_taxon_counts": {
+        "missing": 1,
+        "numeric": 605,
+        "unmatched": 63
+      },
+      "status_frequency_fraction": {
+        "missing": 0.0003125,
+        "numeric": 0.9184375000000001,
+        "unmatched": 0.08125000000000002
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+      "numeric_taxon_sha256": "27ae3eda6f4b51a2c915d9db81426c51200bbb24e90f44393c1bc2db2d62ef2b"
+    },
+    {
+      "dataset": "rail:IT",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 429,
+      "n_numeric": 392,
+      "mean": 5.062509707017641,
+      "total_frequency_mass": 100.71428571428571,
+      "numeric_frequency_mass": 94.07142857142857,
+      "numeric_weight_sum": 94.07142857142857,
+      "numeric_taxon_coverage": 0.9137529137529138,
+      "numeric_frequency_coverage": 0.9340425531914894,
+      "status_taxon_counts": {
+        "numeric": 392,
+        "unmatched": 37
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.9340425531914894,
+        "unmatched": 0.06595744680851064
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+      "numeric_taxon_sha256": "77233e0617cabb7ba6ba65703384673c63c6221a545e23340f4aa2cf8ea15f03"
+    },
+    {
+      "dataset": "rail:HRBA",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 355,
+      "n_numeric": 344,
+      "mean": 5.499611301689998,
+      "total_frequency_mass": 103.93333333333334,
+      "numeric_frequency_mass": 101.13333333333333,
+      "numeric_weight_sum": 101.13333333333333,
+      "numeric_taxon_coverage": 0.9690140845070423,
+      "numeric_frequency_coverage": 0.973059653624118,
+      "status_taxon_counts": {
+        "numeric": 344,
+        "unmatched": 11
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.973059653624118,
+        "unmatched": 0.026940346375881972
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "578c5dca2a3f00de6994b64106af4a4b4d505223f5e5dfffefaae05861a83543",
+      "numeric_taxon_sha256": "a86a3553eb482abaa322acba2898a26ce3994848d1f6c7ab4b65d10e4d092e80"
+    },
+    {
+      "dataset": "rail:SI",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 258,
+      "n_numeric": 241,
+      "mean": 4.5766378510758265,
+      "total_frequency_mass": 29.775280898876403,
+      "numeric_frequency_mass": 28.01123595505618,
+      "numeric_weight_sum": 28.01123595505618,
+      "numeric_taxon_coverage": 0.9341085271317829,
+      "numeric_frequency_coverage": 0.9407547169811321,
+      "status_taxon_counts": {
+        "numeric": 241,
+        "unmatched": 17
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.9407547169811321,
+        "unmatched": 0.05924528301886793
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "05f3a3fdefe26bc5634dd72ea5c329de2b1d7ee9130b658fef5f7f5c5b917903",
+      "numeric_taxon_sha256": "d4c6ecf6e2b9279a859a84fbcb88931c55f4c338be8fc86785ad22d4025899fb"
+    },
+    {
+      "dataset": "rail:SK",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 368,
+      "n_numeric": 341,
+      "mean": 4.674008358766735,
+      "total_frequency_mass": 78.53333333333333,
+      "numeric_frequency_mass": 70.56666666666666,
+      "numeric_weight_sum": 70.56666666666666,
+      "numeric_taxon_coverage": 0.9266304347826086,
+      "numeric_frequency_coverage": 0.8985568760611206,
+      "status_taxon_counts": {
+        "numeric": 341,
+        "unmatched": 27
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.8985568760611206,
+        "unmatched": 0.10144312393887946
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+      "numeric_taxon_sha256": "0c0ebf2c26e7497fc31697e6566c13ee844d804672fa8bcee7aeec7b5c7fce18"
+    },
+    {
+      "dataset": "rail:IN",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 76,
+      "n_numeric": 62,
+      "mean": 4.847761051450224,
+      "total_frequency_mass": 33.875,
+      "numeric_frequency_mass": 27.5625,
+      "numeric_weight_sum": 27.5625,
+      "numeric_taxon_coverage": 0.8157894736842105,
+      "numeric_frequency_coverage": 0.8136531365313653,
+      "status_taxon_counts": {
+        "numeric": 62,
+        "unmatched": 14
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.8136531365313653,
+        "unmatched": 0.1863468634686347
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+      "numeric_taxon_sha256": "dcb49cf75556c109cde6be438845e7bdf0dbab5af7f95eb89fcb61ceb9f3c007"
+    },
+    {
+      "dataset": "rail:AU_WA",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": false,
+      "support_failures": [
+        "insufficient_numeric_taxa"
+      ],
+      "weighting": "recorded_frequency",
+      "n_named": 257,
+      "n_numeric": 9,
+      "mean": null,
+      "total_frequency_mass": 24.625,
+      "numeric_frequency_mass": 1.7,
+      "numeric_weight_sum": 1.7,
+      "numeric_taxon_coverage": 0.03501945525291829,
+      "numeric_frequency_coverage": 0.06903553299492386,
+      "status_taxon_counts": {
+        "numeric": 9,
+        "unmatched": 248
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.06903553299492386,
+        "unmatched": 0.9309644670050762
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "ceb32b45950d39013a41030c3893914c825dd568a384aadb630d0af2d8ec969a",
+      "numeric_taxon_sha256": "8f947282bafeeb0ac0f2879199394b84a4535305f5bc72278b18f9ef28bf02fa"
+    },
+    {
+      "dataset": "road:CZ",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 241,
+      "n_numeric": 220,
+      "mean": 3.69376755005107,
+      "total_frequency_mass": 46.666666666666664,
+      "numeric_frequency_mass": 41.95238095238095,
+      "numeric_weight_sum": 41.95238095238095,
+      "numeric_taxon_coverage": 0.9128630705394191,
+      "numeric_frequency_coverage": 0.8989795918367347,
+      "status_taxon_counts": {
+        "numeric": 220,
+        "unmatched": 21
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.8989795918367347,
+        "unmatched": 0.10102040816326531
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "17fd4f067602a799e79bdece4b617a391ae4655b2dfe430a8d06ef7d7f3c5cc8",
+      "numeric_taxon_sha256": "1814aa609e94a646f49842a3f578926ce25fa9e7ff18161b1f8809626ed9b2d0"
+    },
+    {
+      "dataset": "road:IT",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 648,
+      "n_numeric": 596,
+      "mean": 4.582211343497433,
+      "total_frequency_mass": 49.13333333333333,
+      "numeric_frequency_mass": 45.88333333333333,
+      "numeric_weight_sum": 45.88333333333333,
+      "numeric_taxon_coverage": 0.9197530864197531,
+      "numeric_frequency_coverage": 0.933853459972863,
+      "status_taxon_counts": {
+        "numeric": 596,
+        "unmatched": 52
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.933853459972863,
+        "unmatched": 0.06614654002713705
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+      "numeric_taxon_sha256": "44e4cdc2c9c621b6d5d04226aac12e343f835cf814f250d697bc5959f58a0913"
+    },
+    {
+      "dataset": "road:IN",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 169,
+      "n_numeric": 97,
+      "mean": 4.416710783279027,
+      "total_frequency_mass": 24.25925925925926,
+      "numeric_frequency_mass": 16.724747474747474,
+      "numeric_weight_sum": 16.724747474747474,
+      "numeric_taxon_coverage": 0.5739644970414202,
+      "numeric_frequency_coverage": 0.6894170714781401,
+      "status_taxon_counts": {
+        "numeric": 97,
+        "unmatched": 72
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.6894170714781401,
+        "unmatched": 0.3105829285218598
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+      "numeric_taxon_sha256": "fe6cbb283dd7242d72c0a524c4bd42d692d84054df4fbdd736c6774676fd0da6"
+    },
+    {
+      "dataset": "background:SI:urban",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 94,
+      "n_numeric": 94,
+      "mean": 4.444901733328813,
+      "total_frequency_mass": 11.16,
+      "numeric_frequency_mass": 11.16,
+      "numeric_weight_sum": 11.16,
+      "numeric_taxon_coverage": 1.0,
+      "numeric_frequency_coverage": 1.0,
+      "status_taxon_counts": {
+        "numeric": 94
+      },
+      "status_frequency_fraction": {
+        "numeric": 1.0
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "a6f3f8ed72e4bda2f5c6cfd82cabd5e51ce8df771a8327ef7748b524ef468b41",
+      "numeric_taxon_sha256": "a6f3f8ed72e4bda2f5c6cfd82cabd5e51ce8df771a8327ef7748b524ef468b41"
+    },
+    {
+      "dataset": "background:HRBA:urban",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 185,
+      "n_numeric": 184,
+      "mean": 4.77015211540479,
+      "total_frequency_mass": 9.567333333333334,
+      "numeric_frequency_mass": 9.55,
+      "numeric_weight_sum": 9.55,
+      "numeric_taxon_coverage": 0.9945945945945946,
+      "numeric_frequency_coverage": 0.9981882795623999,
+      "status_taxon_counts": {
+        "numeric": 184,
+        "unmatched": 1
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.9981882795623999,
+        "unmatched": 0.001811720437600167
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+      "numeric_taxon_sha256": "481019312537b38f4deb2d208e2e08d8cb066ef0e676f3e7e23588990e6cd1e8"
+    },
+    {
+      "dataset": "background:SK:urban",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 30,
+      "n_numeric": 28,
+      "mean": 4.675152882777649,
+      "total_frequency_mass": 8.294117647058824,
+      "numeric_frequency_mass": 7.470588235294118,
+      "numeric_weight_sum": 7.470588235294118,
+      "numeric_taxon_coverage": 0.9333333333333333,
+      "numeric_frequency_coverage": 0.900709219858156,
+      "status_taxon_counts": {
+        "numeric": 28,
+        "unmatched": 2
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.900709219858156,
+        "unmatched": 0.09929078014184396
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+      "numeric_taxon_sha256": "8181f90baa82624c8120e919df61c265dc900be5baa9c04059b5092aea9e046b"
+    },
+    {
+      "dataset": "background:IN:interior",
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 58,
+      "n_numeric": 50,
+      "mean": 4.805225136457827,
+      "total_frequency_mass": 15.125,
+      "numeric_frequency_mass": 13.875,
+      "numeric_weight_sum": 13.875,
+      "numeric_taxon_coverage": 0.8620689655172413,
+      "numeric_frequency_coverage": 0.9173553719008265,
+      "status_taxon_counts": {
+        "numeric": 50,
+        "unmatched": 8
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.9173553719008265,
+        "unmatched": 0.08264462809917356
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+      "numeric_taxon_sha256": "a2233d57ab84752c590decbfca63f9f1b9bd733d591ce81392ef225d6df0fdaf"
+    },
+    {
+      "dataset": "rail:CZ",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 669,
+      "n_numeric": 321,
+      "mean": 5.738499127399651,
+      "total_frequency_mass": 164.1025641025641,
+      "numeric_frequency_mass": 73.46153846153847,
+      "numeric_weight_sum": 73.46153846153847,
+      "numeric_taxon_coverage": 0.4798206278026906,
+      "numeric_frequency_coverage": 0.4476562500000001,
+      "status_taxon_counts": {
+        "indifferent": 204,
+        "numeric": 321,
+        "outside_common_numeric": 1,
+        "unmatched": 143
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.39265625,
+        "numeric": 0.4476562500000001,
+        "outside_common_numeric": 0.00015625,
+        "unmatched": 0.15953125
+      },
+      "indifferent_fraction_among_known_status": 0.4672740795834882,
+      "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+      "numeric_taxon_sha256": "af5ebef1e4901d5041dfa5e8802b54e9a6dfe7318ba6f44f08031add6e30ecf1"
+    },
+    {
+      "dataset": "rail:IT",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 429,
+      "n_numeric": 185,
+      "mean": 6.53556658395368,
+      "total_frequency_mass": 100.71428571428571,
+      "numeric_frequency_mass": 43.17857142857143,
+      "numeric_weight_sum": 43.17857142857143,
+      "numeric_taxon_coverage": 0.43123543123543123,
+      "numeric_frequency_coverage": 0.4287234042553192,
+      "status_taxon_counts": {
+        "indifferent": 163,
+        "numeric": 185,
+        "unmatched": 81
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4297872340425532,
+        "numeric": 0.4287234042553192,
+        "unmatched": 0.14148936170212767
+      },
+      "indifferent_fraction_among_known_status": 0.5006195786864931,
+      "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+      "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+    },
+    {
+      "dataset": "rail:HRBA",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 355,
+      "n_numeric": 172,
+      "mean": 7.4313698630137,
+      "total_frequency_mass": 103.93333333333334,
+      "numeric_frequency_mass": 48.666666666666664,
+      "numeric_weight_sum": 48.666666666666664,
+      "numeric_taxon_coverage": 0.48450704225352115,
+      "numeric_frequency_coverage": 0.46824887748556765,
+      "status_taxon_counts": {
+        "indifferent": 134,
+        "numeric": 172,
+        "outside_common_numeric": 1,
+        "unmatched": 48
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4150096215522771,
+        "numeric": 0.46824887748556765,
+        "outside_common_numeric": 0.0025657472738935213,
+        "unmatched": 0.1141757536882617
+      },
+      "indifferent_fraction_among_known_status": 0.4698620188816267,
+      "named_taxon_sha256": "578c5dca2a3f00de6994b64106af4a4b4d505223f5e5dfffefaae05861a83543",
+      "numeric_taxon_sha256": "f4d47d2d65b7ffc8e71a125ee8ccf4c8ca07037bbf7eddeb524e77f5b94ac0d0"
+    },
+    {
+      "dataset": "rail:SI",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 258,
+      "n_numeric": 103,
+      "mean": 5.788420019627085,
+      "total_frequency_mass": 29.775280898876403,
+      "numeric_frequency_mass": 11.44943820224719,
+      "numeric_weight_sum": 11.44943820224719,
+      "numeric_taxon_coverage": 0.3992248062015504,
+      "numeric_frequency_coverage": 0.38452830188679243,
+      "status_taxon_counts": {
+        "indifferent": 114,
+        "numeric": 103,
+        "unmatched": 41
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.47622641509433966,
+        "numeric": 0.38452830188679243,
+        "unmatched": 0.13924528301886793
+      },
+      "indifferent_fraction_among_known_status": 0.5532661113546691,
+      "named_taxon_sha256": "05f3a3fdefe26bc5634dd72ea5c329de2b1d7ee9130b658fef5f7f5c5b917903",
+      "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+    },
+    {
+      "dataset": "rail:SK",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 368,
+      "n_numeric": 169,
+      "mean": 5.7902,
+      "total_frequency_mass": 78.53333333333333,
+      "numeric_frequency_mass": 33.333333333333336,
+      "numeric_weight_sum": 33.333333333333336,
+      "numeric_taxon_coverage": 0.4592391304347826,
+      "numeric_frequency_coverage": 0.42444821731748733,
+      "status_taxon_counts": {
+        "indifferent": 148,
+        "numeric": 169,
+        "outside_common_numeric": 1,
+        "unmatched": 50
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4325127334465196,
+        "numeric": 0.42444821731748733,
+        "outside_common_numeric": 0.0008488964346349745,
+        "unmatched": 0.14219015280135824
+      },
+      "indifferent_fraction_among_known_status": 0.5047052996532937,
+      "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+      "numeric_taxon_sha256": "e928a7a907d470ceb38d142d7313abae0bda3023c2c838d6cf780f4f0106bc1c"
+    },
+    {
+      "dataset": "rail:IN",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 76,
+      "n_numeric": 30,
+      "mean": 6.089669421487604,
+      "total_frequency_mass": 33.875,
+      "numeric_frequency_mass": 15.125,
+      "numeric_weight_sum": 15.125,
+      "numeric_taxon_coverage": 0.39473684210526316,
+      "numeric_frequency_coverage": 0.44649446494464945,
+      "status_taxon_counts": {
+        "indifferent": 23,
+        "numeric": 30,
+        "unmatched": 23
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.2878228782287823,
+        "numeric": 0.44649446494464945,
+        "unmatched": 0.2656826568265683
+      },
+      "indifferent_fraction_among_known_status": 0.39195979899497485,
+      "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+      "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+    },
+    {
+      "dataset": "rail:AU_WA",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": false,
+      "support_failures": [
+        "insufficient_numeric_taxa"
+      ],
+      "weighting": "recorded_frequency",
+      "n_named": 257,
+      "n_numeric": 4,
+      "mean": null,
+      "total_frequency_mass": 24.625,
+      "numeric_frequency_mass": 0.9583333333333333,
+      "numeric_weight_sum": 0.9583333333333333,
+      "numeric_taxon_coverage": 0.01556420233463035,
+      "numeric_frequency_coverage": 0.03891708967851099,
+      "status_taxon_counts": {
+        "indifferent": 1,
+        "numeric": 4,
+        "unmatched": 252
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.016243654822335026,
+        "numeric": 0.03891708967851099,
+        "unmatched": 0.9448392554991539
+      },
+      "indifferent_fraction_among_known_status": 0.294478527607362,
+      "named_taxon_sha256": "ceb32b45950d39013a41030c3893914c825dd568a384aadb630d0af2d8ec969a",
+      "numeric_taxon_sha256": "f788a376ed264cef95a5dfe658448298200bc07e64c19a5f842a6b73f0138b80"
+    },
+    {
+      "dataset": "road:CZ",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 241,
+      "n_numeric": 123,
+      "mean": 4.617225950782998,
+      "total_frequency_mass": 46.666666666666664,
+      "numeric_frequency_mass": 21.285714285714285,
+      "numeric_weight_sum": 21.285714285714285,
+      "numeric_taxon_coverage": 0.5103734439834025,
+      "numeric_frequency_coverage": 0.45612244897959187,
+      "status_taxon_counts": {
+        "indifferent": 67,
+        "numeric": 123,
+        "outside_common_numeric": 1,
+        "unmatched": 50
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.28877551020408165,
+        "numeric": 0.45612244897959187,
+        "outside_common_numeric": 0.003061224489795918,
+        "unmatched": 0.2520408163265306
+      },
+      "indifferent_fraction_among_known_status": 0.38767123287671235,
+      "named_taxon_sha256": "17fd4f067602a799e79bdece4b617a391ae4655b2dfe430a8d06ef7d7f3c5cc8",
+      "numeric_taxon_sha256": "c9969cecc310b2d7f5eeb6f1b0355ee46d8e3c745bd13b6cc1c1b3df90cd1821"
+    },
+    {
+      "dataset": "road:IT",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 648,
+      "n_numeric": 342,
+      "mean": 5.818219178082192,
+      "total_frequency_mass": 49.13333333333333,
+      "numeric_frequency_mass": 24.333333333333332,
+      "numeric_weight_sum": 24.333333333333332,
+      "numeric_taxon_coverage": 0.5277777777777778,
+      "numeric_frequency_coverage": 0.4952510176390773,
+      "status_taxon_counts": {
+        "indifferent": 204,
+        "numeric": 342,
+        "outside_common_numeric": 5,
+        "unmatched": 97
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.3439620081411126,
+        "numeric": 0.4952510176390773,
+        "outside_common_numeric": 0.00814111261872456,
+        "unmatched": 0.15264586160108548
+      },
+      "indifferent_fraction_among_known_status": 0.40986257073565074,
+      "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+      "numeric_taxon_sha256": "0e7b792f685f69cfac39dc5685d8db15c91f597f381b2d745751d11f4dd5ba29"
+    },
+    {
+      "dataset": "road:IN",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 169,
+      "n_numeric": 45,
+      "mean": 5.407407407407407,
+      "total_frequency_mass": 24.25925925925926,
+      "numeric_frequency_mass": 8.034090909090908,
+      "numeric_weight_sum": 8.034090909090908,
+      "numeric_taxon_coverage": 0.26627218934911245,
+      "numeric_frequency_coverage": 0.33117626648160997,
+      "status_taxon_counts": {
+        "indifferent": 36,
+        "numeric": 45,
+        "unmatched": 88
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.22517349063150588,
+        "numeric": 0.33117626648160997,
+        "unmatched": 0.4436502428868841
+      },
+      "indifferent_fraction_among_known_status": 0.404733690906823,
+      "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+      "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+    },
+    {
+      "dataset": "background:SI:urban",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 94,
+      "n_numeric": 46,
+      "mean": 5.585920577617329,
+      "total_frequency_mass": 11.16,
+      "numeric_frequency_mass": 5.54,
+      "numeric_weight_sum": 5.54,
+      "numeric_taxon_coverage": 0.48936170212765956,
+      "numeric_frequency_coverage": 0.496415770609319,
+      "status_taxon_counts": {
+        "indifferent": 40,
+        "numeric": 46,
+        "unmatched": 8
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.3888888888888889,
+        "numeric": 0.496415770609319,
+        "unmatched": 0.11469534050179211
+      },
+      "indifferent_fraction_among_known_status": 0.4392712550607288,
+      "named_taxon_sha256": "a6f3f8ed72e4bda2f5c6cfd82cabd5e51ce8df771a8327ef7748b524ef468b41",
+      "numeric_taxon_sha256": "f0aa4e9a6cf88e63200e248741736e9a6aca452d5325284513e4a849ae1aca59"
+    },
+    {
+      "dataset": "background:HRBA:urban",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 185,
+      "n_numeric": 93,
+      "mean": 6.104070710347064,
+      "total_frequency_mass": 9.567333333333334,
+      "numeric_frequency_mass": 4.110666666666667,
+      "numeric_weight_sum": 4.110666666666667,
+      "numeric_taxon_coverage": 0.5027027027027027,
+      "numeric_frequency_coverage": 0.4296564699324089,
+      "status_taxon_counts": {
+        "indifferent": 80,
+        "numeric": 93,
+        "unmatched": 12
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4813601839593059,
+        "numeric": 0.4296564699324089,
+        "unmatched": 0.08898334610828514
+      },
+      "indifferent_fraction_among_known_status": 0.5283769313140584,
+      "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+      "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+    },
+    {
+      "dataset": "background:SK:urban",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 30,
+      "n_numeric": 15,
+      "mean": 5.8211538461538455,
+      "total_frequency_mass": 8.294117647058824,
+      "numeric_frequency_mass": 3.058823529411765,
+      "numeric_weight_sum": 3.058823529411765,
+      "numeric_taxon_coverage": 0.5,
+      "numeric_frequency_coverage": 0.36879432624113473,
+      "status_taxon_counts": {
+        "indifferent": 10,
+        "numeric": 15,
+        "unmatched": 5
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.38297872340425526,
+        "numeric": 0.36879432624113473,
+        "unmatched": 0.24822695035460987
+      },
+      "indifferent_fraction_among_known_status": 0.5094339622641509,
+      "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+      "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+    },
+    {
+      "dataset": "background:IN:interior",
+      "scenario": "tichy_common_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 58,
+      "n_numeric": 26,
+      "mean": 6.134166666666667,
+      "total_frequency_mass": 15.125,
+      "numeric_frequency_mass": 7.5,
+      "numeric_weight_sum": 7.5,
+      "numeric_taxon_coverage": 0.4482758620689655,
+      "numeric_frequency_coverage": 0.49586776859504134,
+      "status_taxon_counts": {
+        "indifferent": 15,
+        "numeric": 26,
+        "unmatched": 17
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.25206611570247933,
+        "numeric": 0.49586776859504134,
+        "unmatched": 0.25206611570247933
+      },
+      "indifferent_fraction_among_known_status": 0.3370165745856354,
+      "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+      "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+    },
+    {
+      "dataset": "rail:CZ",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 669,
+      "n_numeric": 321,
+      "mean": 4.441534641490877,
+      "total_frequency_mass": 164.1025641025641,
+      "numeric_frequency_mass": 73.46153846153847,
+      "numeric_weight_sum": 73.46153846153847,
+      "numeric_taxon_coverage": 0.4798206278026906,
+      "numeric_frequency_coverage": 0.4476562500000001,
+      "status_taxon_counts": {
+        "missing": 1,
+        "numeric": 321,
+        "outside_common_numeric": 284,
+        "unmatched": 63
+      },
+      "status_frequency_fraction": {
+        "missing": 0.0003125,
+        "numeric": 0.4476562500000001,
+        "outside_common_numeric": 0.4707812500000001,
+        "unmatched": 0.08125000000000002
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+      "numeric_taxon_sha256": "af5ebef1e4901d5041dfa5e8802b54e9a6dfe7318ba6f44f08031add6e30ecf1"
+    },
+    {
+      "dataset": "rail:IT",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 429,
+      "n_numeric": 185,
+      "mean": 5.060915193780073,
+      "total_frequency_mass": 100.71428571428571,
+      "numeric_frequency_mass": 43.17857142857143,
+      "numeric_weight_sum": 43.17857142857143,
+      "numeric_taxon_coverage": 0.43123543123543123,
+      "numeric_frequency_coverage": 0.4287234042553192,
+      "status_taxon_counts": {
+        "numeric": 185,
+        "outside_common_numeric": 207,
+        "unmatched": 37
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.4287234042553192,
+        "outside_common_numeric": 0.5053191489361702,
+        "unmatched": 0.06595744680851064
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+      "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+    },
+    {
+      "dataset": "rail:HRBA",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 355,
+      "n_numeric": 172,
+      "mean": 5.688899813109328,
+      "total_frequency_mass": 103.93333333333334,
+      "numeric_frequency_mass": 48.666666666666664,
+      "numeric_weight_sum": 48.666666666666664,
+      "numeric_taxon_coverage": 0.48450704225352115,
+      "numeric_frequency_coverage": 0.46824887748556765,
+      "status_taxon_counts": {
+        "numeric": 172,
+        "outside_common_numeric": 172,
+        "unmatched": 11
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.46824887748556765,
+        "outside_common_numeric": 0.5048107761385503,
+        "unmatched": 0.026940346375881972
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "578c5dca2a3f00de6994b64106af4a4b4d505223f5e5dfffefaae05861a83543",
+      "numeric_taxon_sha256": "f4d47d2d65b7ffc8e71a125ee8ccf4c8ca07037bbf7eddeb524e77f5b94ac0d0"
+    },
+    {
+      "dataset": "rail:SI",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 258,
+      "n_numeric": 103,
+      "mean": 4.500649791107683,
+      "total_frequency_mass": 29.775280898876403,
+      "numeric_frequency_mass": 11.44943820224719,
+      "numeric_weight_sum": 11.44943820224719,
+      "numeric_taxon_coverage": 0.3992248062015504,
+      "numeric_frequency_coverage": 0.38452830188679243,
+      "status_taxon_counts": {
+        "numeric": 103,
+        "outside_common_numeric": 138,
+        "unmatched": 17
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.38452830188679243,
+        "outside_common_numeric": 0.5562264150943397,
+        "unmatched": 0.05924528301886793
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "05f3a3fdefe26bc5634dd72ea5c329de2b1d7ee9130b658fef5f7f5c5b917903",
+      "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+    },
+    {
+      "dataset": "rail:SK",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 368,
+      "n_numeric": 169,
+      "mean": 4.505672669116438,
+      "total_frequency_mass": 78.53333333333333,
+      "numeric_frequency_mass": 33.333333333333336,
+      "numeric_weight_sum": 33.333333333333336,
+      "numeric_taxon_coverage": 0.4592391304347826,
+      "numeric_frequency_coverage": 0.42444821731748733,
+      "status_taxon_counts": {
+        "numeric": 169,
+        "outside_common_numeric": 172,
+        "unmatched": 27
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.42444821731748733,
+        "outside_common_numeric": 0.4741086587436333,
+        "unmatched": 0.10144312393887946
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+      "numeric_taxon_sha256": "e928a7a907d470ceb38d142d7313abae0bda3023c2c838d6cf780f4f0106bc1c"
+    },
+    {
+      "dataset": "rail:IN",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 76,
+      "n_numeric": 30,
+      "mean": 4.826984647843395,
+      "total_frequency_mass": 33.875,
+      "numeric_frequency_mass": 15.125,
+      "numeric_weight_sum": 15.125,
+      "numeric_taxon_coverage": 0.39473684210526316,
+      "numeric_frequency_coverage": 0.44649446494464945,
+      "status_taxon_counts": {
+        "numeric": 30,
+        "outside_common_numeric": 32,
+        "unmatched": 14
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.44649446494464945,
+        "outside_common_numeric": 0.3671586715867159,
+        "unmatched": 0.1863468634686347
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+      "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+    },
+    {
+      "dataset": "rail:AU_WA",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": false,
+      "support_failures": [
+        "insufficient_numeric_taxa"
+      ],
+      "weighting": "recorded_frequency",
+      "n_named": 257,
+      "n_numeric": 4,
+      "mean": null,
+      "total_frequency_mass": 24.625,
+      "numeric_frequency_mass": 0.9583333333333333,
+      "numeric_weight_sum": 0.9583333333333333,
+      "numeric_taxon_coverage": 0.01556420233463035,
+      "numeric_frequency_coverage": 0.03891708967851099,
+      "status_taxon_counts": {
+        "numeric": 4,
+        "outside_common_numeric": 5,
+        "unmatched": 248
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.03891708967851099,
+        "outside_common_numeric": 0.03011844331641286,
+        "unmatched": 0.9309644670050762
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "ceb32b45950d39013a41030c3893914c825dd568a384aadb630d0af2d8ec969a",
+      "numeric_taxon_sha256": "f788a376ed264cef95a5dfe658448298200bc07e64c19a5f842a6b73f0138b80"
+    },
+    {
+      "dataset": "road:CZ",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 241,
+      "n_numeric": 123,
+      "mean": 3.571290897804925,
+      "total_frequency_mass": 46.666666666666664,
+      "numeric_frequency_mass": 21.285714285714285,
+      "numeric_weight_sum": 21.285714285714285,
+      "numeric_taxon_coverage": 0.5103734439834025,
+      "numeric_frequency_coverage": 0.45612244897959187,
+      "status_taxon_counts": {
+        "numeric": 123,
+        "outside_common_numeric": 97,
+        "unmatched": 21
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.45612244897959187,
+        "outside_common_numeric": 0.44285714285714284,
+        "unmatched": 0.10102040816326531
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "17fd4f067602a799e79bdece4b617a391ae4655b2dfe430a8d06ef7d7f3c5cc8",
+      "numeric_taxon_sha256": "c9969cecc310b2d7f5eeb6f1b0355ee46d8e3c745bd13b6cc1c1b3df90cd1821"
+    },
+    {
+      "dataset": "road:IT",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 648,
+      "n_numeric": 342,
+      "mean": 4.470527777868635,
+      "total_frequency_mass": 49.13333333333333,
+      "numeric_frequency_mass": 24.333333333333332,
+      "numeric_weight_sum": 24.333333333333332,
+      "numeric_taxon_coverage": 0.5277777777777778,
+      "numeric_frequency_coverage": 0.4952510176390773,
+      "status_taxon_counts": {
+        "numeric": 342,
+        "outside_common_numeric": 254,
+        "unmatched": 52
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.4952510176390773,
+        "outside_common_numeric": 0.43860244233378565,
+        "unmatched": 0.06614654002713705
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+      "numeric_taxon_sha256": "0e7b792f685f69cfac39dc5685d8db15c91f597f381b2d745751d11f4dd5ba29"
+    },
+    {
+      "dataset": "road:IN",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 169,
+      "n_numeric": 45,
+      "mean": 4.238019834047465,
+      "total_frequency_mass": 24.25925925925926,
+      "numeric_frequency_mass": 8.034090909090908,
+      "numeric_weight_sum": 8.034090909090908,
+      "numeric_taxon_coverage": 0.26627218934911245,
+      "numeric_frequency_coverage": 0.33117626648160997,
+      "status_taxon_counts": {
+        "numeric": 45,
+        "outside_common_numeric": 52,
+        "unmatched": 72
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.33117626648160997,
+        "outside_common_numeric": 0.35824080499653016,
+        "unmatched": 0.3105829285218598
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+      "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+    },
+    {
+      "dataset": "background:SI:urban",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 94,
+      "n_numeric": 46,
+      "mean": 4.411259297878734,
+      "total_frequency_mass": 11.16,
+      "numeric_frequency_mass": 5.54,
+      "numeric_weight_sum": 5.54,
+      "numeric_taxon_coverage": 0.48936170212765956,
+      "numeric_frequency_coverage": 0.496415770609319,
+      "status_taxon_counts": {
+        "numeric": 46,
+        "outside_common_numeric": 48
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.496415770609319,
+        "outside_common_numeric": 0.503584229390681
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "a6f3f8ed72e4bda2f5c6cfd82cabd5e51ce8df771a8327ef7748b524ef468b41",
+      "numeric_taxon_sha256": "f0aa4e9a6cf88e63200e248741736e9a6aca452d5325284513e4a849ae1aca59"
+    },
+    {
+      "dataset": "background:HRBA:urban",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 185,
+      "n_numeric": 93,
+      "mean": 4.791432579865522,
+      "total_frequency_mass": 9.567333333333334,
+      "numeric_frequency_mass": 4.110666666666667,
+      "numeric_weight_sum": 4.110666666666667,
+      "numeric_taxon_coverage": 0.5027027027027027,
+      "numeric_frequency_coverage": 0.4296564699324089,
+      "status_taxon_counts": {
+        "numeric": 93,
+        "outside_common_numeric": 91,
+        "unmatched": 1
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.4296564699324089,
+        "outside_common_numeric": 0.5685318096299908,
+        "unmatched": 0.001811720437600167
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+      "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+    },
+    {
+      "dataset": "background:SK:urban",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 30,
+      "n_numeric": 15,
+      "mean": 4.640772656321366,
+      "total_frequency_mass": 8.294117647058824,
+      "numeric_frequency_mass": 3.058823529411765,
+      "numeric_weight_sum": 3.058823529411765,
+      "numeric_taxon_coverage": 0.5,
+      "numeric_frequency_coverage": 0.36879432624113473,
+      "status_taxon_counts": {
+        "numeric": 15,
+        "outside_common_numeric": 13,
+        "unmatched": 2
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.36879432624113473,
+        "outside_common_numeric": 0.5319148936170213,
+        "unmatched": 0.09929078014184396
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+      "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+    },
+    {
+      "dataset": "background:IN:interior",
+      "scenario": "eive_common_numeric",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "recorded_frequency",
+      "n_named": 58,
+      "n_numeric": 26,
+      "mean": 4.842259288414584,
+      "total_frequency_mass": 15.125,
+      "numeric_frequency_mass": 7.5,
+      "numeric_weight_sum": 7.5,
+      "numeric_taxon_coverage": 0.4482758620689655,
+      "numeric_frequency_coverage": 0.49586776859504134,
+      "status_taxon_counts": {
+        "numeric": 26,
+        "outside_common_numeric": 24,
+        "unmatched": 8
+      },
+      "status_frequency_fraction": {
+        "numeric": 0.49586776859504134,
+        "outside_common_numeric": 0.4214876033057851,
+        "unmatched": 0.08264462809917356
+      },
+      "indifferent_fraction_among_known_status": 0.0,
+      "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+      "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+    },
+    {
+      "dataset": "rail:CZ",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 669,
+      "n_numeric": 322,
+      "mean": 5.872049689440994,
+      "total_frequency_mass": 164.1025641025641,
+      "numeric_frequency_mass": 73.48717948717949,
+      "numeric_weight_sum": 322.0,
+      "numeric_taxon_coverage": 0.4813153961136024,
+      "numeric_frequency_coverage": 0.44781250000000006,
+      "status_taxon_counts": {
+        "indifferent": 204,
+        "numeric": 322,
+        "unmatched": 143
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.39265625,
+        "numeric": 0.44781250000000006,
+        "unmatched": 0.15953125
+      },
+      "indifferent_fraction_among_known_status": 0.4671872095184979,
+      "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+      "numeric_taxon_sha256": "8a3cb7d019728325c2dd3a3a38a660bb88f76eb785c8ca2c0c3687e997dd3adf"
+    },
+    {
+      "dataset": "rail:IT",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 429,
+      "n_numeric": 185,
+      "mean": 6.594054054054054,
+      "total_frequency_mass": 100.71428571428571,
+      "numeric_frequency_mass": 43.17857142857143,
+      "numeric_weight_sum": 185.0,
+      "numeric_taxon_coverage": 0.43123543123543123,
+      "numeric_frequency_coverage": 0.4287234042553192,
+      "status_taxon_counts": {
+        "indifferent": 163,
+        "numeric": 185,
+        "unmatched": 81
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4297872340425532,
+        "numeric": 0.4287234042553192,
+        "unmatched": 0.14148936170212767
+      },
+      "indifferent_fraction_among_known_status": 0.5006195786864931,
+      "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+      "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+    },
+    {
+      "dataset": "rail:HRBA",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 355,
+      "n_numeric": 173,
+      "mean": 7.430635838150289,
+      "total_frequency_mass": 103.93333333333334,
+      "numeric_frequency_mass": 48.93333333333333,
+      "numeric_weight_sum": 173.0,
+      "numeric_taxon_coverage": 0.48732394366197185,
+      "numeric_frequency_coverage": 0.4708146247594611,
+      "status_taxon_counts": {
+        "indifferent": 134,
+        "numeric": 173,
+        "unmatched": 48
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4150096215522771,
+        "numeric": 0.4708146247594611,
+        "unmatched": 0.1141757536882617
+      },
+      "indifferent_fraction_among_known_status": 0.46850108616944247,
+      "named_taxon_sha256": "578c5dca2a3f00de6994b64106af4a4b4d505223f5e5dfffefaae05861a83543",
+      "numeric_taxon_sha256": "0ffb21a7959f57f4fad0f6b9ace0150e51c313443e107cc402d8963390fc0fa1"
+    },
+    {
+      "dataset": "rail:SI",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 258,
+      "n_numeric": 103,
+      "mean": 5.740776699029126,
+      "total_frequency_mass": 29.775280898876403,
+      "numeric_frequency_mass": 11.44943820224719,
+      "numeric_weight_sum": 103.0,
+      "numeric_taxon_coverage": 0.3992248062015504,
+      "numeric_frequency_coverage": 0.38452830188679243,
+      "status_taxon_counts": {
+        "indifferent": 114,
+        "numeric": 103,
+        "unmatched": 41
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.47622641509433966,
+        "numeric": 0.38452830188679243,
+        "unmatched": 0.13924528301886793
+      },
+      "indifferent_fraction_among_known_status": 0.5532661113546691,
+      "named_taxon_sha256": "05f3a3fdefe26bc5634dd72ea5c329de2b1d7ee9130b658fef5f7f5c5b917903",
+      "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+    },
+    {
+      "dataset": "rail:SK",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 368,
+      "n_numeric": 170,
+      "mean": 5.960588235294117,
+      "total_frequency_mass": 78.53333333333333,
+      "numeric_frequency_mass": 33.4,
+      "numeric_weight_sum": 170.0,
+      "numeric_taxon_coverage": 0.46195652173913043,
+      "numeric_frequency_coverage": 0.42529711375212226,
+      "status_taxon_counts": {
+        "indifferent": 148,
+        "numeric": 170,
+        "unmatched": 50
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4325127334465196,
+        "numeric": 0.42529711375212226,
+        "unmatched": 0.14219015280135824
+      },
+      "indifferent_fraction_among_known_status": 0.5042058386937159,
+      "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+      "numeric_taxon_sha256": "109449d2ccf2c0cefe6b2d56df594088e0a6849fe5eaae873462e59e2f3f9acf"
+    },
+    {
+      "dataset": "rail:IN",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 76,
+      "n_numeric": 30,
+      "mean": 6.11,
+      "total_frequency_mass": 33.875,
+      "numeric_frequency_mass": 15.125,
+      "numeric_weight_sum": 30.0,
+      "numeric_taxon_coverage": 0.39473684210526316,
+      "numeric_frequency_coverage": 0.44649446494464945,
+      "status_taxon_counts": {
+        "indifferent": 23,
+        "numeric": 30,
+        "unmatched": 23
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.2878228782287823,
+        "numeric": 0.44649446494464945,
+        "unmatched": 0.2656826568265683
+      },
+      "indifferent_fraction_among_known_status": 0.39195979899497485,
+      "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+      "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+    },
+    {
+      "dataset": "rail:AU_WA",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": false,
+      "support_failures": [
+        "insufficient_numeric_taxa"
+      ],
+      "weighting": "species_equal",
+      "n_named": 257,
+      "n_numeric": 4,
+      "mean": null,
+      "total_frequency_mass": 24.625,
+      "numeric_frequency_mass": 0.9583333333333333,
+      "numeric_weight_sum": 4.0,
+      "numeric_taxon_coverage": 0.01556420233463035,
+      "numeric_frequency_coverage": 0.03891708967851099,
+      "status_taxon_counts": {
+        "indifferent": 1,
+        "numeric": 4,
+        "unmatched": 252
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.016243654822335026,
+        "numeric": 0.03891708967851099,
+        "unmatched": 0.9448392554991539
+      },
+      "indifferent_fraction_among_known_status": 0.294478527607362,
+      "named_taxon_sha256": "ceb32b45950d39013a41030c3893914c825dd568a384aadb630d0af2d8ec969a",
+      "numeric_taxon_sha256": "f788a376ed264cef95a5dfe658448298200bc07e64c19a5f842a6b73f0138b80"
+    },
+    {
+      "dataset": "road:CZ",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 241,
+      "n_numeric": 124,
+      "mean": 4.640322580645161,
+      "total_frequency_mass": 46.666666666666664,
+      "numeric_frequency_mass": 21.428571428571427,
+      "numeric_weight_sum": 124.0,
+      "numeric_taxon_coverage": 0.5145228215767634,
+      "numeric_frequency_coverage": 0.45918367346938777,
+      "status_taxon_counts": {
+        "indifferent": 67,
+        "numeric": 124,
+        "unmatched": 50
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.28877551020408165,
+        "numeric": 0.45918367346938777,
+        "unmatched": 0.2520408163265306
+      },
+      "indifferent_fraction_among_known_status": 0.3860845839017735,
+      "named_taxon_sha256": "17fd4f067602a799e79bdece4b617a391ae4655b2dfe430a8d06ef7d7f3c5cc8",
+      "numeric_taxon_sha256": "5050f5e749536abf7a478a731fdd521b5dc39266f4d76a2923f7cb0c3e982d81"
+    },
+    {
+      "dataset": "road:IT",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 648,
+      "n_numeric": 347,
+      "mean": 6.0083573487031705,
+      "total_frequency_mass": 49.13333333333333,
+      "numeric_frequency_mass": 24.733333333333334,
+      "numeric_weight_sum": 347.0,
+      "numeric_taxon_coverage": 0.5354938271604939,
+      "numeric_frequency_coverage": 0.5033921302578019,
+      "status_taxon_counts": {
+        "indifferent": 204,
+        "numeric": 347,
+        "unmatched": 97
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.3439620081411126,
+        "numeric": 0.5033921302578019,
+        "unmatched": 0.15264586160108548
+      },
+      "indifferent_fraction_among_known_status": 0.4059247397918334,
+      "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+      "numeric_taxon_sha256": "56e38aa4cb12961cab15280d419cc289af274181ed085c3f6265ad1047c499e7"
+    },
+    {
+      "dataset": "road:IN",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 169,
+      "n_numeric": 45,
+      "mean": 5.253333333333334,
+      "total_frequency_mass": 24.25925925925926,
+      "numeric_frequency_mass": 8.034090909090908,
+      "numeric_weight_sum": 45.0,
+      "numeric_taxon_coverage": 0.26627218934911245,
+      "numeric_frequency_coverage": 0.33117626648160997,
+      "status_taxon_counts": {
+        "indifferent": 36,
+        "numeric": 45,
+        "unmatched": 88
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.22517349063150588,
+        "numeric": 0.33117626648160997,
+        "unmatched": 0.4436502428868841
+      },
+      "indifferent_fraction_among_known_status": 0.404733690906823,
+      "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+      "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+    },
+    {
+      "dataset": "background:SI:urban",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 94,
+      "n_numeric": 46,
+      "mean": 5.943478260869565,
+      "total_frequency_mass": 11.16,
+      "numeric_frequency_mass": 5.54,
+      "numeric_weight_sum": 46.0,
+      "numeric_taxon_coverage": 0.48936170212765956,
+      "numeric_frequency_coverage": 0.496415770609319,
+      "status_taxon_counts": {
+        "indifferent": 40,
+        "numeric": 46,
+        "unmatched": 8
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.3888888888888889,
+        "numeric": 0.496415770609319,
+        "unmatched": 0.11469534050179211
+      },
+      "indifferent_fraction_among_known_status": 0.4392712550607288,
+      "named_taxon_sha256": "a6f3f8ed72e4bda2f5c6cfd82cabd5e51ce8df771a8327ef7748b524ef468b41",
+      "numeric_taxon_sha256": "f0aa4e9a6cf88e63200e248741736e9a6aca452d5325284513e4a849ae1aca59"
+    },
+    {
+      "dataset": "background:HRBA:urban",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 185,
+      "n_numeric": 93,
+      "mean": 6.581720430107527,
+      "total_frequency_mass": 9.567333333333334,
+      "numeric_frequency_mass": 4.110666666666667,
+      "numeric_weight_sum": 93.0,
+      "numeric_taxon_coverage": 0.5027027027027027,
+      "numeric_frequency_coverage": 0.4296564699324089,
+      "status_taxon_counts": {
+        "indifferent": 80,
+        "numeric": 93,
+        "unmatched": 12
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.4813601839593059,
+        "numeric": 0.4296564699324089,
+        "unmatched": 0.08898334610828514
+      },
+      "indifferent_fraction_among_known_status": 0.5283769313140584,
+      "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+      "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+    },
+    {
+      "dataset": "background:SK:urban",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 30,
+      "n_numeric": 15,
+      "mean": 5.760000000000001,
+      "total_frequency_mass": 8.294117647058824,
+      "numeric_frequency_mass": 3.058823529411765,
+      "numeric_weight_sum": 15.0,
+      "numeric_taxon_coverage": 0.5,
+      "numeric_frequency_coverage": 0.36879432624113473,
+      "status_taxon_counts": {
+        "indifferent": 10,
+        "numeric": 15,
+        "unmatched": 5
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.38297872340425526,
+        "numeric": 0.36879432624113473,
+        "unmatched": 0.24822695035460987
+      },
+      "indifferent_fraction_among_known_status": 0.5094339622641509,
+      "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+      "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+    },
+    {
+      "dataset": "background:IN:interior",
+      "scenario": "tichy_species_equal",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "support_failures": [],
+      "weighting": "species_equal",
+      "n_named": 58,
+      "n_numeric": 26,
+      "mean": 6.230769230769231,
+      "total_frequency_mass": 15.125,
+      "numeric_frequency_mass": 7.5,
+      "numeric_weight_sum": 26.0,
+      "numeric_taxon_coverage": 0.4482758620689655,
+      "numeric_frequency_coverage": 0.49586776859504134,
+      "status_taxon_counts": {
+        "indifferent": 15,
+        "numeric": 26,
+        "unmatched": 17
+      },
+      "status_frequency_fraction": {
+        "indifferent": 0.25206611570247933,
+        "numeric": 0.49586776859504134,
+        "unmatched": 0.25206611570247933
+      },
+      "indifferent_fraction_among_known_status": 0.3370165745856354,
+      "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+      "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+    }
+  ],
+  "reference_contrasts": [
+    {
+      "study": "CZ",
+      "reference_dataset": "road:CZ",
+      "scenario": "tichy_numeric",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 669,
+        "n_numeric": 322,
+        "mean": 5.7392882065596655,
+        "total_frequency_mass": 164.1025641025641,
+        "numeric_frequency_mass": 73.48717948717949,
+        "numeric_weight_sum": 73.48717948717949,
+        "numeric_taxon_coverage": 0.4813153961136024,
+        "numeric_frequency_coverage": 0.44781250000000006,
+        "status_taxon_counts": {
+          "indifferent": 204,
+          "numeric": 322,
+          "unmatched": 143
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.39265625,
+          "numeric": 0.44781250000000006,
+          "unmatched": 0.15953125
+        },
+        "indifferent_fraction_among_known_status": 0.4671872095184979,
+        "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+        "numeric_taxon_sha256": "8a3cb7d019728325c2dd3a3a38a660bb88f76eb785c8ca2c0c3687e997dd3adf"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 233,
+        "n_numeric": 122,
+        "mean": 4.626785714285714,
+        "total_frequency_mass": 45.19047619047619,
+        "numeric_frequency_mass": 21.333333333333332,
+        "numeric_weight_sum": 21.333333333333332,
+        "numeric_taxon_coverage": 0.5236051502145923,
+        "numeric_frequency_coverage": 0.4720758693361433,
+        "status_taxon_counts": {
+          "indifferent": 65,
+          "numeric": 122,
+          "unmatched": 46
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2929399367755532,
+          "numeric": 0.4720758693361433,
+          "unmatched": 0.23498419388830347
+        },
+        "indifferent_fraction_among_known_status": 0.38292011019283745,
+        "named_taxon_sha256": "2731d8b90ec045eadd6f6d5d81eaecb11108da7890a5eb0e5bfff9218e9e62b1",
+        "numeric_taxon_sha256": "0b6fa82075e681791410368e268fd4086ca8210e815f537a48124eeb02cba525"
+      },
+      "difference": 1.1125024922739515,
+      "unavailable_mask_keys": 20
+    },
+    {
+      "study": "IT",
+      "reference_dataset": "road:IT",
+      "scenario": "tichy_numeric",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 429,
+        "n_numeric": 185,
+        "mean": 6.53556658395368,
+        "total_frequency_mass": 100.71428571428571,
+        "numeric_frequency_mass": 43.17857142857143,
+        "numeric_weight_sum": 43.17857142857143,
+        "numeric_taxon_coverage": 0.43123543123543123,
+        "numeric_frequency_coverage": 0.4287234042553192,
+        "status_taxon_counts": {
+          "indifferent": 163,
+          "numeric": 185,
+          "unmatched": 81
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4297872340425532,
+          "numeric": 0.4287234042553192,
+          "unmatched": 0.14148936170212767
+        },
+        "indifferent_fraction_among_known_status": 0.5006195786864931,
+        "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+        "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 648,
+        "n_numeric": 347,
+        "mean": 5.817520215633422,
+        "total_frequency_mass": 49.13333333333333,
+        "numeric_frequency_mass": 24.733333333333334,
+        "numeric_weight_sum": 24.733333333333334,
+        "numeric_taxon_coverage": 0.5354938271604939,
+        "numeric_frequency_coverage": 0.5033921302578019,
+        "status_taxon_counts": {
+          "indifferent": 204,
+          "numeric": 347,
+          "unmatched": 97
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.3439620081411126,
+          "numeric": 0.5033921302578019,
+          "unmatched": 0.15264586160108548
+        },
+        "indifferent_fraction_among_known_status": 0.4059247397918334,
+        "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+        "numeric_taxon_sha256": "56e38aa4cb12961cab15280d419cc289af274181ed085c3f6265ad1047c499e7"
+      },
+      "difference": 0.718046368320258,
+      "unavailable_mask_keys": 1
+    },
+    {
+      "study": "SI",
+      "reference_dataset": "background:SI:urban",
+      "scenario": "tichy_numeric",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 257,
+        "n_numeric": 103,
+        "mean": 5.788420019627085,
+        "total_frequency_mass": 29.662921348314608,
+        "numeric_frequency_mass": 11.44943820224719,
+        "numeric_weight_sum": 11.44943820224719,
+        "numeric_taxon_coverage": 0.40077821011673154,
+        "numeric_frequency_coverage": 0.38598484848484843,
+        "status_taxon_counts": {
+          "indifferent": 114,
+          "numeric": 103,
+          "unmatched": 40
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.478030303030303,
+          "numeric": 0.38598484848484843,
+          "unmatched": 0.1359848484848485
+        },
+        "indifferent_fraction_among_known_status": 0.5532661113546691,
+        "named_taxon_sha256": "9de968061e2a0354b236fa814d44c08cb74df481e51ba29b16a2c66436166a1a",
+        "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 93,
+        "n_numeric": 45,
+        "mean": 5.579710144927536,
+        "total_frequency_mass": 11.14,
+        "numeric_frequency_mass": 5.5200000000000005,
+        "numeric_weight_sum": 5.5200000000000005,
+        "numeric_taxon_coverage": 0.4838709677419355,
+        "numeric_frequency_coverage": 0.49551166965888693,
+        "status_taxon_counts": {
+          "indifferent": 40,
+          "numeric": 45,
+          "unmatched": 8
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.38958707360861755,
+          "numeric": 0.49551166965888693,
+          "unmatched": 0.1149012567324955
+        },
+        "indifferent_fraction_among_known_status": 0.44016227180527384,
+        "named_taxon_sha256": "247581b161ba00cfc4cb005b84ccc4e69506aca7e87b8f0024e9adc64c64c15d",
+        "numeric_taxon_sha256": "69135c69945e624b8883eb3943f39250e3697bd12b8c32494d0187b449f67f1c"
+      },
+      "difference": 0.20870987469954905,
+      "unavailable_mask_keys": 11
+    },
+    {
+      "study": "HRBA",
+      "reference_dataset": "background:HRBA:urban",
+      "scenario": "tichy_numeric",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 353,
+        "n_numeric": 173,
+        "mean": 7.431198910081744,
+        "total_frequency_mass": 102.66666666666667,
+        "numeric_frequency_mass": 48.93333333333333,
+        "numeric_weight_sum": 48.93333333333333,
+        "numeric_taxon_coverage": 0.49008498583569404,
+        "numeric_frequency_coverage": 0.47662337662337656,
+        "status_taxon_counts": {
+          "indifferent": 133,
+          "numeric": 173,
+          "unmatched": 47
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.41558441558441556,
+          "numeric": 0.47662337662337656,
+          "unmatched": 0.10779220779220779
+        },
+        "indifferent_fraction_among_known_status": 0.4657933042212518,
+        "named_taxon_sha256": "4215401ea868ea803cb9b8a3980915ad863bb668b4f0020c3e5530e771876a55",
+        "numeric_taxon_sha256": "0ffb21a7959f57f4fad0f6b9ace0150e51c313443e107cc402d8963390fc0fa1"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 185,
+        "n_numeric": 93,
+        "mean": 6.104070710347064,
+        "total_frequency_mass": 9.567333333333334,
+        "numeric_frequency_mass": 4.110666666666667,
+        "numeric_weight_sum": 4.110666666666667,
+        "numeric_taxon_coverage": 0.5027027027027027,
+        "numeric_frequency_coverage": 0.4296564699324089,
+        "status_taxon_counts": {
+          "indifferent": 80,
+          "numeric": 93,
+          "unmatched": 12
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4813601839593059,
+          "numeric": 0.4296564699324089,
+          "unmatched": 0.08898334610828514
+        },
+        "indifferent_fraction_among_known_status": 0.5283769313140584,
+        "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+        "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+      },
+      "difference": 1.3271281997346804,
+      "unavailable_mask_keys": 5
+    },
+    {
+      "study": "SK",
+      "reference_dataset": "background:SK:urban",
+      "scenario": "tichy_numeric",
+      "comparison_design": "urban_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 368,
+        "n_numeric": 170,
+        "mean": 5.790219560878244,
+        "total_frequency_mass": 78.53333333333333,
+        "numeric_frequency_mass": 33.4,
+        "numeric_weight_sum": 33.4,
+        "numeric_taxon_coverage": 0.46195652173913043,
+        "numeric_frequency_coverage": 0.42529711375212226,
+        "status_taxon_counts": {
+          "indifferent": 148,
+          "numeric": 170,
+          "unmatched": 50
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4325127334465196,
+          "numeric": 0.42529711375212226,
+          "unmatched": 0.14219015280135824
+        },
+        "indifferent_fraction_among_known_status": 0.5042058386937159,
+        "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+        "numeric_taxon_sha256": "109449d2ccf2c0cefe6b2d56df594088e0a6849fe5eaae873462e59e2f3f9acf"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 30,
+        "n_numeric": 15,
+        "mean": 5.8211538461538455,
+        "total_frequency_mass": 8.294117647058824,
+        "numeric_frequency_mass": 3.058823529411765,
+        "numeric_weight_sum": 3.058823529411765,
+        "numeric_taxon_coverage": 0.5,
+        "numeric_frequency_coverage": 0.36879432624113473,
+        "status_taxon_counts": {
+          "indifferent": 10,
+          "numeric": 15,
+          "unmatched": 5
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.38297872340425526,
+          "numeric": 0.36879432624113473,
+          "unmatched": 0.24822695035460987
+        },
+        "indifferent_fraction_among_known_status": 0.5094339622641509,
+        "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+        "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+      },
+      "difference": -0.030934285275601603,
+      "unavailable_mask_keys": 19
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "background:IN:interior",
+      "scenario": "tichy_numeric",
+      "comparison_design": "same_station_same_year_same_area",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 6.089669421487604,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 15.125,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "indifferent": 23,
+          "numeric": 30,
+          "unmatched": 23
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2878228782287823,
+          "numeric": 0.44649446494464945,
+          "unmatched": 0.2656826568265683
+        },
+        "indifferent_fraction_among_known_status": 0.39195979899497485,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 58,
+        "n_numeric": 26,
+        "mean": 6.134166666666667,
+        "total_frequency_mass": 15.125,
+        "numeric_frequency_mass": 7.5,
+        "numeric_weight_sum": 7.5,
+        "numeric_taxon_coverage": 0.4482758620689655,
+        "numeric_frequency_coverage": 0.49586776859504134,
+        "status_taxon_counts": {
+          "indifferent": 15,
+          "numeric": 26,
+          "unmatched": 17
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.25206611570247933,
+          "numeric": 0.49586776859504134,
+          "unmatched": 0.25206611570247933
+        },
+        "indifferent_fraction_among_known_status": 0.3370165745856354,
+        "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+        "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+      },
+      "difference": -0.044497245179063505,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "road:IN",
+      "scenario": "tichy_numeric",
+      "comparison_design": "external_mountain_road_reference",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 6.089669421487604,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 15.125,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "indifferent": 23,
+          "numeric": 30,
+          "unmatched": 23
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2878228782287823,
+          "numeric": 0.44649446494464945,
+          "unmatched": 0.2656826568265683
+        },
+        "indifferent_fraction_among_known_status": 0.39195979899497485,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 169,
+        "n_numeric": 45,
+        "mean": 5.407407407407407,
+        "total_frequency_mass": 24.25925925925926,
+        "numeric_frequency_mass": 8.034090909090908,
+        "numeric_weight_sum": 8.034090909090908,
+        "numeric_taxon_coverage": 0.26627218934911245,
+        "numeric_frequency_coverage": 0.33117626648160997,
+        "status_taxon_counts": {
+          "indifferent": 36,
+          "numeric": 45,
+          "unmatched": 88
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.22517349063150588,
+          "numeric": 0.33117626648160997,
+          "unmatched": 0.4436502428868841
+        },
+        "indifferent_fraction_among_known_status": 0.404733690906823,
+        "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+        "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+      },
+      "difference": 0.6822620140801963,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "CZ",
+      "reference_dataset": "road:CZ",
+      "scenario": "eive_all",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 669,
+        "n_numeric": 605,
+        "mean": 4.577591616227453,
+        "total_frequency_mass": 164.1025641025641,
+        "numeric_frequency_mass": 150.71794871794873,
+        "numeric_weight_sum": 150.71794871794873,
+        "numeric_taxon_coverage": 0.9043348281016442,
+        "numeric_frequency_coverage": 0.9184375000000001,
+        "status_taxon_counts": {
+          "missing": 1,
+          "numeric": 605,
+          "unmatched": 63
+        },
+        "status_frequency_fraction": {
+          "missing": 0.0003125,
+          "numeric": 0.9184375000000001,
+          "unmatched": 0.08125000000000002
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+        "numeric_taxon_sha256": "27ae3eda6f4b51a2c915d9db81426c51200bbb24e90f44393c1bc2db2d62ef2b"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 233,
+        "n_numeric": 213,
+        "mean": 3.6916318622659854,
+        "total_frequency_mass": 45.19047619047619,
+        "numeric_frequency_mass": 40.61904761904762,
+        "numeric_weight_sum": 40.61904761904762,
+        "numeric_taxon_coverage": 0.9141630901287554,
+        "numeric_frequency_coverage": 0.898840885142255,
+        "status_taxon_counts": {
+          "numeric": 213,
+          "unmatched": 20
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.898840885142255,
+          "unmatched": 0.101159114857745
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "2731d8b90ec045eadd6f6d5d81eaecb11108da7890a5eb0e5bfff9218e9e62b1",
+        "numeric_taxon_sha256": "0fad16c3ac02165a4bb5e18a592b6d86b29bcfc553311a03a3335ba362c9209b"
+      },
+      "difference": 0.8859597539614676,
+      "unavailable_mask_keys": 20
+    },
+    {
+      "study": "IT",
+      "reference_dataset": "road:IT",
+      "scenario": "eive_all",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 429,
+        "n_numeric": 392,
+        "mean": 5.062509707017641,
+        "total_frequency_mass": 100.71428571428571,
+        "numeric_frequency_mass": 94.07142857142857,
+        "numeric_weight_sum": 94.07142857142857,
+        "numeric_taxon_coverage": 0.9137529137529138,
+        "numeric_frequency_coverage": 0.9340425531914894,
+        "status_taxon_counts": {
+          "numeric": 392,
+          "unmatched": 37
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.9340425531914894,
+          "unmatched": 0.06595744680851064
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+        "numeric_taxon_sha256": "77233e0617cabb7ba6ba65703384673c63c6221a545e23340f4aa2cf8ea15f03"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 648,
+        "n_numeric": 596,
+        "mean": 4.582211343497433,
+        "total_frequency_mass": 49.13333333333333,
+        "numeric_frequency_mass": 45.88333333333333,
+        "numeric_weight_sum": 45.88333333333333,
+        "numeric_taxon_coverage": 0.9197530864197531,
+        "numeric_frequency_coverage": 0.933853459972863,
+        "status_taxon_counts": {
+          "numeric": 596,
+          "unmatched": 52
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.933853459972863,
+          "unmatched": 0.06614654002713705
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+        "numeric_taxon_sha256": "44e4cdc2c9c621b6d5d04226aac12e343f835cf814f250d697bc5959f58a0913"
+      },
+      "difference": 0.48029836352020805,
+      "unavailable_mask_keys": 1
+    },
+    {
+      "study": "SI",
+      "reference_dataset": "background:SI:urban",
+      "scenario": "eive_all",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 257,
+        "n_numeric": 240,
+        "mean": 4.571635491625946,
+        "total_frequency_mass": 29.662921348314608,
+        "numeric_frequency_mass": 27.89887640449438,
+        "numeric_weight_sum": 27.89887640449438,
+        "numeric_taxon_coverage": 0.933852140077821,
+        "numeric_frequency_coverage": 0.9405303030303029,
+        "status_taxon_counts": {
+          "numeric": 240,
+          "unmatched": 17
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.9405303030303029,
+          "unmatched": 0.05946969696969697
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "9de968061e2a0354b236fa814d44c08cb74df481e51ba29b16a2c66436166a1a",
+        "numeric_taxon_sha256": "75110e22b998fea55a3e5157975ba817c513fd0ed0f6c310124e2fa02d26bdd0"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 93,
+        "n_numeric": 93,
+        "mean": 4.442449598280641,
+        "total_frequency_mass": 11.14,
+        "numeric_frequency_mass": 11.14,
+        "numeric_weight_sum": 11.14,
+        "numeric_taxon_coverage": 1.0,
+        "numeric_frequency_coverage": 1.0,
+        "status_taxon_counts": {
+          "numeric": 93
+        },
+        "status_frequency_fraction": {
+          "numeric": 1.0
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "247581b161ba00cfc4cb005b84ccc4e69506aca7e87b8f0024e9adc64c64c15d",
+        "numeric_taxon_sha256": "247581b161ba00cfc4cb005b84ccc4e69506aca7e87b8f0024e9adc64c64c15d"
+      },
+      "difference": 0.12918589334530495,
+      "unavailable_mask_keys": 11
+    },
+    {
+      "study": "HRBA",
+      "reference_dataset": "background:HRBA:urban",
+      "scenario": "eive_all",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 353,
+        "n_numeric": 342,
+        "mean": 5.49720369471383,
+        "total_frequency_mass": 102.66666666666667,
+        "numeric_frequency_mass": 99.86666666666666,
+        "numeric_weight_sum": 99.86666666666666,
+        "numeric_taxon_coverage": 0.9688385269121813,
+        "numeric_frequency_coverage": 0.9727272727272727,
+        "status_taxon_counts": {
+          "numeric": 342,
+          "unmatched": 11
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.9727272727272727,
+          "unmatched": 0.02727272727272727
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "4215401ea868ea803cb9b8a3980915ad863bb668b4f0020c3e5530e771876a55",
+        "numeric_taxon_sha256": "0e8de6b6d37e4b8ee41d2656927daf725fffb73fbc1b96166e186aa899925b14"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 185,
+        "n_numeric": 184,
+        "mean": 4.77015211540479,
+        "total_frequency_mass": 9.567333333333334,
+        "numeric_frequency_mass": 9.55,
+        "numeric_weight_sum": 9.55,
+        "numeric_taxon_coverage": 0.9945945945945946,
+        "numeric_frequency_coverage": 0.9981882795623999,
+        "status_taxon_counts": {
+          "numeric": 184,
+          "unmatched": 1
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.9981882795623999,
+          "unmatched": 0.001811720437600167
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+        "numeric_taxon_sha256": "481019312537b38f4deb2d208e2e08d8cb066ef0e676f3e7e23588990e6cd1e8"
+      },
+      "difference": 0.7270515793090402,
+      "unavailable_mask_keys": 5
+    },
+    {
+      "study": "SK",
+      "reference_dataset": "background:SK:urban",
+      "scenario": "eive_all",
+      "comparison_design": "urban_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 368,
+        "n_numeric": 341,
+        "mean": 4.674008358766735,
+        "total_frequency_mass": 78.53333333333333,
+        "numeric_frequency_mass": 70.56666666666666,
+        "numeric_weight_sum": 70.56666666666666,
+        "numeric_taxon_coverage": 0.9266304347826086,
+        "numeric_frequency_coverage": 0.8985568760611206,
+        "status_taxon_counts": {
+          "numeric": 341,
+          "unmatched": 27
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.8985568760611206,
+          "unmatched": 0.10144312393887946
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+        "numeric_taxon_sha256": "0c0ebf2c26e7497fc31697e6566c13ee844d804672fa8bcee7aeec7b5c7fce18"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 30,
+        "n_numeric": 28,
+        "mean": 4.675152882777649,
+        "total_frequency_mass": 8.294117647058824,
+        "numeric_frequency_mass": 7.470588235294118,
+        "numeric_weight_sum": 7.470588235294118,
+        "numeric_taxon_coverage": 0.9333333333333333,
+        "numeric_frequency_coverage": 0.900709219858156,
+        "status_taxon_counts": {
+          "numeric": 28,
+          "unmatched": 2
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.900709219858156,
+          "unmatched": 0.09929078014184396
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+        "numeric_taxon_sha256": "8181f90baa82624c8120e919df61c265dc900be5baa9c04059b5092aea9e046b"
+      },
+      "difference": -0.0011445240109138055,
+      "unavailable_mask_keys": 19
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "background:IN:interior",
+      "scenario": "eive_all",
+      "comparison_design": "same_station_same_year_same_area",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 62,
+        "mean": 4.847761051450224,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 27.5625,
+        "numeric_weight_sum": 27.5625,
+        "numeric_taxon_coverage": 0.8157894736842105,
+        "numeric_frequency_coverage": 0.8136531365313653,
+        "status_taxon_counts": {
+          "numeric": 62,
+          "unmatched": 14
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.8136531365313653,
+          "unmatched": 0.1863468634686347
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "dcb49cf75556c109cde6be438845e7bdf0dbab5af7f95eb89fcb61ceb9f3c007"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 58,
+        "n_numeric": 50,
+        "mean": 4.805225136457827,
+        "total_frequency_mass": 15.125,
+        "numeric_frequency_mass": 13.875,
+        "numeric_weight_sum": 13.875,
+        "numeric_taxon_coverage": 0.8620689655172413,
+        "numeric_frequency_coverage": 0.9173553719008265,
+        "status_taxon_counts": {
+          "numeric": 50,
+          "unmatched": 8
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.9173553719008265,
+          "unmatched": 0.08264462809917356
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+        "numeric_taxon_sha256": "a2233d57ab84752c590decbfca63f9f1b9bd733d591ce81392ef225d6df0fdaf"
+      },
+      "difference": 0.042535914992396506,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "road:IN",
+      "scenario": "eive_all",
+      "comparison_design": "external_mountain_road_reference",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 62,
+        "mean": 4.847761051450224,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 27.5625,
+        "numeric_weight_sum": 27.5625,
+        "numeric_taxon_coverage": 0.8157894736842105,
+        "numeric_frequency_coverage": 0.8136531365313653,
+        "status_taxon_counts": {
+          "numeric": 62,
+          "unmatched": 14
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.8136531365313653,
+          "unmatched": 0.1863468634686347
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "dcb49cf75556c109cde6be438845e7bdf0dbab5af7f95eb89fcb61ceb9f3c007"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 169,
+        "n_numeric": 97,
+        "mean": 4.416710783279027,
+        "total_frequency_mass": 24.25925925925926,
+        "numeric_frequency_mass": 16.724747474747474,
+        "numeric_weight_sum": 16.724747474747474,
+        "numeric_taxon_coverage": 0.5739644970414202,
+        "numeric_frequency_coverage": 0.6894170714781401,
+        "status_taxon_counts": {
+          "numeric": 97,
+          "unmatched": 72
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.6894170714781401,
+          "unmatched": 0.3105829285218598
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+        "numeric_taxon_sha256": "fe6cbb283dd7242d72c0a524c4bd42d692d84054df4fbdd736c6774676fd0da6"
+      },
+      "difference": 0.4310502681711972,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "CZ",
+      "reference_dataset": "road:CZ",
+      "scenario": "tichy_common_numeric",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 669,
+        "n_numeric": 321,
+        "mean": 5.738499127399651,
+        "total_frequency_mass": 164.1025641025641,
+        "numeric_frequency_mass": 73.46153846153847,
+        "numeric_weight_sum": 73.46153846153847,
+        "numeric_taxon_coverage": 0.4798206278026906,
+        "numeric_frequency_coverage": 0.4476562500000001,
+        "status_taxon_counts": {
+          "indifferent": 204,
+          "numeric": 321,
+          "outside_common_numeric": 1,
+          "unmatched": 143
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.39265625,
+          "numeric": 0.4476562500000001,
+          "outside_common_numeric": 0.00015625,
+          "unmatched": 0.15953125
+        },
+        "indifferent_fraction_among_known_status": 0.4672740795834882,
+        "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+        "numeric_taxon_sha256": "af5ebef1e4901d5041dfa5e8802b54e9a6dfe7318ba6f44f08031add6e30ecf1"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 233,
+        "n_numeric": 121,
+        "mean": 4.618876404494382,
+        "total_frequency_mass": 45.19047619047619,
+        "numeric_frequency_mass": 21.19047619047619,
+        "numeric_weight_sum": 21.19047619047619,
+        "numeric_taxon_coverage": 0.51931330472103,
+        "numeric_frequency_coverage": 0.46891464699683877,
+        "status_taxon_counts": {
+          "indifferent": 65,
+          "numeric": 121,
+          "outside_common_numeric": 1,
+          "unmatched": 46
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2929399367755532,
+          "numeric": 0.46891464699683877,
+          "outside_common_numeric": 0.003161222339304531,
+          "unmatched": 0.23498419388830347
+        },
+        "indifferent_fraction_among_known_status": 0.3845089903181189,
+        "named_taxon_sha256": "2731d8b90ec045eadd6f6d5d81eaecb11108da7890a5eb0e5bfff9218e9e62b1",
+        "numeric_taxon_sha256": "3979b94fa665ff048fbe5569a433da3bfed24123207668a303316d8ff25f4361"
+      },
+      "difference": 1.1196227229052687,
+      "unavailable_mask_keys": 20
+    },
+    {
+      "study": "IT",
+      "reference_dataset": "road:IT",
+      "scenario": "tichy_common_numeric",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 429,
+        "n_numeric": 185,
+        "mean": 6.53556658395368,
+        "total_frequency_mass": 100.71428571428571,
+        "numeric_frequency_mass": 43.17857142857143,
+        "numeric_weight_sum": 43.17857142857143,
+        "numeric_taxon_coverage": 0.43123543123543123,
+        "numeric_frequency_coverage": 0.4287234042553192,
+        "status_taxon_counts": {
+          "indifferent": 163,
+          "numeric": 185,
+          "unmatched": 81
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4297872340425532,
+          "numeric": 0.4287234042553192,
+          "unmatched": 0.14148936170212767
+        },
+        "indifferent_fraction_among_known_status": 0.5006195786864931,
+        "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+        "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 648,
+        "n_numeric": 342,
+        "mean": 5.818219178082192,
+        "total_frequency_mass": 49.13333333333333,
+        "numeric_frequency_mass": 24.333333333333332,
+        "numeric_weight_sum": 24.333333333333332,
+        "numeric_taxon_coverage": 0.5277777777777778,
+        "numeric_frequency_coverage": 0.4952510176390773,
+        "status_taxon_counts": {
+          "indifferent": 204,
+          "numeric": 342,
+          "outside_common_numeric": 5,
+          "unmatched": 97
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.3439620081411126,
+          "numeric": 0.4952510176390773,
+          "outside_common_numeric": 0.00814111261872456,
+          "unmatched": 0.15264586160108548
+        },
+        "indifferent_fraction_among_known_status": 0.40986257073565074,
+        "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+        "numeric_taxon_sha256": "0e7b792f685f69cfac39dc5685d8db15c91f597f381b2d745751d11f4dd5ba29"
+      },
+      "difference": 0.7173474058714886,
+      "unavailable_mask_keys": 1
+    },
+    {
+      "study": "SI",
+      "reference_dataset": "background:SI:urban",
+      "scenario": "tichy_common_numeric",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 257,
+        "n_numeric": 103,
+        "mean": 5.788420019627085,
+        "total_frequency_mass": 29.662921348314608,
+        "numeric_frequency_mass": 11.44943820224719,
+        "numeric_weight_sum": 11.44943820224719,
+        "numeric_taxon_coverage": 0.40077821011673154,
+        "numeric_frequency_coverage": 0.38598484848484843,
+        "status_taxon_counts": {
+          "indifferent": 114,
+          "numeric": 103,
+          "unmatched": 40
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.478030303030303,
+          "numeric": 0.38598484848484843,
+          "unmatched": 0.1359848484848485
+        },
+        "indifferent_fraction_among_known_status": 0.5532661113546691,
+        "named_taxon_sha256": "9de968061e2a0354b236fa814d44c08cb74df481e51ba29b16a2c66436166a1a",
+        "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 93,
+        "n_numeric": 45,
+        "mean": 5.579710144927536,
+        "total_frequency_mass": 11.14,
+        "numeric_frequency_mass": 5.5200000000000005,
+        "numeric_weight_sum": 5.5200000000000005,
+        "numeric_taxon_coverage": 0.4838709677419355,
+        "numeric_frequency_coverage": 0.49551166965888693,
+        "status_taxon_counts": {
+          "indifferent": 40,
+          "numeric": 45,
+          "unmatched": 8
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.38958707360861755,
+          "numeric": 0.49551166965888693,
+          "unmatched": 0.1149012567324955
+        },
+        "indifferent_fraction_among_known_status": 0.44016227180527384,
+        "named_taxon_sha256": "247581b161ba00cfc4cb005b84ccc4e69506aca7e87b8f0024e9adc64c64c15d",
+        "numeric_taxon_sha256": "69135c69945e624b8883eb3943f39250e3697bd12b8c32494d0187b449f67f1c"
+      },
+      "difference": 0.20870987469954905,
+      "unavailable_mask_keys": 11
+    },
+    {
+      "study": "HRBA",
+      "reference_dataset": "background:HRBA:urban",
+      "scenario": "tichy_common_numeric",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 353,
+        "n_numeric": 172,
+        "mean": 7.4313698630137,
+        "total_frequency_mass": 102.66666666666667,
+        "numeric_frequency_mass": 48.666666666666664,
+        "numeric_weight_sum": 48.666666666666664,
+        "numeric_taxon_coverage": 0.48725212464589235,
+        "numeric_frequency_coverage": 0.47402597402597396,
+        "status_taxon_counts": {
+          "indifferent": 133,
+          "numeric": 172,
+          "outside_common_numeric": 1,
+          "unmatched": 47
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.41558441558441556,
+          "numeric": 0.47402597402597396,
+          "outside_common_numeric": 0.0025974025974025974,
+          "unmatched": 0.10779220779220779
+        },
+        "indifferent_fraction_among_known_status": 0.46715328467153283,
+        "named_taxon_sha256": "4215401ea868ea803cb9b8a3980915ad863bb668b4f0020c3e5530e771876a55",
+        "numeric_taxon_sha256": "f4d47d2d65b7ffc8e71a125ee8ccf4c8ca07037bbf7eddeb524e77f5b94ac0d0"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 185,
+        "n_numeric": 93,
+        "mean": 6.104070710347064,
+        "total_frequency_mass": 9.567333333333334,
+        "numeric_frequency_mass": 4.110666666666667,
+        "numeric_weight_sum": 4.110666666666667,
+        "numeric_taxon_coverage": 0.5027027027027027,
+        "numeric_frequency_coverage": 0.4296564699324089,
+        "status_taxon_counts": {
+          "indifferent": 80,
+          "numeric": 93,
+          "unmatched": 12
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4813601839593059,
+          "numeric": 0.4296564699324089,
+          "unmatched": 0.08898334610828514
+        },
+        "indifferent_fraction_among_known_status": 0.5283769313140584,
+        "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+        "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+      },
+      "difference": 1.3272991526666358,
+      "unavailable_mask_keys": 5
+    },
+    {
+      "study": "SK",
+      "reference_dataset": "background:SK:urban",
+      "scenario": "tichy_common_numeric",
+      "comparison_design": "urban_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 368,
+        "n_numeric": 169,
+        "mean": 5.7902,
+        "total_frequency_mass": 78.53333333333333,
+        "numeric_frequency_mass": 33.333333333333336,
+        "numeric_weight_sum": 33.333333333333336,
+        "numeric_taxon_coverage": 0.4592391304347826,
+        "numeric_frequency_coverage": 0.42444821731748733,
+        "status_taxon_counts": {
+          "indifferent": 148,
+          "numeric": 169,
+          "outside_common_numeric": 1,
+          "unmatched": 50
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4325127334465196,
+          "numeric": 0.42444821731748733,
+          "outside_common_numeric": 0.0008488964346349745,
+          "unmatched": 0.14219015280135824
+        },
+        "indifferent_fraction_among_known_status": 0.5047052996532937,
+        "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+        "numeric_taxon_sha256": "e928a7a907d470ceb38d142d7313abae0bda3023c2c838d6cf780f4f0106bc1c"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 30,
+        "n_numeric": 15,
+        "mean": 5.8211538461538455,
+        "total_frequency_mass": 8.294117647058824,
+        "numeric_frequency_mass": 3.058823529411765,
+        "numeric_weight_sum": 3.058823529411765,
+        "numeric_taxon_coverage": 0.5,
+        "numeric_frequency_coverage": 0.36879432624113473,
+        "status_taxon_counts": {
+          "indifferent": 10,
+          "numeric": 15,
+          "unmatched": 5
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.38297872340425526,
+          "numeric": 0.36879432624113473,
+          "unmatched": 0.24822695035460987
+        },
+        "indifferent_fraction_among_known_status": 0.5094339622641509,
+        "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+        "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+      },
+      "difference": -0.030953846153845888,
+      "unavailable_mask_keys": 19
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "background:IN:interior",
+      "scenario": "tichy_common_numeric",
+      "comparison_design": "same_station_same_year_same_area",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 6.089669421487604,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 15.125,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "indifferent": 23,
+          "numeric": 30,
+          "unmatched": 23
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2878228782287823,
+          "numeric": 0.44649446494464945,
+          "unmatched": 0.2656826568265683
+        },
+        "indifferent_fraction_among_known_status": 0.39195979899497485,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 58,
+        "n_numeric": 26,
+        "mean": 6.134166666666667,
+        "total_frequency_mass": 15.125,
+        "numeric_frequency_mass": 7.5,
+        "numeric_weight_sum": 7.5,
+        "numeric_taxon_coverage": 0.4482758620689655,
+        "numeric_frequency_coverage": 0.49586776859504134,
+        "status_taxon_counts": {
+          "indifferent": 15,
+          "numeric": 26,
+          "unmatched": 17
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.25206611570247933,
+          "numeric": 0.49586776859504134,
+          "unmatched": 0.25206611570247933
+        },
+        "indifferent_fraction_among_known_status": 0.3370165745856354,
+        "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+        "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+      },
+      "difference": -0.044497245179063505,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "road:IN",
+      "scenario": "tichy_common_numeric",
+      "comparison_design": "external_mountain_road_reference",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 6.089669421487604,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 15.125,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "indifferent": 23,
+          "numeric": 30,
+          "unmatched": 23
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2878228782287823,
+          "numeric": 0.44649446494464945,
+          "unmatched": 0.2656826568265683
+        },
+        "indifferent_fraction_among_known_status": 0.39195979899497485,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 169,
+        "n_numeric": 45,
+        "mean": 5.407407407407407,
+        "total_frequency_mass": 24.25925925925926,
+        "numeric_frequency_mass": 8.034090909090908,
+        "numeric_weight_sum": 8.034090909090908,
+        "numeric_taxon_coverage": 0.26627218934911245,
+        "numeric_frequency_coverage": 0.33117626648160997,
+        "status_taxon_counts": {
+          "indifferent": 36,
+          "numeric": 45,
+          "unmatched": 88
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.22517349063150588,
+          "numeric": 0.33117626648160997,
+          "unmatched": 0.4436502428868841
+        },
+        "indifferent_fraction_among_known_status": 0.404733690906823,
+        "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+        "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+      },
+      "difference": 0.6822620140801963,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "CZ",
+      "reference_dataset": "road:CZ",
+      "scenario": "eive_common_numeric",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 669,
+        "n_numeric": 321,
+        "mean": 4.441534641490877,
+        "total_frequency_mass": 164.1025641025641,
+        "numeric_frequency_mass": 73.46153846153847,
+        "numeric_weight_sum": 73.46153846153847,
+        "numeric_taxon_coverage": 0.4798206278026906,
+        "numeric_frequency_coverage": 0.4476562500000001,
+        "status_taxon_counts": {
+          "missing": 1,
+          "numeric": 321,
+          "outside_common_numeric": 284,
+          "unmatched": 63
+        },
+        "status_frequency_fraction": {
+          "missing": 0.0003125,
+          "numeric": 0.4476562500000001,
+          "outside_common_numeric": 0.4707812500000001,
+          "unmatched": 0.08125000000000002
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+        "numeric_taxon_sha256": "af5ebef1e4901d5041dfa5e8802b54e9a6dfe7318ba6f44f08031add6e30ecf1"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 233,
+        "n_numeric": 121,
+        "mean": 3.572046309030329,
+        "total_frequency_mass": 45.19047619047619,
+        "numeric_frequency_mass": 21.19047619047619,
+        "numeric_weight_sum": 21.19047619047619,
+        "numeric_taxon_coverage": 0.51931330472103,
+        "numeric_frequency_coverage": 0.46891464699683877,
+        "status_taxon_counts": {
+          "numeric": 121,
+          "outside_common_numeric": 92,
+          "unmatched": 20
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.46891464699683877,
+          "outside_common_numeric": 0.4299262381454162,
+          "unmatched": 0.101159114857745
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "2731d8b90ec045eadd6f6d5d81eaecb11108da7890a5eb0e5bfff9218e9e62b1",
+        "numeric_taxon_sha256": "3979b94fa665ff048fbe5569a433da3bfed24123207668a303316d8ff25f4361"
+      },
+      "difference": 0.869488332460548,
+      "unavailable_mask_keys": 20
+    },
+    {
+      "study": "IT",
+      "reference_dataset": "road:IT",
+      "scenario": "eive_common_numeric",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 429,
+        "n_numeric": 185,
+        "mean": 5.060915193780073,
+        "total_frequency_mass": 100.71428571428571,
+        "numeric_frequency_mass": 43.17857142857143,
+        "numeric_weight_sum": 43.17857142857143,
+        "numeric_taxon_coverage": 0.43123543123543123,
+        "numeric_frequency_coverage": 0.4287234042553192,
+        "status_taxon_counts": {
+          "numeric": 185,
+          "outside_common_numeric": 207,
+          "unmatched": 37
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.4287234042553192,
+          "outside_common_numeric": 0.5053191489361702,
+          "unmatched": 0.06595744680851064
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+        "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 648,
+        "n_numeric": 342,
+        "mean": 4.470527777868635,
+        "total_frequency_mass": 49.13333333333333,
+        "numeric_frequency_mass": 24.333333333333332,
+        "numeric_weight_sum": 24.333333333333332,
+        "numeric_taxon_coverage": 0.5277777777777778,
+        "numeric_frequency_coverage": 0.4952510176390773,
+        "status_taxon_counts": {
+          "numeric": 342,
+          "outside_common_numeric": 254,
+          "unmatched": 52
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.4952510176390773,
+          "outside_common_numeric": 0.43860244233378565,
+          "unmatched": 0.06614654002713705
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+        "numeric_taxon_sha256": "0e7b792f685f69cfac39dc5685d8db15c91f597f381b2d745751d11f4dd5ba29"
+      },
+      "difference": 0.5903874159114384,
+      "unavailable_mask_keys": 1
+    },
+    {
+      "study": "SI",
+      "reference_dataset": "background:SI:urban",
+      "scenario": "eive_common_numeric",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 257,
+        "n_numeric": 103,
+        "mean": 4.500649791107683,
+        "total_frequency_mass": 29.662921348314608,
+        "numeric_frequency_mass": 11.44943820224719,
+        "numeric_weight_sum": 11.44943820224719,
+        "numeric_taxon_coverage": 0.40077821011673154,
+        "numeric_frequency_coverage": 0.38598484848484843,
+        "status_taxon_counts": {
+          "numeric": 103,
+          "outside_common_numeric": 137,
+          "unmatched": 17
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.38598484848484843,
+          "outside_common_numeric": 0.5545454545454545,
+          "unmatched": 0.05946969696969697
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "9de968061e2a0354b236fa814d44c08cb74df481e51ba29b16a2c66436166a1a",
+        "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 93,
+        "n_numeric": 45,
+        "mean": 4.406188712163944,
+        "total_frequency_mass": 11.14,
+        "numeric_frequency_mass": 5.5200000000000005,
+        "numeric_weight_sum": 5.5200000000000005,
+        "numeric_taxon_coverage": 0.4838709677419355,
+        "numeric_frequency_coverage": 0.49551166965888693,
+        "status_taxon_counts": {
+          "numeric": 45,
+          "outside_common_numeric": 48
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.49551166965888693,
+          "outside_common_numeric": 0.5044883303411131
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "247581b161ba00cfc4cb005b84ccc4e69506aca7e87b8f0024e9adc64c64c15d",
+        "numeric_taxon_sha256": "69135c69945e624b8883eb3943f39250e3697bd12b8c32494d0187b449f67f1c"
+      },
+      "difference": 0.09446107894373856,
+      "unavailable_mask_keys": 11
+    },
+    {
+      "study": "HRBA",
+      "reference_dataset": "background:HRBA:urban",
+      "scenario": "eive_common_numeric",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 353,
+        "n_numeric": 172,
+        "mean": 5.688899813109328,
+        "total_frequency_mass": 102.66666666666667,
+        "numeric_frequency_mass": 48.666666666666664,
+        "numeric_weight_sum": 48.666666666666664,
+        "numeric_taxon_coverage": 0.48725212464589235,
+        "numeric_frequency_coverage": 0.47402597402597396,
+        "status_taxon_counts": {
+          "numeric": 172,
+          "outside_common_numeric": 170,
+          "unmatched": 11
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.47402597402597396,
+          "outside_common_numeric": 0.4987012987012987,
+          "unmatched": 0.02727272727272727
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "4215401ea868ea803cb9b8a3980915ad863bb668b4f0020c3e5530e771876a55",
+        "numeric_taxon_sha256": "f4d47d2d65b7ffc8e71a125ee8ccf4c8ca07037bbf7eddeb524e77f5b94ac0d0"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 185,
+        "n_numeric": 93,
+        "mean": 4.791432579865522,
+        "total_frequency_mass": 9.567333333333334,
+        "numeric_frequency_mass": 4.110666666666667,
+        "numeric_weight_sum": 4.110666666666667,
+        "numeric_taxon_coverage": 0.5027027027027027,
+        "numeric_frequency_coverage": 0.4296564699324089,
+        "status_taxon_counts": {
+          "numeric": 93,
+          "outside_common_numeric": 91,
+          "unmatched": 1
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.4296564699324089,
+          "outside_common_numeric": 0.5685318096299908,
+          "unmatched": 0.001811720437600167
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+        "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+      },
+      "difference": 0.8974672332438054,
+      "unavailable_mask_keys": 5
+    },
+    {
+      "study": "SK",
+      "reference_dataset": "background:SK:urban",
+      "scenario": "eive_common_numeric",
+      "comparison_design": "urban_reference",
+      "role": "European_descriptive",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 368,
+        "n_numeric": 169,
+        "mean": 4.505672669116438,
+        "total_frequency_mass": 78.53333333333333,
+        "numeric_frequency_mass": 33.333333333333336,
+        "numeric_weight_sum": 33.333333333333336,
+        "numeric_taxon_coverage": 0.4592391304347826,
+        "numeric_frequency_coverage": 0.42444821731748733,
+        "status_taxon_counts": {
+          "numeric": 169,
+          "outside_common_numeric": 172,
+          "unmatched": 27
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.42444821731748733,
+          "outside_common_numeric": 0.4741086587436333,
+          "unmatched": 0.10144312393887946
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+        "numeric_taxon_sha256": "e928a7a907d470ceb38d142d7313abae0bda3023c2c838d6cf780f4f0106bc1c"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 30,
+        "n_numeric": 15,
+        "mean": 4.640772656321366,
+        "total_frequency_mass": 8.294117647058824,
+        "numeric_frequency_mass": 3.058823529411765,
+        "numeric_weight_sum": 3.058823529411765,
+        "numeric_taxon_coverage": 0.5,
+        "numeric_frequency_coverage": 0.36879432624113473,
+        "status_taxon_counts": {
+          "numeric": 15,
+          "outside_common_numeric": 13,
+          "unmatched": 2
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.36879432624113473,
+          "outside_common_numeric": 0.5319148936170213,
+          "unmatched": 0.09929078014184396
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+        "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+      },
+      "difference": -0.13509998720492788,
+      "unavailable_mask_keys": 19
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "background:IN:interior",
+      "scenario": "eive_common_numeric",
+      "comparison_design": "same_station_same_year_same_area",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 4.826984647843395,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 15.125,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "numeric": 30,
+          "outside_common_numeric": 32,
+          "unmatched": 14
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.44649446494464945,
+          "outside_common_numeric": 0.3671586715867159,
+          "unmatched": 0.1863468634686347
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 58,
+        "n_numeric": 26,
+        "mean": 4.842259288414584,
+        "total_frequency_mass": 15.125,
+        "numeric_frequency_mass": 7.5,
+        "numeric_weight_sum": 7.5,
+        "numeric_taxon_coverage": 0.4482758620689655,
+        "numeric_frequency_coverage": 0.49586776859504134,
+        "status_taxon_counts": {
+          "numeric": 26,
+          "outside_common_numeric": 24,
+          "unmatched": 8
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.49586776859504134,
+          "outside_common_numeric": 0.4214876033057851,
+          "unmatched": 0.08264462809917356
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+        "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+      },
+      "difference": -0.015274640571188769,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "road:IN",
+      "scenario": "eive_common_numeric",
+      "comparison_design": "external_mountain_road_reference",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 4.826984647843395,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 15.125,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "numeric": 30,
+          "outside_common_numeric": 32,
+          "unmatched": 14
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.44649446494464945,
+          "outside_common_numeric": 0.3671586715867159,
+          "unmatched": 0.1863468634686347
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "recorded_frequency",
+        "n_named": 169,
+        "n_numeric": 45,
+        "mean": 4.238019834047465,
+        "total_frequency_mass": 24.25925925925926,
+        "numeric_frequency_mass": 8.034090909090908,
+        "numeric_weight_sum": 8.034090909090908,
+        "numeric_taxon_coverage": 0.26627218934911245,
+        "numeric_frequency_coverage": 0.33117626648160997,
+        "status_taxon_counts": {
+          "numeric": 45,
+          "outside_common_numeric": 52,
+          "unmatched": 72
+        },
+        "status_frequency_fraction": {
+          "numeric": 0.33117626648160997,
+          "outside_common_numeric": 0.35824080499653016,
+          "unmatched": 0.3105829285218598
+        },
+        "indifferent_fraction_among_known_status": 0.0,
+        "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+        "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+      },
+      "difference": 0.58896481379593,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "CZ",
+      "reference_dataset": "road:CZ",
+      "scenario": "tichy_species_equal",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 669,
+        "n_numeric": 322,
+        "mean": 5.872049689440994,
+        "total_frequency_mass": 164.1025641025641,
+        "numeric_frequency_mass": 73.48717948717949,
+        "numeric_weight_sum": 322.0,
+        "numeric_taxon_coverage": 0.4813153961136024,
+        "numeric_frequency_coverage": 0.44781250000000006,
+        "status_taxon_counts": {
+          "indifferent": 204,
+          "numeric": 322,
+          "unmatched": 143
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.39265625,
+          "numeric": 0.44781250000000006,
+          "unmatched": 0.15953125
+        },
+        "indifferent_fraction_among_known_status": 0.4671872095184979,
+        "named_taxon_sha256": "6c3cb088283ab165ac192d29598f72817555be5d8092eff385043c6a46549250",
+        "numeric_taxon_sha256": "8a3cb7d019728325c2dd3a3a38a660bb88f76eb785c8ca2c0c3687e997dd3adf"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 233,
+        "n_numeric": 122,
+        "mean": 4.646721311475409,
+        "total_frequency_mass": 45.19047619047619,
+        "numeric_frequency_mass": 21.333333333333332,
+        "numeric_weight_sum": 122.0,
+        "numeric_taxon_coverage": 0.5236051502145923,
+        "numeric_frequency_coverage": 0.4720758693361433,
+        "status_taxon_counts": {
+          "indifferent": 65,
+          "numeric": 122,
+          "unmatched": 46
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2929399367755532,
+          "numeric": 0.4720758693361433,
+          "unmatched": 0.23498419388830347
+        },
+        "indifferent_fraction_among_known_status": 0.38292011019283745,
+        "named_taxon_sha256": "2731d8b90ec045eadd6f6d5d81eaecb11108da7890a5eb0e5bfff9218e9e62b1",
+        "numeric_taxon_sha256": "0b6fa82075e681791410368e268fd4086ca8210e815f537a48124eeb02cba525"
+      },
+      "difference": 1.2253283779655844,
+      "unavailable_mask_keys": 20
+    },
+    {
+      "study": "IT",
+      "reference_dataset": "road:IT",
+      "scenario": "tichy_species_equal",
+      "comparison_design": "mountain_road_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 429,
+        "n_numeric": 185,
+        "mean": 6.594054054054054,
+        "total_frequency_mass": 100.71428571428571,
+        "numeric_frequency_mass": 43.17857142857143,
+        "numeric_weight_sum": 185.0,
+        "numeric_taxon_coverage": 0.43123543123543123,
+        "numeric_frequency_coverage": 0.4287234042553192,
+        "status_taxon_counts": {
+          "indifferent": 163,
+          "numeric": 185,
+          "unmatched": 81
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4297872340425532,
+          "numeric": 0.4287234042553192,
+          "unmatched": 0.14148936170212767
+        },
+        "indifferent_fraction_among_known_status": 0.5006195786864931,
+        "named_taxon_sha256": "b556b94a12dd45a6159761362a4311c1cbaa5e7bc6fcb34f042e2e4ea9cf2781",
+        "numeric_taxon_sha256": "3267836005f77061c60821f66a09f2241f691d1445fa19fd4c46c69d7097a8b5"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 648,
+        "n_numeric": 347,
+        "mean": 6.0083573487031705,
+        "total_frequency_mass": 49.13333333333333,
+        "numeric_frequency_mass": 24.733333333333334,
+        "numeric_weight_sum": 347.0,
+        "numeric_taxon_coverage": 0.5354938271604939,
+        "numeric_frequency_coverage": 0.5033921302578019,
+        "status_taxon_counts": {
+          "indifferent": 204,
+          "numeric": 347,
+          "unmatched": 97
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.3439620081411126,
+          "numeric": 0.5033921302578019,
+          "unmatched": 0.15264586160108548
+        },
+        "indifferent_fraction_among_known_status": 0.4059247397918334,
+        "named_taxon_sha256": "3b4923268b27aa39e1ad22166f6a25d54e6edc9e5017196af3de3400bd908bfd",
+        "numeric_taxon_sha256": "56e38aa4cb12961cab15280d419cc289af274181ed085c3f6265ad1047c499e7"
+      },
+      "difference": 0.5856967053508839,
+      "unavailable_mask_keys": 1
+    },
+    {
+      "study": "SI",
+      "reference_dataset": "background:SI:urban",
+      "scenario": "tichy_species_equal",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 257,
+        "n_numeric": 103,
+        "mean": 5.740776699029126,
+        "total_frequency_mass": 29.662921348314608,
+        "numeric_frequency_mass": 11.44943820224719,
+        "numeric_weight_sum": 103.0,
+        "numeric_taxon_coverage": 0.40077821011673154,
+        "numeric_frequency_coverage": 0.38598484848484843,
+        "status_taxon_counts": {
+          "indifferent": 114,
+          "numeric": 103,
+          "unmatched": 40
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.478030303030303,
+          "numeric": 0.38598484848484843,
+          "unmatched": 0.1359848484848485
+        },
+        "indifferent_fraction_among_known_status": 0.5532661113546691,
+        "named_taxon_sha256": "9de968061e2a0354b236fa814d44c08cb74df481e51ba29b16a2c66436166a1a",
+        "numeric_taxon_sha256": "e00f87e9e9636d47df30bc31c1888fd964f90682ceee5327d0372441a1766ef2"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 93,
+        "n_numeric": 45,
+        "mean": 5.913333333333334,
+        "total_frequency_mass": 11.14,
+        "numeric_frequency_mass": 5.5200000000000005,
+        "numeric_weight_sum": 45.0,
+        "numeric_taxon_coverage": 0.4838709677419355,
+        "numeric_frequency_coverage": 0.49551166965888693,
+        "status_taxon_counts": {
+          "indifferent": 40,
+          "numeric": 45,
+          "unmatched": 8
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.38958707360861755,
+          "numeric": 0.49551166965888693,
+          "unmatched": 0.1149012567324955
+        },
+        "indifferent_fraction_among_known_status": 0.44016227180527384,
+        "named_taxon_sha256": "247581b161ba00cfc4cb005b84ccc4e69506aca7e87b8f0024e9adc64c64c15d",
+        "numeric_taxon_sha256": "69135c69945e624b8883eb3943f39250e3697bd12b8c32494d0187b449f67f1c"
+      },
+      "difference": -0.17255663430420842,
+      "unavailable_mask_keys": 11
+    },
+    {
+      "study": "HRBA",
+      "reference_dataset": "background:HRBA:urban",
+      "scenario": "tichy_species_equal",
+      "comparison_design": "urban_tree_pit_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 353,
+        "n_numeric": 173,
+        "mean": 7.430635838150289,
+        "total_frequency_mass": 102.66666666666667,
+        "numeric_frequency_mass": 48.93333333333333,
+        "numeric_weight_sum": 173.0,
+        "numeric_taxon_coverage": 0.49008498583569404,
+        "numeric_frequency_coverage": 0.47662337662337656,
+        "status_taxon_counts": {
+          "indifferent": 133,
+          "numeric": 173,
+          "unmatched": 47
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.41558441558441556,
+          "numeric": 0.47662337662337656,
+          "unmatched": 0.10779220779220779
+        },
+        "indifferent_fraction_among_known_status": 0.4657933042212518,
+        "named_taxon_sha256": "4215401ea868ea803cb9b8a3980915ad863bb668b4f0020c3e5530e771876a55",
+        "numeric_taxon_sha256": "0ffb21a7959f57f4fad0f6b9ace0150e51c313443e107cc402d8963390fc0fa1"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 185,
+        "n_numeric": 93,
+        "mean": 6.581720430107527,
+        "total_frequency_mass": 9.567333333333334,
+        "numeric_frequency_mass": 4.110666666666667,
+        "numeric_weight_sum": 93.0,
+        "numeric_taxon_coverage": 0.5027027027027027,
+        "numeric_frequency_coverage": 0.4296564699324089,
+        "status_taxon_counts": {
+          "indifferent": 80,
+          "numeric": 93,
+          "unmatched": 12
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4813601839593059,
+          "numeric": 0.4296564699324089,
+          "unmatched": 0.08898334610828514
+        },
+        "indifferent_fraction_among_known_status": 0.5283769313140584,
+        "named_taxon_sha256": "8e2243d44d6cc77dbdb85f0fe93683e47479d82a721626a3913b2a234eb1fb3b",
+        "numeric_taxon_sha256": "b2b72c2f2a7d766af77c9ee5322a6afed2e958cd3ca32ed35402959d1b9b4ee1"
+      },
+      "difference": 0.8489154080427621,
+      "unavailable_mask_keys": 5
+    },
+    {
+      "study": "SK",
+      "reference_dataset": "background:SK:urban",
+      "scenario": "tichy_species_equal",
+      "comparison_design": "urban_reference",
+      "role": "European_descriptive",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 368,
+        "n_numeric": 170,
+        "mean": 5.960588235294117,
+        "total_frequency_mass": 78.53333333333333,
+        "numeric_frequency_mass": 33.4,
+        "numeric_weight_sum": 170.0,
+        "numeric_taxon_coverage": 0.46195652173913043,
+        "numeric_frequency_coverage": 0.42529711375212226,
+        "status_taxon_counts": {
+          "indifferent": 148,
+          "numeric": 170,
+          "unmatched": 50
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.4325127334465196,
+          "numeric": 0.42529711375212226,
+          "unmatched": 0.14219015280135824
+        },
+        "indifferent_fraction_among_known_status": 0.5042058386937159,
+        "named_taxon_sha256": "2e7834e836d860ad139cd042ef95b0adbd2eb187e16796b801791db35c8390cd",
+        "numeric_taxon_sha256": "109449d2ccf2c0cefe6b2d56df594088e0a6849fe5eaae873462e59e2f3f9acf"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 30,
+        "n_numeric": 15,
+        "mean": 5.760000000000001,
+        "total_frequency_mass": 8.294117647058824,
+        "numeric_frequency_mass": 3.058823529411765,
+        "numeric_weight_sum": 15.0,
+        "numeric_taxon_coverage": 0.5,
+        "numeric_frequency_coverage": 0.36879432624113473,
+        "status_taxon_counts": {
+          "indifferent": 10,
+          "numeric": 15,
+          "unmatched": 5
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.38297872340425526,
+          "numeric": 0.36879432624113473,
+          "unmatched": 0.24822695035460987
+        },
+        "indifferent_fraction_among_known_status": 0.5094339622641509,
+        "named_taxon_sha256": "5deead325c6e160ba1f8e7efec6b1f95fd56a840c765e33ae08172850388a2b1",
+        "numeric_taxon_sha256": "c952afe7186807b22cc82981079a0c7d1b2f896996188d1d976ad62595b4e43c"
+      },
+      "difference": 0.2005882352941164,
+      "unavailable_mask_keys": 19
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "background:IN:interior",
+      "scenario": "tichy_species_equal",
+      "comparison_design": "same_station_same_year_same_area",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 6.11,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 30.0,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "indifferent": 23,
+          "numeric": 30,
+          "unmatched": 23
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2878228782287823,
+          "numeric": 0.44649446494464945,
+          "unmatched": 0.2656826568265683
+        },
+        "indifferent_fraction_among_known_status": 0.39195979899497485,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 58,
+        "n_numeric": 26,
+        "mean": 6.230769230769231,
+        "total_frequency_mass": 15.125,
+        "numeric_frequency_mass": 7.5,
+        "numeric_weight_sum": 26.0,
+        "numeric_taxon_coverage": 0.4482758620689655,
+        "numeric_frequency_coverage": 0.49586776859504134,
+        "status_taxon_counts": {
+          "indifferent": 15,
+          "numeric": 26,
+          "unmatched": 17
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.25206611570247933,
+          "numeric": 0.49586776859504134,
+          "unmatched": 0.25206611570247933
+        },
+        "indifferent_fraction_among_known_status": 0.3370165745856354,
+        "named_taxon_sha256": "512001da2b5dfe8660cd28a7f855b22350ec9973e10614a53643423bdc0a2de7",
+        "numeric_taxon_sha256": "675815bceb36501d8bc42e741652bdbc75c4429d072327ff5cd360182fafd40a"
+      },
+      "difference": -0.12076923076923052,
+      "unavailable_mask_keys": 0
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "road:IN",
+      "scenario": "tichy_species_equal",
+      "comparison_design": "external_mountain_road_reference",
+      "role": "European_indicator_extrapolation",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "rail": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 76,
+        "n_numeric": 30,
+        "mean": 6.11,
+        "total_frequency_mass": 33.875,
+        "numeric_frequency_mass": 15.125,
+        "numeric_weight_sum": 30.0,
+        "numeric_taxon_coverage": 0.39473684210526316,
+        "numeric_frequency_coverage": 0.44649446494464945,
+        "status_taxon_counts": {
+          "indifferent": 23,
+          "numeric": 30,
+          "unmatched": 23
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.2878228782287823,
+          "numeric": 0.44649446494464945,
+          "unmatched": 0.2656826568265683
+        },
+        "indifferent_fraction_among_known_status": 0.39195979899497485,
+        "named_taxon_sha256": "456a70cab1b2c3e0f9fb55fb0e437f1265ea03938ef625cf50e6f8852e1ea8ee",
+        "numeric_taxon_sha256": "9fb3e66f1743a48fbcb1146517fe1f52d656005e706926635f5a7f403db10f36"
+      },
+      "reference": {
+        "estimable": true,
+        "support_failures": [],
+        "weighting": "species_equal",
+        "n_named": 169,
+        "n_numeric": 45,
+        "mean": 5.253333333333334,
+        "total_frequency_mass": 24.25925925925926,
+        "numeric_frequency_mass": 8.034090909090908,
+        "numeric_weight_sum": 45.0,
+        "numeric_taxon_coverage": 0.26627218934911245,
+        "numeric_frequency_coverage": 0.33117626648160997,
+        "status_taxon_counts": {
+          "indifferent": 36,
+          "numeric": 45,
+          "unmatched": 88
+        },
+        "status_frequency_fraction": {
+          "indifferent": 0.22517349063150588,
+          "numeric": 0.33117626648160997,
+          "unmatched": 0.4436502428868841
+        },
+        "indifferent_fraction_among_known_status": 0.404733690906823,
+        "named_taxon_sha256": "88b66154f13adff10b378af4d0b3d425a245ef4819cf81b51b77b4bab28d41ff",
+        "numeric_taxon_sha256": "c65010e86c55ba79148708963cb483a09ae54f8baf8c7591f38e4b2490ac8f37"
+      },
+      "difference": 0.8566666666666665,
+      "unavailable_mask_keys": 0
+    }
+  ],
+  "eive_unknown_envelopes": [
+    {
+      "study": "CZ",
+      "reference_dataset": "road:CZ",
+      "estimable": true,
+      "known_component": 0.8860421493303922,
+      "lower": -0.0314367758540125,
+      "upper": 1.607554925937347,
+      "unknown_coefficient_l1": 0.16389917017913594,
+      "unknown_taxa": 78,
+      "sign": "not_fixed",
+      "estimand": "Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+    },
+    {
+      "study": "IT",
+      "reference_dataset": "road:IT",
+      "estimable": true,
+      "known_component": 0.4494855748474778,
+      "lower": -0.15693589613417097,
+      "upper": 1.0540161136428625,
+      "unknown_coefficient_l1": 0.12109520097770336,
+      "unknown_taxa": 82,
+      "sign": "not_fixed",
+      "estimand": "Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+    },
+    {
+      "study": "SI",
+      "reference_dataset": "background:SI:urban",
+      "estimable": true,
+      "known_component": -0.14268788399760263,
+      "lower": -0.14268788399760263,
+      "upper": 0.452009085699367,
+      "unknown_coefficient_l1": 0.059469696969696964,
+      "unknown_taxa": 17,
+      "sign": "not_fixed",
+      "estimand": "Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+    },
+    {
+      "study": "HRBA",
+      "reference_dataset": "background:HRBA:urban",
+      "estimable": true,
+      "known_component": 0.5857700242584214,
+      "lower": 0.5676528198824198,
+      "upper": 0.8584972969856941,
+      "unknown_coefficient_l1": 0.02908444771032744,
+      "unknown_taxa": 12,
+      "sign": "positive",
+      "estimand": "Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+    },
+    {
+      "study": "SK",
+      "reference_dataset": "background:SK:urban",
+      "estimable": true,
+      "known_component": -0.01109095622726247,
+      "lower": -0.8809087746236306,
+      "upper": 0.8802503001394608,
+      "unknown_coefficient_l1": 0.17611590747630915,
+      "unknown_taxa": 28,
+      "sign": "not_fixed",
+      "estimand": "Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "background:IN:interior",
+      "estimable": true,
+      "known_component": -0.4637031074554056,
+      "lower": -1.0281872646936723,
+      "upper": 1.1378034034774722,
+      "unknown_coefficient_l1": 0.21659906681711447,
+      "unknown_taxa": 18,
+      "sign": "not_fixed",
+      "estimand": "Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+    },
+    {
+      "study": "IN",
+      "reference_dataset": "road:IN",
+      "estimable": true,
+      "known_component": 0.8994401708929152,
+      "lower": -2.078753145044408,
+      "upper": 2.635272836297987,
+      "unknown_coefficient_l1": 0.4714025981342395,
+      "unknown_taxa": 84,
+      "sign": "not_fixed",
+      "estimand": "Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+    }
+  ],
+  "paired_india": [
+    {
+      "scenario": "tichy_numeric",
+      "scale": [
+        1,
+        12
+      ],
+      "estimable": true,
+      "n_candidates": 16,
+      "n_pairs": 16,
+      "mean_difference": 0.002653787399820917,
+      "median_difference": 0.02374183006535935,
+      "n_positive": 9,
+      "n_negative": 7,
+      "n_zero": 0,
+      "difference_range": [
+        -0.5222222222222221,
+        0.5999999999999996
+      ],
+      "mean_rail_numeric_taxon_coverage": 0.4488822434574386,
+      "mean_reference_numeric_taxon_coverage": 0.5078770615455398,
+      "retained_pair_indices_sha256": "46a2a9d1829a20387865c6dc7f507ba6adbfcbc8845bee1838acfc4c89d8fd8b",
+      "interpretation": "Equal station weighting within one external region; not independent climatic replication"
+    },
+    {
+      "scenario": "eive_all",
+      "scale": [
+        0,
+        10
+      ],
+      "estimable": true,
+      "n_candidates": 16,
+      "n_pairs": 16,
+      "mean_difference": 0.06004162707505073,
+      "median_difference": 0.08301365447825271,
+      "n_positive": 11,
+      "n_negative": 5,
+      "n_zero": 0,
+      "difference_range": [
+        -0.3607817867572285,
+        0.45481494758410523
+      ],
+      "mean_rail_numeric_taxon_coverage": 0.8166136606230375,
+      "mean_reference_numeric_taxon_coverage": 0.9294782487037921,
+      "retained_pair_indices_sha256": "46a2a9d1829a20387865c6dc7f507ba6adbfcbc8845bee1838acfc4c89d8fd8b",
+      "interpretation": "Equal station weighting within one external region; not independent climatic replication"
+    }
+  ],
+  "sampling_uncertainty": "Not estimated; no species-level pseudo-replication or marginal binomial reconstruction"
+}

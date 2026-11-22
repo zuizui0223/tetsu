@@ -1,0 +1,127 @@
+{
+  "version": "v315",
+  "design_commit": "12688cc91aab2a3844c47d512f3ce2b90e9086b8",
+  "adapter": "scripts/source_thermal_affinity_v315.py",
+  "source_storage": "Original workbooks are external inputs and are not redistributed in this repository.",
+  "matching_policy": {
+    "normalizer": "The same supplied species-name normalizer is used for both trait definitions and all habitats.",
+    "strict_species": "Exclude aggregates, sections, hybrids, uncertain concepts and explicit infraspecific labels before normalization. EIVE additionally requires TaxonRank=Species.",
+    "synonyms": "No new synonym inference, fuzzy matching, genus/family imputation or infraspecific averaging.",
+    "duplicates": "Identical numeric values or statuses retain one species key. Conflicting values or statuses produce status=conflict and no numeric value.",
+    "habitats": "Each species has one fixed value within each indicator definition, shared across all habitats.",
+    "excluded_names": "Excluded or nonmatching trait names are absent from the returned status map and are classified as unmatched by the analysis."
+  },
+  "status_policy": {
+    "numeric": "A finite source value inside that definition's closed numeric limits.",
+    "indifferent": "Tichy literal x. Retain as a separate ecological status, never zero, a midpoint or true missingness.",
+    "missing": "A source NA or empty value, distinguished from indifferent and from unmatched names.",
+    "conflict": "Multiple different numeric values or statuses normalize to the same species key. No value is selected.",
+    "zero": "Zero is valid on the EIVE 0-10 scale and invalid on the Tichy 1-12 scale."
+  },
+  "sources": {
+    "tichy": {
+      "citation": "Tichy L., Axmanova I., Dengler J., et al. (2023). Ellenberg-type indicator values for European vascular plant species. Journal of Vegetation Science 34, e13168.",
+      "publication_doi": "10.1111/jvs.13168",
+      "dataset_doi": "10.5281/zenodo.7427088",
+      "dataset_version": "2.0",
+      "record_publication_date": "2022-11-07",
+      "record_url": "https://zenodo.org/records/7427088",
+      "metadata_url": "https://zenodo.org/api/records/7427088",
+      "download_url": "https://zenodo.org/api/records/7427088/files/Indicator.values-tables-2022-11-07-Zenodo.v2.xlsx/content",
+      "license": "CC BY 4.0",
+      "local_input_filename": "tichy_2023_zenodo_v2.xlsx",
+      "published_filename": "Indicator.values-tables-2022-11-07-Zenodo.v2.xlsx",
+      "format": "XLSX",
+      "bytes": 19503599,
+      "publisher_md5": "3519d41639647dde8d80042fc98b2ef5",
+      "sha256": "b3fa7c3a6e9d356e52a45472549f807967bd0c3189e58e7e8a22e0389c29cc4e",
+      "sheet": "Tab-IVs-Tichy-et-al2023",
+      "taxon_column": "B: Taxon",
+      "temperature_column": "D: TEMPERATURE / Average",
+      "data_first_row": 3,
+      "limits": [1, 12],
+      "units": "Ellenberg-compatible temperature niche indicator; not degrees Celsius or physiological heat tolerance",
+      "nomenclature": "Euro+Med PlantBase, with source-defined species and aggregates",
+      "construction": "Means across compatible regional systems, with additional values estimated from EVA co-occurrences. Broad generalists can retain x instead of a definitive value.",
+      "source_census": {
+        "taxon_rows": 8908,
+        "numeric_temperature": 7402,
+        "indifferent_x": 1147,
+        "missing_NA": 359,
+        "numeric_regional_source_count_present": 7039,
+        "numeric_EVA_estimated_count_blank": 363
+      },
+      "strict_v314_normalizer_census": {
+        "numeric_species": 7217,
+        "indifferent_species": 1083,
+        "missing_species": 357,
+        "conflicting_normalized_keys": 0,
+        "excluded_trait_rows": 251
+      },
+      "publication_count_note": "The article abstract reports 7400 temperature values; the checksum-verified fixed v2 workbook contains 7402 numeric temperature entries. The adapter validates the pinned-file census."
+    },
+    "eive": {
+      "citation": "Dengler J., Jansen F., Chusova O., et al. (2023). Ecological Indicator Values for Europe (EIVE) 1.0. Vegetation Classification and Survey 4, 7-29.",
+      "publication_doi": "10.3897/VCS.98324",
+      "dataset_doi": "10.5281/zenodo.7534792",
+      "indicator_version": "1.0",
+      "record_publication_date": "2023-01-13",
+      "record_url": "https://zenodo.org/records/7534792",
+      "metadata_url": "https://zenodo.org/api/records/7534792",
+      "download_url": "https://zenodo.org/api/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx/content",
+      "license": "CC BY 4.0",
+      "local_input_filename": "EIVE_Paper_1.0_SM_08.xlsx",
+      "published_filename": "EIVE_Paper_1.0_SM_08.xlsx",
+      "format": "XLSX",
+      "bytes": 2900881,
+      "publisher_md5": "0f0ce19cd2a781eeed027d8b0acadbcb",
+      "sha256": "9551b585ba13dfe3fddbd2287f65fc98ac9f4ec5f80b9ae6f6b985bed73fb4a6",
+      "sheet": "mainTable",
+      "taxon_column": "TaxonConcept",
+      "rank_column": "TaxonRank",
+      "temperature_column": "EIVEres-T",
+      "available_auxiliary_columns": ["EIVEres-T.nw3", "EIVEres-T.n"],
+      "data_first_row": 2,
+      "limits": [0, 10],
+      "units": "Continuous European temperature niche position; not degrees Celsius or physiological heat tolerance",
+      "nomenclature": "Euro+Med augmented",
+      "construction": "Consensus of regional indicator systems rescaled to 0-10. The published construction assigns a source-system mean niche position to indifferent source taxa and retains broad niche-width information. EIVE 1.0 did not use EVA to derive the consensus values.",
+      "source_census": {
+        "taxon_rows": 14835,
+        "numeric_temperature": 14496,
+        "missing_temperature": 339,
+        "ranks": {
+          "Species": 11148,
+          "Subspecies": 2899,
+          "Species Aggregate": 664,
+          "Species Aggregate s. l.": 60,
+          "Variety": 42,
+          "Section": 22
+        }
+      },
+      "strict_v314_normalizer_census": {
+        "numeric_species": 10398,
+        "missing_species": 291,
+        "conflicting_normalized_keys": 0,
+        "excluded_trait_rows": 4146
+      },
+      "rank_exception": "The source row named Lupinus angustifolius subsp angustifolius is labeled Species. It is excluded by its explicit infraspecific name; the genuine species row is retained.",
+      "comparison_note": "EIVE is a separate definition and scale, not a numeric filling of Tichy x values. Both systems share regional indicator sources and are not independent ecological replications."
+    }
+  },
+  "kashmir_paired_source": {
+    "inherited_manifest": "data/manifests/v314_matched_foreign_rail_road_sources.json",
+    "publication_doi": "10.1111/1365-2664.13961",
+    "dataset_doi": "10.5061/dryad.0p2ngf20h",
+    "filename": "Matrix_plot.xlsx",
+    "sha256": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474",
+    "parser": "analyze_Kashmir_same_sites_reference_year_v254.parse_xlsx_matrix",
+    "selection": "The same 16 station transects in baseline 2014, requiring all four original quadrats. Between-station transects and 2017 observations are excluded.",
+    "rail_union": ["Track", "Embankment"],
+    "interior_union": ["Interior Plot 1", "Interior Plot 2"],
+    "paired_stations": 16,
+    "selected_quadrats": 64,
+    "mask_policy": "Apply the union of unresolved source-name base keys across the selected rail and interior observations to both sides of every station pair.",
+    "output_policy": "Return only in-memory species-set pairs. Export no original station identifiers, species-by-site matrix or coordinates."
+  }
+}

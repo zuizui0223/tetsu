@@ -1,0 +1,8 @@
+study,reference_dataset,estimable,known_component,lower,upper,unknown_coefficient_l1,unknown_taxa,sign,estimand
+CZ,road:CZ,True,0.8860421493303922,-0.0314367758540125,1.607554925937347,0.16389917017913594,78,not_fixed,"Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+IT,road:IT,True,0.4494855748474778,-0.15693589613417097,1.0540161136428625,0.12109520097770336,82,not_fixed,"Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+SI,background:SI:urban,True,-0.14268788399760263,-0.14268788399760263,0.452009085699367,0.059469696969696964,17,not_fixed,"Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+HRBA,background:HRBA:urban,True,0.5857700242584214,0.5676528198824198,0.8584972969856941,0.02908444771032744,12,positive,"Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+SK,background:SK:urban,True,-0.01109095622726247,-0.8809087746236306,0.8802503001394608,0.17611590747630915,28,not_fixed,"Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+IN,background:IN:interior,True,-0.4637031074554056,-1.0281872646936723,1.1378034034774722,0.21659906681711447,18,not_fixed,"Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
+IN,road:IN,True,0.8994401708929152,-2.078753145044408,2.635272836297987,0.4714025981342395,84,not_fixed,"Hypothetical all-named-taxa EIVE contrast, not numeric-only mean or confidence interval"
