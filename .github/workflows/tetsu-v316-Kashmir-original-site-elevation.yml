@@ -88,7 +88,8 @@ jobs:
           assert d['v315_original_16_station_baseline_replayed']['eive_all']['strict_legacy_replay_passed']
           for year in ('main_2014','year_2017_sensitivity'):
             for scenario,v in d[year].items():
-                assert v['model']['n_transects']<=31
+                assert 25<=v['original_rows_after_require_all_4_source_plots']<=31
+                assert v['model']['n_transects']<=v['original_rows_after_require_all_4_source_plots']
                 if v['model']['estimable']:
                     assert v['permutation']['n_permutations']==4999
                     assert v['permutation']['n_original_transects']==v['model']['n_transects']
