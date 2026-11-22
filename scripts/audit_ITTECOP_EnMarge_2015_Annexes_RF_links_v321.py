@@ -26,7 +26,11 @@ class Anchors(HTMLParser):
     def handle_data(self,data):
         for a in self.stack:
             a["text"]+=data
-    def handle_endtag(self,tag):
+    def handle_startendtag(self,tag,attrs):
+        if tag=="img" and self.stack:
+            alt=dict(attrs).get("alt","")
+            if alt:self.stack[-1]["text"]+=" "+alt
+        def handle_endtag(self,tag):
         if tag=="a" and self.stack:
             self.links.append(self.stack.pop())
 
@@ -43,8 +47,15 @@ def audit(path:Path):
     p=Anchors();p.feed(text)
     items=[]
     for x in p.links:
+        href=x["href"]
         label=" ".join((x["text"]+" "+x["title"]).split())
-        url=urljoin(PROJECT,x["href"])
+        # Official Joomla project page has image-only report links with
+        # empty anchor text; the file paths are authoritative labels.
+        if "/rapport-final/Annexes/" in href or "/rapport-final/annexes/" in href:
+            label="Annexes RF "+href.rsplit("/",1)[-1]
+        elif "/rapport-final/2008/" in href or "/rapport-final/" in href:
+            label="Rapport final "+href.rsplit("/",1)[-1]
+        url=urljoin(PROJECT,href)
         if any(k in label.casefold() for k in ("annexes","rapport final","présentation","presentation")):
             items.append({"published_link_text":label[:190],
                           "resolved_publisher_url":url,
