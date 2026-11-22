@@ -102,7 +102,44 @@ def audit(source:Path):
             "source_first_cell_role_caveat":"Some spreadsheets contain notes/multi-header rows; do not classify by any single unvalidated keyword."
         })
     if not profiles:raise ValueError("No source meta-analysis worksheets found")
+    if source.name!=MELL8:
+        raise ValueError("Wrong supplementary original effect size file")
+    if qa["sha256"]!="0fd8ff9922c1138d5abd5289e743058b10be3b52c73d4d338cc9b9d2505def17":
+        raise ValueError("Previously authenticated original publisher Supplement 8 SHA changed")
+    if "File" not in sheets or len(sheets["File"])!=206:
+        raise ValueError("Original source 205 case rows changed")
+    records=sheets["File"]
+    header=records[0]
+    if (header.get(0),header.get(1),header.get(3),header.get(14))!=(
+            "Study.ID","Author_date","Case.ID","LTI"):
+        raise ValueError("Unexpected original publication/table reference headers")
+    category=Counter()
+    rail=[]
+    for no,row in enumerate(records[1:],start=2):
+        lti=row.get(14)
+        category[str(lti)]+=1
+        if str(lti).lower()=="railway":
+            effect={str(header.get(col,f"source_column_{col}")):(
+                None if row.get(col) in (None,"NA","") else row.get(col))
+                    for col in range(max(header)+1)}
+            effect["original_excel_row_1based"]=no
+            rail.append(effect)
+    if len(rail)!=3 or category["Railway"]!=3:
+        raise ValueError("Original publication exact three Railway Q2 cases not reproduced")
+    rail_studies=sorted({str(r["Author_date"]) for r in rail})
+    if len(rail_studies)!=2:
+        raise ValueError("Original railway cases do not form two primary publication IDs")
     return {
+        "n_actual_source_Q2_effect_rows":len(records)-1,
+        "source_LTI_case_counts":dict(sorted(category.items())),
+        "source_unique_primary_author_date_IDs_all_LTI":len({str(r.get(1)) for r in records[1:]}),
+        "n_railway_effect_rows":len(rail),
+        "n_railway_distinct_publications":len(rail_studies),
+        "railway_original_publication_identifiers":rail_studies,
+        "source_original_railway_effect_metadata_PUBLIC":rail,
+        "publisher_railway_cases_are_not_independent_marginals":True,
+        "cannot_claim_rail_specific_climate_interaction_from_two_original_papers":True,
+
         "version":"v317","official_publication_doi":EXTRACT_SOURCE,
         "original_publisher_record":META_SOURCE,
         "original_source_xlsx":source.name,
