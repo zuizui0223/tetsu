@@ -1,0 +1,58 @@
+name: "v318 authentic Everingham2019 published Australian railway vegetation Appendix S4 source"
+on:
+  push:
+    branches: [research/tetsu-v318-Australia-Everingham-original-field-plots-20261122]
+    paths:
+      - 'scripts/audit_Everingham_2019_raw_Australian_fieldwork_source_v318.py'
+      - '.github/workflows/tetsu-v318-original-Everingham-Aus-plant-plots.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v318-Everingham2019-public-raw-supplement
+  cancel-in-progress: true
+jobs:
+  Wiley-original-Australian-fieldwork-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Attempt only official public supplement URLs, never bypass login or restricted content
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v318 results/audit/v318
+          target='source_original/v318/aec12719-sup-0002-AppendixS4.xlsx'
+          for url in \
+            'https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Faec.12719&file=aec12719-sup-0002-AppendixS4.xlsx' \
+            'https://onlinelibrary.wiley.com/doi/suppl/10.1111/aec.12719/supinfo/aec12719-sup-0002-AppendixS4.xlsx' \
+            'https://onlinelibrary.wiley.com/doi/supinfo/10.1111/aec.12719/aec12719-sup-0002-AppendixS4.xlsx'; do
+            echo "Attempting published original source: $url"
+            if curl -fL --retry 2 --retry-delay 2 --connect-timeout 20 --max-time 100 \
+                -A 'Academic scientific botany source audit' "$url" -o "$target"; then
+              if head -c 4 "$target" | grep -q 'PK'; then
+                echo "VALID XLSX source ZIP magic; no inference about contents"
+                break
+              fi
+            fi
+            rm -f "$target"
+          done
+          if test ! -f "$target"; then
+            echo 'Source access gate FAILED: public Wiley URLs unavailable, no original Australian field data analyzed.'
+            exit 1
+          fi
+          test "$(stat -c%s "$target")" -ge 130000
+          test "$(stat -c%s "$target")" -le 450000
+          sha256sum "$target"
+      - name: Audit genuine original Appendix S4 workbook fieldwork source before ecology
+        run: |
+          python -u scripts/audit_Everingham_2019_raw_Australian_fieldwork_source_v318.py \
+            --source source_original/v318/aec12719-sup-0002-AppendixS4.xlsx \
+            --output results/audit/v318/Everingham2019_original_rail_vs_firetrail_plot_source_structure.json
+      - name: Archive only original workbook source structural QA, no source taxon records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v318-original-Australia-Everingham2019-raw-fieldwork-source-gate
+          path: results/audit/v318/
+          if-no-files-found: warn
