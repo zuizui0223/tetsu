@@ -1,0 +1,135 @@
+{
+  "version": "v320",
+  "status": "ORIGINAL_420PAGE_FULL_REPORT_SOURCE_VERIFIED_MATCHED_FLORISTIC_PLOT_DATA_NOT_YET_AVAILABLE",
+  "source_study": "Delbaere et al. (2015), En marge... paysage et biodiversité des accotements des grandes infrastructures de transport de l'eurométropole Lille-Kortrijk-Tournai",
+  "source_original_pdf": "https://ittecop.fr/images/docman-files/docman-files/rapport-final/2008/RF_2008_En_marge.pdf",
+  "source_original_pdf_bytes": 96783781,
+  "source_original_pdf_SHA256": "25a1a38512156bf1264b697efd78984a1abf9217f1da21e6ef2c5623da509405",
+  "source_original_pdf_pages": 420,
+  "source_original_24_site_infrastructure_inventory_locations": 24,
+  "original_railway_location_candidates_from_TOC": 6,
+  "original_railway_high_speed_locations": 3,
+  "original_railway_conventional_locations": 3,
+  "source_botany_sampling_note": "Botanical plots are located along infrastructure and where possible in surrounding vegetation (matrice); plants surveyed in spring, summer and autumn; exact paired plant-by-plot data not confirmed in public PDF.",
+  "source_original_railway_site_list": [
+    {
+      "code": 17,
+      "railway": "Paris-Bruxelles",
+      "location": "Esplechin",
+      "type": "High-speed",
+      "chapter_pages_pdf_1based": [
+        263,
+        268
+      ],
+      "author_la_flore_narrative_pages": [
+        268
+      ],
+      "botanist_infrastructure_matrix_map_legend_pages": [
+        263
+      ]
+    },
+    {
+      "code": 18,
+      "railway": "Paris-Lille",
+      "location": "Fretin",
+      "type": "High-speed",
+      "chapter_pages_pdf_1based": [
+        269,
+        275
+      ],
+      "author_la_flore_narrative_pages": [
+        274
+      ],
+      "botanist_infrastructure_matrix_map_legend_pages": [
+        269,
+        275
+      ]
+    },
+    {
+      "code": 19,
+      "railway": "Lille-London",
+      "location": "La Chapelle d'Armentières",
+      "type": "High-speed",
+      "chapter_pages_pdf_1based": [
+        276,
+        283
+      ],
+      "author_la_flore_narrative_pages": [
+        282
+      ],
+      "botanist_infrastructure_matrix_map_legend_pages": []
+    },
+    {
+      "code": 20,
+      "railway": "Lille-Douai",
+      "location": "Phalempin",
+      "type": "Conventional",
+      "chapter_pages_pdf_1based": [
+        284,
+        291
+      ],
+      "author_la_flore_narrative_pages": [
+        290
+      ],
+      "botanist_infrastructure_matrix_map_legend_pages": [
+        285
+      ]
+    },
+    {
+      "code": 21,
+      "railway": "Lille-Kortrijk",
+      "location": "Lauwe",
+      "type": "Conventional",
+      "chapter_pages_pdf_1based": [
+        292,
+        299
+      ],
+      "author_la_flore_narrative_pages": [
+        292
+      ],
+      "botanist_infrastructure_matrix_map_legend_pages": [
+        293
+      ]
+    },
+    {
+      "code": 24,
+      "railway": "Lille-Dunkerque",
+      "location": "Lompret",
+      "type": "Conventional",
+      "chapter_pages_pdf_1based": [
+        324,
+        344
+      ],
+      "author_la_flore_narrative_pages": [
+        324,
+        334,
+        336,
+        337,
+        338,
+        342
+      ],
+      "botanist_infrastructure_matrix_map_legend_pages": [
+        325
+      ]
+    }
+  ],
+  "n_original_railway_locations_with_text_extracted_infrastructure_matrix_map_legend": 5,
+  "n_source_verified_same_area_railway_vs_local_matrix_species_biological_plot_pairs": 0,
+  "n_source_verified_railway_species_by_plot_incidence_cells": 0,
+  "no_new_railway_climate_or_transport_effect_estimated": true,
+  "n_original_published_studies_added": 0,
+  "source_original_GitHub_actions_full_420page_audit": "https://github.com/zuizui0223/tetsu/actions/runs/45013059824",
+  "source_original_aggregate_artifact": "https://github.com/zuizui0223/tetsu/actions/runs/45013059824/artifacts/14750288502",
+  "raw_study_taxon_by_plot_missing": "Need original plot IDs, rail or surrounding matrix status, survey date/season, plot area, species presence and cover, and field survey provenance from original botany team at Conservatoire botanique national de Bailleul",
+  "interpretation_limits": [
+    "These are six railway locations among 24 total infrastructure locations in one original regional research program, not six independent publications or climate regions.",
+    "A map legend identifying botanist rail/matrix plots is not evidence of matched source matrices with all plant species in a table.",
+    "An unverified local pair count of zero means zero source-certifiable pairs, NOT zero pairs surveyed in the original fieldwork.",
+    "Flora narratives are not complete species-by-site incidence matrices; candidate Latin binomials in source text cannot be used to fill taxon absence.",
+    "Other highway/canal sites are not same-site nonrail controls for the railway site locations.",
+    "Railway source type is not a measured freight or passenger traffic exposure, not a train seed dispersal study.",
+    "No raw plot GPS, original full PDF or species-by-plot workbook was redistributed."
+  ],
+  "n_previously_identified_publications_now_source_audited": 1,
+  "original_report_is_same_program_identified_in_v317_and_not_new_independent_study": true
+}
