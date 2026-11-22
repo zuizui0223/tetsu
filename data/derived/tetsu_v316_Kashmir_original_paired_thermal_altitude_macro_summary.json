@@ -89,5 +89,16 @@
     "No direct ballast temperature, freight traffic, seed dispersal, survival, or actual railway-driven range extension measured.",
     "Original full species-by-site/GPS not republished; only aggregate results and SHA-provenance retained.",
     "Strong v315 station-only baseline reproduction does not suffice for field-level source correct model; explicit >=25 genuine source site-pairs hard gate added after zero-row source-key bug detected."
-  ]
+  ],
+  "independent_direct_original_cell_validation": {
+    "url": "https://github.com/zuizui0223/tetsu/actions/runs/44985088469",
+    "artifact": "https://github.com/zuizui0223/tetsu/actions/runs/44985088469/artifacts/14739546340",
+    "original_source_quadrat_rows": 248,
+    "original_2014_paired_transects": 31,
+    "original_2017_paired_transects": 27,
+    "validated_individual_outcomes": "Four original thermal-affinity altitude slopes, four paired community mean differences and four site supports",
+    "maximum_absolute_numerical_discrepancy": 0,
+    "shared_trait_source_and_taxon_normalizer": true,
+    "avoids_republication_of_original_species_site_or_GPS": true
+  }
 }
