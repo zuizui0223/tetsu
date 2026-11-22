@@ -1,0 +1,93 @@
+{
+  "version": "v316",
+  "status": "ORIGINAL_SOURCE_REPLAY_COMPLETED_NO_POSITIVE_THERMAL_ALTITUDE_PATTERN",
+  "scientific_question": "Does original within-transect railway-minus-adjacent-interior species thermal affinity increase in colder/higher Kashmir sites?",
+  "source_original_paper_doi": "10.1111/1365-2664.13961",
+  "source_dryad_doi": "10.5061/dryad.0p2ngf20h",
+  "original_field_workbook_sha256": "529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474",
+  "trait_tichy_workbook_sha256": "b3fa7c3a6e9d356e52a45472549f807967bd0c3189e58e7e8a22e0389c29cc4e",
+  "trait_eive_workbook_sha256": "9551b585ba13dfe3fddbd2287f65fc98ac9f4ec5f80b9ae6f6b985bed73fb4a6",
+  "design_committed_prior_to_seeing_outcomes": "3ce0329f5351bd88bfd80d6b7454f99c4dd3baa0",
+  "source_31_transects_2014_site_elev_m_minmax": [
+    1547,
+    1770
+  ],
+  "source_2014_n": 31,
+  "source_2014_railway_station_n": 16,
+  "source_2014_between_stations_n": 15,
+  "source_2014_plot_quadrat_area_m2": 100,
+  "railway_2014_aggregated_area_per_site_m2": 200,
+  "interior_aggregated_area_per_site_m2": 200,
+  "tichy_2014": {
+    "scale": [
+      1,
+      12
+    ],
+    "source_equal_site_mean_difference": 0.05753381038660194,
+    "source_altitude_slope_per_100m": 0.057330450031256905,
+    "site_permutation_within_station_between_4999_one_sided_positive_rank": 0.3212,
+    "two_sided_rank": 0.6434,
+    "whole_site_LOO_n_positive": 30,
+    "whole_site_LOO_n": 31,
+    "whole_site_LOO_slope_minmax": [
+      -0.06845769290832476,
+      0.1725340442977728
+    ],
+    "rail_numeric_species_per_site_mean": 12.64516129032258,
+    "interior_numeric_species_per_site_mean": 7.935483870967742,
+    "rail_numeric_taxon_fraction_mean": 0.4320190262520689,
+    "interior_numeric_taxon_fraction_mean": 0.4673856349604073,
+    "tichy_indifferent_fraction_rail_mean": 0.3117215235477488,
+    "tichy_indifferent_fraction_interior_mean": 0.27408326162239555
+  },
+  "eive_2014": {
+    "scale": [
+      0,
+      10
+    ],
+    "source_equal_site_mean_difference": 0.04998213054944265,
+    "source_altitude_slope_per_100m": -0.08247934631214582,
+    "site_permutation_within_station_between_4999_one_sided_positive_rank": 0.8994,
+    "two_sided_rank": 0.198,
+    "whole_site_LOO_n_positive": 0,
+    "whole_site_LOO_n": 31,
+    "whole_site_LOO_slope_minmax": [
+      -0.10546893833132671,
+      -0.0036860107703748438
+    ],
+    "rail_numeric_taxon_fraction_mean": 0.8201896411415177,
+    "interior_numeric_taxon_fraction_mean": 0.8802981435047358
+  },
+  "source_2017_independent_regions_added": 0,
+  "source_2017_complete_transects": 27,
+  "tichy_2017": {
+    "source_altitude_slope_per_100m": 0.15322701332922684,
+    "site_permutation_one_sided_positive_rank": 0.2104
+  },
+  "eive_2017": {
+    "source_altitude_slope_per_100m": 0.011152468129637938,
+    "site_permutation_one_sided_positive_rank": 0.4608
+  },
+  "temporal_same_27_sites_change_slope_per_100m": {
+    "tichy": 0.09060379061621832,
+    "eive": 0.09374314240387144
+  },
+  "v315_original_16_station_baseline_reproduced": {
+    "tichy": 0.002653787399820917,
+    "eive": 0.06004162707505073
+  },
+  "unmatched_original_plot_species_cells_across_both_years": 4,
+  "permutation_draws": 4999,
+  "source_original_GitHub_actions_success": "https://github.com/zuizui0223/tetsu/actions/runs/44984919398",
+  "source_aggregate_artifact_url": "https://github.com/zuizui0223/tetsu/actions/runs/44984919398/artifacts/14739730097",
+  "interpretation_limits": [
+    "Tichy and EIVE are different, non-independent ecological temperature indicator systems, not degrees Celsius.",
+    "One Kashmir corridor and narrow original field elevation; source urban/management spatial confounders remain.",
+    "2014 31 physical transects are the units, four quadrats per transect not independent.",
+    "2017 resampled same sites, with 27 complete four-quadrat cases after original missing cells; not additional regional replication.",
+    "Within original station/between blocked site-label permutations assume exchangeability conditional on stratum despite possible spatial autocorrelation; ranks are not causal p values.",
+    "No direct ballast temperature, freight traffic, seed dispersal, survival, or actual railway-driven range extension measured.",
+    "Original full species-by-site/GPS not republished; only aggregate results and SHA-provenance retained.",
+    "Strong v315 station-only baseline reproduction does not suffice for field-level source correct model; explicit >=25 genuine source site-pairs hard gate added after zero-row source-key bug detected."
+  ]
+}
