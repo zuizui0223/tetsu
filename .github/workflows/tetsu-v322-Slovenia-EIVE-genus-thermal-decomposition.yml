@@ -1,0 +1,55 @@
+name: "v322 original Slovenian railway EIVE genus thermal decomposition"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_Slovenia_EIVE_genus_contrast_v322.py'
+      - 'tests/test_Slovenia_EIVE_genus_contrast_v322.py'
+      - '.github/workflows/tetsu-v322-Slovenia-EIVE-genus-thermal-decomposition.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-source-genus-and-species-thermal-filter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test synthetic additive genus decomposition and permutation
+        run: python -m unittest discover -s tests -p 'test_Slovenia_EIVE_genus_contrast_v322.py' -v
+      - name: Retrieve source-verified original Slovenian railway flora
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/SLO102
+      - name: Obtain original independent European EIVE thermal centre and niche width table
+        run: |
+          set -euo pipefail
+          mkdir -p source/EIVE
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            'source/EIVE/EIVE_Paper_1.0_SM_08.xlsx' | md5sum --check
+      - name: Real two-source genus vs within-genus thermal and breadth effects, conditional taxa shuffles
+        run: |
+          python -u scripts/analyze_Slovenia_EIVE_genus_contrast_v322.py \
+            --source-slovenia-xlsx source/SLO102/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --verified-v102 source/SLO102/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --eive-xlsx source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v322_Slovenia_EIVE_genus_thermal_partition_and_conditional_null.json
+      - name: Save only aggregate analyses; never re-host the original source matrices
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v322-original-rail-EIVE-genus-thermal-effects-aggregate
+          path: results/audit/v322_Slovenia_EIVE_genus_thermal_partition_and_conditional_null.json
+          if-no-files-found: warn
