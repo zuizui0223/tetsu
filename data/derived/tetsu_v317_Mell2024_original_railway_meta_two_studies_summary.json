@@ -93,5 +93,33 @@
     "Review's French case has original 'Continent=North_America' despite France; do not use column without data QA",
     "No independent rail-only prediction interval, climate interaction, and no physical train seed dispersal inference"
   ],
-  "independent_raw_followup": "Retrieve Everingham 2019 original Appendix S4 workbook to analyse same-region native community transitions across railway/road/fire-trail habitats (if true sample data identifiable)."
+  "independent_raw_followup": "Retrieve Everingham 2019 original Appendix S4 workbook to analyse same-region native community transitions across railway/road/fire-trail habitats (if true sample data identifiable).",
+  "additional_file5_source_audit": {
+    "original_filename": "13750_2024_328_MOESM5_ESM.xlsx",
+    "original_xlsx_sha256": "85042f37984a6f8f316f1f578e7f3093334ded057ebdc0c72437ac8b34579c90",
+    "original_xlsx_bytes": 713116,
+    "source_review_screening_record_rows": 316,
+    "source_review_rows_with_explicit_LTI_Railway": 10,
+    "unique_original_source_document_IDs_explicit_LTI_Railway": 8,
+    "source_rows_railway_any_LTI_or_verge": 11,
+    "unique_source_document_IDs_railway_any_LTI_or_verge": 9,
+    "included_question_codes_among_extended_11_rows": {
+      "Q1": 2,
+      "Q2": 7,
+      "Q5": 2
+    },
+    "publication_source_original_railway_studies_reported": 10,
+    "source_original_comment": "10 included review Q-design records, NOT 10 independent source publications; 8 unique source IDs and one additional RCT with LTI miscoded as Waterway",
+    "current_original_record_url": "https://github.com/zuizui0223/tetsu/actions/runs/45009957309",
+    "original_study_doc": "docs/tetsu_v317_Mell2024_original_all316_rail_study_map_and_Spain_miscoding_ja.md",
+    "study_candidate_essential": "Delbaere et al France/Belgium (2015) near-natural paired vegetation; Prober (1996) NSW grassy white box railway easements, roadsides and forest; Rivera (2014) Spain randomized original railway embankment topsoil treatments 15 6x9m plots",
+    "source_quality_error_Rivera2014": {
+      "review_LTI": "Waterway",
+      "review_LTI_verge": "Herbaceous railway embankment",
+      "review_Country": "USA",
+      "published_original_country": "Spain",
+      "true_field_infrastructure": "Railway embankment under construction",
+      "original_paper_doi": "10.1371/journal.pone.0101413"
+    }
+  }
 }
