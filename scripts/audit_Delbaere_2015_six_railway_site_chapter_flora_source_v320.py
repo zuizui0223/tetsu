@@ -45,7 +45,13 @@ def source_audit(path):
     out={}
     for code,(place,line,rail_type) in SITES.items():
         token=normalize(place)
-        hits=[k for k,p in enumerate(normals) if token in p]
+        # Original typography alternates curly and plain apostrophes, and
+        # long chapter headings are frequently broken across PDF columns.
+        # For site19 require BOTH locality tokens; do not silently report 0.
+        if code=="19":
+            hits=[k for k,p in enumerate(normals) if "chapelle" in p and "armenti" in p]
+        else:
+            hits=[k for k,p in enumerate(normals) if token in p]
         # Avoid table of contents/infrastructure overview. Main report's
         # indexed site chapters begin about printed page 100, while appendices
         # begin after 350. We do not infer plot site lists from all mentions.
