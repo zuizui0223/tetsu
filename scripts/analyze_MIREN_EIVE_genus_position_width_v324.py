@@ -192,7 +192,9 @@ def main():
        k:v.get(k) for k in ("metric","regions","road_ids","source_first_visit_sites",
           "total_region_equal_roadside_minus_inland","between_genus_contribution",
           "within_genus_species_residual_contribution",
-          "within_genus_trait_permutation","regional_contributions")}
+          "within_genus_trait_permutation","regional_contributions",
+          "region_source_species_pools","region_genus_counts",
+          "region_multi_species_genera","component_region_direction")}
           for v in result["panels"]]},ensure_ascii=False),flush=True)
 
 if __name__=="__main__": main()
