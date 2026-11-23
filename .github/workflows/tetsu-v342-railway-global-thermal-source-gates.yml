@@ -1,0 +1,43 @@
+name: "v342 strict Australian rail/nonrail and global thermal data source access gate"
+on:
+  push:
+    branches:
+      - research/tetsu-v342-independent-thermal-reference-preflight-20261124
+    paths:
+      - 'scripts/audit_external_railway_global_thermal_sources_v342.py'
+      - 'tests/test_external_railway_global_thermal_sources_v342.py'
+      - '.github/workflows/tetsu-v342-railway-global-thermal-source-gates.yml'
+  pull_request:
+    branches:
+      - research/tetsu-Kashmir-Cynodon-persistence-v340-20261124
+    paths:
+      - 'scripts/audit_external_railway_global_thermal_sources_v342.py'
+      - 'tests/test_external_railway_global_thermal_sources_v342.py'
+      - '.github/workflows/tetsu-v342-railway-global-thermal-source-gates.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  external-source-access-not-effect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install official original XLSX schema reader
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Reject synthetic false sources
+        run: python -m unittest discover -s tests -p 'test_external_railway_global_thermal_sources_v342.py' -v
+      - name: Fetch exact public publisher supplement and public climate API access
+        run: |
+          python -u scripts/audit_external_railway_global_thermal_sources_v342.py \
+            --output results/audit/v342_external_railway_global_thermal_source_gate.json
+      - name: Archive aggregate-only source gate without original plot species/GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v342-railway-global-thermal-source-preflight-aggregate
+          path: results/audit/v342_external_railway_global_thermal_source_gate.json
+          if-no-files-found: warn
