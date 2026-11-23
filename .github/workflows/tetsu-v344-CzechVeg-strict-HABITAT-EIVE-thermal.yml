@@ -1,0 +1,72 @@
+name: "v344 CzechVeg strict HABITAT-only thermal EIVE source audit"
+on:
+  push:
+    branches:
+      - research/tetsu-v342-independent-thermal-reference-preflight-20261124
+    paths:
+      - 'scripts/analyze_CzechVeg_strict_HABITAT_EIVE_v344.py'
+      - 'tests/test_CzechVeg_original_study_EIVE_thermal_v344.py'
+      - '.github/workflows/tetsu-v344-CzechVeg-strict-HABITAT-EIVE-thermal.yml'
+  pull_request:
+    branches:
+      - research/tetsu-Kashmir-Cynodon-persistence-v340-20261124
+    paths:
+      - 'scripts/analyze_CzechVeg_strict_HABITAT_EIVE_v344.py'
+      - 'tests/test_CzechVeg_original_study_EIVE_thermal_v344.py'
+      - '.github/workflows/tetsu-v344-CzechVeg-strict-HABITAT-EIVE-thermal.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original_czechveg_context_eive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original XLSX and science reader dependencies
+        run: python -m pip install 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'scipy>=1.13,<2'
+      - name: Synthetic temperature trait and original study block invariants
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_original_study_EIVE_thermal_v344.py' -v
+      - name: Fetch publisher-verified complete CzechVeg field plots and original EIVE table
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v344 results/audit
+          curl -LfsS --retry 4 --connect-timeout 20 --max-time 160 \
+            'https://zenodo.org/api/records/19231152' \
+            -o source_original/v344/zenodo.json
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 900 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv/content' \
+            -o source_original/v344/headers.csv
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 1400 \
+            'https://zenodo.org/api/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv/content' \
+            -o source_original/v344/species.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' \
+            source_original/v344/headers.csv | md5sum --check
+          printf '%s  %s\n' \
+            'b296e5e19f03fb3bad0a8347c317f8a3' \
+            source_original/v344/species.csv | md5sum --check
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source_original/v344/eive.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            source_original/v344/eive.xlsx | md5sum --check
+      - name: Analyze strict HABITAT-only vs broad original source context and pre-specified era
+        run: |
+          python -u scripts/analyze_CzechVeg_strict_HABITAT_EIVE_v344.py \
+            --zenodo-record source_original/v344/zenodo.json \
+            --headers source_original/v344/headers.csv \
+            --species source_original/v344/species.csv \
+            --eive source_original/v344/eive.xlsx \
+            --output results/audit/v344_CzechVeg_strict_HABITAT_and_survey_era_EIVE_aggregate.json
+      - name: Archive aggregate study and technical nulls; no plot species rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v344-CzechVeg-original-study-RAIL-ROAD-EIVE-aggregate-only
+          path: results/audit/v344_CzechVeg_strict_HABITAT_and_survey_era_EIVE_aggregate.json
+          if-no-files-found: warn
