@@ -41,7 +41,7 @@ class ExternalSourceGateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             summarize_worldclim_zip(buf.getvalue())
 
-    def test_anchor_list_fixed_source():
+    def test_anchor_list_fixed_source(self):
         self.assertEqual(ANCHORS,("Cynodon dactylon","Poa annua"))
         self.assertEqual(len(SUPPLEMENT_URLS),2)
 
