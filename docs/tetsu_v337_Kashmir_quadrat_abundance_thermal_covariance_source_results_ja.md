@@ -1,5 +1,7 @@
 # v337 実データ結果：区画ごとのabundance–温度指標の対応を分析（2026-11-23）
 
+> **重要な後続監査（v338、2026-11-23）**：この文書のplot内abundanceラベル交換による探索的分率0.033は、元speciesごとのabundance分布・Track/内陸での分布を保持した[より厳しい帰無検定](tetsu_v338_Kashmir_species_preserving_abundance_null_results_ja.md)では支持されない（2014年元14組、species×zone帰無の両側分率**0.825**）。このページの観測差や元plot内帰無値は数値として再現されるが、**駅間での新しい温度選別機構を示す確証的結果として引用してはいけない**。
+
 ## 1．真正ソースと用語の訂正
 
 Rashid et al. (2021), *Journal of Applied Ecology*, [doi:10.1111/1365-2664.13961](https://doi.org/10.1111/1365-2664.13961)。原論文の大学公開著者版 [University of Antwerp institutional copy](https://repository.uantwerpen.be/docstore/d%3Airua%3A7552) の方法2.2に、元31調査地点・4プロット×2調査年における**種abundanceを記録するために各地点に12個の1×1m quadratを配置**したとある。元Dryadの数値は原著でいう`species abundance`である。ただし元Excelの各数値が方形区平均、合計、密度、あるいは独自の変換値かは明記された方法から確定できない。**%被度、正確な個体密度、バイオマスとは呼ばない**。最大103.6は100%を超えるから誤記という意味ではない。
