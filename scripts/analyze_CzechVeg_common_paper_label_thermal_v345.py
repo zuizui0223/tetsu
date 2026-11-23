@@ -36,11 +36,11 @@ def paper_comparison(strict,strict_scores,broad,broad_scores,traits):
     both=sorted(set(paper_a)&set(paper_b))
     diffs=[paper_b[p]-paper_a[p] for p in both]
     return {"strict":{"n_source_papers":a["n_original_studies"],
-                       "n_source_blocks":a["n_original_matched_blocks"],
+                       "n_source_blocks":a.get("n_original_matched_blocks",0),
                        "mean_EIVE":a.get("mean_study_equal_RAIL_minus_ROAD_EIVE"),
                        "n_positive":a.get("n_original_studies_positive_RAIL_minus_ROAD")},
             "broad":{"n_source_papers":b["n_original_studies"],
-                     "n_source_blocks":b["n_original_matched_blocks"],
+                     "n_source_blocks":b.get("n_original_matched_blocks",0),
                      "mean_EIVE":b.get("mean_study_equal_RAIL_minus_ROAD_EIVE"),
                      "n_positive":b.get("n_original_studies_positive_RAIL_minus_ROAD")},
             "source_papers_present_in_both_estimates":len(both),
@@ -66,7 +66,7 @@ def same_original_plots(strict,broad,strict_scores,broad_scores,traits):
             matched[key]=arm
     a,paper_a=report_stats(matched,strict_scores,trait_data_to_positions(traits))
     b,paper_b=report_stats(matched,broad_scores,trait_data_to_positions(traits))
-    if a["n_original_matched_blocks"]!=b["n_original_matched_blocks"]:
+    if a.get("n_original_matched_blocks",0)!=b.get("n_original_matched_blocks",0):
         raise AssertionError("Identical original source plot frames differ between labels")
     if paper_a!=paper_b:
         raise AssertionError("Exact same source plant plots must have exactly same temperature CWM")
