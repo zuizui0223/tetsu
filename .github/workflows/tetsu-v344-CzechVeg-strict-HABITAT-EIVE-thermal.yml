@@ -5,14 +5,14 @@ on:
       - research/tetsu-v342-independent-thermal-reference-preflight-20261124
     paths:
       - 'scripts/analyze_CzechVeg_strict_HABITAT_EIVE_v344.py'
-      - 'tests/test_CzechVeg_original_study_EIVE_thermal_v344.py'
+      - 'tests/test_CzechVeg_strict_HABITAT_EIVE_v344.py'
       - '.github/workflows/tetsu-v344-CzechVeg-strict-HABITAT-EIVE-thermal.yml'
   pull_request:
     branches:
       - research/tetsu-Kashmir-Cynodon-persistence-v340-20261124
     paths:
       - 'scripts/analyze_CzechVeg_strict_HABITAT_EIVE_v344.py'
-      - 'tests/test_CzechVeg_original_study_EIVE_thermal_v344.py'
+      - 'tests/test_CzechVeg_strict_HABITAT_EIVE_v344.py'
       - '.github/workflows/tetsu-v344-CzechVeg-strict-HABITAT-EIVE-thermal.yml'
   workflow_dispatch:
 permissions:
@@ -29,7 +29,7 @@ jobs:
       - name: Install original XLSX and science reader dependencies
         run: python -m pip install 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'scipy>=1.13,<2'
       - name: Synthetic temperature trait and original study block invariants
-        run: python -m unittest discover -s tests -p 'test_CzechVeg_original_study_EIVE_thermal_v344.py' -v
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_strict_HABITAT_EIVE_v344.py' -v
       - name: Fetch publisher-verified complete CzechVeg field plots and original EIVE table
         run: |
           set -euo pipefail
@@ -67,6 +67,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: tetsu-v344-CzechVeg-original-study-RAIL-ROAD-EIVE-aggregate-only
+          name: tetsu-v344-CzechVeg-strict-HABITAT-EIVE-aggregate-only
           path: results/audit/v344_CzechVeg_strict_HABITAT_and_survey_era_EIVE_aggregate.json
           if-no-files-found: warn
