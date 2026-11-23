@@ -183,7 +183,7 @@ def percentile(vals,p):
 def trait_null(selected,plot_s,trait_map,obs,mode,draws=N_NULL):
     active={n for v in selected.values() for side in ("rail","road") for pid in v[side]
             for n in plot_s[pid]["eligible"]}
-    vals={name:trait_map[name][0] for name in active}
+    vals={name:trait_map[name] for name in active}
     genus=defaultdict(list)
     for name in active:
         genus[name.split()[0]].append(name)
