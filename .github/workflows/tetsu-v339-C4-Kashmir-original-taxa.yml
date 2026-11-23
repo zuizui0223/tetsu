@@ -6,6 +6,12 @@ on:
     paths:
       - 'scripts/audit_Kashmir_C4_candidate_taxa_v339.py'
       - '.github/workflows/tetsu-v339-C4-Kashmir-original-taxa.yml'
+  pull_request:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/audit_Kashmir_C4_candidate_taxa_v339.py'
+      - '.github/workflows/tetsu-v339-C4-Kashmir-original-taxa.yml'
   workflow_dispatch:
 permissions:
   contents: read
