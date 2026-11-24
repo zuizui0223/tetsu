@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from sample_entire_global_GERS_railkm_WGS84_v368b import (
     SAMPLE_K,SEED,EXPECTED_CANDIDATE_SEGMENTS,EXPECTED_CANDIDATE_KM,
-    fixed_sample_targets,candidate_segment
+    fixed_sample_targets,candidate_segment,original_rail_flags_at_fraction
 )
 
 class GlobalRailLengthProbabilitySourceTests(unittest.TestCase):
@@ -22,6 +22,18 @@ class GlobalRailLengthProbabilitySourceTests(unittest.TestCase):
         self.assertEqual({i for _,i in a},set(range(2048)))
         self.assertTrue(all(0<=v<2_237_043_481. for v,_ in a))
         self.assertEqual(a,sorted(a))
+    def test_source_Oveture_rail_flag_scoping_is_APPLIED_at_selected_fraction(self):
+        rules=[{"values":["is_bridge"],"between":[0.4,0.6]},
+               {"values":["is_freight"],"between":None},
+               {"values":["is_tunnel"],"between":[0.8,1.0]}]
+        self.assertEqual(original_rail_flags_at_fraction(rules,.2),{"is_freight"})
+        self.assertEqual(original_rail_flags_at_fraction(rules,.5),{"is_freight","is_bridge"})
+        self.assertEqual(original_rail_flags_at_fraction(rules,.65),{"is_freight"})
+        self.assertEqual(original_rail_flags_at_fraction(rules,.9),{"is_freight","is_tunnel"})
+        self.assertEqual(original_rail_flags_at_fraction(rules,1.),{"is_freight","is_tunnel"})
+        with self.assertRaises(ValueError):
+            original_rail_flags_at_fraction([{"values":["is_bridge"],"between":[.8,.2]}],.4)
+
     def test_not_named_lines_no_tunnel_filter_but_exclude_inactive(self):
         row={"subtype":"rail","class":"standard_gauge",
              "rail_flags":[{"values":["is_bridge","is_tunnel"]}]}
