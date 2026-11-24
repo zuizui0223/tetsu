@@ -1,0 +1,57 @@
+name: "v358 authentic 89 Slovenia railway plant plots on true Overture connector graph"
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/analyze_Slovenia_Overture_connector_network_botany_v358.py'
+      - 'tests/test_Slovenia_Overture_connector_network_botany_v358.py'
+      - '.github/workflows/tetsu-v358-original-Slovenia-real-connector-network-botany.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: v358-authentic-SI-botanical-sites-Overture-physical-network
+  cancel-in-progress: true
+jobs:
+  original_Slovenia_plant_site_real_physical_network:
+    runs-on: ubuntu-latest
+    timeout-minutes: 39
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install official network GIS original-data tools
+        run: python -m pip install 'overturemaps==2.1.1' 'networkx>=3.4,<4' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25'
+      - name: Strict synthetic actual physical-rail connector topology QA
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_Overture_connector_network_botany_v358.py' -v
+          python -m py_compile scripts/analyze_Slovenia_Overture_connector_network_botany_v358.py
+      - name: Retrieve ORIGINAL published 2026 Slovenia 92-site XLSX and its official original source audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v358/slovenia
+      - name: Audit author-original genuine 401279-byte XLSX source original SHA
+        run: |
+          set -euo pipefail
+          FILE='source/v358/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx'
+          test "$(stat -c%s "$FILE")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$FILE" | sha256sum --check
+      - name: Reproduce original 89 sites/15 lines/59 matched triads, build actual Overture network topology and check botanical similarities
+        run: |
+          python -u scripts/analyze_Slovenia_Overture_connector_network_botany_v358.py \
+            --original-xlsx source/v358/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v358/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v358_Slovenia_original_rail_graph_botany_source_aggregate.json
+      - name: Archive actual source network and original author section similarity aggregate ONLY
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v358-authentic-Slovenia-real-rail-connectors-and-plant-section-Jaccard
+          path: results/audit/v358_Slovenia_original_rail_graph_botany_source_aggregate.json
+          if-no-files-found: warn
