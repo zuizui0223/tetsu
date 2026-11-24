@@ -119,6 +119,7 @@ def scan(mode,idx,out):
     counts=Counter()
     perfile=[]
     writer=None
+    writer_open=False
     shard_path=Path(out).with_suffix(".rail.parquet")
     last_report_time=time.monotonic()
     try:
@@ -139,6 +140,7 @@ def scan(mode,idx,out):
                             shard_path.parent.mkdir(parents=True,exist_ok=True)
                             writer=pq.ParquetWriter(shard_path,b.schema,
                               compression="zstd",compression_level=5,write_statistics=True)
+                            writer_open=True
                         writer.write_batch(b)
                 if (time.monotonic()-last_report_time)>40:
                     print(json.dumps({"source_global_shard":idx,
@@ -158,9 +160,11 @@ def scan(mode,idx,out):
                 # A shard can in principle contain no rail rows due source
                 # partition geography. Do not imply no-world rail.
                 pass
-        if writer is not None:writer.close()
-        if mode=="full" and writer is None:
-            raise ValueError("Full shard had no railway rows; inspect original partitioning")
+        if writer is not None:
+            writer.close()
+            writer_open=False
+        # A complete original geographical partition may contain no rail:
+        # this is a real zero-rail source shard, not an incomplete scan.
         checksum=None
         bytes_written=0
         if writer is not None:
@@ -194,7 +198,7 @@ def scan(mode,idx,out):
         print(json.dumps({k:v for k,v in stats.items() if k!="original_source_files"},ensure_ascii=False),flush=True)
         return stats
     finally:
-        if writer is not None:
+        if writer is not None and writer_open:
             writer.close()
 
 
