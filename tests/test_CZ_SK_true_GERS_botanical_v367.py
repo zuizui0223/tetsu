@@ -11,7 +11,7 @@ from analyze_Czech35_true_GERS_rail_network_floristic_v367 import (
 from analyze_Slovakia19_true_GERS_rail_network_beta_v367 import (
   EXPECTED_GERS_CONNECTED_PAIRS as SK_EXPECT,
   SK_SOURCE_SITE_N,SK_SOURCE_TAXA_N,SK_SOURCE_SITE_TAXON_INCIDENCES,
-  LAMBDA,DRAWS,BURN,THIN
+  LAMBDA,DRAWS,BURN,THIN,station_pairs
 )
 
 class V367IndependentCzechSlovakTests(unittest.TestCase):
@@ -23,6 +23,26 @@ class V367IndependentCzechSlovakTests(unittest.TestCase):
         self.assertEqual((SK_SOURCE_SITE_N,SK_SOURCE_TAXA_N,SK_SOURCE_SITE_TAXON_INCIDENCES),(19,318,1763))
         self.assertEqual(SK_EXPECT,171)
         self.assertEqual((LAMBDA,DRAWS,BURN,THIN),(.05,199,18000,650))
+
+    def test_Slovak_real_GERS_distance_dictionary_pair_key_not_station_ordinal(self):
+        # If code erroneously calls network.get(i,j), the second station
+        # index j silently becomes a numeric *network distance*. Fix it
+        # with an explicit regression using an obviously different source
+        # physical railway route metric.
+        sites=[{"lon":20.+i*.001,"lat":49.3} for i in range(19)]
+        flora={i+1:{"poa",f"source{i}"} for i in range(19)}
+        net={(i,j):1.0+abs(i-j)*.2 for i in range(19) for j in range(19) if i!=j}
+        records=station_pairs(sites,flora,net)
+        self.assertEqual(len(records),171)
+        p0=next(x for x in records if x["i"]==0 and x["j"]==1)
+        self.assertAlmostEqual(p0["network"],1.2)
+        self.assertNotEqual(p0["network"],p0["j"])
+        p1=next(x for x in records if x["i"]==0 and x["j"]==18)
+        self.assertAlmostEqual(p1["network"],4.6)
+        self.assertNotEqual(p1["network"],p1["j"])
+        net2=dict(net);net2[0,1]=6.0
+        with self.assertRaises(ValueError):
+            station_pairs(sites,flora,net2)
 
     def test_original_Czech_must_have_real_same_and_other_routes_and_GERS_paths(self):
         sites=[]
