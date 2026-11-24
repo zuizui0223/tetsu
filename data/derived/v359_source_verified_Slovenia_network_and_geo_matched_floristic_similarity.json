@@ -1,0 +1,110 @@
+{
+  "version": "v359-original-SI-botany-joint-real-rail-geodistance-matched",
+  "original_real_publisher_DOI": "10.1007/s44473-026-00155-z",
+  "original_publisher_XLSX_SHA256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+  "source_original_Slovenia_sites": 89,
+  "source_original_Slovenia_rail_author_sections": 15,
+  "source_real_Overture_rail_release": "2026-11-18.0",
+  "source_Overture_GERS_physical_network_QA": {
+    "source_Overture_release": "2026-11-18.0",
+    "source_real_bbox_transport_n": 861914,
+    "source_all_rail_subtype_n": 8886,
+    "source_complete": true,
+    "source_attempt": 1,
+    "source_original_bbox_not_published_for_rare_botanical_site_privacy": true
+  },
+  "source_real_graph_nodes": 12346,
+  "source_real_graph_edges": 14181,
+  "source_GERS_segment_count": 6612,
+  "source_plants_mapped_to_real_tracks": 86,
+  "source_plants_not_uniquely_mapped_to_tracks": 3,
+  "original_source_true_network_distinct_pairs_with_paths": 4334,
+  "original_geo_only_prior_full59_Jaccard_advantage": 0.01967094157833441,
+  "original_botanical_survival_after_network_matching": {
+    "geo_and_network": {
+      "source_matching_QA": {
+        "no_source_Oveture_shortest_path_or_unmatched": 3498,
+        "source_anchors_no_joint_geo_and_network_caliper_match": 55,
+        "source_anchors_without_both_label_candidate_types": 7,
+        "source_original_qualifying_anchors": 27,
+        "original_sections_qualifying": 7
+      },
+      "source_botany": {
+        "source_distinct_original_publisher_transects": 89,
+        "source_qualified_anchors": 27,
+        "source_qualified_author_line_sections": 7,
+        "source_qualifies_predefined_minimum_12_anchors_4_sections": true,
+        "geodesic_distance_caliper_km": 2.5,
+        "source_true_connector_network_distance_caliper_km": 5,
+        "source_habitat_comparisons": {
+          "BS_and_BT": {
+            "source_author_section_equal_same_Jaccard": 0.2641973830276629,
+            "source_author_section_equal_other_Jaccard": 0.23716407102858783,
+            "source_author_section_equal_same_minus_other_Jaccard": 0.027033311999075067,
+            "source_author_sections_positive": 5,
+            "source_author_sections_negative": 2,
+            "source_author_section_LOO_gap_range": [
+              0.008934275604858832,
+              0.051121334668348097
+            ],
+            "source_198_source_PSEUDOREPLICATION_guard": true
+          },
+          "BS": {
+            "source_author_section_equal_same_Jaccard": 0.21503801804754638,
+            "source_author_section_equal_other_Jaccard": 0.17917058724085314,
+            "source_author_section_equal_same_minus_other_Jaccard": 0.03586743080669324,
+            "source_author_sections_positive": 3,
+            "source_author_sections_negative": 4,
+            "source_author_section_LOO_gap_range": [
+              -0.00483110589659005,
+              0.06037522947103565
+            ],
+            "source_198_source_PSEUDOREPLICATION_guard": true
+          },
+          "BT": {
+            "source_author_section_equal_same_Jaccard": 0.19834953944115905,
+            "source_author_section_equal_other_Jaccard": 0.18881118515266213,
+            "source_author_section_equal_same_minus_other_Jaccard": 0.009538354288496911,
+            "source_author_sections_positive": 4,
+            "source_author_sections_negative": 3,
+            "source_author_section_LOO_gap_range": [
+              -0.0074861394612535746,
+              0.03116450987574184
+            ],
+            "source_198_source_PSEUDOREPLICATION_guard": true
+          }
+        },
+        "line_equal_mean_source_same_geodesic_km": 20.187996474626413,
+        "line_equal_mean_source_other_geodesic_km": 19.62405931939338,
+        "line_equal_mean_source_same_network_km": 25.059106115226488,
+        "line_equal_mean_source_other_network_km": 27.32853613626555,
+        "line_equal_mean_source_abs_geographic_gap_km": 0.8828053402992941,
+        "line_equal_mean_source_abs_network_gap_km": 2.9156860432536007,
+        "original_source_same_line_label_IS_NOT_physically_shortest_network_distance_or_train_OD": true,
+        "field_site_pairs_not_independent_sampling_units": true
+      }
+    },
+    "geo_network_year_layout": {
+      "source_matching_QA": {
+        "no_source_Oveture_shortest_path_or_unmatched": 3498,
+        "source_anchors_without_both_label_candidate_types": 33,
+        "source_anchors_no_joint_geo_and_network_caliper_match": 50,
+        "source_original_qualifying_anchors": 6,
+        "original_sections_qualifying": 3
+      },
+      "source_botany": {
+        "source_distinct_original_publisher_transects": 89,
+        "source_qualified_anchors": 6,
+        "source_qualified_author_line_sections": 3,
+        "source_qualifies_predefined_minimum_12_anchors_4_sections": false,
+        "geodesic_distance_caliper_km": 2.5,
+        "source_true_connector_network_distance_caliper_km": 5,
+        "biological_result": "NOT_IDENTIFIED_due_to_source_support",
+        "do_not_impute_plant_similarity_gap_zero": true
+      }
+    }
+  },
+  "original_site_taxonomy_or_GPS_not_redistributed": true,
+  "NOT_independent_original_field_randomization_or_caused_by_train_seed_movement": true,
+  "no_global_railway_plant_similarity_conclusion": true
+}
