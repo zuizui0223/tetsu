@@ -97,6 +97,29 @@ def census_global_source(paths):
         raise ValueError("Original global candidate WGS84 rail km drift >35m from true v361")
     return distance,dict(counts)
 
+def original_rail_flags_at_fraction(rules,at):
+    """Return only true Overture rail flags applying at exact SOURCE at.
+
+    Overture rail_flags are geometrically SCOPED [start,end] along
+    original geodetic rail segment. Any-flag-on-segment is NOT proof
+    of bridge/tunnel at an independently sampled line location.
+    """
+    result=set()
+    for rule in rules or ():
+        if not isinstance(rule,dict):continue
+        rng=rule.get("between")
+        if rng is not None:
+            if not isinstance(rng,(list,tuple)) or len(rng)!=2:
+                raise ValueError("Original source rail flag scope not length-two")
+            a,b=map(float,rng)
+            if not (0<=a<b<=1):
+                raise ValueError("Original source rail flag WGS84 interval invalid")
+            if not (a<=at<b or (at==1.0 and b==1.0)):
+                continue
+        result.update(rule.get("values") or ())
+    return result
+
+
 def select_source_global_rail_km(paths,distance_m):
     from pyproj import Geod
     geod=Geod(ellps="WGS84")
@@ -119,9 +142,12 @@ def select_source_global_rail_km(paths,distance_m):
                 lon,lat=true_WGS84_geodesic_at(geom,fraction,geod)
                 if not(-180<=lon<=180 and -90<=lat<=90):
                     raise ValueError("Original global source rail point coordinate invalid")
-                flagval=set()
+                flagval=original_rail_flags_at_fraction(
+                    row.get("rail_flags"),fraction)
+                any_segment_flags=set()
                 for f in row.get("rail_flags") or []:
-                    if isinstance(f,dict):flagval.update(f.get("values") or [])
+                    if isinstance(f,dict):
+                        any_segment_flags.update(f.get("values") or [])
                 out.append({"original_independent_rail_km_point_draw_index":idx,
                     "sampled_original_GERS_segment_SHA256":hashlib.sha256(
                         str(row["id"]).encode("utf8")).hexdigest(),
@@ -130,7 +156,8 @@ def select_source_global_rail_km(paths,distance_m):
                     "original_S2_globally_uniform_rail_km_fraction":round(fraction,12),
                     "source_original_segment_length_m":round(L,3),
                     "source_original_rail_class":row["class"],
-                    "source_original_known_rail_flags":sorted(flagval),
+                    "source_original_known_rail_flags_APPLYING_AT_SAMPLED_POINT":sorted(flagval),
+                    "source_original_any_flags_SOMEWHERE_ON_SEGMENT_NOT_AT_POINT":sorted(any_segment_flags),
                     "source_overpass_or_tunnel_candidate":bool(flagval&{"is_bridge","is_tunnel","is_covered"}),
                     "source_site_geocode_is_synthetic_rail_km_point_NOT_plant_or_observer_GPS":True})
                 current+=1
@@ -207,11 +234,13 @@ def main():
          "sample_seed_SHA256":hashlib.sha256(SEED.encode()).hexdigest(),
          "sampling_strategy":"Independent U(0,sum eligible WGS84 source rail segment geodesic length) cumulative-target draws WITH replacement, not uniform rail segments or selected cities",
          "source_sampled_rail_flag_counts":dict(Counter(
-            flag for row in sample for flag in row["source_original_known_rail_flags"])),
+            flag for row in sample for flag in row["source_original_known_rail_flags_APPLYING_AT_SAMPLED_POINT"])),
          "source_sampled_original_rail_class_counts":dict(Counter(
             row["source_original_rail_class"] for row in sample)),
          "source_draws_by_original_continent_map_units":group,
          "source_sampled_bridge_tunnel_covered_candidates":sum(row["source_overpass_or_tunnel_candidate"] for row in sample),
+         "source_rail_flags_geometrically_scoped_at_actual_random_source_location":True,
+         "original_normal_candidate_population_excludes_ENTIRE_SEGMENT_if_any_inactive_flag_even_partially_scoped":True,
          "source_rail_sample_full_point_GPS_only_CI_artifact_NOT_original_observer_GPS":True,
          "source_none_of_sample_selected_using_plant_data":True,
          "original_rail_line_length_sampling_NOT_botanical_plot_or_named_train_route":True,
