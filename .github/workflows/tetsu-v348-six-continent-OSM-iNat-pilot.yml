@@ -6,14 +6,10 @@ on:
       - 'scripts/pilot_self_extracted_six_continent_rail_flora_v348.py'
       - 'tests/test_self_extracted_rail_flora_v348.py'
       - '.github/workflows/tetsu-v348-six-continent-OSM-iNat-pilot.yml'
-  pull_request:
-    branches:
-      - research/tetsu-v346-world-plant-climate-envelope-20261124
-    paths:
-      - 'scripts/pilot_self_extracted_six_continent_rail_flora_v348.py'
-      - 'tests/test_self_extracted_rail_flora_v348.py'
-      - '.github/workflows/tetsu-v348-six-continent-OSM-iNat-pilot.yml'
   workflow_dispatch:
+concurrency:
+  group: tetsu-v348-six-continent-source-retrieval
+  cancel-in-progress: true
 permissions: {contents: read}
 jobs:
   self_extracted_geographic_source_opportunity:
