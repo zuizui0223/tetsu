@@ -46,7 +46,7 @@ def read_metadata(client,key):
     data=decompressor.decompress(fragment,3_000_000)
     lines=data.split(b"\n")
     if len(lines)<2:raise ValueError("Original global metadata header sample not parsed")
-    cols=lines[0].decode("utf8-sig").strip().split("\t")
+    cols=lines[0].decode("utf-8-sig").strip().split("\t")
     if len(cols)!=len(set(cols)) or len(cols)<5:
         raise ValueError("Original S3 TSV header invalid")
     expected=REQ_OBS if key.startswith("observations") else REQ_TAX
