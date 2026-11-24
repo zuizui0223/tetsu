@@ -20,7 +20,7 @@ from pathlib import Path
 SOURCE_RESOURCE="2552d157-9519-476c-995d-906e2433cc19"
 DOI="10.5519/p3dm31kc"
 ENDPOINT="https://data.nhm.ac.uk/api/3/action/datastore_search"
-PAGE=2500
+PAGE=1000
 EXPECTED_TOTAL=59369
 COLUMNS=("taxon","wfo","life form","habit","dispersal mode",
         "plant min_ height [m]","plant max_ height [m]",
@@ -40,9 +40,11 @@ def source_value(v):
     return s not in ("","na","n/a","null","none","nan",
                      "not available","not reported","no data","unknown","?","-")
 
-def query(offset,limit=PAGE,tries=5):
-    url=ENDPOINT+"?"+urllib.parse.urlencode(
-       {"resource_id":SOURCE_RESOURCE,"limit":limit,"offset":offset})
+def query(after_id=None,limit=PAGE,tries=5):
+    params={"resource_id":SOURCE_RESOURCE,"limit":limit,"sort":"_id asc"}
+    if after_id is not None:
+        params["filters"]=json.dumps({"_id":{"gt":after_id}})
+    url=ENDPOINT+"?"+urllib.parse.urlencode(params)
     req=urllib.request.Request(url,headers={
        "User-Agent":"tetsu-v372-world-trait-source-coverage/1.0",
        "Accept":"application/json"})
@@ -75,12 +77,16 @@ def source_traits():
     genus=Counter()
     first_total=None
     offset=0
+    after_id=None
     while True:
-        page,h=query(offset)
+        page,h=query(after_id)
         total=page.get("total")
-        if not isinstance(total,int) or total!=EXPECTED_TOTAL:
-            raise ValueError(f"Original global NHM source total changed: {total}")
-        if first_total is None:first_total=total
+        if not isinstance(total,int) or total<0 or total>EXPECTED_TOTAL:
+            raise ValueError(f"Original NHM source pagination total invalid: {total}")
+        if first_total is None:
+            if total!=EXPECTED_TOTAL:
+                raise ValueError(f"Original global NHM source total changed: {total}")
+            first_total=total
         current=[x["id"] for x in page.get("fields",[])
                  if x.get("id")!="_id"]
         if fields is None:
@@ -98,6 +104,8 @@ def source_traits():
             summaries["source_original_trait_records"]+=1
             rid=row.get("_id")
             if rid in seen_ids:raise ValueError("Original NHM dataset page repeats row ID")
+            if not isinstance(rid,int) or (after_id is not None and rid<=after_id):
+                raise ValueError("Official NHM _id keyset page order corrupt")
             seen_ids.add(rid)
             taxon=str(row.get("taxon") or "").strip()
             if not taxon:raise ValueError("NHM original trait record has no taxon name")
@@ -117,6 +125,7 @@ def source_traits():
             if li and disp and height:summaries["source_lifeform_disp_height_same_row"]+=1
             mask=(int(li),int(disp),int(height),int(seed))
             masks["".join(map(str,mask))]+=1
+        after_id=int(records[-1]["_id"])
         offset+=len(records)
         if summaries["source_original_trait_records"]>=EXPECTED_TOTAL:break
         if offset%10000< PAGE:print(json.dumps({
