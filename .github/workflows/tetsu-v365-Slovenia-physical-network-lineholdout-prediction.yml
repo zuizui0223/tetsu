@@ -1,0 +1,57 @@
+name: "v365 genuine 89-site Slovenia rail physical network distance line-heldout beta prediction"
+on:
+  push:
+    branches: [research/tetsu-v364-geodesic-network-distance-20261124]
+    paths:
+      - 'scripts/evaluate_Slovenia_network_distance_line_heldout_v365.py'
+      - 'tests/test_Slovenia_source_lineheldout_network_beta_v365.py'
+      - '.github/workflows/tetsu-v365-Slovenia-physical-network-lineholdout-prediction.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: v365-original-Slovenia-line-heldout-true-GERS-network-beta
+  cancel-in-progress: true
+jobs:
+  original_source_independent_line_heldout_network_prediction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 44
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install original Overture GIS, WGS84 geodesic and fixed ridge regression
+        run: python -m pip install 'overturemaps==2.1.1' 'networkx>=3.4,<4' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25' 'numpy>=2,<3'
+      - name: Synthetic original line-heldout network predictive value tests
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_source_lineheldout_network_beta_v365.py' -v
+          python -m py_compile scripts/evaluate_Slovenia_network_distance_line_heldout_v365.py
+      - name: Download original publisher botanical 2026 Slovenia site-by-species data
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v365/slovenia
+      - name: Strict original botanist 401279B and SHA256 source pin
+        run: |
+          set -euo pipefail
+          FILE=source/v365/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx
+          test "$(stat -c%s "$FILE")" = 401279
+          printf '%s  %s\n' \
+            26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f \
+            "$FILE" | sha256sum --check
+      - name: Recompute truly original GERS-WGS84 geodesic source network, compare source heldout 15 line-pair botanical beta predictions
+        run: |
+          python -u scripts/evaluate_Slovenia_network_distance_line_heldout_v365.py \
+            --original-xlsx source/v365/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v365/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v365_real_source_Slovenia_network_distance_lineheldout_beta_prediction.json
+      - name: Archive original numerical source section-aggregated prediction only, not botanist site coordinates or species lists
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v365-authentic-source-lineheldout-GERS-physical-network-beta-prediction
+          path: results/audit/v365_real_source_Slovenia_network_distance_lineheldout_beta_prediction.json
+          if-no-files-found: warn

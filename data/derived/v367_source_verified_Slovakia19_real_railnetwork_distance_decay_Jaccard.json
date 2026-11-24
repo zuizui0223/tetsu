@@ -1,0 +1,104 @@
+{
+  "version": "v367-SK-genuine-original-19-station-one-railway-route-GERS-network-beta",
+  "source_original_Slovak_author_PDF_SHA256": "99465bdd7ed56985e65b1163f16eca4f702fc821619d84c89bf986d4d3736ae1",
+  "source_original_19_station_DMS_and_318_taxa_1763_incidences": true,
+  "source_GERS_rail_physical_distance_consistency_QA": {
+    "original_source_CZECH_SLOVAK_network_triangulation_QA_not_botany": true,
+    "original_source_station_pair_QA_counts": {
+      "source_rail_pairs_with_path": 171,
+      "source_path_shorter_than_GPS_chord_above50m": 0,
+      "source_path_shorter_than_GPS_chord_above100m": 0,
+      "source_path_below_GPS_chord_minus_OWN_TRACK_offsets_plus5m": 0
+    },
+    "source_max_original_geodesic_distance_minus_GERS_railpath_m": -28.69275326324816,
+    "source_min_original_geodesic_distance_minus_GERS_railpath_m": -14217.00611370283,
+    "source_site_to_rail_GPS_displacement_bound_max_sum_m": 42.370000000000005,
+    "source_same_real_171_original_Slovak_pair_support": true,
+    "can_claim_original_network_geodesic_physical_distance_consistency": true
+  },
+  "source_actual_phyiscal_original_author_railway_routes_n": 1,
+  "source_overtyre_release": "2026-11-18.0",
+  "source_true_19_station_GERS_connected_pairs_n": 171,
+  "original_field_Jaccard_mean": 0.3639543937155646,
+  "original_source_true_network_km_minmax": [
+    1.1007525531492428,
+    60.95420674462069
+  ],
+  "original_source_geodesic_km_minmax": [
+    1.0720597998859946,
+    46.73720063091786
+  ],
+  "source_true_GERS_network_to_geodesic_distance_ratio_median": 1.1341977778239676,
+  "original_true_network_Jaccard_per_network_km_slope": -0.0016517453825120184,
+  "original_WGS84_geodetic_Jaccard_per_geographic_km_slope": -0.0019996744905985795,
+  "source_prior_v310_original_approx_geographic_km_slope_reproduced": -0.0020021839482198068,
+  "source_publisher_19_entire_stations_not_171_independent_source_botanical_transects": true,
+  "source_entire_original_station_leave_one_out_network_distance_slope": {
+    "source_full_station_Loo_true_network_slope_range": [
+      -0.001952415790293715,
+      -0.0014610610714010579
+    ],
+    "original_stations_with_negative_GERS_network_distance_decay": 19,
+    "original_station_LOO_slope_n": 19
+  },
+  "source_19_station_heldout_geo_and_network_prediction": {
+    "source_original_entire_station_holdout_folds_n": 19,
+    "source_holdout_pairs_train_per_fold": 153,
+    "source_holdout_pairs_test_per_fold": 18,
+    "source_geo_only_MSE": 0.003796288988953094,
+    "source_geo_plus_network_MSE": 0.0037980211070793696,
+    "source_independent_true_GERS_network_gain_M0_minus_M1_MSE": -0.0000017321181262757512,
+    "source_heldout_stations_where_network_improves_MSE": 12,
+    "source_ridge_lambda_prespecified": 0.05,
+    "source_pairwise_test_not_19_independent_network_railways": true
+  },
+  "source_true_GERS_network_and_geographic_distance_species_frequency_null": {
+    "source_original_survey_station_n": 19,
+    "original_source_margin_preservation_exact": true,
+    "null_slopes": {
+      "network": {
+        "source_observed_original_Jaccard_per_distance_km_slope": -0.0016517453825120184,
+        "original_site_and_taxon_frequency_fixed_null_mean": -0.0002518793553116736,
+        "source_observed_minus_null_slope": -0.0013998660272003449,
+        "technical_null_2p5_97p5_not_field_CI": [
+          -0.0007205081546766482,
+          0.00012962619272527127
+        ],
+        "technical_lower_rank_NOT_independent_field_p": 0.002506265664160401,
+        "technical_correlated_null_draws_NOT_independent_field": 398
+      },
+      "geographic": {
+        "source_observed_original_Jaccard_per_distance_km_slope": -0.0019996744905985795,
+        "original_site_and_taxon_frequency_fixed_null_mean": -0.0003130887019662228,
+        "source_observed_minus_null_slope": -0.0016865857886323567,
+        "technical_null_2p5_97p5_not_field_CI": [
+          -0.0008690694652992402,
+          0.00018258543357045715
+        ],
+        "technical_lower_rank_NOT_independent_field_p": 0.002506265664160401,
+        "technical_correlated_null_draws_NOT_independent_field": 398
+      }
+    },
+    "source_null_chains": [
+      {
+        "source_seed": 310901,
+        "source_site_richness_and_species_frequency_preserved": true,
+        "source_checkerboard_acceptance": 0.9997896165592127,
+        "source_null_network_slope_mean": -0.0002422729466777188,
+        "source_null_geographic_slope_mean": -0.0002980877901890466
+      },
+      {
+        "source_seed": 310902,
+        "source_site_richness_and_species_frequency_preserved": true,
+        "source_checkerboard_acceptance": 0.9997217509331524,
+        "source_null_network_slope_mean": -0.0002614857639456284,
+        "source_null_geographic_slope_mean": -0.000328089613743399
+      }
+    ]
+  },
+  "source_original_botanical_station_distances_are_NOT_train_2012_2014_OD": true,
+  "original_physically_connected_graph_is_not_an_independent_between_line_comparison": true,
+  "no_source_taxon_names_original_station_DMS_or_rail_graph_geometries_republished": true,
+  "authenticated_source_run_url": "https://github.com/zuizui0223/tetsu/actions/runs/45362326266",
+  "individual_botanical_species_site_coordinates_source_GERS_IDs_NOT_included": true
+}

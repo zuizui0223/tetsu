@@ -1,0 +1,71 @@
+{
+  "version": "v366-independent-Czech-Slovak-original-flora-physical-railway-source-feasibility",
+  "source_study_country": "CZ",
+  "source_publisher_author_years": "2020-2022",
+  "source_original_station_coordinate_class_NOT_author_plot_GPS": "2026 THIRD-PARTY-DERIVED national SR70 station centroid, NOT 2020-22 botanical plot GPS",
+  "source_original_botanical_station_count": 35,
+  "source_original_source_taxon_count_prior_publication": 761,
+  "source_original_author_rail_stretch_or_line_count": 5,
+  "original_botanical_and_GPS_provenance": {
+    "original_source_39_real_pub_stations_n": 39,
+    "source_35_geolocated_source_station_centroids_n": 35,
+    "original_source_4_unlocated_station_GPS_missing_NOT_imputed": 4,
+    "original_source_stretch_labels": 5,
+    "original_matched_station_unique_taxa_min": 740,
+    "original_publisher_S1_SHA256": "df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06",
+    "original_publisher_corrected_S2_SHA256": "00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2",
+    "original_station_registry_derived_SR70_SHA256": "fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019"
+  },
+  "original_Overture_rail_source_data_QA": {
+    "original_Overture_real_release": "2026-11-18.0",
+    "original_Overture_source_complete": true,
+    "original_source_n_all_transport_features": 1544527,
+    "original_source_n_all_rail_subtype": 28379,
+    "source_data_latest_snapshot_2026_vs_original_field_date_mismatch": true,
+    "source_bbox_WGS84_not_published_as_botanist_GPS": true,
+    "source_attempt": 1
+  },
+  "original_Overture_rail_GERS_geodetic_component_QA": {
+    "source_original_normal_rail_GERS_segments": 19783,
+    "source_original_connector_graph_nodes": 46570,
+    "source_original_connector_graph_edges": 52014,
+    "source_segment_count": 19783,
+    "source_projected_vs_WGS84_geodetic_abs_ppm_median": 361.00501971603194,
+    "source_projected_vs_WGS84_geodetic_abs_ppm_max": 399.9999713923952,
+    "source_legacy_graph_edges": 52014,
+    "source_corrected_graph_edges": 52014,
+    "source_exact_same_original_UUID_nodes": true
+  },
+  "source_original_primary_point_to_rail_m": 300,
+  "source_original_strict_point_to_rail_m": 120,
+  "source_primary_original_site_to_rail_and_connected_pairs_QA": {
+    "source_original_true_physical_rail_matched_station_n": 35,
+    "source_original_sites_ambiguous_disconnected_tracks_n": 0,
+    "source_original_sites_without_a_qualifying_track_n": 0,
+    "source_botanist_original_rail_station_to_GERS_offset_m_median": 0.152,
+    "source_botanist_original_rail_station_to_GERS_offset_m_max": 0.933,
+    "source_potential_original_site_pairs": 595,
+    "source_real_network_connected_original_station_pairs_within_300km": 568,
+    "source_real_network_connected_pairs_SAME_original_author_stretch": 113,
+    "source_real_network_connected_pairs_OTHER_original_author_stretch": 455,
+    "source_no_rail_network_path_for_some_pairs_is_missing_NOT_negative_plant_ecology": true
+  },
+  "source_strict_source_site_to_rail_and_connected_pairs_QA": {
+    "source_original_true_physical_rail_matched_station_n": 35,
+    "source_original_sites_ambiguous_disconnected_tracks_n": 0,
+    "source_original_sites_without_a_qualifying_track_n": 0,
+    "source_botanist_original_rail_station_to_GERS_offset_m_median": 0.152,
+    "source_botanist_original_rail_station_to_GERS_offset_m_max": 0.933,
+    "source_potential_original_site_pairs": 595,
+    "source_real_network_connected_original_station_pairs_within_300km": 568,
+    "source_real_network_connected_pairs_SAME_original_author_stretch": 113,
+    "source_real_network_connected_pairs_OTHER_original_author_stretch": 455,
+    "source_no_rail_network_path_for_some_pairs_is_missing_NOT_negative_plant_ecology": true
+  },
+  "botanical_species_compositional_network_effect_NOT_YET_CALCULATED": true,
+  "single_Slovak_original_publisher_railway_line_NOT_multiple_line_clusters": false,
+  "CZ_centroid_is_not_botanist_actual_transect_GPS": true,
+  "source_2026_network_is_temporally_offset_from_field_surveys": true,
+  "no_source_GPS_raw_botanical_taxa_original_PDF_or_original_rail_geometry_republished": true,
+  "source_verified_ci_url": "https://github.com/zuizui0223/tetsu/actions/runs/45360386649"
+}

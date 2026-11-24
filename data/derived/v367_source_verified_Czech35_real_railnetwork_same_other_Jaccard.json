@@ -1,0 +1,105 @@
+{
+  "version": "v367-CZ-authentic-Preslia-35station-botany-GERS-geo-network-matched-source",
+  "original_publisher_DOI": "10.23855/preslia.2024.247",
+  "original_publisher_source_S1_S2_SHA256": {
+    "S1": "df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06",
+    "S2": "00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2"
+  },
+  "original_2026_SR70_thirdparty_derived_station_GPS_NOT_field_plot_GPS": true,
+  "original_source_35_botanical_station_centroids_n": 35,
+  "original_source_author_rail_stretches_n": 5,
+  "original_source_Overture_release": "2026-11-18.0",
+  "original_GERS_rail_segments": 19783,
+  "original_true_source_rail_connected_station_pairs": 568,
+  "original_geo_only_previous_v282_baseline": {
+    "source_anchors": 33,
+    "original_author_stretch_Jaccard_gap": -0.00173118063895798
+  },
+  "real_geo_and_GERS_network_site_matching_QA": {
+    "source_true_GERS_path_missing": 54,
+    "source_original_anchors_no_simultaneous_geo_and_network_caliper_match": 4,
+    "n_real_original_Czech_station_anchors": 31,
+    "original_author_stretches_supported": 5
+  },
+  "original_source_min12_anchors_4_stretches_supported": true,
+  "new_original_source_network_matched_beta_and_null": {
+    "original_matched_station_anchors_n": 31,
+    "original_author_stretches_matched_n": 5,
+    "source_equal_stretch_same_minus_other_Jaccard": 0.003225201512183975,
+    "source_author_stretches_observed_positive_n": 2,
+    "source_equal_stretch_LOO_range": [
+      -0.013329235570397165,
+      0.010494840233930568
+    ],
+    "source_matched_geographic_km_same_other": [
+      44.67458982181084,
+      45.69680141300796
+    ],
+    "source_matched_physical_GERS_network_km_same_other": [
+      58.87684670154339,
+      65.09090308005307
+    ],
+    "source_site_grouped_exact_original_species_prevalence_nulls": {
+      "original_35_stations_total_species_frequency": {
+        "original_source_station_sites_for_frequency_pool_n": 35,
+        "original_matched_jaccard_same_stretch_minus_other": 0.003225201512183975,
+        "source_frequency_null_mode": "original_35_stations_total_species_frequency",
+        "source_null_mean": -0.0022932560784864053,
+        "observed_minus_fixed_species_frequency_null": 0.00551845759067038,
+        "technical_rank_upper_NOT_field_p": 0.16080402010050251,
+        "technical_q025_q975_NOT_field_CI": [
+          -0.013693610339653486,
+          0.012202764272866151
+        ],
+        "original_qualifying_stretches_observed_exceeding_own_source_null_mean_n": 3,
+        "original_all35_station_site_richness_and_species_occurrence_margins_exact": true,
+        "original_5_stretch_frequency_null_conditions_on_line_signal": false,
+        "technical_correlated_MCMC_draws_not_independent_studies": 198,
+        "technical_mcmc_chains": [
+          {
+            "chain": 1,
+            "source_checkerboard_swaps_accepted": 37150,
+            "proposal_count_per_original_null_group": 37150
+          },
+          {
+            "chain": 2,
+            "source_checkerboard_swaps_accepted": 37150,
+            "proposal_count_per_original_null_group": 37150
+          }
+        ]
+      },
+      "original_5_stretches_species_frequency": {
+        "original_source_station_sites_for_frequency_pool_n": 35,
+        "original_matched_jaccard_same_stretch_minus_other": 0.003225201512183975,
+        "source_frequency_null_mode": "original_5_stretches_species_frequency",
+        "source_null_mean": 0.026550468128701318,
+        "observed_minus_fixed_species_frequency_null": -0.02332526661651734,
+        "technical_rank_upper_NOT_field_p": 1,
+        "technical_q025_q975_NOT_field_CI": [
+          0.015176930829362742,
+          0.038363727056103414
+        ],
+        "original_qualifying_stretches_observed_exceeding_own_source_null_mean_n": 2,
+        "original_all35_station_site_richness_and_species_occurrence_margins_exact": true,
+        "original_5_stretch_frequency_null_conditions_on_line_signal": true,
+        "technical_correlated_MCMC_draws_not_independent_studies": 198,
+        "technical_mcmc_chains": [
+          {
+            "chain": 1,
+            "source_checkerboard_swaps_accepted": 185750,
+            "proposal_count_per_original_null_group": 37150
+          },
+          {
+            "chain": 2,
+            "source_checkerboard_swaps_accepted": 185750,
+            "proposal_count_per_original_null_group": 37150
+          }
+        ]
+      }
+    }
+  },
+  "no_source_station_GPS_raw_taxa_matrix_or_source_GERS_geometry_republished": true,
+  "no_train_seed_transport_traffic_or_global_replication_inference": true,
+  "authenticated_source_run_url": "https://github.com/zuizui0223/tetsu/actions/runs/45362326266",
+  "individual_botanical_species_site_coordinates_source_GERS_IDs_NOT_included": true
+}
