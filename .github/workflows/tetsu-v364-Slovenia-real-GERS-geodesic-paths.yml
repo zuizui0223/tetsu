@@ -1,0 +1,57 @@
+name: "v364 genuine Overture geodesic-at source railway network distance audit"
+on:
+  push:
+    branches: [research/tetsu-v364-geodesic-network-distance-20261124]
+    paths:
+      - 'scripts/recompute_Slovenia_GERS_true_geodesic_network_v364.py'
+      - 'tests/test_Slovenia_source_GERS_true_geodesic_v364.py'
+      - '.github/workflows/tetsu-v364-Slovenia-real-GERS-geodesic-paths.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: v364-real-Overture-Slovenia-WGS84-at-correction
+  cancel-in-progress: true
+jobs:
+  original_source_geodetic_network_plant_identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 43
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install actual source reader and WGS84 geodetic linear referencing geometry
+        run: python -m pip install 'overturemaps==2.1.1' 'networkx>=3.4,<4' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25'
+      - name: Test exact true geodetic GERS distance rather than projected-distance fractions
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_source_GERS_true_geodesic_v364.py' -v
+          python -m py_compile scripts/recompute_Slovenia_GERS_true_geodesic_network_v364.py
+      - name: Get genuine original botanist 2026 Slovenia 89-site XLSX and earlier publisher source audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v364/slovenia
+      - name: HARD original publisher botanical source 401279-byte SHA256 pin
+        run: |
+          set -euo pipefail
+          FILE=source/v364/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx
+          test "$(stat -c%s "$FILE")" = 401279
+          printf '%s  %s\n' \
+            26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f \
+            "$FILE" | sha256sum --check
+      - name: Recompute real Overture geodesic source shortest paths for exactly same 89 authentic field botanical sites and strict frequency null
+        run: |
+          python -u scripts/recompute_Slovenia_GERS_true_geodesic_network_v364.py \
+            --original-xlsx source/v364/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v364/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v364_real_original_Slovenia_GERS_WGS84_network_corrected_botanical_similarity.json
+      - name: Save only original aggregate audited path delta and Jaccard frequency-null results, not original site GPS/taxa
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v364-source-corrected-WGS84-geodesic-Slovenia-botanical-network-comparison
+          path: results/audit/v364_real_original_Slovenia_GERS_WGS84_network_corrected_botanical_similarity.json
+          if-no-files-found: warn
