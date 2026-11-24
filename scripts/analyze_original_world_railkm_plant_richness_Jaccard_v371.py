@@ -230,7 +230,11 @@ def block_weights(rows):
     w=np.array([1/count[(r["continent"],r["block"])] for r in rows],dtype=float)
     if not np.all(np.isfinite(w)) or np.any(w<=0):
         raise AssertionError("Nonpositive original block weights")
-    return w
+    # Frozen ridge lambda=.10 is defined against *normalized*
+    # geographic-block-weighted mean squared error. Without normalization
+    # each source block contributes mass 1 and the effective ridge
+    # penalty is lambda / n_blocks; prohibit such region-count drift.
+    return w/w.sum()
 
 def fit_predict(train,test,predictors,target,clip_predictions):
     if len(train)<len(predictors)*4:
