@@ -1,0 +1,30 @@
+name: "v346e CEH original global plant species CSV filename discovery"
+on:
+  push:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/audit_EIDC_primary_filename_v346e.py'
+      - '.github/workflows/tetsu-v346e-CEH-primary-filename.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original_EIDC_file_identifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Probe source EIDC original package filename without downloading species rows
+        run: |
+          python -u scripts/audit_EIDC_primary_filename_v346e.py \
+            --output results/audit/v346e_EIDC_original_zip_metadata_filename.json
+      - name: Archive aggregate file source gate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v346e-EIDC-source-filename-only
+          path: results/audit/v346e_EIDC_original_zip_metadata_filename.json
+          if-no-files-found: warn
