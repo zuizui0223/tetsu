@@ -1,0 +1,40 @@
+name: "v348 self-extracted six-continent OSM railway and iNaturalist plant pilot"
+on:
+  push:
+    branches: [research/tetsu-v348-self-extracted-global-rail-flora-20261124]
+    paths:
+      - 'scripts/pilot_self_extracted_six_continent_rail_flora_v348.py'
+      - 'tests/test_self_extracted_rail_flora_v348.py'
+      - '.github/workflows/tetsu-v348-six-continent-OSM-iNat-pilot.yml'
+  pull_request:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/pilot_self_extracted_six_continent_rail_flora_v348.py'
+      - 'tests/test_self_extracted_rail_flora_v348.py'
+      - '.github/workflows/tetsu-v348-six-continent-OSM-iNat-pilot.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  self_extracted_geographic_source_opportunity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Strict synthetic spatial distance and plant source QA gates
+        run: |
+          python -m unittest discover -s tests -p 'test_self_extracted_rail_flora_v348.py' -v
+          python -m py_compile scripts/pilot_self_extracted_six_continent_rail_flora_v348.py
+      - name: Retrieve TRUE OpenStreetMap railway geometry and iNat public 2025 records in six frozen urban regions
+        run: |
+          python -u scripts/pilot_self_extracted_six_continent_rail_flora_v348.py \
+            --output results/audit/v348_self_extracted_OSM_iNat_six_continent_source_counts_aggregate.json
+      - name: Preserve only city level source provenance and observation counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v348-six-continent-self-extraction-aggregate-only
+          path: results/audit/v348_self_extracted_OSM_iNat_six_continent_source_counts_aggregate.json
+          if-no-files-found: warn
