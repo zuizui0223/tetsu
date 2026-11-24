@@ -69,7 +69,11 @@ class V364TrueGERSGeodeticDistances(unittest.TestCase):
         self.assertEqual(qa["source_original_site_matches_recalibrated"],2)
         self.assertTrue(all(s["status"]=="matched_to_real_rail_connector_network" for s in attach))
         self.assertTrue(all(s["source_correct_geodetic_linear_referencing"] for s in attach))
-        dist=nx.shortest_path_length(aug,"botanical_site_0","botanical_site_1",weight="weight")
+        # Site nodes are attached through their two bounding connectors.
+        # The downstream original physical_network_distances() includes the
+        # shorter direct in-segment path when both sites share one GERS line.
+        from analyze_Slovenia_geod_and_rail_distance_matched_v359 import physical_network_distances
+        dist=physical_network_distances(aug,attach)[0,1]*1000
         estimated=(attach[1]["source_fraction"]-attach[0]["source_fraction"])*segments[0]["source_geodetic_length_m"]
         self.assertAlmostEqual(dist,estimated,places=5)
 if __name__=="__main__":unittest.main()
