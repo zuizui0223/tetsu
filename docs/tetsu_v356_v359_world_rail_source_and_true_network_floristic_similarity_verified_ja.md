@@ -81,3 +81,25 @@ Original source publishers/OSM ODbL/copyright respected, Overture full geometric
 
 ## v362 actual named infrastructure routes and original species-Jaccard test pending
 [Design locked](tetsu_v362_real_named_OSM_route_floristic_similarity_frozen_ja.md): real named source OSM route relations, one-to-many true memberships, authentic original 89-site botanical incidence and Overture physical graph distances. Primary route uniquely identified in all three contrasted field locations, sensitivity any overlapping named route vs disjoint; geographic and railway-network distances jointly matched, genuine survey year/layout and exact source species-frequency null. No named-route botanical effect asserted before authentic source run succeeds. Previous v359b physical-network source section-effect was nonexceptional after stricter source frequency null.
+
+## v361 全球physical rail connector network 全件構築 SUCCESS（2026-11-24）
+[**v361 TRUE original full worldwide physical GERS connector graph Actions #45354737204 SUCCESS**](https://github.com/zuizui0223/tetsu/actions/runs/45354737204)。元v357全128/128 Parquetとrail-only16 blobsを原SHAで照合し、元GERS physical connector UUIDを同じなら連結するunion-find物理グラフを2枚構築。地図線路の単純な視覚的交差を真の線路接続と取り違えない。Original worldwide source 2,054,855 all rail-segment identity and 2,892,198.162km lengthを再現。実線路名・実際の乗車可否は別source。
+
+| 原本 physical network 指標 | All Overture rail subtype | 通常鉄道の地図上active candidate（standard+narrow+unknown class, abandoned/disused/under-construction除外。橋/トンネルは維持） |
+|---|---:|---:|
+| actual source GERS segments | 2,054,855 | 1,536,226 |
+| source rail centerline km | 2,892,198.162 | 2,237,043.481 |
+| **true source connector nodes** | **4,970,641** | **3,547,570** |
+| **physical connected components** | **142,792** | **44,710** |
+| physical component with only 1 original segment | 114,552 | 35,704 |
+| LARGEST component original segments | 1,208,759 | 1,009,974 |
+| LARGEST component centerline km | **1,548,769.636** | **1,369,687.050** |
+| LARGEST component share of original subject total rail km | **53.55%** | **61.23%** |
+| Top10 source components centerline km | 2,421,827.420 | 2,030,263.105 |
+| Top10 source components share of subject km | **83.74%** | **90.76%** |
+
+**科学的な意味**：数十万のsource small isolated componentsと非常に少数の巨大なsource connected networksが同時に存在する。**巨大なsource physical graph component＝一つの営業路線ではない**：路線の分岐/乗り換え/連結管理・複軌間・軌道ゲージ・通行禁止などと、複数営業路線が接続する可能性を原GIS connectorのみでは区別できない。Graphのsource conn UUIDは図形/地図上の物理的連続の表現であって、貨物OD、旅客運行、列車走行可能性、種子散布実験を表さない。地図source境界欠損や誤りはcomponent countを変える可能性がある。この結果は**ネットワークの地理学的/インフラデータ構造の新事実**であり、**種組成による全球均質化が観測されたという意味ではない**。
+
+検証可能な集計source [v361 derived global component metrics JSON](../data/derived/v361_source_verified_world_all_rail_physical_connector_components.json)、実装 [v361 connector build](../scripts/build_global_Overture_physical_connector_components_v361.py)、原GitHub artifact ID14902715264。
+
+次の真の生物地理的問いは、（a）植物調査地点が各source named infrastructure routeに割当可能か、（b）同一路線・物理network距離・地理距離・地域種プール・生息地の観察頻度を同時に含むモデルが距離減衰や独立留保した路線を予測できるか、（c）route=railway関係被覆の地理的不均一を補正できるか。Sloveniaでは元89地点の一部がnamed relation複数所属し、名前付き路線を無理やり単一ラベルに統一してはいけない。追加独立地域の同法による植生定面積プロットが必要。
