@@ -1,11 +1,25 @@
-import sys,unittest
+import sys,unittest,tempfile,zipfile
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 import geopandas as gpd
 from shapely.geometry import box
 from pyproj import Transformer
+from audit_global_GloNAF_rail2048_v378a import read_original_nol
 from analyze_global_rail_documented_naturalized_v379 import cell_region,within_region,RICH_BASE,RICH_BUILT,X_START,Y_START
 class TestV379(unittest.TestCase):
+    def test_nested_original_shape_bundle(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)
+            stem="glonaf_2024_nol"
+            s=p/(stem+".shp")
+            gpd.GeoDataFrame({"code":["X"]},geometry=[box(0,0,1,1)],crs=4326).to_file(s)
+            with zipfile.ZipFile(p/(stem+".zip"),"w") as z:
+                for f in p.glob(stem+".*"):
+                    if f.suffix!=".zip":z.write(f,stem+"/"+f.name)
+            g=read_original_nol(p)
+            self.assertEqual(list(g["code"]),["X"])
+            self.assertAlmostEqual(g.geometry.iloc[0].area,1)
+
     def test_unique_whole_cell_not_center_and_guard(self):
         inv=Transformer.from_crs("EPSG:6933","EPSG:4326",always_xy=True)
         key=(174,74);w=100000

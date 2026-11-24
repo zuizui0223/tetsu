@@ -8,7 +8,7 @@ import geopandas as gpd
 import numpy as np
 from shapely.geometry import box
 from pyproj import Transformer
-from audit_global_GloNAF_rail2048_v378a import verified,load,unique_map,norm,valid_name,region_key,MD5,audit_documented_rows
+from audit_global_GloNAF_rail2048_v378a import verified,load,unique_map,norm,valid_name,region_key,MD5,audit_documented_rows,read_original_nol
 from scan_fullworld_2025_iNat_plant_macro_grid_v369 import (
  source_client, open_original_source, taxonomy_source, source_ancestry_ids,
  source_coarse_cell, OBS_ETAG,OBS_BYTES,TAXA_ETAG,TAXA_BYTES,MAX_UNCERT_M,
@@ -62,7 +62,7 @@ def source_lists(root):
             if obj and obj.lower() not in ("na","nan"):
                 if obj in byobj:raise ValueError("Original OBJIDsic ambiguity")
                 byobj[obj]=k
-    g=gpd.read_file("zip://"+str((root/"glonaf_2024_nol.zip").resolve()))
+    g=read_original_nol(root)
     print(json.dumps({"original_nonoverlap_geometry_rows":len(g),"columns":list(g.columns),"crs":str(g.crs)}),flush=True)
     if g.crs is None:raise ValueError("GloNAF source missing CRS")
     g=g.to_crs("EPSG:4326")
@@ -85,12 +85,18 @@ def source_lists(root):
           "matrix_only_n":len(txids-set(g["region_id"]))}),flush=True)
     if len(header)!=987 or len(txids)!=985 or txids!=set(g["region_id"]):
         raise ValueError("GloNAF nonoverlap polygon and publisher matrix region header disagree")
-    if g.geometry.is_empty.any() or any(not mapped[r] for r in g["region_id"]):
-        raise ValueError("Empty nonoverlap region geometry or strict listed species pool")
+    if g.geometry.is_empty.any():
+        raise ValueError("Empty source nonoverlap region geometry")
+    # Source-supported geometry alone does not prove there are accepted
+    # binomial species matches in the direct-region lists. Such regions
+    # remain in source geometry / denominator, but cannot enter a fraction.
+    no_direct_names=sum(not mapped[r] for r in g["region_id"])
+    print(json.dumps({"nonoverlap_regions_without_direct_exact_species_pool":no_direct_names}),flush=True)
     return g,mapped,{"publisher_original_regions":len(regions),"nonoverlap_regions":len(g),
         "all_known_exact_species":len(set().union(*mapped.values())),
         "ambiguous_exact_names_archive":sum(len(x)>1 for x in names.values()),
-        "publisher_nonoverlap_matrix_header_verified":True,"publisher_table_audit":tableqa}
+        "publisher_nonoverlap_matrix_header_verified":True,"publisher_table_audit":tableqa,
+        "regions_without_direct_exact_species_pool":no_direct_names}
 
 def cell_region(key,width,g,inverse,pad):
     x=X_START+key[0]*width;y=Y_START+key[1]*width
@@ -239,6 +245,9 @@ def score(panels,sets,names,listed):
             if len(ids)<MIN_VASCULAR_SPECIES:
                 qa["fails_min_vascular_species"]+=1;continue
             documented=listed[r["region"]]
+            if not documented:
+                qa["no_direct_exact_documented_species_pool"]+=1
+                continue
             # Numerator is the count of source canonical species IDs
             # exactly matching an accepted, region-documented name.
             n=sum(names[i] in documented for i in ids)

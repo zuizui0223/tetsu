@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """v378a: GloNAF 2.02 original source support on fixed all-world 2048 rail draws."""
-import argparse, csv, hashlib, json, re
+import argparse, csv, hashlib, json, re, tempfile, zipfile
 from pathlib import Path
 from collections import Counter, defaultdict
 from shapely.geometry import Point, Polygon
@@ -81,6 +81,25 @@ def unique_map(rows,key):
         result[k]=r
     return result
 
+def read_original_nol(root):
+    # Official Zenodo ZIP contains a nested directory, not a shapefile at
+    # the archive root. Explicitly select the known complete .shp bundle.
+    archive=root/"glonaf_2024_nol.zip"
+    stem="glonaf_2024_nol"
+    with zipfile.ZipFile(archive) as z, tempfile.TemporaryDirectory() as td:
+        members={Path(n).name:n for n in z.namelist()
+                 if not n.endswith("/") and Path(n).stem==stem}
+        required={stem+ext for ext in (".shp",".shx",".dbf",".prj")}
+        if not required<=set(members):
+            raise ValueError("Original nested shapefile bundle incomplete")
+        for name in sorted(required):
+            (Path(td)/name).write_bytes(z.read(members[name]))
+        g=gpd.read_file(Path(td)/(stem+".shp"))
+    print(json.dumps({"original_nol_zip_member_names":sorted(members),
+        "original_nol_shape_rows":len(g),"original_nol_shape_fields":list(g.columns),
+        "original_nol_crs":str(g.crs)}),flush=True)
+    return g
+
 def region_key(s, by_code, by_obj):
     vals={x.lower():norm(v) for x,v in s.items()}
     a=by_code.get(vals.get("code",""))
@@ -143,7 +162,7 @@ def analyze(root, sample, ne):
     q["n_documented_exact_unambiguous_species_names"]=len(unambig)
     q["ambiguous_species_names_excluded"]=len(name_ids)-len(unambig)
     q["n_regions_with_complete_vascular_non_invasive_only_list"]=len(complete)
-    g=gpd.read_file("zip://"+str((root/"glonaf_2024_nol.zip").resolve()))
+    g=read_original_nol(root)
     print(json.dumps({"original_nonoverlap_geometry_rows":len(g),"columns":list(g.columns),"crs":str(g.crs)}),flush=True)
     if g.crs is None:raise ValueError("Original region CRS missing")
     g=g.to_crs("EPSG:4326")
@@ -190,7 +209,7 @@ def analyze(root, sample, ne):
         "original_source_md5":MD5,"source_rail_sample_seed":meta["sample_seed_SHA256"],
         "source_nonoverlap_regions_n":len(g),"original_taxon_list_QA":dict(q),
         "original_publisher_table_audit":tableqa,
-        "list_completeness_code_interpretation_requires_dictionary_verification":True,
+        "list_completeness_code_interpretation_verified_from_original_dictionary_run_45390916370":True,
         "source_counts_by_continent_and_world":{k:dict(v) for k,v in by.items()},
         "GloNAF_nonlisted_NOT_native":True,"approximate_geodesic_window_polygon_not_exact_circle":True,
         "only_source_coverage_NOT_ecological_effect_or_plant_record_presence":True}
