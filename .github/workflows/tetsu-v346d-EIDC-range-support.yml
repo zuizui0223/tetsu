@@ -1,0 +1,30 @@
+name: "v346d official EIDC archive range and size probe"
+on:
+  push:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/audit_EIDC_resumable_archive_support_v346d.py'
+      - '.github/workflows/tetsu-v346d-EIDC-range-support.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original_source_range_probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Test EIDC immutable official zipped data HTTP size and ranges
+        run: |
+          python -u scripts/audit_EIDC_resumable_archive_support_v346d.py \
+           --output results/audit/v346d_EIDC_source_range_http_probe.json
+      - name: Store source headers only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v346d-EIDC-HTTP-range-source-audit
+          path: results/audit/v346d_EIDC_source_range_http_probe.json
+          if-no-files-found: warn
