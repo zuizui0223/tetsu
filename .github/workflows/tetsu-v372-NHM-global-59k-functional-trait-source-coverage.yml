@@ -1,0 +1,36 @@
+name: "v372 original all 59369 NHM global species life form dispersal and height trait completeness"
+on:
+  push:
+    branches:
+      - research/tetsu-v368-world-rail-pps-biodiversity-20261124
+    paths:
+      - 'scripts/audit_original_NHM_global_functional_trait_coverage_v372.py'
+      - 'tests/test_original_NHM_global_functional_trait_coverage_v372.py'
+      - '.github/workflows/tetsu-v372-NHM-global-59k-functional-trait-source-coverage.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-NHM-global-trait-source-census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Six global ecological trait source coverage tests
+        run: |
+          python -m unittest discover -s tests -p 'test_original_NHM_global_functional_trait_coverage_v372.py' -v
+          python -m py_compile scripts/audit_original_NHM_global_functional_trait_coverage_v372.py
+      - name: Genuine 2026 NHM full original combined.csv official DataStore API, all 59369 angiosperm species
+        run: |
+          python -u scripts/audit_original_NHM_global_functional_trait_coverage_v372.py \
+            --output results/audit/v372_NHM_2026_original_world_59369_functional_trait_coverage.json
+      - name: Archive global original source joint life-form-dispersal-height-seed trait completeness counts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v372-original-NHM-world-59369-functional-trait-availability
+          path: results/audit/v372_NHM_2026_original_world_59369_functional_trait_coverage.json
+          if-no-files-found: warn
