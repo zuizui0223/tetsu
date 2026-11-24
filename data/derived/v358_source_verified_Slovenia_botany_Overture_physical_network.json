@@ -1,0 +1,86 @@
+{
+  "version": "v358-true-Overture-physical-connector-rail-network-Slovenia-flora",
+  "original_botanical_source_DOI": "10.1007/s44473-026-00155-z",
+  "original_botanical_source_401279_bytes_SHA256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+  "original_botanical_sites": 89,
+  "original_author_line_sections": 15,
+  "original_v28_same_line_geography_matched_Jaccard_gap_all59": 0.01967094157833441,
+  "original_rail_subtype_source": {
+    "source_Overture_release": "2026-11-18.0",
+    "source_real_bbox_transport_n": 861914,
+    "source_all_rail_subtype_n": 8886,
+    "source_complete": true,
+    "source_attempt": 1,
+    "source_original_bbox_not_published_for_rare_botanical_site_privacy": true
+  },
+  "genuine_network_source_feature_count": {
+    "all_rail_subtype_rows": 8886,
+    "source_usable_rail_segments": 6612,
+    "source_rail_connector_incidences": 21029,
+    "source_rail_names_present": 642,
+    "source_original_eligible_rail_with_zero_added_edges": 71
+  },
+  "genuine_network_source_nodes": 12346,
+  "genuine_network_source_edges": 14181,
+  "genuine_regional_physical_connector_components_n": 286,
+  "original_field_sites_matched_to_track_source_status": {
+    "matched_to_real_rail_connector_network": 86,
+    "ambiguous_multiple_disconnected_source_tracks": 3
+  },
+  "source_original_GPS_to_Overture_track_median_m": 1.865,
+  "source_original_GPS_to_Overture_track_max_reported_m": 18.97,
+  "primary_and_accuracy_sensitivity": {
+    "120.0": {
+      "source_original_anchor_candidates": 59,
+      "source_rail_matched_site_n": 86,
+      "source_rail_unmatched_site_n": 0,
+      "source_rail_ambiguous_site_n": 3,
+      "source_network_pairing_support": {
+        "source_network_triad_complete": 48,
+        "unmatched_or_ambiguous_source_triads": 7,
+        "source_original_disconnected_topology_triads": 4
+      },
+      "source_true_author_sections_with_qualified_network_triads": 8,
+      "source_original_matched_triads_with_true_network_paths": 48,
+      "source_met_minimum_support_four_lines_twelve_anchors": true,
+      "source_original_section_name_NOT_identical_to_overall_connected_component": true,
+      "source_section_equal_jaccard_same_minus_other": 0.020758798861016486,
+      "source_sections_with_positive_jaccard_advantage": 5,
+      "source_section_equal_mean_network_same_km": 27.690822652729953,
+      "source_section_equal_mean_network_other_km": 55.811954504943614,
+      "source_section_equal_mean_geodesic_same_km": 21.331189039946604,
+      "source_section_equal_mean_geodesic_other_km": 21.41335961608558,
+      "source_geodesic_matched_same_minus_other_plant_similarity_before_graph_all59": 0.01967094157833441,
+      "source_new_graph_complete_site_cohort_not_directly_comparable_to_full59": true,
+      "not_a_field_randomized_test_of_train_dispersal": true
+    },
+    "60.0": {
+      "source_original_anchor_candidates": 59,
+      "source_rail_matched_site_n": 86,
+      "source_rail_unmatched_site_n": 0,
+      "source_rail_ambiguous_site_n": 3,
+      "source_network_pairing_support": {
+        "source_network_triad_complete": 48,
+        "unmatched_or_ambiguous_source_triads": 7,
+        "source_original_disconnected_topology_triads": 4
+      },
+      "source_true_author_sections_with_qualified_network_triads": 8,
+      "source_original_matched_triads_with_true_network_paths": 48,
+      "source_met_minimum_support_four_lines_twelve_anchors": true,
+      "source_original_section_name_NOT_identical_to_overall_connected_component": true,
+      "source_section_equal_jaccard_same_minus_other": 0.020758798861016486,
+      "source_sections_with_positive_jaccard_advantage": 5,
+      "source_section_equal_mean_network_same_km": 27.690822652729953,
+      "source_section_equal_mean_network_other_km": 55.811954504943614,
+      "source_section_equal_mean_geodesic_same_km": 21.331189039946604,
+      "source_section_equal_mean_geodesic_other_km": 21.41335961608558,
+      "source_geodesic_matched_same_minus_other_plant_similarity_before_graph_all59": 0.01967094157833441,
+      "source_new_graph_complete_site_cohort_not_directly_comparable_to_full59": true,
+      "not_a_field_randomized_test_of_train_dispersal": true
+    }
+  },
+  "rail_graph_source_bbox_ONLY_regional_may_break_long_paths": true,
+  "no_original_field_GPS_plant_species_or_rail_network_geometry_republished": true,
+  "author_15_line_sections_do_NOT_equate_to_Overture_connected_components": true,
+  "no_causal_rail_traffic_seed_dispersal_or_global_similarity_claim": true
+}
