@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """v358: explicit physical network connectors, NOT rail crossing geometry as edges."""
-import math,sys,unittest
+import math,sys,unittest,importlib.util
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from analyze_Slovenia_Overture_connector_network_botany_v358 import (
    source_eligible,adjacent_connector_chain,add_segment_edges,build_rail_graph
 )
-from shapely.geometry import LineString
-from pyproj import Transformer
-import networkx as nx
+HAS_GIS=all(importlib.util.find_spec(x) is not None for x in ("networkx","shapely","pyproj"))
+if HAS_GIS:
+    from shapely.geometry import LineString
+    from pyproj import Transformer
+    import networkx as nx
 
+@unittest.skipUnless(HAS_GIS,"v358 true rail physical connector tests need networkx/shapely/pyproj in specialized original-source workflow")
 class V358OriginalPhysicalRailGraphTests(unittest.TestCase):
     def t(self,a,b):
         return {"id":a,"subtype":"rail","class":"standard_gauge",
