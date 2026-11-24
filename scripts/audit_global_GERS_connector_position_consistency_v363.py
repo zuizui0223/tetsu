@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""v363 deterministic connector UUID positional source-integrity audit.
+"""v363b true geodesic connector UUID positional source-integrity audit.
 
 Source globally complete original Overture 2026-11-18, 128 Parquet source
 files summarized as 16 original rail-only SHA-pinned GeoParquet shards
@@ -30,6 +30,40 @@ def pick_uuid(uuid):
     if not isinstance(uuid,str) or not uuid:return False
     first4=hashlib.sha256(uuid.encode("utf8")).digest()[:4]
     return int.from_bytes(first4,"big")%MODULUS==0
+
+def true_WGS84_geodesic_at(line,at,geod):
+    """Overture source at = travelled WGS84 ellipsoid length / full length.
+
+    DO NOT use shapely.LineString.interpolate(normalized=True), because
+    planar longitude/latitude coordinate lengths disagree with the
+    geodesic distance fraction published by Overture, especially for
+    curved track segments and high latitudes.
+    """
+    coords=list(line.coords)
+    if len(coords)<2:
+        raise ValueError("Source rail line lacks two original WGS84 vertices")
+    if not (0.0<=at<=1.0):
+        raise ValueError("Original at location is outside normalized source range")
+    if at<=1e-12:return float(coords[0][0]),float(coords[0][1])
+    if at>=1-1e-12:return float(coords[-1][0]),float(coords[-1][1])
+    dist=[]
+    total=0.
+    for (x0,y0),(x1,y1) in zip(coords,coords[1:]):
+        az,_,length=geod.inv(x0,y0,x1,y1)
+        if not math.isfinite(length) or length<0:
+            raise ValueError("Original source rail line WGS84 segment length invalid")
+        dist.append((x0,y0,az,length))
+        total+=length
+    if total<=0:raise ValueError("Original source rail line has no true geodesic extent")
+    goal=total*at
+    previous=0.
+    for x,y,az,length in dist:
+        if goal<=previous+length:
+            xnew,ynew,_=geod.fwd(x,y,az,min(length,max(0.0,goal-previous)))
+            return float(xnew),float(ynew)
+        previous+=length
+    return float(coords[-1][0]),float(coords[-1][1])
+
 
 def sampled_connector_positions(shard_paths):
     import pyarrow.parquet as pq
@@ -73,8 +107,7 @@ def sampled_connector_positions(shard_paths):
                 if shape.geom_type!="LineString" or shape.is_empty:
                     raise ValueError("Original source GERS rail line geometry is malformed")
                 for cid,at in candidates:
-                    atpoint=shape.interpolate(at,normalized=True)
-                    lon,lat=atpoint.x,atpoint.y
+                    lon,lat=true_WGS84_geodesic_at(shape,at,geod)
                     if not all(math.isfinite(z) for z in (lon,lat)):
                         raise ValueError("Invalid original WGS84 source connector position")
                     if not (-180<=lon<=180 and -90<=lat<=90):
@@ -120,11 +153,12 @@ def run(source_dir,census_path):
     original=json.loads(Path(census_path).read_text(encoding="utf8"))
     paths=validate_files(source_dir,original)
     result=sampled_connector_positions(paths)
-    return {"version":"v363-worldwide-original-GERS-connector-UUID-positional-QA",
+    return {"version":"v363b-true-WGS84-geodesic-global-GERS-connector-UUID-positional-QA",
       "original_global_rail_source_release":SOURCE_RELEASE,
       "original_genuine_full_128_Overture_source_inventory_SHA256":EXPECTED_INVENTORY_SHA,
       "original_global_full_16_rail_only_GeoParquet_SHA_verified":True,
       "stable_selection":"SHA256(connector_id)[:4] interpreted as 32-bit int mod 256 == 0; not source data outcome or botanist site selection",
+      "correct_original_Overture_at_interpretation":"WGS84 geodetic distance fraction along original line segments, NOT planar lonlat shapely normalized interpolate",
       "audit":result,
       "NO_worldwide_botanical_Jaccard_or_train_traffic_result":True}
 
