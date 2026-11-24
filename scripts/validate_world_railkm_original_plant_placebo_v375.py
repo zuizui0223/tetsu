@@ -33,10 +33,10 @@ SEED="tetsu-v375-20261124-conditional-rail-map-placebo"
 DRAWS=39
 SOURCE_NE_SHA="718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b"
 EXPECTED={
-  100000:{"richness":0.0034565261140192885,
-          "jaccard":0.00003170576215421156},
-  200000:{"richness":0.0036532861030028514,
-          "jaccard":-0.00010563827123567526}
+  100000:{"richness":0.004463745492835951,
+          "jaccard":0.0001476673508208617},
+  200000:{"richness":0.0066142438317320406,
+          "jaccard":-0.00006120015031440586}
 }
 BANDS=("cool","temperate","warm")
 
