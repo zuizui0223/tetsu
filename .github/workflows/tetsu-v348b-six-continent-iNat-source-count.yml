@@ -1,0 +1,28 @@
+name: "v348b official iNaturalist six-continent botanical source census"
+on:
+  push:
+    branches: [research/tetsu-v348-self-extracted-global-rail-flora-20261124]
+    paths:
+      - 'scripts/pilot_six_continent_plant_source_counts_v348b.py'
+      - '.github/workflows/tetsu-v348b-six-continent-iNat-source-count.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  original_iNat_six_continent_source_census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Fixed six urban windows original public plant source counts (not effect)
+        run: |
+          python -u scripts/pilot_six_continent_plant_source_counts_v348b.py \
+            --output results/audit/v348b_six_continent_original_public_plant_API_counts.json
+      - name: Archive only city-level source count and HTTP provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v348b-six-continent-original-iNat-counts-only
+          path: results/audit/v348b_six_continent_original_public_plant_API_counts.json
+          if-no-files-found: warn
