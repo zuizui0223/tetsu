@@ -148,7 +148,7 @@ def coordinate_source_window(sites):
     lat=[x["lat"] for x in sites]
     bbox=(min(lon)-BBOX_MARGIN_DEGREES,min(lat)-BBOX_MARGIN_DEGREES,
           max(lon)+BBOX_MARGIN_DEGREES,max(lat)+BBOX_MARGIN_DEGREES)
-    if not 12<=bbox[0]<=25 or not 18<=bbox[2]<=25 or not 47<=bbox[1]<=51 or not 49<=bbox[3]<=52:
+    if not 12<=bbox[0]<=24 or not bbox[0]<bbox[2]<=25 or not 47<=bbox[1]<=51 or not 49<=bbox[3]<=52:
         raise ValueError("Independent Czech/Slovak paper coordinates outside source geography")
     return bbox
 
