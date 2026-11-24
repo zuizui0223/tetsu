@@ -17,12 +17,6 @@ from pathlib import Path
 from audit_Czech_2024_true_35_stations_stretch_geodistance_matched_v282 import (
     source_original_czech_station_floras
 )
-from analyze_Slovakia2016_19station_original_taxon_incidence_v310 import (
-    source_list_clauses,parse_clauses,validate_original_source,station_sets
-)
-from analyze_Slovakia2016_19station_original_physical_distance_v310 import (
-    parse_source_dms
-)
 from analyze_Slovenia_geod_and_rail_distance_matched_v359 import (
     physical_network_distances
 )
@@ -84,6 +78,12 @@ def original_CZ_sites(s1,s2,sr70):
 
 def original_SK_sites(pdf):
     import fitz
+    from analyze_Slovakia2016_19station_original_taxon_incidence_v310 import (
+        source_list_clauses,parse_clauses,validate_original_source,station_sets
+    )
+    from analyze_Slovakia2016_19station_original_physical_distance_v310 import (
+        parse_source_dms
+    )
     original=Path(pdf)
     if not original.is_file() or original.stat().st_size!=249373 or digest(original)!=SK_SHA:
         raise ValueError("Original Slovakia 2016 author paper source not SHA+size matched")
