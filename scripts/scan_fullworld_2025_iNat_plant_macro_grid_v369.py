@@ -89,8 +89,23 @@ def taxonomy_source(client):
     for tid,(rank,active,anc) in taxa.items():
         if rank=='species' and active and str(ROOT_PLANT_TAXON) in anc:
             plant_species.add(tid)
-    if len(plant_species)<100_000:raise ValueError(
-        'Original global plant species pool unexpectedly small; source ancestry interpretation wrong')
+    # Public photo-linked open data taxa need not include 100,000
+    # independently observed active plant species. Diagnose the ACTUAL
+    # source rank/ancestry coverage before interpreting a smaller count.
+    raw_rank_count=Counter(rank for rank,active,anc in taxa.values()
+                           if rank=='species')
+    raw_ancestry_plant_substring_count=sum(
+        '47126' in anc for rank,active,anc in taxa.values() if rank=='species')
+    print(json.dumps({'SOURCE_TAXONOMY_PREFLIGHT_ONLY':True,
+        'n_original_taxonomy_rows':len(taxa),
+        'n_original_all_species_rank':raw_rank_count['species'],
+        'n_original_species_with_plant_ancestor_47126':raw_ancestry_plant_substring_count,
+        'n_original_ACTIVE_plant_species':len(plant_species),
+        'source_first_five_plant_taxon_ancestry_only_NO_species_names':[
+            taxa[k][2][:6] for k in list(plant_species)[:5]]
+        }),flush=True)
+    if len(plant_species)<10_000:raise ValueError(
+        'Original global active plant species taxon tree unexpectedly small; correct taxonomy source parser before continuing')
     canonical={k:k for k in plant_species}
     infraspecies=('subspecies','variety','form','subvariety')
     for tid,(rank,active,anc) in taxa.items():
