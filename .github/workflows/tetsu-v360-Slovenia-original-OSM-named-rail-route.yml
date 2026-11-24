@@ -43,24 +43,25 @@ jobs:
           printf '%s  %s\n' \
             '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
             "$FILE" | sha256sum --check
-      - name: Download PINNED Geofabrik ORIGINAL OSM Oct 16 2026 PBF and official MD5, do not use mutable latest
+      - name: Download PINNED Geofabrik ORIGINAL OSM Oct 01 2026 PBF and official MD5, do not use mutable latest
         run: |
           set -euo pipefail
           mkdir -p source/v360/osm results/audit
           curl -LfsS --retry 3 --retry-all-errors --connect-timeout 30 --max-time 1100 \
-            'https://download.geofabrik.de/europe/slovenia-261016.osm.pbf' \
-            -o source/v360/osm/slovenia-261016.osm.pbf
+            'https://download.geofabrik.de/europe/slovenia-261001.osm.pbf' \
+            -o source/v360/osm/slovenia-261001.osm.pbf
           curl -LfsS --retry 3 --retry-all-errors --connect-timeout 30 --max-time 120 \
-            'https://download.geofabrik.de/europe/slovenia-261016.osm.pbf.md5' \
-            -o source/v360/osm/slovenia-261016.osm.pbf.md5
-          test "$(stat -c%s source/v360/osm/slovenia-261016.osm.pbf)" = 313730042
-          EXPECTED="$(awk 'NR==1 {print $1}' source/v360/osm/slovenia-261016.osm.pbf.md5)"
+            'https://download.geofabrik.de/europe/slovenia-261001.osm.pbf.md5' \
+            -o source/v360/osm/slovenia-261001.osm.pbf.md5
+          test "$(stat -c%s source/v360/osm/slovenia-261001.osm.pbf)" = 313417178
+          EXPECTED="$(awk 'NR==1 {print $1}' source/v360/osm/slovenia-261001.osm.pbf.md5)"
           test "${#EXPECTED}" -eq 32
-          printf '%s  %s\n' "$EXPECTED" source/v360/osm/slovenia-261016.osm.pbf | md5sum --check
+          test "$EXPECTED" = '703113982dc57e356f08dfccb1ddbf1a'
+          printf '%s  %s\n' "$EXPECTED" source/v360/osm/slovenia-261001.osm.pbf | md5sum --check
       - name: Truly scan OSM route=railway/tracks relations and crosswalk to Overture physical rail source and publisher plant site line membership
         run: |
           python -u scripts/audit_original_OSM_named_rail_route_Slovenia_v360.py \
-            --source-osm-pbf source/v360/osm/slovenia-261016.osm.pbf \
+            --source-osm-pbf source/v360/osm/slovenia-261001.osm.pbf \
             --original-xlsx source/v360/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
             --source-audit source/v360/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
             --output results/audit/v360_original_OSM_railway_route_relations_vs_Overture_slovene_source_aggregate.json
