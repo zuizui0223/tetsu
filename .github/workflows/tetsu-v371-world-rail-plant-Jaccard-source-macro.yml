@@ -1,3 +1,5 @@
+# Source original global 2025 plants v369 SUCCESS run 45375453375 verified 2026-11-24;
+# the source-gated v371 workflow now executes the full original worldwide macro model.
 name: "v371 genuine global rail-km x 2025 plant biodiversity leave-continent-out macro"
 on:
   push:
