@@ -1,0 +1,25 @@
+name: "v347 global plant temperature × original railway arithmetic tests"
+on:
+  push:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/analyze_global_plant_temperature_railway_v347.py'
+      - 'tests/test_global_plant_temperature_railway_v347.py'
+      - '.github/workflows/tetsu-v347-global-rail-warmth-math-synthetic.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  full_rail_global_trait_math_synthetic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Synthetic global temperature coverage and site pairing regression tests
+        run: |
+          python -m unittest discover -s tests -p 'test_global_plant_temperature_railway_v347.py' -v
+      - name: Compile user global railway source parser
+        run: |
+          python -m py_compile scripts/analyze_global_plant_temperature_railway_v347.py
