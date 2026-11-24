@@ -1,0 +1,73 @@
+name: "v377 true global 7.8M plant records rail-km predictive lift excluding observer-hotspot cells"
+on:
+  push:
+    branches:
+      - research/tetsu-v368-world-rail-pps-biodiversity-20261124
+    paths:
+      - 'scripts/analyze_global_railkm_plant_observer_hotspots_v377.py'
+      - 'tests/test_global_railkm_plant_observer_hotspots_v377.py'
+      - '.github/workflows/tetsu-v377-global-observer-hotspot-source-robustness.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-fullworld-photo-observer-hotspot-negative-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install independent genuine global plant source climate/continental matched modeling dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'rasterio>=1.3,<2'
+      - name: Seven deterministic source global plant observer-hotspot exclusion tests
+        run: |
+          python -m unittest discover -s tests -p 'test_global_railkm_plant_observer_hotspots_v377.py' -v
+          python -m py_compile scripts/analyze_global_railkm_plant_observer_hotspots_v377.py
+      - name: Reuse complete source-verified actual 2025 worldwide iNaturalist S3 13.7GB botanical 100km and 200km aggregates
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v377/plants
+      - name: Reuse genuine original global Overture 128-shard railway km full 100km and 200km mapped exposure
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v377/rail
+      - name: Acquire pinned original independent NaturalEarth geographic source and WorldClim 2.1 BIO1
+        run: |
+          set -euo pipefail
+          mkdir -p source/v377/land results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 240 \
+            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' \
+            -o source/v377/land/ne_110m_admin_0_map_units.geojson
+          printf '%s  %s\n' \
+            '718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b' \
+            source/v377/land/ne_110m_admin_0_map_units.geojson | sha256sum --check
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 600 \
+            'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' \
+            -o source/v377/land/wc2.1_10m_bio.zip
+          printf '%s  %s\n' \
+            '00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf' \
+            source/v377/land/wc2.1_10m_bio.zip | sha256sum --check
+      - name: Refit source-corrected global six-continent holdout M0/M1 after 0/5/10% original highest-observer-cell exclusion
+        run: |
+          python -u scripts/analyze_global_railkm_plant_observer_hotspots_v377.py \
+            --original-v369-global-plants source/v377/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --original-v370-global-rail source/v377/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --natural-earth source/v377/land/ne_110m_admin_0_map_units.geojson \
+            --worldclim-zip source/v377/land/wc2.1_10m_bio.zip \
+            --output results/audit/v377_original_world_2025_railkm_botany_observer_hotspot_exclusion.json
+      - name: Preserve only source-verified aggregate global predictive robustness no observer identity or species GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v377-genuine-world-railkm-2025-plants-observer-hotspot-heldout-robustness
+          path: results/audit/v377_original_world_2025_railkm_botany_observer_hotspot_exclusion.json
+          if-no-files-found: warn
