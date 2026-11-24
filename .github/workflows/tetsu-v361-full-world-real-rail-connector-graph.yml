@@ -3,6 +3,12 @@ name: "v361 authentic full-global original railway connector components"
 # SUCCESSFULLY. This workflow is manual-only to avoid treating a still-running
 # or partial source extraction as a full global network.
 on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/build_global_Overture_physical_connector_components_v361.py'
+      - 'tests/test_global_original_rail_physical_components_v361.py'
+      - '.github/workflows/tetsu-v361-full-world-real-rail-connector-graph.yml'
   workflow_dispatch:
 permissions:
   contents: read
