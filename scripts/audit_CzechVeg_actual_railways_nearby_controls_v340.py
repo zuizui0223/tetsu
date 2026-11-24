@@ -36,7 +36,7 @@ def rail_certainty(text):
         return "unused_railway_structure"
     if re.search(r"\bkolejist\w*|\bmezi\s+kolej\w*|\bzelez\w*\s+most\w*|\bzelez\w*\s+viadukt\w*",h):
         return "railway_track_yard_or_structure"
-    if re.search(r"\bzelez\w*\s+nasyp\w*|\bzelez\w*\s+prikop\w*|"
+    if re.search(r"\bzelez\w*\s+nas[ey]p\w*|\bzelez\w*\s+prikop\w*|"
                  r"\bzelez\w*\s+zarez\w*|\bzelez\w*\s+vleck\w*|"
                  r"\bsvah\s+zelez",h):
         return "railway_embankment_ditch_or_cut"
