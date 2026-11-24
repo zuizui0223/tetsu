@@ -46,7 +46,8 @@ class OriginalRailPlacebo(unittest.TestCase):
         self.assertEqual(qa["source_valid_botanical_cells_railkm_movable"],0)
         self.assertEqual(rows[0]["rail_km"],3)
     def test_invalid_source_negative_source_rail_length_rejected(self):
-        rows=[item("Asia",25,20,0,0)]\n        rows[0]["rail_km"]=-1
+        rows=[item("Asia",25,20,0,0)]
+        rows[0]["rail_km"]=-1
         with self.assertRaises(ValueError):
             m.permute_railkm_in_eligible_observed_cells(rows,random.Random(2))
     def test_placebo_performance_fraction_is_not_pvalue(self):
