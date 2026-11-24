@@ -26,3 +26,6 @@ v348–350 investigated 6 *convenience metro anchor windows*, not a global targe
 Save only source metadata, per-stratum frame population and selection probabilities, and coarse selected cell centers. No original raw raster, geopolygon, user source GPS or raw plant × plot files into GitHub.
 
 Note: this 100km 1:110m *demonstration frame* is scientifically more defensible than six cherry-picked hub windows for sampling opportunity, but not equivalent to a worldwide length-weighted railway sample; don't mislabel it as such. Draft stacked on v350 PR #56; main untouched.
+
+## Source QA erratum after first source run, before any biological result
+v351 source run #45330379123 genuinely downloaded and checksum-verified the official WorldClim BIO ZIP, but failed before any cell sampling because at least one original Natural Earth 1:110m country polygon has invalid OGC self-intersection/topology. The repaired implementation calls shapely.make_valid, retains only polygon components, rejects empty geometries and >1% area changes, and publishes repaired source-country count and maximum relative area drift. No rail, plant, or climatic sample effect was calculated or inspected before this repair. The original 100 km cell centres, climate thresholds, random seed and SRSWOR selection probabilities were NOT altered.
