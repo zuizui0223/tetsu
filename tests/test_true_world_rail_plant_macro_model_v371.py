@@ -43,6 +43,18 @@ class V371GenuineGlobalMacroModelTests(unittest.TestCase):
         weights=block_weights([a,b,c])
         self.assertAlmostEqual(float(weights.sum()),1.0)
         self.assertAlmostEqual(float(weights[0]+weights[1]),float(weights[2]))
+    def test_genuine_global_source_cell_uses_original_1000km_block_field(self):
+        # Original source geo records did not expose the shorter 'block'
+        # alias that synthetic units had inadvertently always supplied.
+        a=self.src(0)
+        a["original_equal_area_1000km_block"]=a.pop("block")
+        b=self.src(1)
+        b["original_equal_area_1000km_block"]=b.pop("block")
+        c=self.src(20)
+        c["original_equal_area_1000km_block"]=c.pop("block")
+        weights=block_weights([a,b,c])
+        self.assertAlmostEqual(float(weights.sum()),1.0)
+        self.assertAlmostEqual(float(weights[0]+weights[1]),float(weights[2]))
     def test_global_continent_heldout_does_not_train_on_the_tested_continent(self):
         allz=[]
         for c in CONTINENTS:
