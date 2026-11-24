@@ -1,0 +1,57 @@
+name: "v363 original full-world GERS connector position consistency QA"
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/audit_global_GERS_connector_position_consistency_v363.py'
+      - 'tests/test_global_GERS_connector_position_v363.py'
+      - '.github/workflows/tetsu-v363-world-GERS-connector-position-QA.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: v363-original-global-rail-GERS-connector-spatial-QA
+  cancel-in-progress: true
+jobs:
+  source_original_fullworld_connector_positions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install original GeoParquet and precise geodesic connector source QA utilities
+        run: python -m pip install 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Verify deterministic 1/256 connector UUID sample and actual spatial agreement math
+        run: |
+          python -m unittest discover -s tests -p 'test_global_GERS_connector_position_v363.py' -v
+          python -m py_compile scripts/audit_global_GERS_connector_position_consistency_v363.py
+      - name: Retrieve original authoritative entire 128-file world rail source completeness ledger
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v363/census
+      - name: Retrieve genuine 16 rail-only source Parquet shards with original physical connector positions
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-rail-geometry-*
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v363/rail
+          merge-multiple: true
+      - name: Verify ALL original rail-only Parquet SHA & scan full 2,054,855 rail segments, compare hashed connector spatial coordinates
+        run: |
+          python -u scripts/audit_global_GERS_connector_position_consistency_v363.py \
+            --source-dir source/v363/rail \
+            --census source/v363/census/v357_complete_original_world_rail_source_CENSUS.json \
+            --output results/audit/v363_global_genuine_GERS_connector_UUID_physical_coordinate_agreement.json
+      - name: Upload ONLY source UUID positional QA counts, never source rail geometries or original IDs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v363-global-GERS-connector-position-consistency-aggregate
+          path: results/audit/v363_global_genuine_GERS_connector_UUID_physical_coordinate_agreement.json
+          if-no-files-found: warn
