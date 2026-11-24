@@ -54,6 +54,8 @@ def source_continents(path):
     from shapely.geometry import shape
     from shapely.ops import unary_union
     from shapely.prepared import prep
+    from shapely.validation import make_valid
+    from shapely.geometry import Polygon, MultiPolygon
     doc=json.loads(Path(path).read_text(encoding="utf8"))
     if doc.get("type")!="FeatureCollection" or not isinstance(doc.get("features"),list):
         raise ValueError("Not original Natural Earth country GeoJSON")
@@ -66,7 +68,30 @@ def source_continents(path):
             qa["excluded_antarctica_or_other"]+=1
             continue
         g=shape(feat.get("geometry"))
-        if not g.is_valid or g.is_empty:raise ValueError("Invalid original Natural Earth country geometry")
+        if g.is_empty:raise ValueError("Empty original Natural Earth country geometry")
+        if not g.is_valid:
+            repaired=make_valid(g)
+            polygons=[]
+            def collect_valid_polys(part):
+                if isinstance(part,Polygon):polygons.append(part)
+                elif isinstance(part,MultiPolygon):
+                    polygons.extend(part.geoms)
+                elif hasattr(part,"geoms"):
+                    for sub in part.geoms:collect_valid_polys(sub)
+            collect_valid_polys(repaired)
+            if not polygons:raise ValueError("Unrepairable invalid Natural Earth land polygon")
+            new=unary_union(polygons)
+            if not new.is_valid:raise ValueError("Repaired Natural Earth polygon is still invalid")
+            # A topological repair can change small coastal edge area but cannot
+            # be chosen based on Overture rail or plant observations.
+            area_drift=abs(new.area-g.area)/max(abs(g.area),1e-15)
+            if area_drift>0.01:
+                raise ValueError("Natural Earth repair changed polygon area by >1%")
+            qa["source_invalid_country_polygons_repaired"]+=1
+            qa["source_max_polygon_area_relative_drift_ppm"] = max(
+                qa["source_max_polygon_area_relative_drift_ppm"],
+                round(area_drift*1e6,3))
+            g=new
         geom[cont].append(g)
         qa["country_"+cont]+=1
     if set(geom)!=set(CONTINENTS):raise ValueError("Not all six continents represented by source")
