@@ -1,0 +1,105 @@
+{
+  "version": "v349b",
+  "checked_date": "2026-11-24",
+  "study": "self-extracted railway-proximity plant source feasibility, NOT railway flora biodiversity estimate",
+  "source_original_run": "https://github.com/zuizui0223/tetsu/actions/runs/45328987737",
+  "original_plants": "iNaturalist original public 2025 research-grade Plantae and wild, all source pages",
+  "original_rail": "Overture global 2026 Nov transportation railway segments, subtype rail, conservative flags",
+  "frozen_rail_buffers_m": {
+    "near_distance_plus_accuracy_max": 80,
+    "background_distance_minus_accuracy_min": 300,
+    "background_distance_plus_accuracy_max": 1000,
+    "source_geometry_extra_outside_plant_window": 1100
+  },
+  "primary_sample": "one pre-declared urban 0.024-degree latitude and longitude window per 6 continents; not random world railway sample",
+  "original_plant_total_query_count": 1041,
+  "city_aggregates": [
+    {
+      "city": "Tokyo",
+      "continent": "Asia",
+      "country": "Japan",
+      "original_plant_observations_2025": 170,
+      "original_mapped_railway_features_eligible": 55,
+      "near_observations": 0,
+      "near_species": 0,
+      "background_observations": 82,
+      "background_species": 48,
+      "source_two_arm_support": false
+    },
+    {
+      "city": "Prague",
+      "continent": "Europe",
+      "country": "Czechia",
+      "original_plant_observations_2025": 536,
+      "original_mapped_railway_features_eligible": 208,
+      "near_observations": 60,
+      "near_species": 41,
+      "background_observations": 150,
+      "background_species": 88,
+      "source_two_arm_support": true
+    },
+    {
+      "city": "Cape Town",
+      "continent": "Africa",
+      "country": "South Africa",
+      "original_plant_observations_2025": 96,
+      "original_mapped_railway_features_eligible": 173,
+      "near_observations": 0,
+      "near_species": 0,
+      "background_observations": 32,
+      "background_species": 21,
+      "source_two_arm_support": false
+    },
+    {
+      "city": "Sydney",
+      "continent": "Oceania",
+      "country": "Australia",
+      "original_plant_observations_2025": 89,
+      "original_mapped_railway_features_eligible": 167,
+      "near_observations": 15,
+      "near_species": 12,
+      "background_observations": 18,
+      "background_species": 15,
+      "source_two_arm_support": false
+    },
+    {
+      "city": "San Francisco",
+      "continent": "North America",
+      "country": "United States",
+      "original_plant_observations_2025": 133,
+      "original_mapped_railway_features_eligible": 60,
+      "near_observations": 3,
+      "near_species": 3,
+      "background_observations": 35,
+      "background_species": 26,
+      "source_two_arm_support": false
+    },
+    {
+      "city": "Sao Paulo",
+      "continent": "South America",
+      "country": "Brazil",
+      "original_plant_observations_2025": 17,
+      "original_mapped_railway_features_eligible": 70,
+      "near_observations": 0,
+      "near_species": 0,
+      "background_observations": 1,
+      "background_species": 1,
+      "source_two_arm_support": false
+    }
+  ],
+  "sum_near_observations": 78,
+  "sum_background_observations": 318,
+  "sum_original_rail_segments_eligible_source_features": 733,
+  "eligible_continents_for_both_arm_comparison": 1,
+  "source_proximity_arm_minimum": {
+    "near_observations": 10,
+    "near_species": 5,
+    "background_observations": 30,
+    "background_species": 10
+  },
+  "no_worldwide_railway_warming_estimated": true,
+  "no_actual_railway_trackbed_vegetation_inventories": true,
+  "no_species_absences_individual_records_exact_GPS_or_usernames_published": true,
+  "uncontrolled_bias": "opportunistic plant observation effort, OSM/Overture mapped 2026 relative to 2025 observations, urbanization, access, cultivation classification, and railway land boundaries",
+  "next_go_no_go": "predeclare railway network probability sample across climate strata and retrieve independent global species temperature traits; preserve quality support and local habitat controls"
+}
