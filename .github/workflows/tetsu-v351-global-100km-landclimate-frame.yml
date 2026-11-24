@@ -27,7 +27,7 @@ jobs:
           set -euo pipefail
           mkdir -p source_original/v351 results/audit
           curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 260 \
-            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson' \
+            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' \
             -o source_original/v351/official_naturalearth_countries.geojson
           curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 780 \
             'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' \
