@@ -1,0 +1,60 @@
+name: "v378a global GloNAF regional source support of fixed 2048 railway draws"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/audit_global_GloNAF_rail2048_v378a.py'
+      - '.github/workflows/tetsu-v378a-global-GloNAF-rail2048.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source_gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'geopandas>=1,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'rasterio>=1.3,<2' 'pyarrow>=18,<25'
+      - name: Validate helpers without interpreting biological results
+        run: |
+          python -m py_compile scripts/audit_global_GloNAF_rail2048_v378a.py
+          PYTHONPATH=scripts python - <<'PY'
+          from audit_global_GloNAF_rail2048_v378a import valid_name, complete_vascular, classify_window, region_key
+          from pyproj import Geod
+          assert valid_name("Plantago major") and not valid_name("Plantago major subsp. major")
+          assert complete_vascular(dict(taxon_group_id="1",completeness_id="3",invasives_only="0"))
+          assert not complete_vascular(dict(taxon_group_id="1",completeness_id="2",invasives_only="0"))
+          assert region_key({"CODE":"X"}, {"X":"1"}, {})=="1"
+          assert classify_window(Geod(ellps="WGS84"),179.999,0,5) is None
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v368b-original-world-railkm-sampled-source-points
+          run-id: 45373590287
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v378/rail
+      - name: Retrieve exact publisher original GloNAF version and verified continent source
+        run: |
+          set -euo pipefail
+          mkdir -p source/v378/glonaf
+          for f in glonaf_2024_nol.zip glonaf_flora2.csv glonaf_list.csv glonaf_region.csv glonaf_taxon_wcvp.csv; do
+            curl -LfS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 240 "https://zenodo.org/records/17105725/files/$f?download=1" -o "source/v378/glonaf/$f"
+          done
+          curl -LfsS --retry 3 --max-time 120 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/v378/ne.geojson
+          echo '718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b  source/v378/ne.geojson' | sha256sum --check
+      - name: Audit all 2048 original draws with independent GloNAF regions and list quality
+        run: |
+          python -u scripts/audit_global_GloNAF_rail2048_v378a.py \
+            --glonaf source/v378/glonaf \
+            --sample source/v378/rail/v368b_global_2048_world_GERS_rail_km_random_points.json \
+            --natural-earth source/v378/ne.geojson \
+            --output results/audit/v378a_original_global_GloNAF_rail2048_source_support.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v378a-GloNAF-global-rail2048-source-support-aggregate
+          path: results/audit/v378a_original_global_GloNAF_rail2048_source_support.json
+          if-no-files-found: error
