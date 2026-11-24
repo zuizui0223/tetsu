@@ -1,0 +1,69 @@
+{
+  "version": "v366-independent-Czech-Slovak-original-flora-physical-railway-source-feasibility",
+  "source_study_country": "SK",
+  "source_publisher_author_years": "2012-2014",
+  "source_original_station_coordinate_class_NOT_author_plot_GPS": "AUTHOR ORIGINAL 2016 printed 19-station DMS coordinates of 2012-14 whole station surveys",
+  "source_original_botanical_station_count": 19,
+  "source_original_source_taxon_count_prior_publication": 318,
+  "source_original_author_rail_stretch_or_line_count": 1,
+  "original_botanical_and_GPS_provenance": {
+    "original_author_PDF_source_sha256": "99465bdd7ed56985e65b1163f16eca4f702fc821619d84c89bf986d4d3736ae1",
+    "original_original_station_DMS_coordinates_count": 19,
+    "original_source_distinct_publisher_original_taxa": 318,
+    "original_source_station_species_positive_cells": 1763,
+    "original_author_rail_routes_n": 1,
+    "source_original_five_printed_richness_benchmarks_validated": true
+  },
+  "original_Overture_rail_source_data_QA": {
+    "original_Overture_real_release": "2026-11-18.0",
+    "original_Overture_source_complete": true,
+    "original_source_n_all_transport_features": 73423,
+    "original_source_n_all_rail_subtype": 833,
+    "source_data_latest_snapshot_2026_vs_original_field_date_mismatch": true,
+    "source_bbox_WGS84_not_published_as_botanist_GPS": true,
+    "source_attempt": 1
+  },
+  "original_Overture_rail_GERS_geodetic_component_QA": {
+    "source_original_normal_rail_GERS_segments": 745,
+    "source_original_connector_graph_nodes": 1768,
+    "source_original_connector_graph_edges": 1936,
+    "source_segment_count": 745,
+    "source_projected_vs_WGS84_geodetic_abs_ppm_median": 386.71614027341315,
+    "source_projected_vs_WGS84_geodetic_abs_ppm_max": 400.0000313687524,
+    "source_legacy_graph_edges": 1936,
+    "source_corrected_graph_edges": 1936,
+    "source_exact_same_original_UUID_nodes": true
+  },
+  "source_original_primary_point_to_rail_m": 180,
+  "source_original_strict_point_to_rail_m": 80,
+  "source_primary_original_site_to_rail_and_connected_pairs_QA": {
+    "source_original_true_physical_rail_matched_station_n": 19,
+    "source_original_sites_ambiguous_disconnected_tracks_n": 0,
+    "source_original_sites_without_a_qualifying_track_n": 0,
+    "source_botanist_original_rail_station_to_GERS_offset_m_median": 6.378,
+    "source_botanist_original_rail_station_to_GERS_offset_m_max": 21.486,
+    "source_potential_original_site_pairs": 171,
+    "source_real_network_connected_original_station_pairs_within_300km": 171,
+    "source_real_network_connected_pairs_SAME_original_author_stretch": 171,
+    "source_real_network_connected_pairs_OTHER_original_author_stretch": 0,
+    "source_no_rail_network_path_for_some_pairs_is_missing_NOT_negative_plant_ecology": true
+  },
+  "source_strict_source_site_to_rail_and_connected_pairs_QA": {
+    "source_original_true_physical_rail_matched_station_n": 19,
+    "source_original_sites_ambiguous_disconnected_tracks_n": 0,
+    "source_original_sites_without_a_qualifying_track_n": 0,
+    "source_botanist_original_rail_station_to_GERS_offset_m_median": 6.378,
+    "source_botanist_original_rail_station_to_GERS_offset_m_max": 21.486,
+    "source_potential_original_site_pairs": 171,
+    "source_real_network_connected_original_station_pairs_within_300km": 171,
+    "source_real_network_connected_pairs_SAME_original_author_stretch": 171,
+    "source_real_network_connected_pairs_OTHER_original_author_stretch": 0,
+    "source_no_rail_network_path_for_some_pairs_is_missing_NOT_negative_plant_ecology": true
+  },
+  "botanical_species_compositional_network_effect_NOT_YET_CALCULATED": true,
+  "single_Slovak_original_publisher_railway_line_NOT_multiple_line_clusters": true,
+  "CZ_centroid_is_not_botanist_actual_transect_GPS": false,
+  "source_2026_network_is_temporally_offset_from_field_surveys": true,
+  "no_source_GPS_raw_botanical_taxa_original_PDF_or_original_rail_geometry_republished": true,
+  "source_verified_ci_url": "https://github.com/zuizui0223/tetsu/actions/runs/45360386649"
+}
