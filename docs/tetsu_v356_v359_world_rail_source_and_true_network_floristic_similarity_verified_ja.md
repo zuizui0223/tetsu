@@ -47,3 +47,22 @@
 - [Frozen global original railway source design](tetsu_v356_global_rail_all_segments_line_network_source_frozen_ja.md), [v358 fixed graph botanical design](tetsu_v358_Slovenia_original_rail_graph_similarity_frozen_ja.md), [v359 fixed dual match design](tetsu_v359_source_Slovenia_real_network_distance_matched_flora_frozen_ja.md).
 
 Original source publishers/OSM ODbL/copyright respected, Overture full geometric original data not committed directly to GitHub repo. Draft PR #58 stacked on PR #57, main unchanged.
+
+## v359b：本当の線路距離と地理距離を揃えた27地点の**同じ比較集合**に種頻度保存帰無を適用 — SOURCE VERIFIED（2026-11-24）
+
+[**Original-source and Overture-GERS network run #45345069976 SUCCESS**](https://github.com/zuizui0223/tetsu/actions/runs/45345069976)。元データŠabić 2026原著401,279Bを元SHAと照合し、v359真正27 anchors/7 author source sections のBS+BT source Jaccard差**+0.027033312**を1e-10以内で完全再現。生態的なネットワーク・地理距離二重マッチのアンカーと植物記録は**一切入れ替えていない**。
+
+同じ89原著調査区の種×地点行列を元に、各地点の植物種数と各種の出現頻度を完全に固定したcheckerboardシャッフル。2 independent seeded chains×99 retained correlated MCMC draws。全89地点での種頻度のみの帰無H0-Aと、2022/2023調査年×SINGLE/DOUBLE線路構成内での種頻度を保持したより厳しい帰無H0-Bを、**新しい元27地点セットに**適用した。両familyは元source結果を調べる前に固定（ただしv359観測値を見たあとの事後頑健性分析）。
+
+| v359b source original same 27 matched anchors / 7 publisher sections | H0-A 全site種頻度保存 | **H0-B 年×線路構成別site種頻度保存** |
+|---|---:|---:|
+| 元観測の同一区間−別区間植物Jaccard | +0.027033 | +0.027033 |
+| 技術帰無の平均 | +0.004555 | **+0.018549** |
+| 観測−技術帰無 | +0.022479 | **+0.008484** |
+| 技術帰無2.5–97.5% | [−0.03238,+0.03874] | **[−0.01895,+0.05987]** |
+| 上側技術順位（**フィールドp値ではない**） | 0.0955 | **0.3116** |
+| 原著7 sectionで観測＞各section帰無平均 | 5/7 | 5/7 |
+
+**最も強い結果解釈：** source network＆地理距離を両方揃えても、小さい同一区間類似性+0.027は観測される。しかし、元の調査年・単線／複線別の種頻度を保持する技術帰無の平均+0.01855を差し引くと残差**+0.00848**となり、技術帰無でも観測と同程度の効果が普通に現れる（rank0.312）。したがって、**線路網の独自の輸送や分散が植物相を同化する独立した証拠は得られていない。** これは「鉄道植物の同一路線類似性が存在しない」の意味ではなく、観測された記述的差の説明機構を厳格に限定するもの。原著89地点/15sectionは1か国であり世界普遍性/列車ODは不明。帰無シャッフルは地理的な原点種プール、同じ管理、列車ODを完全制御していないので、フィールド因果仮説のp値を生成しない。
+
+[元の技術検定凍結](tetsu_v359b_Slovenia_network_geo_matched_fixed_species_frequency_null_frozen_ja.md)、[原著集計JSON](../data/derived/v359b_original_27site_7section_real_network_matched_species_frequency_null.json)、[解析コード](../scripts/analyze_Slovenia_networkmatched_species_frequency_null_v359b.py)、[真正元original source workflow](../.github/workflows/tetsu-v359b-SI-rail-network-species-null.yml)。これにより先のv359の「可能性」は**機構としては未支持**へ格下げした。
