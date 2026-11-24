@@ -1,0 +1,225 @@
+{
+  "version": "v365-real-Slovenia-plant-beta-physical-rail-network-vs-geography-LOLO",
+  "source_pair_opportunity_QA": {
+    "source_original_site_pairs_total": 3916,
+    "original_true_source_physical_network_pair_n": 2167,
+    "source_no_verified_source_GERS_network_path_pairs": 1749
+  },
+  "source_original_line_section_heldout_fold_n": 15,
+  "source_results": {
+    "BS_and_BT": {
+      "original_source_primary_effort_conditional": {
+        "identified": true,
+        "n_source_heldout_sections": 15,
+        "losses": {
+          "M0_geo_year_layout_richness": {
+            "source_equal_original_section_mean_test_MSE": 0.0038519913138238653,
+            "source_equal_original_section_mean_test_MAE": 0.04857177361006201
+          },
+          "M1_M0_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.00385737829507962,
+            "source_equal_original_section_mean_test_MAE": 0.048507536666868155
+          },
+          "M2_M0_plus_author_section_label": {
+            "source_equal_original_section_mean_test_MSE": 0.0038979463130516022,
+            "source_equal_original_section_mean_test_MAE": 0.04875741345658264
+          },
+          "M3_M2_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.0039028781790458058,
+            "source_equal_original_section_mean_test_MAE": 0.048726835215838774
+          }
+        },
+        "predictive_increments": {
+          "M0_minus_M1_TRUE_network_increment_MSE": -0.000005386981255754621,
+          "M2_minus_M3_TRUE_network_after_line_indicator_MSE": -0.00000493186599420355,
+          "M0_minus_M2_original_author_section_label_increment_MSE": -0.00004595499922773697,
+          "source_original_sections_where_network_improves_MSE_without_line_n": 9,
+          "source_original_sections_where_network_worsens_MSE_without_line_n": 6,
+          "source_original_sections_where_network_improves_MSE_after_line_n": 8,
+          "source_original_sections_where_network_worsens_MSE_after_line_n": 7,
+          "technical_per_section_M0_minus_M1_MSE_median": 0.000004968563766884898,
+          "technical_per_section_M2_minus_M3_MSE_median": 0.0000036807574715566616,
+          "whole_original_line_heldout_pairs_unequal_and_NOT_independent": true
+        }
+      },
+      "no_plant_richness_predictor_sensitivity": {
+        "identified": true,
+        "n_source_heldout_sections": 15,
+        "losses": {
+          "M0_geo_year_layout": {
+            "source_equal_original_section_mean_test_MSE": 0.004605890952884064,
+            "source_equal_original_section_mean_test_MAE": 0.05327894948108945
+          },
+          "M1_geo_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.0046331843629189295,
+            "source_equal_original_section_mean_test_MAE": 0.05339750874601137
+          },
+          "M2_geo_plus_author_section_label": {
+            "source_equal_original_section_mean_test_MSE": 0.004634631469989399,
+            "source_equal_original_section_mean_test_MAE": 0.0533698708457316
+          },
+          "M3_geo_section_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.0046640980339100096,
+            "source_equal_original_section_mean_test_MAE": 0.0534997788757117
+          }
+        },
+        "predictive_increments": {
+          "M0_minus_M1_TRUE_network_increment_MSE": -0.00002729341003486572,
+          "M2_minus_M3_TRUE_network_after_line_indicator_MSE": -0.000029466563920610422,
+          "M0_minus_M2_original_author_section_label_increment_MSE": -0.000028740517105335303,
+          "source_original_sections_where_network_improves_MSE_without_line_n": 7,
+          "source_original_sections_where_network_worsens_MSE_without_line_n": 8,
+          "source_original_sections_where_network_improves_MSE_after_line_n": 5,
+          "source_original_sections_where_network_worsens_MSE_after_line_n": 10,
+          "technical_per_section_M0_minus_M1_MSE_median": -0.0000018605904731853334,
+          "technical_per_section_M2_minus_M3_MSE_median": -0.000018891584518051195,
+          "whole_original_line_heldout_pairs_unequal_and_NOT_independent": true
+        }
+      }
+    },
+    "BS": {
+      "original_source_primary_effort_conditional": {
+        "identified": true,
+        "n_source_heldout_sections": 15,
+        "losses": {
+          "M0_geo_year_layout_richness": {
+            "source_equal_original_section_mean_test_MSE": 0.005679457316677849,
+            "source_equal_original_section_mean_test_MAE": 0.058859204322467565
+          },
+          "M1_M0_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.005703874383455459,
+            "source_equal_original_section_mean_test_MAE": 0.05898674701248168
+          },
+          "M2_M0_plus_author_section_label": {
+            "source_equal_original_section_mean_test_MSE": 0.005663424335485044,
+            "source_equal_original_section_mean_test_MAE": 0.05889382995139581
+          },
+          "M3_M2_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.005695324136485753,
+            "source_equal_original_section_mean_test_MAE": 0.059062636250540895
+          }
+        },
+        "predictive_increments": {
+          "M0_minus_M1_TRUE_network_increment_MSE": -0.00002441706677761002,
+          "M2_minus_M3_TRUE_network_after_line_indicator_MSE": -0.0000318998010007095,
+          "M0_minus_M2_original_author_section_label_increment_MSE": 0.000016032981192804982,
+          "source_original_sections_where_network_improves_MSE_without_line_n": 0,
+          "source_original_sections_where_network_worsens_MSE_without_line_n": 15,
+          "source_original_sections_where_network_improves_MSE_after_line_n": 6,
+          "source_original_sections_where_network_worsens_MSE_after_line_n": 9,
+          "technical_per_section_M0_minus_M1_MSE_median": -0.000003952621431876219,
+          "technical_per_section_M2_minus_M3_MSE_median": -0.0000060693958435376755,
+          "whole_original_line_heldout_pairs_unequal_and_NOT_independent": true
+        }
+      },
+      "no_plant_richness_predictor_sensitivity": {
+        "identified": true,
+        "n_source_heldout_sections": 15,
+        "losses": {
+          "M0_geo_year_layout": {
+            "source_equal_original_section_mean_test_MSE": 0.005774883017144761,
+            "source_equal_original_section_mean_test_MAE": 0.059707744824309045
+          },
+          "M1_geo_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.005791291483691387,
+            "source_equal_original_section_mean_test_MAE": 0.05980661957629565
+          },
+          "M2_geo_plus_author_section_label": {
+            "source_equal_original_section_mean_test_MSE": 0.005783602358166992,
+            "source_equal_original_section_mean_test_MAE": 0.059864914477739235
+          },
+          "M3_geo_section_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.005810446986055608,
+            "source_equal_original_section_mean_test_MAE": 0.060017978008294046
+          }
+        },
+        "predictive_increments": {
+          "M0_minus_M1_TRUE_network_increment_MSE": -0.00001640846654662586,
+          "M2_minus_M3_TRUE_network_after_line_indicator_MSE": -0.000026844627888615927,
+          "M0_minus_M2_original_author_section_label_increment_MSE": -0.000008719341022231201,
+          "source_original_sections_where_network_improves_MSE_without_line_n": 6,
+          "source_original_sections_where_network_worsens_MSE_without_line_n": 9,
+          "source_original_sections_where_network_improves_MSE_after_line_n": 1,
+          "source_original_sections_where_network_worsens_MSE_after_line_n": 14,
+          "technical_per_section_M0_minus_M1_MSE_median": -8.318143164885543e-7,
+          "technical_per_section_M2_minus_M3_MSE_median": -0.00001351087986127585,
+          "whole_original_line_heldout_pairs_unequal_and_NOT_independent": true
+        }
+      }
+    },
+    "BT": {
+      "original_source_primary_effort_conditional": {
+        "identified": true,
+        "n_source_heldout_sections": 15,
+        "losses": {
+          "M0_geo_year_layout_richness": {
+            "source_equal_original_section_mean_test_MSE": 0.004983031892250245,
+            "source_equal_original_section_mean_test_MAE": 0.05591292552015436
+          },
+          "M1_M0_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.004941408422042463,
+            "source_equal_original_section_mean_test_MAE": 0.05554987456081131
+          },
+          "M2_M0_plus_author_section_label": {
+            "source_equal_original_section_mean_test_MSE": 0.005018288758432884,
+            "source_equal_original_section_mean_test_MAE": 0.05584481229896781
+          },
+          "M3_M2_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.004993860319633297,
+            "source_equal_original_section_mean_test_MAE": 0.05564071063800629
+          }
+        },
+        "predictive_increments": {
+          "M0_minus_M1_TRUE_network_increment_MSE": 0.000041623470207781746,
+          "M2_minus_M3_TRUE_network_after_line_indicator_MSE": 0.000024428438799586893,
+          "M0_minus_M2_original_author_section_label_increment_MSE": -0.000035256866182639506,
+          "source_original_sections_where_network_improves_MSE_without_line_n": 10,
+          "source_original_sections_where_network_worsens_MSE_without_line_n": 5,
+          "source_original_sections_where_network_improves_MSE_after_line_n": 9,
+          "source_original_sections_where_network_worsens_MSE_after_line_n": 6,
+          "technical_per_section_M0_minus_M1_MSE_median": 0.00001767768565589297,
+          "technical_per_section_M2_minus_M3_MSE_median": 0.00002409029589449819,
+          "whole_original_line_heldout_pairs_unequal_and_NOT_independent": true
+        }
+      },
+      "no_plant_richness_predictor_sensitivity": {
+        "identified": true,
+        "n_source_heldout_sections": 15,
+        "losses": {
+          "M0_geo_year_layout": {
+            "source_equal_original_section_mean_test_MSE": 0.005404035054885269,
+            "source_equal_original_section_mean_test_MAE": 0.05810892652021383
+          },
+          "M1_geo_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.005397077466579688,
+            "source_equal_original_section_mean_test_MAE": 0.057984585590873106
+          },
+          "M2_geo_plus_author_section_label": {
+            "source_equal_original_section_mean_test_MSE": 0.005425811748996517,
+            "source_equal_original_section_mean_test_MAE": 0.05807609876283484
+          },
+          "M3_geo_section_plus_TRUE_network_distance": {
+            "source_equal_original_section_mean_test_MSE": 0.005438397571552397,
+            "source_equal_original_section_mean_test_MAE": 0.05810321158510168
+          }
+        },
+        "predictive_increments": {
+          "M0_minus_M1_TRUE_network_increment_MSE": 0.00000695758830558061,
+          "M2_minus_M3_TRUE_network_after_line_indicator_MSE": -0.000012585822555880033,
+          "M0_minus_M2_original_author_section_label_increment_MSE": -0.000021776694111247906,
+          "source_original_sections_where_network_improves_MSE_without_line_n": 11,
+          "source_original_sections_where_network_worsens_MSE_without_line_n": 4,
+          "source_original_sections_where_network_improves_MSE_after_line_n": 9,
+          "source_original_sections_where_network_worsens_MSE_after_line_n": 6,
+          "technical_per_section_M0_minus_M1_MSE_median": 0.00003096922801622444,
+          "technical_per_section_M2_minus_M3_MSE_median": 0.000027421987689829792,
+          "whole_original_line_heldout_pairs_unequal_and_NOT_independent": true
+        }
+      }
+    }
+  },
+  "source_original_successful_actions_run_url": "https://github.com/zuizui0223/tetsu/actions/runs/45359255096",
+  "source_original_full_per_line_fold_metrics_artifact_name": "tetsu-v365-authentic-source-lineheldout-GERS-physical-network-beta-prediction",
+  "source_original_full_per_line_fold_metrics_artifact_id": 14904395436,
+  "source_caution": "Original GitHub Actions output writes per-line fold aggregate metrics to the original source artifact; repository stores aggregate summary from actual verified job log. No GPS species or pairwise source observations exported."
+}
