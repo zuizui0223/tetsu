@@ -207,10 +207,21 @@ def beta_features(pair):
        "log_mean_rail_km":math.log1p(.5*(a["rail_km"]+b["rail_km"])),
        "abs_log_rail_contrast":rails[1]}
 
+def original_source_block_key(entry):
+    # True original entire-world source richness CELL records preserve the
+    # field name original_equal_area_1000km_block, while adjacent beta
+    # PAIRS use block. They are the same 1000km equal-area source block
+    # semantics and must not be treated as two independent studies.
+    if "block" in entry:
+        return tuple(entry["block"])
+    if "original_equal_area_1000km_block" in entry:
+        return tuple(entry["original_equal_area_1000km_block"])
+    raise ValueError("Genuine global plant source cell lacks geographic block")
+
 def block_weights(items):
-    count=Counter(x["block"] for x in items)
+    count=Counter(original_source_block_key(x) for x in items)
     if not count:raise ValueError("No original global source spatial blocks")
-    weights=np.array([1.0/count[x["block"]] for x in items],dtype=float)
+    weights=np.array([1.0/count[original_source_block_key(x)] for x in items],dtype=float)
     return weights/weights.sum()
 
 def ridge_estimate(train,test,base,extra,target,kind):
@@ -261,7 +272,7 @@ def cv_country_holdout(items,kind):
         folds.append({"heldout_continent":continent,
           "n_test_original_macro_source_units_not_independent_field_studies":len(test),
           "n_training_original_macro_source_units":len(train),
-          "n_independent_geographic_1000km_test_blocks":len({q["block"] for q in test}),
+          "n_independent_geographic_1000km_test_blocks":len({original_source_block_key(q) for q in test}),
           "M0_geo_climate_observer_effort_test_MSE":mse0,
           "M1_plus_source_GERS_rail_km_test_MSE":mse1,
           "M0_minus_M1_test_MSE_delta_positive_means_better":mse0-mse1,
