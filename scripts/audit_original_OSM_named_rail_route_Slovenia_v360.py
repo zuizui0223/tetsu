@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """v360: true OSM `route=railway/tracks` membership on physical Overture rails.
 
-Original Geofabrik Slovenia 2026-10-16 PBF, MD5 and file bytes verified
+Original Geofabrik Slovenia 2026-10-01 PBF, MD5 and file bytes verified
 by workflow. Original botanists 2022-23 sampled 89 sites / 15 line sections.
 This only verifies named route coverage; does not calculate Jaccard effects,
 re-export raw observations, original GPS, OSM ways/relation IDs or tracks.
@@ -17,9 +17,9 @@ from analyze_Slovenia_Overture_connector_network_botany_v358 import (
     real_overture,build_rail_graph,site_attach,source_eligible,SOURCE_UTM,RELEASE
 )
 
-PBF_EXPECTED_BYTES=313730042
-OSM_SNAPSHOT="2026-10-16"
-PBF_URL="https://download.geofabrik.de/europe/slovenia-261016.osm.pbf"
+PBF_EXPECTED_BYTES=313417178
+OSM_SNAPSHOT="2026-10-01"
+PBF_URL="https://download.geofabrik.de/europe/slovenia-261001.osm.pbf"
 OSM_WAY_PATTERN=re.compile(r"^w([0-9]+)@[0-9]+$")
 RAIL_RELATION_ROUTE_VALUES=frozenset(("railway","tracks"))
 AUTHOR_SITES_N=89
@@ -54,7 +54,7 @@ def source_osm_way_refs(record):
 def route_memberships(pbf):
     import osmium
     if Path(pbf).stat().st_size!=PBF_EXPECTED_BYTES:
-        raise ValueError("Original Geofabrik 2026-10-16 PBF source byte size drift")
+        raise ValueError("Original Geofabrik 2026-10-01 PBF source byte size drift")
     class Handler(osmium.SimpleHandler):
         def __init__(self):
             super().__init__()
