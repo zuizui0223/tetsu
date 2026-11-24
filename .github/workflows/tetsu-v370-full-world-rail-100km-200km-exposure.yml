@@ -1,0 +1,65 @@
+name: "v370 actual entire global Overture railway track km per 100km 200km macroecology grid"
+on:
+  push:
+    branches: [research/tetsu-v368-world-rail-pps-biodiversity-20261124]
+    paths:
+      - 'scripts/aggregate_entire_world_GERS_rail_100km_200km_grid_v370.py'
+      - 'tests/test_original_fullworld_GERS_rail_grid_v370.py'
+      - '.github/workflows/tetsu-v370-full-world-rail-100km-200km-exposure.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: v370-genuine-world-all-normal-rail-100km-grid
+  cancel-in-progress: true
+jobs:
+  actual_128_original_Oveture_GERS_world_grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install true physical railway source full GeoParquet and WGS84 geodetic area grid tools
+        run: python -m pip install 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Test original world GERS geodesic clipping and antimeridian correctness first
+        run: |
+          python -m unittest discover -s tests -p 'test_original_fullworld_GERS_rail_grid_v370.py' -v
+          python -m py_compile scripts/aggregate_entire_world_GERS_rail_100km_200km_grid_v370.py
+      - name: Retrieve publisher source authentic entire worldwide rail Parquet census
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v370/census
+      - name: Retrieve 16 source SHA verified original all-world normal rail segment geometries
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-rail-geometry-*
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v370/rail
+          merge-multiple: true
+      - name: Scan original 2.05m world GERS rail rows and clip every eligible 1.536m normal segment to its true 100km and 200km equal-area global grid cells
+        run: |
+          python -u scripts/aggregate_entire_world_GERS_rail_100km_200km_grid_v370.py \
+            --rail-dir source/v370/rail \
+            --original-v357-census source/v370/census/v357_complete_original_world_rail_source_CENSUS.json \
+            --output-summary results/audit/v370_original_fullworld_railkm_100km_200km_source_QA.json \
+            --output-grid results/audit/v370_original_fullworld_railkm_100km_200km_grid_counts.json
+      - name: Archive entire world rail-km full-source original QA only, not private source railway geometry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-railkm-100km-grid-census-QA
+          path: results/audit/v370_original_fullworld_railkm_100km_200km_source_QA.json
+          if-no-files-found: warn
+      - name: Archive only global coarse infrastructure rail-km by 100km and 200km equal-area cell for macro analyses
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          path: results/audit/v370_original_fullworld_railkm_100km_200km_grid_counts.json
+          if-no-files-found: error
