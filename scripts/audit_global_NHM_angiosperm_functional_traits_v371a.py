@@ -57,11 +57,30 @@ def source_sample(resource):
     url=resource.get("url")
     if not url or not url.startswith("https://"):
         raise ValueError("Original NHM resource URL absent or not HTTPS")
-    data,meta=http(url,limit=PREFIX_BYTES,range_bytes=PREFIX_BYTES)
-    body=data.decode("utf-8-sig",errors="strict")
-    lines=body.splitlines()
-    if len(lines)<3:raise ValueError("Original NHM combined traits CSV source header empty")
-    row=next(csv.reader([lines[0]]))
+    try:
+        data,meta=http(url,limit=PREFIX_BYTES,range_bytes=PREFIX_BYTES)
+        lines=data.decode("utf-8-sig",errors="strict").splitlines()
+        if len(lines)<3:raise ValueError("Original NHM combined.csv contains no CSV header")
+        row=next(csv.reader([lines[0]]))
+        data_sha=hashlib.sha256(data).hexdigest()
+        source_prefix_len=len(data)
+        original_source_type="Original direct NHM CSV HTTP source"
+        datastore_total=None
+    except urllib.error.HTTPError as err:
+        if err.code not in (403,404):raise
+        if not resource.get("id"):raise ValueError("Original NHM resource ID missing")
+        api="https://data.nhm.ac.uk/api/3/action/datastore_search?"+urllib.parse.urlencode(
+            {"resource_id":resource["id"],"limit":1})
+        raw,meta=http(api,limit=3_000_000)
+        obj=json.loads(raw)
+        if not obj.get("success"):raise ValueError("Publisher DataStore inaccessible")
+        result=obj.get("result") or {}
+        row=[x["id"] for x in result.get("fields",[]) if x.get("id") not in ("_id",)]
+        if not row:raise ValueError("Publisher NHM DataStore has no actual columns")
+        data_sha=hashlib.sha256(raw).hexdigest()
+        source_prefix_len=len(raw)
+        original_source_type="Official NHM CKAN read-only datastore_search metadata, CSV direct returned 403"
+        datastore_total=result.get("total")
     if len(row)<4 or len(row)!=len(set(row)):
         raise ValueError("Original NHM global trait source malformed columns")
     trait_fields=[c for c in row if any(k in c.lower() for k in
@@ -71,8 +90,9 @@ def source_sample(resource):
      "original_NHM_CSV_header_columns":row,
      "original_NHM_source_column_count":len(row),
      "original_functional_candidate_source_columns":trait_fields,
-     "source_prefix_length_bytes":len(data),
-     "source_original_prefix_SHA256":hashlib.sha256(data).hexdigest(),
+     "source_prefix_length_bytes":source_prefix_len,
+     "publisher_official_datastore_total_records_reported":datastore_total,\n     "source_read_method":original_source_type,
+     "source_original_prefix_SHA256":data_sha,
      "source_HTTP":{k:v for k,v in meta.items() if k!="resolved_URL"},
      "original_species_names_and_traits_SAMPLE_values_NOT_republished":True}
 
