@@ -148,7 +148,6 @@ def select_source_global_rail_km(paths,distance_m):
     return out
 
 def aggregate_by_continent_using_original_NaturalEarth(points,geometry):
-    import geopandas as gpd
     from shapely.geometry import shape,Point
     from shapely.ops import unary_union
     from shapely.prepared import prep
