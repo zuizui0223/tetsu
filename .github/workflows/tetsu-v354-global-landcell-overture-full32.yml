@@ -1,0 +1,79 @@
+name: "v354 all 32 source-random global landcells original Overture railway source"
+on:
+  push:
+    branches: [research/tetsu-v351-global-equal-area-climate-frame-20261124]
+    paths:
+      - 'scripts/audit_original_full32_Overture_rail_v354.py'
+      - 'tests/test_original_full32_Overture_rail_v354.py'
+      - '.github/workflows/tetsu-v354-global-landcell-overture-full32.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v354-all32-landcell-real-overture-source
+  cancel-in-progress: true
+permissions: {contents: read}
+jobs:
+  source_original_rail_by_continent:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - {code: af, continent: Africa}
+          - {code: as, continent: Asia}
+          - {code: eu, continent: Europe}
+          - {code: na, continent: North America}
+          - {code: sa, continent: South America}
+          - {code: oc, continent: Oceania}
+    runs-on: ubuntu-latest
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install real worldwide fixed-release Overture GeoParquet reader
+        run: python -m pip install 'overturemaps==2.1.1' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Run synthetic exact world source cohort and original six Overture source baseline tests
+        run: |
+          python -m unittest discover -s tests -p 'test_original_full32_Overture_rail_v354.py' -v
+          python -m py_compile scripts/audit_original_full32_Overture_rail_v354.py
+      - name: Inspect ORIGINAL sampled railway availability in this frozen continent, no rail outcome selection
+        run: |
+          python -u scripts/audit_original_full32_Overture_rail_v354.py \
+            --frame data/derived/v351_global_land_climate_100km_probabilistic_source_verified.json \
+            --continent "${{ matrix.continent }}" \
+            --output results/audit/v354_${{ matrix.code }}.json
+      - name: Archive original continent partial or complete source status, never raw geometries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v354-source-rail-${{ matrix.code }}
+          path: results/audit/v354_${{ matrix.code }}.json
+          if-no-files-found: warn
+  validate_and_aggregate_all32:
+    needs: source_original_rail_by_continent
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v354-source-rail-*
+          path: source_original/v354_aggregate
+          merge-multiple: true
+      - name: HARD FAIL if any original sample cell omitted, duplicated or first six source values drift
+        run: |
+          python scripts/audit_original_full32_Overture_rail_v354.py \
+            --frame data/derived/v351_global_land_climate_100km_probabilistic_source_verified.json \
+            --aggregate-input-dir source_original/v354_aggregate \
+            --v352-baseline data/derived/v352_original_global_temperate_landcell_Overture_rail_first6_aggregate.json \
+            --output results/audit/v354_complete_32_global_probability_landcell_rail_source.json
+      - name: Archive complete source-land-grid rail presence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v354-full32-global-random-landcell-rail-aggregate-only
+          path: results/audit/v354_complete_32_global_probability_landcell_rail_source.json
+          if-no-files-found: warn

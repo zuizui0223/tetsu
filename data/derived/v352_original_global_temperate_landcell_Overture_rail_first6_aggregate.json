@@ -1,0 +1,176 @@
+{
+  "version": "v352-source-verified-Overture-rail-only-first-six",
+  "source_run_url": "https://github.com/zuizui0223/tetsu/actions/runs/45331051469",
+  "original_land_grid_frame_sha256": "b65a13e32d65e8fa818bbefe2d7fd1f0e15c6c5cb97ff6f6212aea23cf138bf2",
+  "source_Overture_release": "2026-11-18.0",
+  "n_frozen_random_temperate_cells": 6,
+  "rail_source_complete_n": 6,
+  "rail_present_n": 3,
+  "mapped_rail_absent_n": 3,
+  "false_plant_API_count_dropped": "v352 JSON response truncated at 30k; iNaturalist counts are NOT included; repaired v353 separate run",
+  "source_rail_candidate_100km_cells": [
+    {
+      "continent": "Africa",
+      "source_grid": "197:34",
+      "climate_T_C": 16.867,
+      "pi": 0.0025252525252525255,
+      "source_mapped_rail": {
+        "status": "original_overture_source_complete",
+        "source_rail_features_in_original_cell": 1,
+        "source_rail_geodesic_km_in_original_cell": 0.098,
+        "source_complete": true,
+        "source_rail_candidate_in_original_land_cell": true,
+        "source_total_transportation_records_examined": 70029,
+        "source_rail_tagged_before_class_filters": 62,
+        "source_rail_clipped_parts": 1,
+        "source_filter_rejections": {
+          "source_rail_filter_reject_rail_flag_excluded": 61
+        },
+        "original_source_attempt": 1,
+        "source_WGS84_query_bbox_rounded": [
+          27.982,
+          -32.201,
+          29.021,
+          -31.281
+        ],
+        "original_railway_source_not_confirmed_train_activity": true
+      }
+    },
+    {
+      "continent": "Asia",
+      "source_grid": "224:123",
+      "climate_T_C": 10.434,
+      "pi": 0.001076426264800861,
+      "source_mapped_rail": {
+        "status": "original_overture_source_complete",
+        "source_rail_features_in_original_cell": 0,
+        "source_rail_geodesic_km_in_original_cell": 0,
+        "source_complete": true,
+        "source_rail_candidate_in_original_land_cell": false,
+        "source_total_transportation_records_examined": 9,
+        "source_rail_tagged_before_class_filters": 1,
+        "source_rail_clipped_parts": 0,
+        "source_filter_rejections": {
+          "source_rail_filter_reject_rail_flag_excluded": 1
+        },
+        "original_source_attempt": 1,
+        "source_WGS84_query_bbox_rounded": [
+          55.966,
+          43.048,
+          57.004,
+          44.126
+        ],
+        "original_railway_source_not_confirmed_train_activity": true
+      }
+    },
+    {
+      "continent": "Europe",
+      "source_grid": "172:127",
+      "climate_T_C": 10.91,
+      "pi": 0.0026954177897574125,
+      "source_mapped_rail": {
+        "status": "original_overture_source_complete",
+        "source_rail_features_in_original_cell": 1040,
+        "source_rail_geodesic_km_in_original_cell": 365.799,
+        "source_complete": true,
+        "source_rail_candidate_in_original_land_cell": true,
+        "source_total_transportation_records_examined": 208688,
+        "source_rail_tagged_before_class_filters": 1543,
+        "source_rail_clipped_parts": 1040,
+        "source_filter_rejections": {
+          "source_rail_filter_reject_rail_flag_excluded": 499,
+          "source_rail_filter_reject_wrong_class": 3
+        },
+        "original_source_attempt": 1,
+        "source_WGS84_query_bbox_rounded": [
+          2.072,
+          47.474,
+          3.11,
+          48.64
+        ],
+        "original_railway_source_not_confirmed_train_activity": true
+      }
+    },
+    {
+      "continent": "North America",
+      "source_grid": "83:112",
+      "climate_T_C": 17.153,
+      "pi": 0.001644736842105263,
+      "source_mapped_rail": {
+        "status": "original_overture_source_complete",
+        "source_rail_features_in_original_cell": 174,
+        "source_rail_geodesic_km_in_original_cell": 156.839,
+        "source_complete": true,
+        "source_rail_candidate_in_original_land_cell": true,
+        "source_total_transportation_records_examined": 58745,
+        "source_rail_tagged_before_class_filters": 254,
+        "source_rail_clipped_parts": 174,
+        "source_filter_rejections": {
+          "source_rail_filter_reject_rail_flag_excluded": 78
+        },
+        "original_source_attempt": 1,
+        "source_WGS84_query_bbox_rounded": [
+          -90.169,
+          32.199,
+          -89.131,
+          33.129
+        ],
+        "original_railway_source_not_confirmed_train_activity": true
+      }
+    },
+    {
+      "continent": "South America",
+      "source_grid": "116:33",
+      "climate_T_C": 17.494,
+      "pi": 0.0025,
+      "source_mapped_rail": {
+        "status": "original_overture_source_complete",
+        "source_rail_features_in_original_cell": 0,
+        "source_rail_geodesic_km_in_original_cell": 0,
+        "source_complete": true,
+        "source_rail_candidate_in_original_land_cell": false,
+        "source_total_transportation_records_examined": 2930,
+        "source_rail_tagged_before_class_filters": 38,
+        "source_rail_clipped_parts": 0,
+        "source_filter_rejections": {
+          "source_rail_filter_reject_rail_flag_excluded": 38
+        },
+        "original_source_attempt": 1,
+        "source_WGS84_query_bbox_rounded": [
+          -55.968,
+          -33.129,
+          -54.929,
+          -32.199
+        ],
+        "original_railway_source_not_confirmed_train_activity": true
+      }
+    },
+    {
+      "continent": "Oceania",
+      "source_grid": "306:32",
+      "climate_T_C": 18.16,
+      "pi": 0.003875968992248062,
+      "source_mapped_rail": {
+        "status": "original_overture_source_complete",
+        "source_rail_features_in_original_cell": 0,
+        "source_rail_geodesic_km_in_original_cell": 0,
+        "source_complete": true,
+        "source_rail_candidate_in_original_land_cell": false,
+        "source_total_transportation_records_examined": 817,
+        "source_rail_tagged_before_class_filters": 0,
+        "source_rail_clipped_parts": 0,
+        "source_filter_rejections": {},
+        "original_source_attempt": 1,
+        "source_WGS84_query_bbox_rounded": [
+          140.952,
+          -34.066,
+          141.99,
+          -33.127
+        ],
+        "original_railway_source_not_confirmed_train_activity": true
+      }
+    }
+  ],
+  "not_global_rail_length_sampling_frame": true,
+  "not_plant_thermal_result": true
+}

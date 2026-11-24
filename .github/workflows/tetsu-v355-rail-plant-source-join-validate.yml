@@ -1,0 +1,25 @@
+name: "v355 audited full32 global rail and public plants source join"
+on:
+  push:
+    branches: [research/tetsu-v351-global-equal-area-climate-frame-20261124]
+    paths:
+      - 'scripts/validate_v355_global_rail_plant_source_join.py'
+      - 'tests/test_v355_source_verified_global32_join.py'
+      - 'data/derived/v355_source_matched_global32_rail_plant_opportunity_verified.json'
+      - '.github/workflows/tetsu-v355-rail-plant-source-join-validate.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  original_source_aggregate_crosscheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Validate full32 original rail and plant source keys, absent 2025 data and all 18 source strata
+        run: |
+          python -m unittest discover -s tests -p 'test_v355_source_verified_global32_join.py' -v
+          python scripts/validate_v355_global_rail_plant_source_join.py \
+            --frame data/derived/v351_global_land_climate_100km_probabilistic_source_verified.json \
+            --joined data/derived/v355_source_matched_global32_rail_plant_opportunity_verified.json

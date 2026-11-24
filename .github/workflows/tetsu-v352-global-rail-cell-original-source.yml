@@ -1,0 +1,39 @@
+name: "v352 original Overture railway in source-random continental land cells"
+on:
+  push:
+    branches: [research/tetsu-v351-global-equal-area-climate-frame-20261124]
+    paths:
+      - 'scripts/audit_global_landcell_Overture_rail_v352.py'
+      - 'tests/test_global_landcell_Overture_rail_v352.py'
+      - '.github/workflows/tetsu-v352-global-rail-cell-original-source.yml'
+  workflow_dispatch:
+concurrency:
+  group: v352-original-global-random-landcell-overture
+  cancel-in-progress: true
+permissions: {contents: read}
+jobs:
+  full_original_rail_in_global_probability_sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install genuine Overture cloud parquet source client and geodesic clip geometry
+        run: python -m pip install 'overturemaps==2.1.1' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Synthetic original frame identity and exact clip geometry tests BEFORE source run
+        run: |
+          python -m unittest discover -s tests -p 'test_global_landcell_Overture_rail_v352.py' -v
+          python -m py_compile scripts/audit_global_landcell_Overture_rail_v352.py
+      - name: Fetch original Overture 2026-11-18 railway track in six 100km probability-selected global cells
+        run: |
+          python -u scripts/audit_global_landcell_Overture_rail_v352.py \
+            --frame data/derived/v351_global_land_climate_100km_probabilistic_source_verified.json \
+            --output results/audit/v352_actual_probability_sample_Overture_rail_status.json
+      - name: Preserve only continent/cell aggregate verified rail km and original public plant counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v352-original-continental-probability-rail-availability
+          path: results/audit/v352_actual_probability_sample_Overture_rail_status.json
+          if-no-files-found: warn

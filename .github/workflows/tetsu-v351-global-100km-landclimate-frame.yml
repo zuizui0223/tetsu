@@ -1,0 +1,50 @@
+name: "v351 global equal-area land climate strata original sources"
+on:
+  push:
+    branches: [research/tetsu-v351-global-equal-area-climate-frame-20261124]
+    paths:
+      - 'scripts/generate_global_equal_area_climate_land_grid_v351.py'
+      - 'tests/test_global_equal_area_climate_frame_v351.py'
+      - '.github/workflows/tetsu-v351-global-100km-landclimate-frame.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  actual_WorldClim_NaturalEarth_global_landframe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install scientific CRS and georaster source readers
+        run: python -m pip install 'shapely>=2.0,<3' 'pyproj>=3.6,<4' 'rasterio>=1.4,<2'
+      - name: Test exact finite-grid climate strata source behavior BEFORE originals
+        run: |
+          python -m unittest discover -s tests -p 'test_global_equal_area_climate_frame_v351.py' -v
+          python -m py_compile scripts/generate_global_equal_area_climate_land_grid_v351.py
+      - name: Get pinned Natural Earth official original country polygons and WorldClim2.1 1970-2000 BIO1 real ZIP
+        run: |
+          set -euo pipefail
+          mkdir -p source_original/v351 results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 260 \
+            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' \
+            -o source_original/v351/official_naturalearth_countries.geojson
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 780 \
+            'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' \
+            -o source_original/v351/official_worldclim_10m_bio.zip
+          printf '%s  %s\n' \
+            '00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf' \
+            source_original/v351/official_worldclim_10m_bio.zip | sha256sum --check
+      - name: Enumerate ALL source equal-area land-grid centers and sample 18 continent-temperature strata
+        run: |
+          python -u scripts/generate_global_equal_area_climate_land_grid_v351.py \
+            --natural-earth source_original/v351/official_naturalearth_countries.geojson \
+            --worldclim-zip source_original/v351/official_worldclim_10m_bio.zip \
+            --output results/audit/v351_global_land_worldclim_100km_probability_frame.json
+      - name: Share only aggregate original source checksums, sampling probabilities and coarse landcell centers
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v351-world-source-36-100km-landcell-strata-aggregate
+          path: results/audit/v351_global_land_worldclim_100km_probability_frame.json
+          if-no-files-found: warn
