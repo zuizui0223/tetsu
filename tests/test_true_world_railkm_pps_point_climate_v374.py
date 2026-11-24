@@ -63,7 +63,7 @@ class AuthenticGlobalLineClimate(unittest.TestCase):
         self.assertEqual(m.X_START,-17400000)
         self.assertEqual(m.Y_START,-7400000)
     def test_v373_grid_comparison_requires_both_scales(self):
-        d={"results":[{"source_grid_width_m":100000,
+        d={"global_source_grid_rail_climate_results":[{"source_grid_width_m":100000,
                "source_full_global_climate_context_QA":{
                 "original_full_global_rail_geodesic_km":m.EXPECTED_V373_KM},
                "source_each_of_six_continents_climate_band":{c:{} for c in m.CONTINENTS}}]}
