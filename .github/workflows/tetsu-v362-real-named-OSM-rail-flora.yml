@@ -63,7 +63,7 @@ jobs:
         run: |
           python -u scripts/analyze_Slovenia_true_OSM_named_rail_route_floristic_similarity_v362.py \
             --osm-pbf source/v362/osm/slovenia-261001.osm.pbf \
-            --original-xlsx source/v362/slovenia/source_original/SLO_2026_RAIL_92sites_plant_supplement_source_v102.xlsx \
+            --original-xlsx source/v362/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
             --source-audit source/v362/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
             --output results/audit/v362_true_OSM_named_railway_route_vs_Slovenia_source_floristic_similarity.json
       - name: Publish source named route similarity/support summary only, NO original GPS or botanical records
