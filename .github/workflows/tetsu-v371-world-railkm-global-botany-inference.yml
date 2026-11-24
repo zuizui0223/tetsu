@@ -1,0 +1,91 @@
+name: "v371 world 100km 200km true rail exposure vs original 2025 plant landscape beta"
+on:
+  push:
+    branches: [research/tetsu-v368-world-rail-pps-biodiversity-20261124]
+    paths:
+      - 'scripts/model_global_railkm_plant_landscape_macro_v371.py'
+      - 'tests/test_true_world_rail_plant_macro_model_v371.py'
+      - '.github/workflows/tetsu-v371-world-railkm-global-botany-inference.yml'
+  workflow_dispatch:
+    inputs:
+      verified_v369_original_run_id:
+        description: "SUCCESSFUL complete 13.7GB original 2025 global plant observations CI run ID; never guess a partial run"
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_global_math_and_source_semantics_qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install global blocked ecological macro model and original WorldClim reader
+        run: python -m pip install 'numpy>=2,<3' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'rasterio>=1.4,<2'
+      - name: Check 100km 200km symmetric source Jaccard, exact rail predictors, continent-heldout and 1000km block weights
+        run: |
+          python -m unittest discover -s tests -p 'test_true_world_rail_plant_macro_model_v371.py' -v
+          python -m py_compile scripts/model_global_railkm_plant_landscape_macro_v371.py
+  genuinely_global_source_original_rail_vs_biodiversity:
+    needs: original_global_math_and_source_semantics_qa
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install original WorldClim and source whole-landscape global biodiversity model
+        run: python -m pip install 'numpy>=2,<3' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'rasterio>=1.4,<2'
+      - name: DOWNLOAD ONLY after original v369 full 13.7GB source hash-audited run SUCCESS
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: ${{ inputs.verified_v369_original_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v371/plant
+      - name: Download original v369 worldwide data-source quality meta to ensure 2025 actual S3 source checksum
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-2025-plant-source-QA-only
+          run-id: ${{ inputs.verified_v369_original_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v371/quality
+      - name: Download exact full-world 2026 Overture original 100km 200km rail GIS km exposure source
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v371/rail
+      - name: Get verified official WorldClim annual macrotemperature and Natural Earth 1:110m geounit polygons
+        run: |
+          set -euo pipefail
+          mkdir -p source/v371/climate source/v371/land results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 780 \
+            'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' \
+            -o source/v371/climate/wc2.1_10m_bio.zip
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 240 \
+            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' \
+            -o source/v371/land/NE110_original.geojson
+          printf '%s  %s\n' \
+            '00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf' source/v371/climate/wc2.1_10m_bio.zip \
+            '718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b' source/v371/land/NE110_original.geojson | sha256sum --check
+      - name: Combine global ORIGINAL plant communities and true entire-world railway km, report six-continent heldout incremental regional prediction
+        run: |
+          python -u scripts/model_global_railkm_plant_landscape_macro_v371.py \
+            --world-plant-source source/v371/plant/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --world-rail-grid-source source/v371/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --worldclim-zip source/v371/climate/wc2.1_10m_bio.zip \
+            --natural-earth source/v371/land/NE110_original.geojson \
+            --output results/audit/v371_authentic_worldwide_railkm_vs_plant_macro_richness_beta_continentheldout.json
+      - name: Publish only global 100km and 200km macro study heldout effect-size aggregates; original source plant identities/GPS kept private
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v371-worldwide-authentic-GERS-railkm-botanical-landscape-beta-6continent-heldout
+          path: results/audit/v371_authentic_worldwide_railkm_vs_plant_macro_richness_beta_continentheldout.json
+          if-no-files-found: warn
