@@ -1,0 +1,10 @@
+# v384b source results: continent-score robustness (2026-11-24)
+Original source v382 artifact, job 138484223910 in run 45405292686, SUCCESS. Recomputed exact fold means. Incremental rail predictor after GRIP4 road density, tree, built-up, climate and effort controls. All-landscape original observations, not actual ballast or directional homogenization.
+| width | min land | richness relative MSE improvement (%) | richness positive/eligible | richness leave-one-score-out delta range | Jaccard relative improvement (%) | Jaccard positive/eligible | Jaccard leave-one-score-out delta range |
+|---|---|---|---|---|---|---|---|
+|100km|0.5|0.9545656305|4/6|[-0.0000687786,0.0020294110]|2.3938560729|4/6|[0.0000748884,0.0001719216]|
+|100km|0.8|0.2770781714|3/6|[-0.0009871558,0.0014324625]|1.5020703735|4/6|[0.0000301490,0.0001740556]|
+|200km|0.5|1.7519386976|5/6|[0.0012507613,0.0039895349]|-1.0369445455|2/6|[-0.0000650728,-0.0000319888]|
+|200km|0.8|-0.0414312838|3/5|[-0.0004204991,0.0006598345]|-1.6281148313|2/6|[-0.0001097515,-0.0000523144]|
+100km Jaccard: Africa, Europe, South America and Oceania positive at both land gates; Asia and North America negative. At 200km only Europe and North America positive at both gates. Richness is more sensitive to land gate and which heldout score is excluded. At 100km/50%, relative gain is small and can vanish when one score removed. At 200km/50% positive in five, but 80% land gate fails. Note train sets overlap, leave-one-score-out does NOT refit any models, no inference of independent continental replicates or statistical significance. No ecological causal claims; especially lower prediction error is not proof that actual plant Jaccard increases with rail density.
+Original v384 matrix job 138484224321 and general CI 45405303530 FAILED only because synthetic test supplied swapped version string road-tree vs tree-road. Fixed test fixture, not numerical code or source data. Matrix source not yet run. v383 still executing source replay; no new adjusted naturalized fraction estimates at this point.
