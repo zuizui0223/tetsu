@@ -1,0 +1,94 @@
+{
+  "version": "v359b-source-authentic-27-anchors-7-sections-network-geo-fixed-plant-frequency-null",
+  "original_Slovenia_publisher_DOI": "10.1007/s44473-026-00155-z",
+  "original_publisher_source_sha256": "26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f",
+  "original_Overture_release": "2026-11-18.0",
+  "original_Overture_source_status": {
+    "source_Overture_release": "2026-11-18.0",
+    "source_real_bbox_transport_n": 861914,
+    "source_all_rail_subtype_n": 8886,
+    "source_complete": true,
+    "source_attempt": 1,
+    "source_original_bbox_not_published_for_rare_botanical_site_privacy": true
+  },
+  "original_publisher_plant_site_n": 89,
+  "original_publisher_sections_n": 15,
+  "original_global_physical_connector_source_rail_lines_in_region": 6612,
+  "original_true_railway_matched_site_n": 86,
+  "original_ambiguous_source_site_n": 3,
+  "original_geo_and_rail_network_matched_source_anchors": 27,
+  "original_author_sections_with_strict_matched_source_data": 7,
+  "original_v359_matched_source_Jaccard_same_minus_other": 0.027033311999075067,
+  "source_frequency_nulls_same_original_27_anchor_triples": {
+    "all_original_sites": {
+      "source_original_site_count": 89,
+      "original_lines_with_distance_matched_anchors": 7,
+      "source_matched_anchor_site_count": 27,
+      "source_matched_observed_line_gap": 0.027033311999075067,
+      "source_line_equal_mcmc_null_gap_mean": 0.004554717905742003,
+      "source_observed_minus_fixed_frequency_null_line_gap": 0.022478594093333065,
+      "source_MCMC_technical_q025": -0.03238292320906765,
+      "source_MCMC_technical_q975": 0.03873753463614027,
+      "n_source_correlated_MCMC_draws": 198,
+      "technical_upper_rank_NOT_real_field_p": 0.09547738693467336,
+      "source_original_lines_where_matched_gap_exceeds_null_mean": 5,
+      "source_original_lines_where_matched_gap_less_than_null_mean": 2,
+      "two_independent_seed_chain_diagnostics": [
+        {
+          "chain": 1,
+          "source_initial_genuine_sites": 89,
+          "proposals_per_source_group": 37650,
+          "accepted_taxon_checkerboard_swaps": 37650,
+          "chain_mean_geodistance_matched_line_gap": 0.0037881679580617227
+        },
+        {
+          "chain": 2,
+          "source_initial_genuine_sites": 89,
+          "proposals_per_source_group": 37650,
+          "accepted_taxon_checkerboard_swaps": 37647,
+          "chain_mean_geodistance_matched_line_gap": 0.0053212678534222835
+        }
+      ],
+      "site_richness_and_taxon_frequency_preserved_per_defined_group": true,
+      "original_source_site_plant_community_richness_not_rarefied": true,
+      "mcmc_null_not_field_experiment_or_rail_network_effect": true
+    },
+    "within_original_survey_year_and_track_layout": {
+      "source_original_site_count": 89,
+      "original_lines_with_distance_matched_anchors": 7,
+      "source_matched_anchor_site_count": 27,
+      "source_matched_observed_line_gap": 0.027033311999075067,
+      "source_line_equal_mcmc_null_gap_mean": 0.01854911594686319,
+      "source_observed_minus_fixed_frequency_null_line_gap": 0.008484196052211877,
+      "source_MCMC_technical_q025": -0.018953533431642917,
+      "source_MCMC_technical_q975": 0.059873320928520386,
+      "n_source_correlated_MCMC_draws": 198,
+      "technical_upper_rank_NOT_real_field_p": 0.31155778894472363,
+      "source_original_lines_where_matched_gap_exceeds_null_mean": 5,
+      "source_original_lines_where_matched_gap_less_than_null_mean": 2,
+      "two_independent_seed_chain_diagnostics": [
+        {
+          "chain": 1,
+          "source_initial_genuine_sites": 89,
+          "proposals_per_source_group": 37650,
+          "accepted_taxon_checkerboard_swaps": 150590,
+          "chain_mean_geodistance_matched_line_gap": 0.01887418318759365
+        },
+        {
+          "chain": 2,
+          "source_initial_genuine_sites": 89,
+          "proposals_per_source_group": 37650,
+          "accepted_taxon_checkerboard_swaps": 150587,
+          "chain_mean_geodistance_matched_line_gap": 0.018224048706132725
+        }
+      ],
+      "site_richness_and_taxon_frequency_preserved_per_defined_group": true,
+      "original_source_site_plant_community_richness_not_rarefied": true,
+      "mcmc_null_not_field_experiment_or_rail_network_effect": true
+    }
+  },
+  "fixed_source_sampled_botanical_incidence_89_sites_not_27_only": true,
+  "no_source_gps_raw_taxa_railway_shapes_named_source_line_ID_or_user_records_published": true,
+  "technical_frequency_rank_is_not_randomized_field_p_value": true,
+  "conclusions_cannot_establish_train_seed_transport_or_global_railway_network_homogenization": true
+}
