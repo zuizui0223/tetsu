@@ -1,0 +1,54 @@
+{
+  "version": "v360-true-OSM-named-infrastructure-railway-relation-coverage",
+  "source_pbf_original_Geofabrik_snapshot": "2026-10-01",
+  "source_pbf_original_official_website": "https://download.geofabrik.de/europe/slovenia-261001.osm.pbf",
+  "source_original_PBF_bytes": 313417178,
+  "source_original_PBF_sha256": "cce34d7bdfd310238dd302f50b9ad61c3ba9e66bc376856bf2cf56e002dbd9f7",
+  "source_Overture_release": "2026-11-18.0",
+  "source_Overture_original_bbox_complete": {
+    "source_Overture_release": "2026-11-18.0",
+    "source_real_bbox_transport_n": 861914,
+    "source_all_rail_subtype_n": 8886,
+    "source_complete": true,
+    "source_attempt": 1,
+    "source_original_bbox_not_published_for_rare_botanical_site_privacy": true
+  },
+  "source_original_publisher_botanical_plots": 89,
+  "source_original_author_sections": 15,
+  "source_original_Overture_physical_graph_segments": 6612,
+  "original_OSM_railway_route_relation_source_QA": {
+    "original_OSM_relations_scanned": 115044,
+    "source_infrastructure_route_relations_all": 73,
+    "source_infrastructure_route_relations_named": 73,
+    "source_route_way_member_incidences": 9587,
+    "train_service_route_relations_not_infrastructure": 42,
+    "distinct_original_OSM_ways_in_any_infrastructure_route": 7981,
+    "distinct_original_OSM_ways_in_named_infrastructure_routes": 7981,
+    "OSM_source_ways_belonging_to_multiple_named_routes": 1414
+  },
+  "original_Overture_eligible_rail_source_covered_by_OSM_route_relations": {
+    "source_all_Overture_rail_segments": 8886,
+    "source_eligible_normal_rail_segments": 6613,
+    "source_eligible_original_GERS_with_OSM_way_references": 6613,
+    "source_eligible_original_GERS_with_any_OSM_route_relation": 722,
+    "source_eligible_original_GERS_with_named_OSM_route_relation": 722,
+    "source_eligible_original_GERS_with_multiple_named_OSM_route_relations": 272,
+    "source_eligible_GERS_original_OSM_way_provenance_count": 14248,
+    "source_Overture_rail_segments_rejected_by_normal_class_activity": 2273
+  },
+  "source_field_site_real_named_route_coverage": {
+    "original_author_sites_total": 89,
+    "original_author_sites_matched_to_genuine_overature_physical_rails": 86,
+    "original_sites_with_zero_named_OSM_route_relations": 1,
+    "original_sites_with_exactly_one_named_OSM_route_relation": 43,
+    "original_sites_with_multiple_named_OSM_route_relations": 42,
+    "original_sites_with_any_OSM_infrastructure_relations": 85,
+    "original_author_sites_not_unambiguously_matched_to_physical_rail": 3
+  },
+  "physical_connector_component_is_not_real_named_line": true,
+  "route_railway_membership_does_not_measure_train_service_or_seed_transport": true,
+  "OSM_Geofabrik_2026_10_vs_Overture_2026_11_source_mismatch": true,
+  "source_named_routes_many_to_many_not_one_line_per_segment": true,
+  "no_botanical_Jaccard_or_global_railway_line_similarity_calculated": true,
+  "source_original_ways_names_relationIDs_GPS_species_usernames_and_geometries_not_republished": true
+}
