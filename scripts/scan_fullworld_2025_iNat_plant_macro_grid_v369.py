@@ -65,6 +65,11 @@ def open_original_source(client,key,etag,expected_bytes):
     rows=csv.DictReader(text,delimiter='\t',quoting=csv.QUOTE_NONE)
     return rows,wrapped,text
 
+def source_ancestry_ids(value):
+    if value is None:return []
+    return [k for k in str(value).strip().replace(chr(92),"/").split("/") if k]
+
+
 def taxonomy_source(client):
     rows,raw,stream=open_original_source(client,'taxa.csv.gz',TAXA_ETAG,TAXA_BYTES)
     try:
@@ -78,7 +83,11 @@ def taxonomy_source(client):
             if tid in taxa:raise ValueError('Original global taxon ID duplicated')
             rank=row['rank'].strip().lower()
             is_active=str(row['active']).strip().lower() in ('t','true','1')
-            ancestors=row['ancestry'].strip().split('\\') if row['ancestry'] else []
+            # Original iNaturalist open metadata contains slash-separated
+            # ancestry in the current 2026 source despite README describing
+            # a backslash. Support both; never classify 1.3m species as
+            # nonplants because an original taxonomy delimiter changed.
+            ancestors=source_ancestry_ids(row['ancestry'])
             if not ancestors:ancestors=[]
             # Compressed original taxonomy ancestor IDs, not original names
             taxa[tid]=(rank,is_active,ancestors)
