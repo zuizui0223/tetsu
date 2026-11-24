@@ -43,6 +43,9 @@ jobs:
           for f in glonaf_2024_nol.zip glonaf_flora2.csv glonaf_list.csv glonaf_region.csv glonaf_taxon_wcvp.csv; do
             curl -LfS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 240 "https://zenodo.org/records/17105725/files/$f?download=1" -o "source/v378/glonaf/$f"
           done
+          curl -LfS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 120 'https://zenodo.org/records/17105725/files/glonaf_list_datadictionary.csv?download=1' -o source/v378/glonaf/glonaf_list_datadictionary.csv
+          echo 'b47461989aaf0be50831b30327fbab39  source/v378/glonaf/glonaf_list_datadictionary.csv' | md5sum --check
+          cat source/v378/glonaf/glonaf_list_datadictionary.csv
           curl -LfsS --retry 3 --max-time 120 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/v378/ne.geojson
           echo '718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b  source/v378/ne.geojson' | sha256sum --check
       - name: Audit all 2048 original draws with independent GloNAF regions and list quality

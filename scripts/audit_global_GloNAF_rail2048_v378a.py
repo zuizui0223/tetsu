@@ -27,10 +27,45 @@ def load(path, required):
         d=csv.DictReader(f)
         if not required<=set(d.fieldnames or []):
             raise ValueError("Original source fields missing: "+str(path))
-        return list(d)
+        rows=list(d)
+        if any(None in r or any(v is None for v in r.values()) for r in rows):
+            raise ValueError("Malformed source CSV rows: "+str(path))
+        print(json.dumps({"GloNAF_original_csv":path.name,"actual_rows":len(rows),
+                          "columns":d.fieldnames}),flush=True)
+        return rows
 
 def norm(value):
     return str(value or "").strip()
+def audit_documented_rows(regions,lists,taxa,flora):
+    # Publisher MD5s are the primary file identity gate. Documentation may
+    # describe counts differently; retain actual counts and independently
+    # reproduce the publisher's accepted-ID total using its own R join recipe.
+    expected={"regions":1343,"lists":2274,"taxa_archive":95635,"flora":349271}
+    actual=dict(zip(expected,(len(regions),len(lists),len(taxa),len(flora))))
+    out={"documentation_row_counts":expected,"actual_csv_row_counts":actual,
+         "row_count_differences":{k:actual[k]-v for k,v in expected.items()}}
+    print(json.dumps({"source_row_count_audit":out}),flush=True)
+    accepted=set();unknown=Counter()
+    for r in flora:
+        rid,lid,tid=(norm(r[k]) for k in ("region_id","list_id","taxon_wcvp_id"))
+        if rid not in regions:unknown["region"]+=1
+        if lid not in lists:unknown["list"]+=1
+        elif norm(lists[lid]["region_id"])!=rid:unknown["list_region_disagreement"]+=1
+        if tid not in taxa:
+            if tid.lower() in ("","na","nan"):unknown["explicit_missing_taxon_key"]+=1
+            else:unknown["unknown_nonmissing_taxon_key"]+=1
+            continue
+        aid=norm(taxa[tid]["accepted_plant_name_id"])
+        if aid.lower() not in ("","na","nan"):accepted.add(aid)
+    out["publisher_recipe_distinct_accepted_ids"]=len(accepted)
+    out["join_QA"]=dict(unknown)
+    print(json.dumps({"source_publisher_recipe_audit":out}),flush=True)
+    if any(v for k,v in unknown.items() if k!="explicit_missing_taxon_key"):
+        raise ValueError("Original source nonmissing foreign key discrepancy")
+    if len(accepted)!=16429:
+        raise ValueError("Original publisher 16429 unique accepted IDs not reproduced")
+    return out
+
 def valid_name(s):
     return re.fullmatch(r"[A-Z][a-z]+ [a-z][a-z-]+",s) is not None
 
@@ -79,13 +114,21 @@ def analyze(root, sample, ne):
     li=unique_map(lists,"id")
     taxa=unique_map(load(root/"glonaf_taxon_wcvp.csv",{"id","accepted_plant_name_id","taxa_accepted","wcvp_taxon_rank"}),"id")
     flora=load(root/"glonaf_flora2.csv",{"taxon_wcvp_id","region_id","list_id"})
-    if (len(reg),len(lists),len(taxa),len(flora))!=(1343,2274,95635,349271):
-        raise ValueError("Source row counts disagree with original 2.02 documentation")
+    tableqa=audit_documented_rows(reg,li,taxa,flora)
     complete={norm(x["region_id"]) for x in lists if complete_vascular(x)}
-    if not complete<=reg.keys():raise ValueError("List region not in original regions")
+    # Placeholder list regions outside the current region export cannot
+    # contribute to any geometry or plant assignment.
+    absent_complete_regions=complete-set(reg)
+    complete &= set(reg)
+    print(json.dumps({"raw_list_code_support":dict(Counter(
+         "|".join(norm(r[k]) for k in ("taxon_group_id","completeness_id","invasives_only"))
+         for r in lists)),"complete_code_regions_not_in_current_region_table":len(absent_complete_regions)}),flush=True)
     name_ids=defaultdict(set); region_names=defaultdict(set); q=Counter()
     for r in flora:
         rid=norm(r["region_id"]); lid=norm(r["list_id"]); tid=norm(r["taxon_wcvp_id"])
+        if tid not in taxa and tid.lower() in ("","na","nan"):
+            q["explicit_missing_taxon_key"]+=1
+            continue
         if rid not in reg or lid not in li or tid not in taxa:
             raise ValueError("Original flora join key missing")
         if norm(li[lid]["region_id"])!=rid:
@@ -101,6 +144,7 @@ def analyze(root, sample, ne):
     q["ambiguous_species_names_excluded"]=len(name_ids)-len(unambig)
     q["n_regions_with_complete_vascular_non_invasive_only_list"]=len(complete)
     g=gpd.read_file("zip://"+str((root/"glonaf_2024_nol.zip").resolve()))
+    print(json.dumps({"original_nonoverlap_geometry_rows":len(g),"columns":list(g.columns),"crs":str(g.crs)}),flush=True)
     if g.crs is None:raise ValueError("Original region CRS missing")
     g=g.to_crs("EPSG:4326")
     geomname=g.geometry.name
@@ -145,6 +189,8 @@ def analyze(root, sample, ne):
     return {"version":"v378a","source_DOI":"10.5281/zenodo.17105725",
         "original_source_md5":MD5,"source_rail_sample_seed":meta["sample_seed_SHA256"],
         "source_nonoverlap_regions_n":len(g),"original_taxon_list_QA":dict(q),
+        "original_publisher_table_audit":tableqa,
+        "list_completeness_code_interpretation_requires_dictionary_verification":True,
         "source_counts_by_continent_and_world":{k:dict(v) for k,v in by.items()},
         "GloNAF_nonlisted_NOT_native":True,"approximate_geodesic_window_polygon_not_exact_circle":True,
         "only_source_coverage_NOT_ecological_effect_or_plant_record_presence":True}

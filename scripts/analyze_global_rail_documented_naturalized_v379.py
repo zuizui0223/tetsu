@@ -8,7 +8,7 @@ import geopandas as gpd
 import numpy as np
 from shapely.geometry import box
 from pyproj import Transformer
-from audit_global_GloNAF_rail2048_v378a import verified,load,unique_map,norm,valid_name,region_key,MD5
+from audit_global_GloNAF_rail2048_v378a import verified,load,unique_map,norm,valid_name,region_key,MD5,audit_documented_rows
 from scan_fullworld_2025_iNat_plant_macro_grid_v369 import (
  source_client, open_original_source, taxonomy_source, source_ancestry_ids,
  source_coarse_cell, OBS_ETAG,OBS_BYTES,TAXA_ETAG,TAXA_BYTES,MAX_UNCERT_M,
@@ -35,8 +35,7 @@ def source_lists(root):
     lists=unique_map(load(root/"glonaf_list.csv",{"id","region_id"}),"id")
     taxa=unique_map(load(root/"glonaf_taxon_wcvp.csv",{"id","accepted_plant_name_id","taxa_accepted","wcvp_taxon_rank"}),"id")
     flora=load(root/"glonaf_flora2.csv",{"taxon_wcvp_id","region_id","list_id"})
-    if (len(regions),len(lists),len(taxa),len(flora))!=(1343,2274,95635,349271):
-        raise ValueError("Original GloNAF publisher row count mismatch")
+    tableqa=audit_documented_rows(regions,lists,taxa,flora)
     names=defaultdict(set); mapped=defaultdict(set)
     # Detect ambiguous exact names across the whole original standardized archive,
     # rather than across only the subset of naturalization entries.
@@ -46,6 +45,7 @@ def source_lists(root):
             names[n].add(aid)
     for r in flora:
         rid,lid,tid=(norm(r[k]) for k in ("region_id","list_id","taxon_wcvp_id"))
+        if tid not in taxa and tid.lower() in ("","na","nan"):continue
         if rid not in regions or lid not in lists or tid not in taxa or norm(lists[lid]["region_id"])!=rid:
             raise ValueError("Original region-list-taxon IDs not consistent")
         t=taxa[tid]; n=norm(t["taxa_accepted"]); aid=norm(t["accepted_plant_name_id"])
@@ -63,6 +63,7 @@ def source_lists(root):
                 if obj in byobj:raise ValueError("Original OBJIDsic ambiguity")
                 byobj[obj]=k
     g=gpd.read_file("zip://"+str((root/"glonaf_2024_nol.zip").resolve()))
+    print(json.dumps({"original_nonoverlap_geometry_rows":len(g),"columns":list(g.columns),"crs":str(g.crs)}),flush=True)
     if g.crs is None:raise ValueError("GloNAF source missing CRS")
     g=g.to_crs("EPSG:4326")
     geom=g.geometry.name
@@ -79,6 +80,9 @@ def source_lists(root):
     import csv
     with txr.open(encoding="utf-8-sig",newline="") as f: header=next(csv.reader(f))
     txids={bycode[k] for k in header if k in bycode}
+    print(json.dumps({"TxR_header_n":len(header),"TxR_mapped_region_codes_n":len(txids),
+          "polygon_region_n":len(g),"polygon_only_n":len(set(g["region_id"])-txids),
+          "matrix_only_n":len(txids-set(g["region_id"]))}),flush=True)
     if len(header)!=987 or len(txids)!=985 or txids!=set(g["region_id"]):
         raise ValueError("GloNAF nonoverlap polygon and publisher matrix region header disagree")
     if g.geometry.is_empty.any() or any(not mapped[r] for r in g["region_id"]):
@@ -86,7 +90,7 @@ def source_lists(root):
     return g,mapped,{"publisher_original_regions":len(regions),"nonoverlap_regions":len(g),
         "all_known_exact_species":len(set().union(*mapped.values())),
         "ambiguous_exact_names_archive":sum(len(x)>1 for x in names.values()),
-        "publisher_nonoverlap_matrix_header_verified":True}
+        "publisher_nonoverlap_matrix_header_verified":True,"publisher_table_audit":tableqa}
 
 def cell_region(key,width,g,inverse,pad):
     x=X_START+key[0]*width;y=Y_START+key[1]*width
