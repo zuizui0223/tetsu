@@ -88,6 +88,22 @@ jobs:
             --natural-earth source/v371/map/ne_110m_admin_0_map_units.geojson \
             --worldclim-zip source/v371/map/wc2.1_10m_bio.zip \
             --output results/audit/v371_source_true_global_railkm_plant_richness_and_Jaccard_biome_holdout.json
+      - name: Independent PRE-EXISTING global plant richness and adjacent Jaccard macro implementation cross-check
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          python -u scripts/model_global_railkm_plant_landscape_macro_v371.py \
+            --world-plant-source source/v371/iNat/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --world-rail-grid-source source/v371/GERS/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --worldclim-zip source/v371/map/wc2.1_10m_bio.zip \
+            --natural-earth source/v371/map/ne_110m_admin_0_map_units.geojson \
+            --output results/audit/v371_original_independent_global_plant_railkm_model_implementation.json
+      - name: Archive PREEXISTING independent source-matched global macro model results
+        if: steps.source.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v371-global-world-railkm-plant-biodiversity-second-prespecified-implementation
+          path: results/audit/v371_original_independent_global_plant_railkm_model_implementation.json
+          if-no-files-found: error
       - name: Archive genuine worldwide regional macro outcome only if the original global biological census completed
         if: steps.source.outputs.ready == 'true'
         uses: actions/upload-artifact@v4
