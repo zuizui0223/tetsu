@@ -70,8 +70,10 @@ class WorldPlantRailModel(unittest.TestCase):
         rows=[{"continent":"Europe","block":(0,0)}]*10 + [
              {"continent":"Europe","block":(1,0)}]
         w=m.block_weights(rows)
-        self.assertAlmostEqual(sum(w[:10]),1)
-        self.assertAlmostEqual(w[-1],1)
+        # True frozen ridge objective is normalized block weighted MSE.
+        self.assertAlmostEqual(float(sum(w)),1)
+        self.assertAlmostEqual(float(sum(w[:10])),.5)
+        self.assertAlmostEqual(float(w[-1]),.5)
     def test_ridge_holdout_correctly_improves_if_global_true_rail_signal(self):
         rows=[]
         for ci,cont in enumerate(m.CONTINENTS):
