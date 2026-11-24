@@ -25,7 +25,9 @@ class GlobalObserverHotspotAudit(unittest.TestCase):
   self.assertIn((0,0),{r["key"] for r in kept})
  def test_continent_separate_source_sampling_no_global_only_threshold(self):
   original=[row(i,cont="Europe",n=i+5) for i in range(100)]
-  original += [row(i,cont="Asia",n=i+15) for i in range(20)]
+  # Real source globally unique EPSG6933 cell ids cannot be reused
+  # across two continents even in synthetic input fixtures.
+  original += [row(i+100,cont="Asia",n=i+15) for i in range(20)]
   kept,qa=m.select_unhot_cells(original,.10)
   self.assertEqual(qa["Europe"]["n_excluded_source_public_plant_observer_hotspot_cells"],10)
   self.assertEqual(qa["Asia"]["n_excluded_source_public_plant_observer_hotspot_cells"],2)
