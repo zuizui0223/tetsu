@@ -111,25 +111,31 @@ def enrich_neighbor_pairs(original_pairs,full_cells):
     return pair_records
 
 def fit_same_study_continent_cv(rich,beta):
-    # The built-up predictor belongs in BOTH nested models through the
-    # shared baseline, and must appear exactly once. Never duplicate it
-    # in the rail-only incremental columns: ridge regularization would
-    # artificially weaken for that duplicated urban predictor.
-    if (set(RICH_RAIL)&set(RICH_BASE+(RICH_BUILT,)) or
-        set(BETA_RAIL)&set(BETA_BASE+BETA_BUILT)):
-        raise AssertionError("GHSL source urban covariate duplicated in added rail terms")
+    # v371 continent_holdout(base, extended) expects FULL predictor lists,
+    # not incremental columns. Each variable occurs ONCE in M0b and M1b.
+    # M0b = original geo/observer base + GHSL;
+    # M1b = original (base + rail) + GHSL.
+    urban_r_base=RICH_BASE+(RICH_BUILT,)
+    urban_r_full=RICH_RAIL+(RICH_BUILT,)
+    urban_j_base=BETA_BASE+BETA_BUILT
+    urban_j_full=BETA_RAIL+BETA_BUILT
+    for old,full in ((urban_r_base,urban_r_full),(urban_j_base,urban_j_full)):
+        if (len(set(old))!=len(old) or len(set(full))!=len(full) or
+            not set(old).issubset(set(full)) or
+            len(full)-len(old)!=len(set(full)-set(old))):
+            raise AssertionError("Global GHSL+GERS nested model has duplicate/missing original predictors")
     r0=continent_holdout(rich,RICH_BASE,RICH_RAIL,"log_species",False,
              MIN_CONTINENT_RICH_CELLS,MIN_CONTINENT_RICH_CELLS*2,
              "original_global_recorded_logplant_species_richness")
-    r1=continent_holdout(rich,RICH_BASE+(RICH_BUILT,),
-             RICH_RAIL,"log_species",False,
+    r1=continent_holdout(rich,urban_r_base,
+             urban_r_full,"log_species",False,
              MIN_CONTINENT_RICH_CELLS,MIN_CONTINENT_RICH_CELLS*2,
              "original_global_richness_add_original_GHSL_builtup")
     j0=continent_holdout(beta,BETA_BASE,BETA_RAIL,"jaccard",True,
              MIN_CONTINENT_BETA_PAIRS,MIN_TRAIN_BETA_PAIRS,
              "original_global_adjacent_landscape_Jaccard")
-    j1=continent_holdout(beta,BETA_BASE+BETA_BUILT,
-             BETA_RAIL,"jaccard",True,
+    j1=continent_holdout(beta,urban_j_base,
+             urban_j_full,"jaccard",True,
              MIN_CONTINENT_BETA_PAIRS,MIN_TRAIN_BETA_PAIRS,
              "original_global_Jaccard_add_GHSL_builtup")
     for v in (r0,r1,j0,j1):
