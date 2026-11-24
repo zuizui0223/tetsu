@@ -28,10 +28,33 @@
 
 **この方向が何を意味するか**：もし鉄道沿いで暖地性植物が多いのかを世界で検証するなら、鉄道建設の温帯偏重および大陸・気候・土地利用・地理的植物供給源の偏りを、まずSource sampling frame段階で調整しなければならない。**気候による植物の選別、微気候的な生育可能性の拡大、列車による種子輸送の証拠ではない**。
 
+## 2026-11-24 追記：v369 真正全球植物データ全件抽出SUCCESS
+
+[**v369 original iNaturalist full world source SUCCESS #45375453375**](https://github.com/zuizui0223/tetsu/actions/runs/45375453375)、源観測gzip 13,697,505,636 bytes（source ETag `4539360677c8190d9aa12dbf6982ee72-27`、完全SHA256 `1c48a9646f3bf6d56ffdfdc91a1a176c173c98014830ad48fa162b2803c3b279`）、源taxa 40,184,871 bytes（ETag `0a6a162c57bb2f24ea4f00c76c20080d`）を元S3で全件検証済み。
+
+| source真正集計 | 完全原sourceの実結果 |
+|---|---:|
+| 原世界2026-10-27 photo-linked観測レコード全行 | **288,721,938** |
+| 原source分類体系の全taxa | **1,675,070** |
+| original active Plantae species taxa | **284,070** |
+| 2025年・source研究用／座標条件後の公開植物観測 | **7,827,936** |
+| 100km等面積格子に2025年植物が1件以上 | **9,029** |
+| 100km格子：≥50観測/≥5観測者/≥20植物種 | **4,219** |
+| 100km格子：同支持条件の真正隣接2格子Jaccard | **5,944** |
+| 200km格子：source植物観測あり | **3,355** |
+| 200km格子：同支持条件の植物cell | **1,923** |
+| 200km格子：source真正隣接pair | **2,722** |
+
+原観測者・元species×GPSの個別地点はCI上でのみ使用し、集計成果物に転載しない。**source研究用写真観測の豊富さと真の植生plotの被度・未検出種は別物**。全球のコース100km Jaccardは個別の鉄道路線に沿った種子散布・同一生息地の局所群集類似性ではない。
+
+Source artifacts： [v369 全球100/200km source cell植物種数・努力・Jaccard集計 #14912667253](https://github.com/zuizui0223/tetsu/actions/runs/45375453375/artifacts/14912667253)、[元S3 source QA #14912582489](https://github.com/zuizui0223/tetsu/actions/runs/45375453375/artifacts/14912582489)。
+
+この真正成功を確認して、[v371 全球鉄道km×全球植物記録の実データ統合分析](https://github.com/zuizui0223/tetsu/actions/workflows/tetsu-v371-world-rail-plant-Jaccard-source-macro.yml)を源原データ完了条件つきで再実行依頼した。**予測改善の実データ結果は、このv371実ジョブの成功と結果を確認する前に肯定／否定とも主張しない**。
+
 ## 全球植物相の真の解析条件（未完了と結果を区別）
 
 - [v369 2025年元iNaturalist全世界13.70GB研究用source](https://github.com/zuizui0223/tetsu/actions/runs/45375453375)：元S3 iNat observations.csv.gzとtaxa.csv.gzのETagを固定し、全世界の2025年research-grade野生植物の100km/200kmセル内記録件数、unique observers、種/属/科 richness、隣接セル対のJaccardを直接抽出する。**公式source全件のstreamがSUCCESSとなり実際のchecksum・aggregateが揃うまで全球植物の効果量は未計算**。iNat sourceは種位置をobscuredするgeoprivacyフラグを持たないため、近傍80mの真の鉄道植生には使わない。全年/季節/分類群を完全に観測したfloraでもない。
-- [v371 全球railkm×2025植物richness／regional Jaccardモデル基礎CI #45377420094](https://github.com/zuizui0223/tetsu/actions/runs/45377420094)：**9/9合成テスト成功**、sourceデータ実計算はv369未完了のためスキップ。baselineは種数を元観測努力・元distinct observers・WorldClim BIO1・緯度でモデル化。M1は元格子内鉄道kmを追加。隣接セルの源Jaccardは種記録数の幾何平均と差、元気温、緯度、方向を調整してrailkm平均＋差を追加。1000km元地理block等重み、source大陸を1つ丸ごと伏せて予測loss改善を判定。研究の主材料は**鉄道網 vs 周辺地域全体の植物記録**であり、実線路内植物群集ではない。
+- [v371 全球railkm×2025植物richness／regional Jaccardモデル基礎CI #45377420094](https://github.com/zuizui0223/tetsu/actions/runs/45377420094)：**9/9合成テスト成功**、sourceデータ実計算は当初実行時はv369未完了のためスキップ。v369は後続のsource実行でSUCCESS。baselineは種数を元観測努力・元distinct observers・WorldClim BIO1・緯度でモデル化。M1は元格子内鉄道kmを追加。隣接セルの源Jaccardは種記録数の幾何平均と差、元気温、緯度、方向を調整してrailkm平均＋差を追加。1000km元地理block等重み、source大陸を1つ丸ごと伏せて予測loss改善を判定。研究の主材料は**鉄道網 vs 周辺地域全体の植物記録**であり、実線路内植物群集ではない。
 - 既存別実装 `scripts/model_global_railkm_plant_landscape_macro_v371.py` とworkflow `tetsu-v371-world-railkm-global-botany-inference.yml` も同じ実全球入力を対象に存在する。片方の実装で良い結果が出た方を都合よく採用せず、結果を得た後はsourceキー、モデル説明変数、foldと推定数値を**相互監査**する。v369結果が使えなければ両実装とも肯定/否定の全球生態学的推定値は報告不可。
 - WorldClimは**現地気候**であって種レベルのtemperature preference Tではない。植物の暖地選好を直接検定するには独立全球種別温度ニッチ（EIDC等）と元学名の真正クロスウォークが必要。
 
