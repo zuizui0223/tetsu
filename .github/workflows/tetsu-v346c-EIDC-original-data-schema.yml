@@ -1,0 +1,31 @@
+name: "v346c original global 200k species temperature CSV physical audit"
+on:
+  push:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/audit_EIDC_global_plant_thermal_primary_v346c.py'
+      - '.github/workflows/tetsu-v346c-EIDC-original-data-schema.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authentic_global_plant_climate_CSV:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original EIDC global source archive and CSV rows
+        run: |
+          python -u scripts/audit_EIDC_global_plant_thermal_primary_v346c.py \
+            --output results/audit/v346c_EIDC_global_species_climate_original_schema.json
+      - name: Store ONLY source schema and SHA; not full source species records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v346c-EIDC-200k-plant-source-schema-only
+          path: results/audit/v346c_EIDC_global_species_climate_original_schema.json
+          if-no-files-found: warn
