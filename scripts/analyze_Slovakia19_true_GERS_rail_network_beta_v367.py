@@ -262,7 +262,7 @@ def run(pdf,rail_factory=None):
     vals=[p["jaccard"] for p in pairs]
     slope_network=source_linear_slope([p["network"] for p in pairs],vals)
     slope_geo=source_linear_slope([p["geo"] for p in pairs],vals)
-    geo_previous=[geodist(DMS[i],DMS[j]) for i,j in combinations(range(1,20))]
+    geo_previous=[geodist(DMS[i],DMS[j]) for i,j in combinations(range(1,20),2)]
     old_slope=source_linear_slope(geo_previous,vals)
     if abs(old_slope-EXPECTED_LEGACY_GEO_SLOPE)>1e-5:
         raise ValueError("Original publication v310 geographical distance slope changed")
