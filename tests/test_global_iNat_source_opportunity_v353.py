@@ -15,7 +15,7 @@ class V353LandCellPlantOpportunityTests(unittest.TestCase):
         self.assertEqual(len(self.all),32)
         self.assertEqual(len({r["cell"]["source_original_fixed_grid_index"] for r in self.all}),32)
         self.assertEqual(len({r["continent"] for r in self.all}),6)
-        self.assertEqual(sum(r["macrotemp_stratum"]=="warm" for r in self.all),10)
+        self.assertEqual(sum(r["source_climate_stratum"]=="warm" for r in self.all),10)
 
     def test_API_count_is_only_source_count(self):
         r=self.all[0]
@@ -34,11 +34,11 @@ class V353LandCellPlantOpportunityTests(unittest.TestCase):
 
     def test_source_strata_support_keeps_zero_and_unavailable_separate(self):
         rows=[
-          {"continent":"Asia","macrotemp_stratum":"warm",
+          {"continent":"Asia","source_climate_stratum":"warm",
            "API":{"source_api_2025_public_plants_bbox_count":0}},
-          {"continent":"Asia","macrotemp_stratum":"warm",
+          {"continent":"Asia","source_climate_stratum":"warm",
            "API":{"source_api_2025_public_plants_bbox_count":None}},
-          {"continent":"Africa","macrotemp_stratum":"cool",
+          {"continent":"Africa","source_climate_stratum":"cool",
            "API":{"source_api_2025_public_plants_bbox_count":1000}},
         ]
         out=summarize(rows)
