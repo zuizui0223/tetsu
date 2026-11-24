@@ -1,0 +1,86 @@
+name: "v367 genuine independent Czech and Slovak physical railway network floristic effects"
+on:
+  push:
+    branches: [research/tetsu-v364-geodesic-network-distance-20261124]
+    paths:
+      - 'scripts/analyze_Czech35_true_GERS_rail_network_floristic_v367.py'
+      - 'scripts/analyze_Slovakia19_true_GERS_rail_network_beta_v367.py'
+      - 'tests/test_CZ_SK_true_GERS_botanical_v367.py'
+      - '.github/workflows/tetsu-v367-Czech-Slovakia-true-GERS-rail-floristic-effects.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v367-Czech-and-Slovak-independent-original-rail-beta
+  cancel-in-progress: true
+jobs:
+  independent_original_country_railway_network_botany:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        study: [CZ, SK]
+    runs-on: ubuntu-latest
+    timeout-minutes: 52
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install unchanged original botanical readers and source-authentic GERS WGS84 geodetic graph
+        run: python -m pip install 'overturemaps==2.1.1' 'networkx>=3.4,<4' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25' 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'PyMuPDF==1.24.14'
+      - name: Exact source cohort and species-independent Czech source triads / Slovak one-line null design tests
+        run: |
+          python -m unittest discover -s tests -p 'test_CZ_SK_true_GERS_botanical_v367.py' -v
+          python -m py_compile scripts/analyze_Czech35_true_GERS_rail_network_floristic_v367.py
+          python -m py_compile scripts/analyze_Slovakia19_true_GERS_rail_network_beta_v367.py
+      - name: Retrieve Czech publisher authentic S1, corrected S2 and original station registry points
+        if: matrix.study == 'CZ'
+        run: |
+          set -euo pipefail
+          mkdir -p source/v367/CZ
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 25 --max-time 240 \
+            'https://www.preslia.cz/appendices/P24302KutlvasrSupplTableS1.xlsx' \
+            -o source/v367/CZ/S1.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 25 --max-time 240 \
+            'https://preslia.cz/appendix/file?id=540' \
+            -o source/v367/CZ/S2.xlsx
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 25 --max-time 240 \
+            'https://raw.githubusercontent.com/Sap1k/jrunify-ext-geodata/main/rail/SR70.csv' \
+            -o source/v367/CZ/SR70.csv
+          test "$(stat -c%s source/v367/CZ/S1.xlsx)" = 79261
+          test "$(stat -c%s source/v367/CZ/S2.xlsx)" = 13533
+          printf '%s  %s\n' \
+            df6bc0b949e7f6a5cb57755dc8f9c86187223f66ddfbef959cf0e03ef7c46b06 source/v367/CZ/S1.xlsx \
+            00c7cfdf5047854ba99d47dc8ec8c55b1b7df72731ce647c22b286ddef24a5a2 source/v367/CZ/S2.xlsx \
+            fc43a1969af64f17285c7c6e3a30b00c3994d0ba1cfda6db09d8e4baaa166019 source/v367/CZ/SR70.csv | sha256sum --check
+      - name: Retrieve genuine Slovakia 2016 original published PDF including DMS site coordinates and 318 source taxa
+        if: matrix.study == 'SK'
+        run: |
+          set -euo pipefail
+          mkdir -p source/v367/SK
+          curl -LfsS --retry 4 --retry-all-errors --retry-delay 4 --connect-timeout 25 --max-time 240 \
+            'https://cbrb.sav.sk/usr/Janka/docs/BulletinSBS_2016_Majekova-Limanek.pdf' \
+            -o source/v367/SK/original2016.pdf
+          test "$(stat -c%s source/v367/SK/original2016.pdf)" = 249373
+          printf '%s  %s\n' \
+            99465bdd7ed56985e65b1163f16eca4f702fc821619d84c89bf986d4d3736ae1 source/v367/SK/original2016.pdf | sha256sum --check
+      - name: Recompute genuine original field flora × physical world-GERS rail paths; Czech Jaccard within/between 5 line stretches; Slovakia 19-station network distance decay
+        run: |
+          set -euo pipefail
+          mkdir -p results/audit
+          if [[ '${{ matrix.study }}' == 'CZ' ]]; then
+            python -u scripts/analyze_Czech35_true_GERS_rail_network_floristic_v367.py \
+              --s1 source/v367/CZ/S1.xlsx --s2 source/v367/CZ/S2.xlsx \
+              --sr70 source/v367/CZ/SR70.csv \
+              --output results/audit/v367_CZ_original_source_network_matched_flora.json
+          else
+            python -u scripts/analyze_Slovakia19_true_GERS_rail_network_beta_v367.py \
+              --pdf source/v367/SK/original2016.pdf \
+              --output results/audit/v367_SK_original_source_network_distance_decay_flora.json
+          fi
+      - name: Publish only original study-level source network/Jaccard and technical null aggregates, no taxa or site GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v367-${{ matrix.study }}-original-flora-rail-network-beta-aggregate
+          path: results/audit/v367_${{ matrix.study }}_original_source_network*.json
+          if-no-files-found: warn
