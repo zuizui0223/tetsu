@@ -107,7 +107,7 @@ def num_summary(nums):
             "min":a[0],"max":a[-1]}
 
 def source_v373(v373):
-    d=v373.get("results",[])
+    d=v373.get("global_source_grid_rail_climate_results",[])
     if not isinstance(d,list) or {x.get("source_grid_width_m") for x in d}!={100_000,200_000}:
         raise ValueError("Not authentic v373 global 100km/200km climate-band results")
     valid={}
