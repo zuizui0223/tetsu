@@ -199,7 +199,7 @@ def line_holdout_fit(pairs,source_sites,habitat,models):
           "source_author_section_with_low_pair_support"],
       "source_no_training_field_site_shared_with_heldout_line":True,
       "source_fixed_ridge_penalty_each_model":LAM,
-      "original_plant_site_richness_known_conditioned_on_in_primary":RICH_FEATURES[0] in names[0],
+      "original_plant_site_richness_known_conditioned_on_in_primary":RICH_FEATURES[0] in models[names[0]],
       "source_n_original_survey_years":2,
       "source_models_test_losses":average,
       "source_predeclared_network_incremental_validation":contrasts,
