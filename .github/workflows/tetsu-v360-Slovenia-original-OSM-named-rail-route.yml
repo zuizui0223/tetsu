@@ -1,0 +1,73 @@
+name: "v360 original Slovenian named OSM railway routes vs Overture GERS"
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/audit_original_OSM_named_rail_route_Slovenia_v360.py'
+      - 'tests/test_original_OSM_named_rail_route_Slovenia_v360.py'
+      - '.github/workflows/tetsu-v360-Slovenia-original-OSM-named-rail-route.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: v360-Slovenia-source-OSM-railway-named-line-relations
+  cancel-in-progress: true
+jobs:
+  genuine_OSM_infrastructure_railway_relation_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 37
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install official osm PBF relation parser and Overture original graph source tools
+        run: |
+          python -m pip install 'osmium>=4,<5' 'overturemaps==2.1.1' 'networkx>=3.4,<4' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Strict synthetic named railway vs passenger train relation, source way IDs and many-to-many mapping tests
+        run: |
+          python -m unittest discover -s tests -p 'test_original_OSM_named_rail_route_Slovenia_v360.py' -v
+          python -m py_compile scripts/audit_original_OSM_named_rail_route_Slovenia_v360.py
+      - name: Retrieve genuine unchanged publisher Slovenia 89 trackside site botany source
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v360/slovenia
+      - name: Verify original Slovenian botanical supplement SHA256
+        run: |
+          set -euo pipefail
+          FILE=source/v360/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx
+          test "$(stat -c%s "$FILE")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$FILE" | sha256sum --check
+      - name: Download PINNED Geofabrik ORIGINAL OSM Oct 16 2026 PBF and official MD5, do not use mutable latest
+        run: |
+          set -euo pipefail
+          mkdir -p source/v360/osm results/audit
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 30 --max-time 1100 \
+            'https://download.geofabrik.de/europe/slovenia-261016.osm.pbf' \
+            -o source/v360/osm/slovenia-261016.osm.pbf
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 30 --max-time 120 \
+            'https://download.geofabrik.de/europe/slovenia-261016.osm.pbf.md5' \
+            -o source/v360/osm/slovenia-261016.osm.pbf.md5
+          test "$(stat -c%s source/v360/osm/slovenia-261016.osm.pbf)" = 313730042
+          EXPECTED="$(awk 'NR==1 {print $1}' source/v360/osm/slovenia-261016.osm.pbf.md5)"
+          test "${#EXPECTED}" -eq 32
+          printf '%s  %s\n' "$EXPECTED" source/v360/osm/slovenia-261016.osm.pbf | md5sum --check
+      - name: Truly scan OSM route=railway/tracks relations and crosswalk to Overture physical rail source and publisher plant site line membership
+        run: |
+          python -u scripts/audit_original_OSM_named_rail_route_Slovenia_v360.py \
+            --source-osm-pbf source/v360/osm/slovenia-261016.osm.pbf \
+            --original-xlsx source/v360/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v360/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v360_original_OSM_railway_route_relations_vs_Overture_slovene_source_aggregate.json
+      - name: Publish aggregate route coverage only; no OSM PBF, source way/relation IDs, botanist GPS or site flora
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v360-original-real-named-OSM-route-relations-source-only
+          path: results/audit/v360_original_OSM_railway_route_relations_vs_Overture_slovene_source_aggregate.json
+          if-no-files-found: warn
