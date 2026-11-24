@@ -178,7 +178,7 @@ def original_inat_count(cell):
            "source_error_type":type(e).__name__,
            "source_short_message":str(e)[:155]}
 
-def run(source_frame_path):
+def run(source_frame_path,checkpoint=None):
     j=json.loads(Path(source_frame_path).read_text(encoding="utf8"))
     chosen=wave_a(j)
     rows=[]
@@ -196,6 +196,19 @@ def run(source_frame_path):
             "source_parent_landcell_population_n":cell["source_parent_population_n"],
             "source_design_cell_inclusion_probability":cell["source_wave_A_cell_inclusion_probability"],
             "original_Overture":info,"original_iNaturalist_source_count_only":observed})
+        print(json.dumps({"source_progress_continent":cell["continent"],
+            "source_rail_status":info["status"],
+            "source_clipped_rail_km":info["source_rail_geodesic_km_in_original_cell"],
+            "source_original_iNat_bbox_records":
+              observed["source_2025_research_grade_public_plant_records_bbox_count"]}),
+              flush=True)
+        if checkpoint is not None:
+            partial={"version":"v352-original-partial-source-availability",
+                "n_source_cells_processed":len(rows),"n_source_cells_expected":len(chosen),
+                "source_results_NOT_GLOBAL_WHEN_PARTIAL":True,
+                "rows":rows}
+            Path(checkpoint).parent.mkdir(parents=True,exist_ok=True)
+            Path(checkpoint).write_text(json.dumps(partial,ensure_ascii=False,indent=2))
     return {"version":"v352-world-source-random-land-grid-waveA-rail-presence",
         "original_frame_sample_sha256":SOURCE_FRAME_SHA,
         "original_Overture_release":RAIL_RELEASE,
@@ -213,7 +226,7 @@ def run(source_frame_path):
 def main():
     a=argparse.ArgumentParser();a.add_argument("--frame",required=True);a.add_argument("--output",required=True)
     p=a.parse_args()
-    result=run(p.frame)
+    result=run(p.frame,checkpoint=p.output)
     dst=Path(p.output);dst.parent.mkdir(parents=True,exist_ok=True)
     dst.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
     print(json.dumps(result,ensure_ascii=False),flush=True)
