@@ -103,10 +103,15 @@ def source_traits():
         for row in records:
             summaries["source_original_trait_records"]+=1
             rid=row.get("_id")
-            if rid in seen_ids:raise ValueError("Original NHM dataset page repeats row ID")
-            if not isinstance(rid,int) or (after_id is not None and rid<=after_id):
+            try:
+                numeric_id=int(rid)
+            except (ValueError,TypeError):
+                raise ValueError("Official NHM _id is nonnumeric") from None
+            if numeric_id in seen_ids:
+                raise ValueError("Original NHM dataset page repeats row ID")
+            if after_id is not None and numeric_id<=after_id:
                 raise ValueError("Official NHM _id keyset page order corrupt")
-            seen_ids.add(rid)
+            seen_ids.add(numeric_id)
             taxon=str(row.get("taxon") or "").strip()
             if not taxon:raise ValueError("NHM original trait record has no taxon name")
             if taxon in seen_names:summaries["source_duplicate_taxon_names"]+=1
