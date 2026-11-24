@@ -48,6 +48,22 @@ class SourceTrueGlobalBuiltup(unittest.TestCase):
   self.assertAlmostEqual(out["mean_six_continent_equal_source_MSE"]["GERS_rail_lift_after_JRC_settlement"],.1)
   self.assertEqual(out["n_continents_where_railkm_still_helps_after_builtup"],1)
   self.assertTrue(out["no_causal_rail_or_plant_source_claim"])
+ def test_urban_ridge_added_only_once_and_not_again_in_rail_increment(self):
+  from unittest.mock import patch
+  called=[]
+  def fake_holdout(rows,base,added,*args):
+   called.append((tuple(base),tuple(added)))
+   return {"n_original_continents_eligible_as_heldout_folds":6}
+  with patch.object(m,"continent_holdout",side_effect=fake_holdout):
+   m.fit_same_study_continent_cv([],[])
+  self.assertEqual(len(called),4)
+  self.assertEqual(called[1][0].count(m.RICH_BUILT),1)
+  self.assertNotIn(m.RICH_BUILT,called[1][1])
+  for name in m.BETA_BUILT:
+   self.assertEqual(called[3][0].count(name),1)
+   self.assertNotIn(name,called[3][1])
+  for base,added in called:
+   self.assertFalse(set(base)&set(added))
  def test_full_world_source_not_a_single_city(self):
   self.assertEqual(len(m.GRID_WIDTHS),2)
   self.assertEqual(m.MIN_CONTINENTS,4)
