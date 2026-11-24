@@ -70,6 +70,7 @@ def grid_sums(srcfile):
               "source_y_resolution_m":abs(src.transform.e),
               "source_nodata":src.nodata,"source_dtype":src.dtypes[0],
               "source_band_count":src.count}
+        print(json.dumps({"source_original_GHSL_raster_schema":desc}),flush=True)
         if not src.crs or src.count!=1:
             raise ValueError("JRC global builtup 1km original raster unrecognized")
         if abs(src.transform.a-1000)>1 or abs(src.transform.e+1000)>1:
