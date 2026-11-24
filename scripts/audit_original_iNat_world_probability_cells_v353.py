@@ -53,7 +53,9 @@ def count_source_cell(row,client=None):
                 req=urllib.request.Request(url,headers={"User-Agent":"tetsu-v353-sampled-global-land-grid-plants/1.0",
                     "Accept":"application/json"})
                 with urllib.request.urlopen(req,timeout=35) as response:
-                    data=response.read(50000)
+                    data=response.read(2_000_001)
+                    if len(data)>2_000_000:
+                        raise ValueError("Original one-record iNat JSON >2MB source bound")
                     status=response.status
             else:
                 data,status=client(url)
