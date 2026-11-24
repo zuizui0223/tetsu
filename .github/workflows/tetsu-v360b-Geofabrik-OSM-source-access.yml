@@ -1,0 +1,28 @@
+name: "v360b original Geofabrik Slovenia OSM railway source access"
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/audit_geofabrik_pinned_osm_access_v360b.py'
+      - '.github/workflows/tetsu-v360b-Geofabrik-OSM-source-access.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  original_Geofabrik_source_access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Check official Slovenian OSM PBF HEAD/MD5 sources without uploading or downloading raw OSM ways
+        run: |
+          python -u scripts/audit_geofabrik_pinned_osm_access_v360b.py \
+            --output results/audit/v360b_Geofabrik_original_OSM_PBF_source_access.json
+      - name: Preserve only official source access provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v360b-original-pbf-source-path-validation-only
+          path: results/audit/v360b_Geofabrik_original_OSM_PBF_source_access.json
+          if-no-files-found: warn
