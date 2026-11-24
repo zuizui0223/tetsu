@@ -194,7 +194,7 @@ def scan(mode,idx,out):
         print(json.dumps({k:v for k,v in stats.items() if k!="original_source_files"},ensure_ascii=False),flush=True)
         return stats
     finally:
-        if writer is not None and not writer.is_closed:
+        if writer is not None:
             writer.close()
 
 
