@@ -86,7 +86,11 @@ def source_physical_distance_triangle_check(sites,attached,network):
 
 def station_pairs(sites,coords,network):
     from pyproj import Geod
-    from analyze_Slovakia2016_19station_original_taxon_incidence_v310 import jaccard
+    # Pure original Jaccard calculation, exact mathematical equivalent to
+    # v310.jaccard but independent of fitz/PyMuPDF in repository-wide smoke CI.
+    def jaccard(a,b):
+        union=a|b
+        return len(a&b)/len(union) if union else None
     geo=Geod(ellps="WGS84")
     pairs=[]
     for i,j in combinations(range(19),2):
