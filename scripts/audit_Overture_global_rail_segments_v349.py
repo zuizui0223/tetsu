@@ -40,10 +40,12 @@ def line_length_m(lines,lat0,lon0):
 def inspect(city):
     from overturemaps import record_batch_reader
     from shapely import wkb
+    from shapely.geometry import box
     name,continent,country,lat,lon=city
     a,b,c,d=bounds(lat,lon)
     # Overture bbox is west, south, east, north, unlike our (S,W,N,E).
     bbox=(b,a,d,c)
+    clip_region=box(b,a,d,c)
     out={"city":name,"continent":continent,"country":country,
          "window_halfspan_degrees":0.012,
          "source_type":"Overture global transportation subtype rail"}
@@ -60,15 +62,21 @@ def inspect(city):
             good,why=eligible_segment(row)
             if not good:
                 tally[why]+=1;continue
-            geom=wkb.loads(bytes(row["geometry"]))
-            if geom.geom_type=="LineString":
-                eligible_lines.append(geom)
-            elif geom.geom_type=="MultiLineString":
-                eligible_lines.extend(geom.geoms)
-            else:tally["other_geometry"]+=1
+            geom=wkb.loads(bytes(row["geometry"])).intersection(clip_region)
+            if geom.is_empty:
+                tally["source_rail_geometry_outside_plant_window"]+=1
+                continue
+            pieces=([geom] if geom.geom_type=="LineString" else
+                    list(geom.geoms) if geom.geom_type in ("MultiLineString","GeometryCollection") else [])
+            for part in pieces:
+                if part.geom_type=="LineString" and len(part.coords)>=2:
+                    eligible_lines.append(part)
+                elif part.geom_type=="MultiLineString":
+                    eligible_lines.extend([p for p in part.geoms if len(p.coords)>=2])
+            if not pieces:tally["other_geometry"]+=1
         out.update({"source_total_transportation_segments":len(rows),
                     "source_rail_features_eligible":len(eligible_lines),
-                    "source_rail_line_length_km":round(line_length_m(eligible_lines,lat,lon)/1000,4),
+                    "source_rail_line_length_km_INSIDE_WINDOW":round(line_length_m(eligible_lines,lat,lon)/1000,4),
                     "source_filter_outcomes":dict(sorted(tally.items())),
                     "source_success":True,
                     "source_original_coordinates_or_segments_not_exported":True})
