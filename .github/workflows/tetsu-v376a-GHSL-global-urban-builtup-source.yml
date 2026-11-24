@@ -1,0 +1,33 @@
+name: "v376a original European Commission GHSL 2020 1km built-up source ZIP retrieval audit"
+on:
+  push:
+    branches:
+      - research/tetsu-v368-world-rail-pps-biodiversity-20261124
+    paths:
+      - 'scripts/audit_GHSL_global_2020_builtup_source_v376a.py'
+      - 'tests/test_GHSL_global_2020_builtup_source_v376a.py'
+      - '.github/workflows/tetsu-v376a-GHSL-global-urban-builtup-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  external-original-world-human-footprint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Eight unit tests verifying official original global builtup source and no simulated source values
+        run: python -m unittest discover -s tests -p 'test_GHSL_global_2020_builtup_source_v376a.py' -v
+      - name: Independently verify European Commission JRC GHSL original 2020 1km built-up global file HEAD and ZIP magic
+        run: |
+          python -u scripts/audit_GHSL_global_2020_builtup_source_v376a.py \
+            --output results/audit/v376a_source_EC_GHSL_2020_world_1km_original_ZIP_head.json
+      - name: Archive official world source HEAD and authentic ZIP prefix only, no plant user GPS or source GEOTIFF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v376a-official-EC-GHSL-2020-global-builtup-source-audit
+          path: results/audit/v376a_source_EC_GHSL_2020_world_1km_original_ZIP_head.json
+          if-no-files-found: warn
