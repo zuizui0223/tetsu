@@ -1,0 +1,31 @@
+name: "v346 verified global 200k plant thermal trait EIDC source discovery"
+on:
+  push:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/audit_EIDC_global_plant_thermal_source_v346.py'
+      - '.github/workflows/tetsu-v346-EIDC-global-plant-temperature-access.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original_EIDC_global_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Official EIDC and UK data registry metadata/real-source probes only
+        run: |
+          python -u scripts/audit_EIDC_global_plant_thermal_source_v346.py \
+            --output results/audit/v346_EIDC_global_plant_thermal_source_access.json
+      - name: Save aggregate original-source access only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v346-EIDC-global-plants-source-access
+          path: results/audit/v346_EIDC_global_plant_thermal_source_access.json
+          if-no-files-found: warn
