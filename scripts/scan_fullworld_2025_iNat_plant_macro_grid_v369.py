@@ -151,6 +151,55 @@ def cell_contents():
     return {'original_2025_public_photo_observations':0,
             'source_plant_species':set(),'source_observers':set()}
 
+MIN_PAIR_CELL_OBS=50
+MIN_PAIR_CELL_OBSERVERS=5
+MIN_PAIR_CELL_PLANT_SPECIES=20
+
+def source_local_taxonomic_beta_pairs(cell_data,cell_m):
+    """Global coarsely georeferenced adjacent source flora comparison.
+
+    Both cells must have independently adequate source public plant
+    sampling effort. This Jaccard describes the ENTIRE 100km/200km
+    landscape, NOT railway ballast vegetation. The raw 2025 taxon IDs,
+    rare-species sensitive lat/long and observer IDs do not leave CI.
+    """
+    pairs=[]
+    valid={}
+    for key,entry in cell_data.items():
+        if (entry['original_2025_public_photo_observations']>=MIN_PAIR_CELL_OBS
+            and len(entry['source_observers'])>=MIN_PAIR_CELL_OBSERVERS
+            and len(entry['source_plant_species'])>=MIN_PAIR_CELL_PLANT_SPECIES):
+            valid[key]=entry
+    for (i,j),left in valid.items():
+        for dx,dy in ((1,0),(0,1)):
+            other=valid.get((i+dx,j+dy))
+            if other is None:continue
+            a=left['source_plant_species'];b=other['source_plant_species']
+            union=len(a|b)
+            if union<=0:raise ValueError('Original world macro beta zero union despite source richness gate')
+            shared=len(a&b)
+            pairs.append({
+              'source_grid_width_m':cell_m,
+              'source_cell_A_original_grid_ix_iy':[i,j],
+              'source_cell_B_original_grid_ix_iy':[i+dx,j+dy],
+              'source_biological_Jaccard_similarity_between_ENTIRE_landscape_cells':round(shared/union,8),
+              'source_shared_plants_species_n':shared,
+              'source_union_plants_species_n':union,
+              'source_grid_A_2025_photo_observations_n':left['original_2025_public_photo_observations'],
+              'source_grid_B_2025_photo_observations_n':other['original_2025_public_photo_observations'],
+              'source_grid_A_distinct_original_observers_n':len(left['source_observers']),
+              'source_grid_B_distinct_original_observers_n':len(other['source_observers']),
+              'source_grid_A_original_plant_species_n':len(a),
+              'source_grid_B_original_plant_species_n':len(b),
+              'source_original_full_landscape_beta_NOT_railroad_field_plot_beta':True})
+    return pairs,{"n_source_cells_meeting_effort_and_taxon_source_requirements":len(valid),
+        "n_original_adjacent_source_landscape_beta_pairs":len(pairs),
+        "sampling_gate_min_original_2025_photo_observations_per_cell":MIN_PAIR_CELL_OBS,
+        "sampling_gate_min_original_distinct_observers_per_cell":MIN_PAIR_CELL_OBSERVERS,
+        "sampling_gate_min_original_source_species_per_cell":MIN_PAIR_CELL_PLANT_SPECIES,
+        "source_pair_records_dependent_and_NOT_independent_biological_studies":True}
+
+
 def count_original_2025_plants(client,canonical,genus,family):
     from pyproj import Transformer
     transform=Transformer.from_crs('EPSG:4326','EPSG:6933',always_xy=True)
@@ -233,8 +282,11 @@ def count_original_2025_plants(client,canonical,genus,family):
                 'source_2025_plant_family_richness':len({family[k] for k in taxa if k in family}),
                 'source_2025_distinct_observers_with_photo_linked_plant_records':
                     len(val['source_observers'])})
+        original_pairs,pairQA=source_local_taxonomic_beta_pairs(cmap,km)
         result[str(km)]={'n_global_occupied_observation_grid_cells':len(items),
-                'source_full_world_100km_or_200km_gridded_plant_effort_and_taxonomic_counts':items}
+                'source_full_world_100km_or_200km_gridded_plant_effort_and_taxonomic_counts':items,
+                'source_fullworld_adjacent_100km_200km_ORIGINAL_LANDSCAPE_botanical_Jaccard_pairs':original_pairs,
+                'source_original_macro_landscape_beta_opportunity_QA':pairQA}
     return result,dict(qa),raw.hash.hexdigest()
 
 def main():
@@ -261,6 +313,9 @@ def main():
       'source_global_photo_observations_QA':obsqa,
       'source_grid_n_by_width':{x:len(z['source_full_world_100km_or_200km_gridded_plant_effort_and_taxonomic_counts'])
               for x,z in cells.items()},
+      'original_taxonomic_beta_is_entire_adjacent_landscape_flora_NOT_rail_specific_plot':True,
+      'source_original_macro_landscape_beta_pair_QA_by_grid_width':{
+          x:z['source_original_macro_landscape_beta_opportunity_QA'] for x,z in cells.items()},
       'original_specific_plant_observer_IDs_species_IDs_and_GPS_NOT_PUBLISHED':True}
     dest=Path(args.output_grid);dest.parent.mkdir(parents=True,exist_ok=True)
     dest.write_text(json.dumps({'source_summary':header,'source_grids':cells},
