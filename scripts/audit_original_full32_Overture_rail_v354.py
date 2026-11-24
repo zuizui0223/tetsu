@@ -50,7 +50,7 @@ def analyze_partition(frame_path,continent,output):
              "source_original_BIO1_C":cell["cell"]["original_macroclimate_BIO1_C"],
              "source_population_landcell_N":cell["population_n"],
              "source_original_design_inclusion_probability":cell["source_pi"],
-             "source_Oveture_rail":source}
+             "source_Overture_rail":source}
         out["source_original_cells"].append(row)
         # Only genuine source results examined so far, never substitute unobserved
         # sections with rail-positive ones after looking at biology.
@@ -62,11 +62,11 @@ def analyze_partition(frame_path,continent,output):
              "source_rail_km":source["source_rail_geodesic_km_in_original_cell"]}),flush=True)
     out["status"]="COMPLETE-continent-source-partition"
     out["source_n_rail_mapped_present"]=sum(
-        x["source_Oveture_rail"]["source_rail_candidate_in_original_land_cell"] is True for x in out["source_original_cells"])
+        x["source_Overture_rail"]["source_rail_candidate_in_original_land_cell"] is True for x in out["source_original_cells"])
     out["source_n_rail_mapped_absent"]=sum(
-        x["source_Oveture_rail"]["source_rail_candidate_in_original_land_cell"] is False for x in out["source_original_cells"])
+        x["source_Overture_rail"]["source_rail_candidate_in_original_land_cell"] is False for x in out["source_original_cells"])
     out["source_n_rail_unavailable"]=sum(
-        not x["source_Oveture_rail"]["source_complete"] for x in out["source_original_cells"])
+        not x["source_Overture_rail"]["source_complete"] for x in out["source_original_cells"])
     target.write_text(json.dumps(out,ensure_ascii=False,indent=2),encoding="utf8")
     return out
 
@@ -98,7 +98,7 @@ def consolidate(frame_path,directory,reference):
     for row in source_rows:
         x=row["source_original_grid_ix_iy"]
         if x in first:
-            now=row["source_Oveture_rail"]
+            now=row["source_Overture_rail"]
             old=first[x]
             if now["source_rail_candidate_in_original_land_cell"]!=old["source_rail_candidate_in_original_land_cell"]:
                 raise AssertionError("Same fixed Overture original source v352 rail present indicator drift")
@@ -110,7 +110,7 @@ def consolidate(frame_path,directory,reference):
     for cont in CONT_CODES.values():
         for band in ("cool","temperate","warm"):
             rows=[r for r in source_rows if r["continent"]==cont and r["source_climate_band"]==band]
-            eligible=[r["source_Oveture_rail"] for r in rows if r["source_Oveture_rail"]["source_complete"]]
+            eligible=[r["source_Overture_rail"] for r in rows if r["source_Overture_rail"]["source_complete"]]
             have=[r for r in eligible if r["source_rail_candidate_in_original_land_cell"]]
             summary.append({"continent":cont,"source_temp_band":band,
               "n_original_sample_cells":len(rows),"source_rail_complete_n":len(eligible),
@@ -125,12 +125,12 @@ def consolidate(frame_path,directory,reference):
        "Overture_source_release":RAIL_RELEASE,
        "original_32_sample_land_cells_included_without_outcome_selection":True,
        "total_original_source_landcells_n":32,
-       "original_source_complete_cell_n":sum(r["source_Oveture_rail"]["source_complete"] for r in source_rows),
-       "original_source_unavailable_cell_n":sum(not r["source_Oveture_rail"]["source_complete"] for r in source_rows),
-       "source_rail_present_n":sum(r["source_Oveture_rail"]["source_rail_candidate_in_original_land_cell"] is True for r in source_rows),
-       "source_rail_absent_n":sum(r["source_Oveture_rail"]["source_rail_candidate_in_original_land_cell"] is False for r in source_rows),
+       "original_source_complete_cell_n":sum(r["source_Overture_rail"]["source_complete"] for r in source_rows),
+       "original_source_unavailable_cell_n":sum(not r["source_Overture_rail"]["source_complete"] for r in source_rows),
+       "source_rail_present_n":sum(r["source_Overture_rail"]["source_rail_candidate_in_original_land_cell"] is True for r in source_rows),
+       "source_rail_absent_n":sum(r["source_Overture_rail"]["source_rail_candidate_in_original_land_cell"] is False for r in source_rows),
        "original_rail_km_only_within_selected_landcells":round(sum(
-           (r["source_Oveture_rail"]["source_rail_geodesic_km_in_original_cell"] or 0) for r in source_rows),3),
+           (r["source_Overture_rail"]["source_rail_geodesic_km_in_original_cell"] or 0) for r in source_rows),3),
        "continent_macrotemperature_strata":summary,
        "source_rows":source_rows,
        "not_global_network_length_weighted":True,
