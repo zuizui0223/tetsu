@@ -269,7 +269,8 @@ def run(pdf,rail_factory=None):
     detours=[p["network"]/p["geo"] for p in pairs]
     result={"version":"v367-SK-genuine-original-19-station-one-railway-route-GERS-network-beta",
         "source_original_Slovak_author_PDF_SHA256":SK_SHA,
-        "source_original_19_station_DMS_and_318_taxa_1763_incidences":True,\n        "source_GERS_rail_physical_distance_consistency_QA":triangle,
+        "source_original_19_station_DMS_and_318_taxa_1763_incidences":True,
+        "source_GERS_rail_physical_distance_consistency_QA":triangle,
         "source_actual_phyiscal_original_author_railway_routes_n":1,
         "source_overtyre_release":"2026-11-18.0",
         "source_true_19_station_GERS_connected_pairs_n":len(pairs),
