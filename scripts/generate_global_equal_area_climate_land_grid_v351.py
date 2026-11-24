@@ -15,7 +15,7 @@ from pathlib import Path
 WORLDCLIM_SHA="00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf"
 NATURAL_EARTH_COMMIT="ca96624a56bd078437bca8184e78163e5039ad19"
 NATURAL_EARTH_URL=("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/"
-                   +NATURAL_EARTH_COMMIT+"/geojson/ne_110m_admin_0_countries.geojson")
+                   +NATURAL_EARTH_COMMIT+"/geojson/ne_110m_admin_0_map_units.geojson")
 WORLDCLIM_URL="https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip"
 CELL_M=100_000
 X_START=-17_000_000
@@ -55,15 +55,15 @@ def source_continents(path):
     from shapely.ops import unary_union
     from shapely.prepared import prep
     from shapely.validation import make_valid
-    from shapely.geometry import Polygon, MultiPolygon
+    from shapely.geometry import Polygon, MultiPolygon, box
     doc=json.loads(Path(path).read_text(encoding="utf8"))
     if doc.get("type")!="FeatureCollection" or not isinstance(doc.get("features"),list):
-        raise ValueError("Not original Natural Earth country GeoJSON")
+        raise ValueError("Not original Natural Earth 110m map-unit GeoJSON")
     geom=defaultdict(list);qa=Counter()
     for feat in doc["features"]:
         prop=feat.get("properties") or {}
         cont=prop.get("CONTINENT")
-        qa["original_countries"]+=1
+        qa["original_admin_0_map_units"]+=1
         if cont not in CONTINENTS:
             qa["excluded_antarctica_or_other"]+=1
             continue
@@ -92,8 +92,27 @@ def source_continents(path):
                 qa["source_max_polygon_area_relative_drift_ppm"],
                 round(area_drift*1e6,3))
             g=new
-        geom[cont].append(g)
-        qa["country_"+cont]+=1
+        # Political-country CONTINENT labels can be geographically wrong:
+        # map-unit polygons split French Guiana from France; Natural Earth
+        # still assigns all of Russia to Europe. Freeze Ural split at 60E,
+        # including the Russian far-east wrap near 180/-180 in Asia.
+        if prop.get("GEOUNIT")=="Russia":
+            eu=g.intersection(box(-170,-90,60,90))
+            asi=g.intersection(box(60,-90,180,90)).union(
+                g.intersection(box(-180,-90,-170,90)))
+            if eu.is_empty or asi.is_empty:
+                raise ValueError("Transcontinental original Russia source no longer splittable")
+            restored=eu.union(asi)
+            if abs(restored.area-g.area)/max(abs(g.area),1e-12)>1e-7:
+                raise ValueError("Russia split lost original geographical source area")
+            geom["Europe"].append(eu)
+            geom["Asia"].append(asi)
+            qa["original_Russia_split_at_60E_into_geographic_continents"]+=1
+            qa["country_Europe"]+=1
+            qa["country_Asia"]+=1
+        else:
+            geom[cont].append(g)
+            qa["country_"+cont]+=1
     if set(geom)!=set(CONTINENTS):raise ValueError("Not all six continents represented by source")
     return {k:prep(unary_union(v)) for k,v in geom.items()},dict(qa)
 
