@@ -1,0 +1,57 @@
+name: "v359b true physical rail network matched Slovenia flora species-prevalence null"
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/analyze_Slovenia_networkmatched_species_frequency_null_v359b.py'
+      - 'tests/test_Slovenia_networkmatched_fixed_frequency_null_v359b.py'
+      - '.github/workflows/tetsu-v359b-SI-rail-network-species-null.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tetsu-v359b-authentic-Slovenia-rail-network-frequency-null
+  cancel-in-progress: true
+jobs:
+  original_publisher_and_GERS_27_network_matched_source_null:
+    runs-on: ubuntu-latest
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install original Overture physical rail connector reader and graph source tools
+        run: python -m pip install 'overturemaps==2.1.1' 'networkx>=3.4,<4' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25'
+      - name: Source incidence margins and network match cohort synthetic invariants
+        run: |
+          python -m unittest discover -s tests -p 'test_Slovenia_networkmatched_fixed_frequency_null_v359b.py' -v
+          python -m py_compile scripts/analyze_Slovenia_networkmatched_species_frequency_null_v359b.py
+      - name: Retrieve authentic original 2026 Slovenian authors flora XLSX and provenance
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v359b/slovenia
+      - name: Validate source botanist XLSX 401279 bytes SHA256
+        run: |
+          set -euo pipefail
+          FILE=source/v359b/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx
+          test "$(stat -c%s "$FILE")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$FILE" | sha256sum --check
+      - name: Recompute exact real Overture 27-anchor 7-section source comparison under fixed original species frequencies (no source p inference)
+        run: |
+          python -u scripts/analyze_Slovenia_networkmatched_species_frequency_null_v359b.py \
+            --original-xlsx source/v359b/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v359b/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v359b_genuine_network_and_geo_matched_source_fixed_species_prevalence_null.json
+      - name: Preserve source technical null aggregate only, never author plant species matrix or exact GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v359b-original-SI-27-site-7-line-physical-network-fixed-species-null
+          path: results/audit/v359b_genuine_network_and_geo_matched_source_fixed_species_prevalence_null.json
+          if-no-files-found: warn
