@@ -8,11 +8,12 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from scan_fullworld_2025_iNat_plant_macro_grid_v369 import (
   OBS_ETAG,TAXA_ETAG,OBS_BYTES,TAXA_BYTES,
   ROOT_PLANT_TAXON,SOURCE_REGION_M,
-  X_START,X_END,Y_START,Y_END,source_coarse_cell,MAX_UNCERT_M,source_ancestry_ids
+  X_START,X_END,Y_START,Y_END,source_coarse_cell,MAX_UNCERT_M,source_ancestry_ids,OBS_QUALITY
 )
 class V369WholeWorldBioGridTests(unittest.TestCase):
     def test_original_public_world_source_snapshot_is_explicitly_pinned(self):
         self.assertEqual(ROOT_PLANT_TAXON,47126)
+        self.assertEqual(OBS_QUALITY,'research') # Original S3 QA run 45375307357: 86,827 / 100k sample were 'research', not 'research_grade'
         self.assertEqual(OBS_BYTES,13697505636)
         self.assertEqual(TAXA_BYTES,40184871)
         self.assertIn('-27',OBS_ETAG)
