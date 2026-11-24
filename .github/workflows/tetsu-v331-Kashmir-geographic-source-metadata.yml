@@ -1,0 +1,56 @@
+name: "v331 Kashmir source-matched station-between geography metadata audit"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/audit_Kashmir_source_geographic_matching_v331.py'
+      - 'tests/test_Kashmir_source_geographic_matching_v331.py'
+      - '.github/workflows/tetsu-v331-Kashmir-geographic-source-metadata.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-publisher-coordinate-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original XLSX read-only dependency
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Source numeric tests
+        run: python -m unittest discover -s tests -p 'test_Kashmir_source_geographic_matching_v331.py' -v
+      - name: Retrieve official Dryad 99735 original source archive
+        run: |
+          set -euo pipefail
+          mkdir -p source/Kashmir results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/Kashmir/Dryad99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,shutil
+          with zipfile.ZipFile('source/Kashmir/Dryad99735.zip') as z:
+              members=[f for f in z.infolist() if not f.is_dir() and f.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(members)!=1:raise ValueError('Not exactly one original Dryad Matrix_plot.xlsx')
+              with z.open(members[0]) as source,Path('source/Kashmir/Matrix_plot.xlsx').open('wb') as dest:
+                  shutil.copyfileobj(source,dest)
+          PY
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/Kashmir/Matrix_plot.xlsx | sha256sum --check
+      - name: Inspect publisher geography metadata without site coordinates
+        run: |
+          python scripts/audit_Kashmir_source_geographic_matching_v331.py \
+            --source source/Kashmir/Matrix_plot.xlsx \
+            --output results/audit/v331_Kashmir_geo_source_fields_QA.json
+      - name: Archive aggregate only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v331-Kashmir-geographical-source-schema-only
+          path: results/audit/v331_Kashmir_geo_source_fields_QA.json
+          if-no-files-found: warn

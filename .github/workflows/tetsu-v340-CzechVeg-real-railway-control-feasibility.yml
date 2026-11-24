@@ -1,0 +1,45 @@
+name: "v340 original CzechVeg v1.1 genuine railway habitat and nearby control feasibility"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/audit_CzechVeg_actual_railways_nearby_controls_v340.py'
+      - 'tests/test_CzechVeg_actual_railways_nearby_controls_v340.py'
+      - '.github/workflows/tetsu-v340-CzechVeg-real-railway-control-feasibility.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-authenticated-railway-control-feasibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test source precision, years, surface areas and rail-vs-landmark labels
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_actual_railways_nearby_controls_v340.py' -v
+      - name: Retrieve exact Zenodo v1.1 CzechVeg-Open full vegetation-plot metadata (117739 rows)
+        run: |
+          set -euo pipefail
+          mkdir -p source/CzechVeg results/audit
+          curl -LfSs --retry 5 --retry-all-errors --connect-timeout 30 --max-time 900 \
+            'https://zenodo.org/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv?download=1' \
+            -o source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' \
+            'source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv' | md5sum --check
+      - name: Check truly railway-sampled substrate labels and nearby nonrail source availability without species inference
+        run: |
+          python -u scripts/audit_CzechVeg_actual_railways_nearby_controls_v340.py \
+            --source-headers source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv \
+            --output results/audit/v340_CzechVeg_authentic_railway_and_nonrail_control_support.json
+      - name: Store aggregate-only plot source feasibility; never republish field GPS or original species rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v340-CzechVeg-genuine-railway-matched-background-source-support
+          path: results/audit/v340_CzechVeg_authentic_railway_and_nonrail_control_support.json
+          if-no-files-found: warn

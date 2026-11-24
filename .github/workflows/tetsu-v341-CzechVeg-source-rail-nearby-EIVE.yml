@@ -1,0 +1,66 @@
+name: "v341 source-authenticated CzechVeg railway vs nearby vascular EIVE community"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_CzechVeg_rail_nearby_EIVE_source_v341.py'
+      - 'tests/test_CzechVeg_rail_nearby_EIVE_source_v341.py'
+      - '.github/workflows/tetsu-v341-CzechVeg-source-rail-nearby-EIVE.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  new-original-railway-sources-plot-species-thermal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deterministic Hungarian same-study source plot matcher
+        run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.13,<2'
+      - name: Run nine synthetic no-source-leakage railway flora matching and trait tests
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_rail_nearby_EIVE_source_v341.py' -v
+      - name: Download and pin exact original 117739 Czech vegetation full header metadata
+        run: |
+          set -euo pipefail
+          mkdir -p source/CzechVeg source/EIVE results/audit
+          curl -LfSs --retry 5 --retry-all-errors --connect-timeout 30 --max-time 900 \
+            'https://zenodo.org/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv?download=1' \
+            -o source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' \
+            'source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv' | md5sum --check
+      - name: Download and pin exact original 382MB Czech vegetation species-by-plot source matrix
+        run: |
+          set -euo pipefail
+          curl -LfSs --retry 5 --retry-all-errors --connect-timeout 30 --max-time 1400 \
+            'https://zenodo.org/records/19231152/files/CzechVeg_Open_species_v1-1_2026-03-26.csv?download=1' \
+            -o source/CzechVeg/CzechVeg_Open_species_v1-1_2026-03-26.csv
+          printf '%s  %s\n' \
+            'b296e5e19f03fb3bad0a8347c317f8a3' \
+            'source/CzechVeg/CzechVeg_Open_species_v1-1_2026-03-26.csv' | md5sum --check
+      - name: Download independent source verified European thermal centre and niche width EIVE 1.0
+        run: |
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            source/EIVE/EIVE_Paper_1.0_SM_08.xlsx | md5sum --check
+      - name: Real CzechVeg source 84 railway habitats and same-study matched nearby flora EIVE temperature/width analysis
+        run: |
+          python -u scripts/analyze_CzechVeg_rail_nearby_EIVE_source_v341.py \
+            --source-headers source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv \
+            --source-species source/CzechVeg/CzechVeg_Open_species_v1-1_2026-03-26.csv \
+            --eive-xlsx source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v341_CzechVeg_original_rail_nearby_source_EIVE_temperature.json
+      - name: Archive derived aggregate per-study diagnostics only, no site GPS or original species plots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v341-authentic-CzechVeg-rail-nearby-EIVE-trait-aggregate
+          path: results/audit/v341_CzechVeg_original_rail_nearby_source_EIVE_temperature.json
+          if-no-files-found: warn

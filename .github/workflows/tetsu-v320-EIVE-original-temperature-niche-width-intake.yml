@@ -1,0 +1,45 @@
+name: "v320 original EIVE Europe temperature niche-width schema source intake"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/audit_EIVE_temperature_niche_width_source_v320.py'
+      - 'tests/test_EIVE_temperature_niche_width_source_v320.py'
+      - '.github/workflows/tetsu-v320-EIVE-original-temperature-niche-width-intake.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-intake-not-a-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Synthetic OOXML schema checks
+        run: python -m unittest discover -s tests -p 'test_EIVE_temperature_niche_width_source_v320.py' -v
+      - name: Download open Zenodo original niche position and niche width for European species
+        run: |
+          set -euo pipefail
+          mkdir -p source/EIVE
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            'source/EIVE/EIVE_Paper_1.0_SM_08.xlsx' | md5sum --check
+      - name: Audit unmodified Zenodo source workbook sheet metadata; do NOT infer column semantics
+        run: |
+          python -u scripts/audit_EIVE_temperature_niche_width_source_v320.py \
+            --input source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v320_EIVE_original_temperature_niche_position_width_source_schema.json
+      - name: Archive metadata only, never reproduce complete external source table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v320-EIVE-original-source-niche-width-schema-only
+          path: results/audit/v320_EIVE_original_temperature_niche_position_width_source_schema.json
+          if-no-files-found: warn

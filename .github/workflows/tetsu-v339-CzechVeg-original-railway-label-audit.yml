@@ -1,0 +1,45 @@
+name: "v339 source-verified CzechVeg railway habitat plot metadata discovery"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/audit_CzechVeg_railway_headers_source_v339.py'
+      - 'tests/test_CzechVeg_railway_headers_source_v339.py'
+      - '.github/workflows/tetsu-v339-CzechVeg-original-railway-label-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  new-independent-source-railway-plot-discovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Eight synthetic strict Czech railway label tests
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_railway_headers_source_v339.py' -v
+      - name: Download exact 117739 original Czech vegetation plot header records from Zenodo v1.1
+        run: |
+          set -euo pipefail
+          mkdir -p source/CzechVeg results/audit
+          curl -LfSs --retry 5 --retry-all-errors --connect-timeout 30 --max-time 900 \
+            'https://zenodo.org/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv?download=1' \
+            -o source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' \
+            'source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv' | md5sum --check
+      - name: Full original source metadata audit for railway HABITAT vs incidental LOCALITY words
+        run: |
+          python -u scripts/audit_CzechVeg_railway_headers_source_v339.py \
+            --source-headers source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv \
+            --output results/audit/v339_CzechVeg_117739_railway_text_label_source_audit.json
+      - name: Store only aggregate label audit; never republish original plot species or coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v339-original-CzechVeg-railway-habitat-candidate-counts
+          path: results/audit/v339_CzechVeg_117739_railway_text_label_source_audit.json
+          if-no-files-found: warn

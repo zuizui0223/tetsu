@@ -1,0 +1,54 @@
+name: "v323 source-authenticated European MIREN roads vs interior EIVE thermal benchmark"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_original_MIREN_EIVE_road_vs_interior_v323.py'
+      - 'tests/test_original_MIREN_EIVE_road_vs_interior_v323.py'
+      - '.github/workflows/tetsu-v323-MIREN-road-EIVE-temperature-benchmark.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  road-not-rail-thermal-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Six synthetic same-road same-site year and EIVE nonrail benchmark tests
+        run: python -m unittest discover -s tests -p 'test_original_MIREN_EIVE_road_vs_interior_v323.py' -v
+      - name: Retrieve exact MD5-audited MIREN mountain road vegetation source from v98
+        uses: actions/download-artifact@v4
+        with:
+          name: authentic-global-MIREN-standardized-road-verge-flora-v98
+          run-id: 43212464976
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/MIREN98
+      - name: Download independent original European EIVE temperature niche position and width traits
+        run: |
+          set -euo pipefail
+          mkdir -p source/EIVE
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            'source/EIVE/EIVE_Paper_1.0_SM_08.xlsx' | md5sum --check
+      - name: Quantify independent ROAD Plot1 vs Plot3 thermal centre and width, do not call roads railways
+        run: |
+          python -u scripts/analyze_original_MIREN_EIVE_road_vs_interior_v323.py \
+            --miren-csv source/MIREN98/source_original/MIREN_road_survey_2007_2023_v3.csv \
+            --eive-xlsx source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v323_MIREN_4Europe_regions_road_vs_inland_EIVE_thermal_aggregates.json
+      - name: Publish aggregate results only without rehosting original MIREN plots or coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v323-original-MIREN-4Europe-road-thermal-EIVE-aggregate
+          path: results/audit/v323_MIREN_4Europe_regions_road_vs_inland_EIVE_thermal_aggregates.json
+          if-no-files-found: warn

@@ -1,0 +1,65 @@
+name: "v332 original Kashmir geographic station-vs-between thermal contrast matched audit"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_Kashmir_geographic_station_between_EIVE_v332.py'
+      - 'tests/test_Kashmir_geographic_station_between_EIVE_v332.py'
+      - '.github/workflows/tetsu-v332-Kashmir-geographic-station-between-thermal.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authentic-Kashmir-one-to-one-station-between:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original XLSX reader and deterministic minimum-cost match solver
+        run: python -m pip install 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'scipy>=1.13,<2'
+      - name: Validate DMS parsing, station uniqueness, altitude/rarity gates, outcome accounting
+        run: python -m unittest discover -s tests -p 'test_Kashmir_geographic_station_between_EIVE_v332.py' -v
+      - name: Download official first-party Dryad Kashmir original vegetation workbook
+        run: |
+          set -euo pipefail
+          mkdir -p source/Kashmir source/EIVE results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/Kashmir/official_99735.zip
+          python - <<'PY'
+          from pathlib import Path
+          import shutil,zipfile
+          with zipfile.ZipFile('source/Kashmir/official_99735.zip') as z:
+              found=[f for f in z.infolist() if not f.is_dir() and f.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(found)!=1:raise ValueError('Original Dryad version not unique source matrix')
+              with z.open(found[0]) as inp,Path('source/Kashmir/Matrix_plot.xlsx').open('wb') as out:
+                  shutil.copyfileobj(inp,out)
+          PY
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/Kashmir/Matrix_plot.xlsx | sha256sum --check
+      - name: Verify exact European EIVE temperature-trait original XLSX
+        run: |
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            source/EIVE/EIVE_Paper_1.0_SM_08.xlsx | md5sum --check
+      - name: Source-backed geographic one-to-one matching, source altitude, richness and trait coverage sensitivity
+        run: |
+          python -u scripts/analyze_Kashmir_geographic_station_between_EIVE_v332.py \
+            --kashmir-original source/Kashmir/Matrix_plot.xlsx \
+            --eive-original source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v332_Kashmir_station_between_matched_temperature_source.json
+      - name: Archive only derived aggregate and diagnostics, never raw site coordinates or species rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v332-true-Kashmir-station-between-geographic-temperature-matched
+          path: results/audit/v332_Kashmir_station_between_matched_temperature_source.json
+          if-no-files-found: warn

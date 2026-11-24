@@ -1,0 +1,66 @@
+name: "v334 original Kashmir railway station EIVE source cover weighted thermal CWM"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/analyze_Kashmir_cover_weighted_matched_temperature_v334.py'
+      - 'tests/test_Kashmir_cover_weighted_matched_temperature_v334.py'
+      - '.github/workflows/tetsu-v334-Kashmir-original-cover-weighted-EIVE.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publisher-authenticated-source-cover-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Dryad workbook reader, EIVE crosswalk and geographic matcher
+        run: python -m pip install 'openpyxl==3.1.5' 'numpy>=1.26,<3' 'scipy>=1.13,<2'
+      - name: Eight original-cover-weighted versus occurrence matched-zone tests
+        run: python -m unittest discover -s tests -p 'test_Kashmir_cover_weighted_matched_temperature_v334.py' -v
+      - name: Fetch source-verified official Kashmir original abundance workbook from Dryad
+        run: |
+          set -euo pipefail
+          mkdir -p source/Kashmir source/EIVE results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 300 \
+            'https://datadryad.org/api/v2/versions/99735/download' \
+            -o source/Kashmir/dryad_original.zip
+          python - <<'PY'
+          from pathlib import Path
+          import zipfile,shutil
+          with zipfile.ZipFile('source/Kashmir/dryad_original.zip') as z:
+              matches=[f for f in z.infolist() if not f.is_dir() and
+                       f.filename.split('/')[-1]=='Matrix_plot.xlsx']
+              if len(matches)!=1:raise ValueError('Unexpected original Dryad source file list')
+              with z.open(matches[0]) as src,Path('source/Kashmir/Matrix_plot.xlsx').open('wb') as dst:
+                  shutil.copyfileobj(src,dst)
+          PY
+          printf '%s  %s\n' \
+            '529f3b97521933018e12623b61f531f012c67241cae2602a6675dbd534192474' \
+            source/Kashmir/Matrix_plot.xlsx | sha256sum --check
+      - name: Fetch original independent EIVE 1.0 niche position and width values
+        run: |
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 20 --max-time 240 \
+            'https://zenodo.org/records/7534792/files/EIVE_Paper_1.0_SM_08.xlsx?download=1' \
+            -o source/EIVE/EIVE_Paper_1.0_SM_08.xlsx
+          printf '%s  %s\n' \
+            '0f0ce19cd2a781eeed027d8b0acadbcb' \
+            source/EIVE/EIVE_Paper_1.0_SM_08.xlsx | md5sum --check
+      - name: Compare exact same source-geo paired communities equal-species, source-weighted and sqrt-weighted EIVE CWM
+        run: |
+          python -u scripts/analyze_Kashmir_cover_weighted_matched_temperature_v334.py \
+            --kashmir-original source/Kashmir/Matrix_plot.xlsx \
+            --eive-original source/EIVE/EIVE_Paper_1.0_SM_08.xlsx \
+            --output results/audit/v334_Kashmir_station_between_original_source_cover_EIVE.json
+      - name: Archive only genuine source numerical QC and aggregate weighted CWM contrasts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v334-Kashmir-original-source-value-weighted-thermal-EIVE
+          path: results/audit/v334_Kashmir_station_between_original_source_cover_EIVE.json
+          if-no-files-found: warn
