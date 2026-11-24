@@ -78,8 +78,12 @@ def grid_sums(srcfile):
         if (not str(src.crs).lower().find("moll")>=0
             and "54009" not in str(src.crs)):
             raise ValueError("Original GHSL 2020 source is not Mollweide 54009")
-        if src.nodata is None or src.nodata>=0:
-            raise ValueError("Original GHSL 2020 raster expected negative nodata that is not built-up zero")
+        # Original publisher source is uint32 with NoData UINT32_MAX,
+        # NOT a negative nodata. Its 4,294,967,295 sentinel must be
+        # excluded, never treated as real built-up area or source zero.
+        if (src.dtypes[0]!="uint32" or src.nodata is None
+            or int(src.nodata)!=4294967295):
+            raise ValueError("GHSL uint32 original NoData sentinel changed; do not conflate with builtup zero")
         reproject(
            source=rasterio.band(src,1),
            destination=dest,
