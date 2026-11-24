@@ -1,0 +1,29 @@
+name: "v346f EIDC original species climate CSV direct-file availability"
+on:
+  push:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/audit_EIDC_direct_CSV_source_v346f.py'
+      - '.github/workflows/tetsu-v346f-EIDC-direct-csv.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  original_EIDC_CSV_access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Probe original CEH datastore for direct source CSV with no HTML substitution
+        run: |
+          python -u scripts/audit_EIDC_direct_CSV_source_v346f.py \
+            --output results/audit/v346f_EIDC_verified_CSV_endpoint_probe.json
+      - name: Aggregate endpoint QA only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v346f-EIDC-original-direct-file-route-qa
+          path: results/audit/v346f_EIDC_verified_CSV_endpoint_probe.json
+          if-no-files-found: warn
