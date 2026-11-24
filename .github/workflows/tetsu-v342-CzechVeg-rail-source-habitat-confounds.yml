@@ -1,0 +1,47 @@
+name: "v342 independent CzechVeg rail habitat source study and canopy confounding gate"
+on:
+  push:
+    branches:
+      - research/tetsu-typical-species-climate-hypotheses-20261122
+    paths:
+      - 'scripts/audit_CzechVeg_study_habitat_confounding_v342.py'
+      - 'tests/test_CzechVeg_study_habitat_confounding_v342.py'
+      - '.github/workflows/tetsu-v342-CzechVeg-rail-source-habitat-confounds.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  correct-rail-study-confounding-before-mechanism:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original-match Hungarian solver
+        run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.13,<2'
+      - name: Nine source-study x rail habitat and canopy confounding tests
+        run: python -m unittest discover -s tests -p 'test_CzechVeg_study_habitat_confounding_v342.py' -v
+      - name: Acquire source v1.1 all 117739 true original plot headers and checksum
+        run: |
+          set -euo pipefail
+          mkdir -p source/CzechVeg results/audit
+          curl -LfSs --retry 5 --retry-all-errors --connect-timeout 30 --max-time 900 \
+            'https://zenodo.org/records/19231152/files/CzechVeg-Open_headers_v1-1_2026-03-26.csv?download=1' \
+            -o source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv
+          printf '%s  %s\n' \
+            '0bc920462d1f9eac473e7b2a231e6782' \
+            source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv | md5sum --check
+      - name: Test whether v341 positive yard versus negative embankment reflects source/study or forest confounding
+        run: |
+          python -u scripts/audit_CzechVeg_study_habitat_confounding_v342.py \
+            --source-headers source/CzechVeg/CzechVeg-Open_headers_v1-1_2026-03-26.csv \
+            --output results/audit/v342_CzechVeg_study_by_rail_habitat_and_canopy_confounds.json
+      - name: Archive only study aggregate and canopy confound QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v342-CzechVeg-study-habitat-and-canopy-confounding-aggregates
+          path: results/audit/v342_CzechVeg_study_by_rail_habitat_and_canopy_confounds.json
+          if-no-files-found: warn
