@@ -170,7 +170,7 @@ def run(source_s1,source_s2,sr70,rail_factory=original_overture_rail_source):
     outgraph,attached,siteqa2=corrected_source_attachments(
         G,segments,source,T,threshold=300.)
     net=physical_network_distances(outgraph,attached)
-    sitecounts=source_rail_gps_coverage(source,attached,net)
+    sitecounts=source_rail_gps_coverage(\n        [{**x,"source_original_group":x["source_stretch"]} for x in source],attached,net)
     if (sitecounts["source_original_true_physical_rail_matched_station_n"]!=35
         or sitecounts["source_real_network_connected_original_station_pairs_within_300km"]!=EXPECTED_GERS_CONNECTED_STATION_PAIRS):
         raise ValueError("True previous original Czech v366 physical connected station support drift")
