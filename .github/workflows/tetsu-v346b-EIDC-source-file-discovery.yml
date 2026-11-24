@@ -1,0 +1,31 @@
+name: "v346b EIDC original global plant climate file discovery"
+on:
+  push:
+    branches:
+      - research/tetsu-v346-world-plant-climate-envelope-20261124
+    paths:
+      - 'scripts/audit_EIDC_global_plant_source_payload_v346b.py'
+      - '.github/workflows/tetsu-v346b-EIDC-source-file-discovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official_EIDC_payload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Read original EIDC data listing and authenticate zipped source entries
+        run: |
+          python -u scripts/audit_EIDC_global_plant_source_payload_v346b.py \
+            --output results/audit/v346b_EIDC_global_plant_source_files_aggregate.json
+      - name: Archive only source provenance and file list; no plant record rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v346b-EIDC-authoritative-source-manifest-only
+          path: results/audit/v346b_EIDC_global_plant_source_files_aggregate.json
+          if-no-files-found: warn
