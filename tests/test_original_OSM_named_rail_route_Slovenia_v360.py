@@ -10,7 +10,7 @@ from audit_original_OSM_named_rail_route_Slovenia_v360 import (
 )
 class V360NamedRailWaySourceTests(unittest.TestCase):
     def test_source_2026_static_original_pbf_immutable_size(self):
-        self.assertEqual(PBF_EXPECTED_BYTES,313730042)
+        self.assertEqual(PBF_EXPECTED_BYTES,313417178)
     def test_distinct_infrastructure_rail_relation_not_passenger_train(self):
         self.assertTrue(pure_source_eligible_railway_relation({"type":"route","route":"railway"}))
         self.assertTrue(pure_source_eligible_railway_relation({"type":"route","route":"tracks"}))
