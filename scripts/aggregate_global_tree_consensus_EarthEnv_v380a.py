@@ -15,6 +15,13 @@ NX=(X_END-X_START)//W
 NY=(Y_END-Y_START)//W
 CLASS_IDS=(1,2,3,4)
 BASE_URL="https://data.earthenv.org/consensus_landcover/with_DISCover/"
+EXPECTED_SHA={
+ "1":"52d51ccd528c6da54fea4d73b5be67c99b77da6bd0ef0061f3e79dda1bf36315",
+ "2":"1917bcc1e42c3aefbceaa0cee6c1a4521f346a020c6fe2732e6abd04bd16144c",
+ "3":"88fddd809442e005e5edfa08ff48792e6f54997b3ebd7d254461a6145d4f7779",
+ "4":"b5f3ad3cf9175d64bf23807710f51e6200e09e649bf357a8f28881ff46daa5aa"}
+def reduce_source_pixel_bins(values,starts):
+    return np.add.reduceat(values,starts,axis=1)
 def file_sha(p):
     with p.open("rb") as f:return hashlib.file_digest(f,"sha256").hexdigest()
 def rollup(x):
@@ -47,6 +54,7 @@ def source_rows(treearea,validarea,w):
     return rows
 def aggregate(paths):
     sha={str(c):file_sha(p) for c,p in zip(CLASS_IDS,paths)}
+    if sha!=EXPECTED_SHA:raise ValueError("Original four publisher EarthEnv layer SHA256 differs from v380a")
     area=np.zeros((NY,NX),dtype="float64")
     tree=np.zeros_like(area)
     qa={"joint_valid_source_pixels_in_grid":0,"joint_valid_sum_above100":0,
@@ -92,8 +100,8 @@ def aggregate(paths):
             if qa["joint_valid_sum_above104"]:
                 raise ValueError("Tree consensus sum exceeds rounding tolerance; no forest proxy estimated")
             pixelarea=dy[a:a+n,None]*dx[None,:]
-            v=np.reduceat(np.where(good,pixelarea,0.),starts,axis=1)
-            t=np.reduceat(np.where(good,pixelarea*np.minimum(sums,100)/100,0.),starts,axis=1)
+            v=reduce_source_pixel_bins(np.where(good,pixelarea,0.),starts)
+            t=reduce_source_pixel_bins(np.where(good,pixelarea*np.minimum(sums,100)/100,0.),starts)
             for j in np.flatnonzero(ok_y):
                 area[y[j],xbins]+=v[j];tree[y[j],xbins]+=t[j]
             if a%2048==0:print(json.dumps({"source_rows_sofar":a+n,**qa}),flush=True)

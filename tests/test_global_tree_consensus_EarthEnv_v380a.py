@@ -2,8 +2,12 @@ import sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 import numpy as np
-from aggregate_global_tree_consensus_EarthEnv_v380a import rollup,source_rows,NX,NY,W
+from aggregate_global_tree_consensus_EarthEnv_v380a import rollup,source_rows,NX,NY,W,reduce_source_pixel_bins
 class TestTree(unittest.TestCase):
+    def test_actual_source_pixel_reduceat(self):
+        values=np.array([[1.,2.,3.,4.],[5.,6.,7.,8.]])
+        np.testing.assert_array_equal(reduce_source_pixel_bins(values,np.array([0,2])),
+                                      [[3.,7.],[11.,15.]])
     def test_2x2_conservation_and_no_missing_imputation(self):
         area=np.zeros((NY,NX));tree=area.copy()
         area[0,0]=2e9;tree[0,0]=1e9

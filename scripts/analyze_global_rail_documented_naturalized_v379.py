@@ -29,6 +29,52 @@ MIN_REGION_BLOCKS=2
 REGIONAL_BASE=RICH_BASE+(RICH_BUILT,"log_species","log_documented_regional_species_pool")
 REGIONAL_RAIL=REGIONAL_BASE+("log_rail_km",)
 
+def reconcile_nol_geometry(g,regions,bycode,byobj,header):
+    """Outcome-blind region reconciliation. Never guess an ambiguous polygon."""
+    txids={bycode[k] for k in header if k in bycode}
+    obj=[]; direct=[]
+    for _,r in g.iterrows():
+        oid=byobj.get(norm(r["OBJIDsic"]))
+        raw=norm(r["IDregion"])
+        # IDregion may store the original numeric region.id or its code.
+        opts={x for x in (raw if raw in regions else None,bycode.get(raw)) if x is not None}
+        direct.append(next(iter(opts)) if len(opts)==1 else None)
+        obj.append(oid)
+    p=set(direct)-{None};q=set(obj)-{None}
+    audit={"header_columns_n":len(header),"matrix_region_codes_n":len(txids),
+        "header_nonregion_columns":[x for x in header if x not in bycode],
+        "original_shape_rows":len(g),"OBJIDsic_distinct_matches":len(q),
+        "IDregion_distinct_matches":len(p),
+        "IDregion_OBJIDsic_disagreement_rows":sum(x!=y for x,y in zip(direct,obj)),
+        "IDregion_matrix_only_n":len(txids-p),"IDregion_geometry_only_n":len(p-txids),
+        "OBJIDsic_matrix_only_n":len(txids-q),"OBJIDsic_geometry_only_n":len(q-txids)}
+    print(json.dumps({"source_region_key_audit":audit}),flush=True)
+    if len(header)!=987 or len(txids)!=984 or len(g)!=984:
+        raise ValueError("Pinned original v2.02 header/geometry row counts changed")
+    if p==txids and len(p)==len(g) and all(direct):
+        # Direct field gives a unique bijection to the publisher matrix.
+        ids=direct
+        audit["method"]="IDregion_bijection_to_publisher_matrix"
+    else:
+        # If the direct field is unavailable or fails the independent
+        # bijection check, use the previously source-verified OBJIDsic
+        # mapping ONLY for uniquely assigned matrix-region rows, never
+        # duplicate or contradictory rows. Do not merge duplicate polygons.
+        counts=Counter(obj)
+        ids=[o if o in txids and counts[o]==1 and (d is None or d==o) else None
+             for d,o in zip(direct,obj)]
+        audit["method"]="unique_nonconflicting_OBJIDsic_intersection"
+        if sum(x is None for x in ids)>2:
+            raise ValueError("More than two original region polygons unresolved; inspect source mapping")
+    audit["excluded_geometry_rows"]=sum(x is None for x in ids)
+    audit["matrix_regions_without_assigned_geometry"]=len(txids-(set(ids)-{None}))
+    g=g.copy()
+    # Preserve unresolved polygons as blockers when testing full-window
+    # containment, with no biological region ID assigned.
+    g["region_id"]=ids
+    print(json.dumps({"source_region_reconciliation":audit}),flush=True)
+    return g,audit
+
 def source_lists(root):
     verified(root)
     regions=unique_map(load(root/"glonaf_region.csv",{"id","code"}),"id")
@@ -67,35 +113,28 @@ def source_lists(root):
     if g.crs is None:raise ValueError("GloNAF source missing CRS")
     g=g.to_crs("EPSG:4326")
     geom=g.geometry.name
-    g["region_id"]=[region_key(r.drop(labels=[geom]).to_dict(),bycode,byobj) for _,r in g.iterrows()]
-    g=g[["region_id",geom]].copy()
-    g[geom]=g.geometry.make_valid()
-    g=g.dissolve(by="region_id").reset_index()
-    # Cross-check against independent publisher taxon-by-nonoverlap-region matrix:
-    # use its header only; no guessed matrix value encodings.
+    # Cross-check original polygon field identity against the publisher
+    # matrix header rather than requiring a guessed 985-region count.
     txr=root/"glonaf_TxR.csv"
     with txr.open("rb") as f:
         if hashlib.file_digest(f,"md5").hexdigest()!="af2b5ea09f3fe6c677c7a2ceadd2b543":
             raise ValueError("Original GloNAF TxR MD5 mismatch")
     import csv
     with txr.open(encoding="utf-8-sig",newline="") as f: header=next(csv.reader(f))
-    txids={bycode[k] for k in header if k in bycode}
-    print(json.dumps({"TxR_header_n":len(header),"TxR_mapped_region_codes_n":len(txids),
-          "polygon_region_n":len(g),"polygon_only_n":len(set(g["region_id"])-txids),
-          "matrix_only_n":len(txids-set(g["region_id"]))}),flush=True)
-    if len(header)!=987 or len(txids)!=985 or txids!=set(g["region_id"]):
-        raise ValueError("GloNAF nonoverlap polygon and publisher matrix region header disagree")
+    g,regionqa=reconcile_nol_geometry(g,regions,bycode,byobj,header)
+    g=g[["region_id",geom]].copy()
+    g[geom]=g.geometry.make_valid()
     if g.geometry.is_empty.any():
         raise ValueError("Empty source nonoverlap region geometry")
     # Source-supported geometry alone does not prove there are accepted
     # binomial species matches in the direct-region lists. Such regions
     # remain in source geometry / denominator, but cannot enter a fraction.
-    no_direct_names=sum(not mapped[r] for r in g["region_id"])
+    no_direct_names=sum(r is None or not mapped[r] for r in g["region_id"])
     print(json.dumps({"nonoverlap_regions_without_direct_exact_species_pool":no_direct_names}),flush=True)
     return g,mapped,{"publisher_original_regions":len(regions),"nonoverlap_regions":len(g),
         "all_known_exact_species":len(set().union(*mapped.values())),
         "ambiguous_exact_names_archive":sum(len(x)>1 for x in names.values()),
-        "publisher_nonoverlap_matrix_header_verified":True,"publisher_table_audit":tableqa,
+        "publisher_nonoverlap_matrix_header_reconciliation":regionqa,"publisher_table_audit":tableqa,
         "regions_without_direct_exact_species_pool":no_direct_names}
 
 def cell_region(key,width,g,inverse,pad):
@@ -109,7 +148,14 @@ def cell_region(key,width,g,inverse,pad):
     area=box(a,b,c,d)
     hits=g.sindex.query(area,predicate="covered_by")
     if len(hits)!=1:return None
-    return g.iloc[int(hits[0])]["region_id"]
+    # A full-cell region hit must not also intersect an unresolved
+    # original polygon or a second region with positive area.
+    i=int(hits[0]);rid=g.iloc[i]["region_id"]
+    if rid is None:return None
+    for j in g.sindex.query(area,predicate="intersects"):
+        if int(j)!=i and g.geometry.iloc[int(j)].intersection(area).area>0:
+            return None
+    return rid
 
 def grid_counts(plant,width):
     return plant["source_grids"][str(width)]["source_full_world_100km_or_200km_gridded_plant_effort_and_taxonomic_counts"]
