@@ -1,0 +1,48 @@
+name: "v376b genuine JRC GHSL global 2020 1km built-up m2 entire world area-normalized 100km/200km"
+on:
+  push:
+    branches:
+      - research/tetsu-v368-world-rail-pps-biodiversity-20261124
+    paths:
+      - 'scripts/aggregate_original_GHSL2020_global_builtup_v376b.py'
+      - 'tests/test_GHSL2020_global_builtup_m2_rollup_v376b.py'
+      - '.github/workflows/tetsu-v376b-world-GHSL2020-builtup-m2-100km.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official_JRC_GHSL_full_world_2020_builtup_m2_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install original source raster and equal-area full-world geodesic GIS tools
+        run: python -m pip install 'numpy>=1.26,<3' 'rasterio>=1.3,<2'
+      - name: Eight synthetic tests of source JRC builtup m2 not % and original global 100km/200km area conservation
+        run: python -m unittest discover -s tests -p 'test_GHSL2020_global_builtup_m2_rollup_v376b.py' -v
+      - name: Download full original official JRC 2020 global Mollweide 1km GHSL ZIP source, exact verified ETag
+        run: |
+          set -euo pipefail
+          mkdir -p source/v376b results/audit
+          curl --fail --location --silent --show-error --retry 5 --retry-all-errors --connect-timeout 30 --max-time 1400 \
+            --header 'If-Match: "91762cc-622dc4d319ac9"' \
+            'https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_BUILT_S_GLOBE_R2023A/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000/V1-0/GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.zip' \
+            -o source/v376b/original_EC_GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.zip
+          test "$(stat -c%s source/v376b/original_EC_GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.zip)" = '152527564'
+          unzip -tqq source/v376b/original_EC_GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.zip
+          sha256sum source/v376b/original_EC_GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.zip
+      - name: Convert original source 1km built-area m2 by physical Mollweide-to-EPSG6933 weighted sum, 200km exact rollup
+        run: |
+          python -u scripts/aggregate_original_GHSL2020_global_builtup_v376b.py \
+            --original-global-GHSL-ZIP source/v376b/original_EC_GHS_BUILT_S_E2020_GLOBE_R2023A_54009_1000_V1_0.zip \
+            --workspace source/v376b \
+            --output results/audit/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json
+      - name: Archive only 100km/200km world source built-up fractions, source ZIP fingerprint and raster unit integrity
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v376b-JRC-GHSL-2020-global-builtup-100km-200km-real-source
+          path: results/audit/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json
+          if-no-files-found: warn
