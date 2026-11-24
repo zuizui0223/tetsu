@@ -1,0 +1,38 @@
+name: "v349 official Overture global railway segment independent source audit"
+on:
+  push:
+    branches: [research/tetsu-v348-self-extracted-global-rail-flora-20261124]
+    paths:
+      - 'scripts/audit_Overture_global_rail_segments_v349.py'
+      - 'tests/test_Overture_global_rail_segments_v349.py'
+      - '.github/workflows/tetsu-v349-Overture-global-rail-source.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v349-overture-source-only
+  cancel-in-progress: true
+permissions: {contents: read}
+jobs:
+  original_global_railway_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install Overture public source reader and geometry library
+        run: |
+          python -m pip install overturemaps shapely
+      - name: Confirm original rail class and flags eligibility
+        run: |
+          python -m unittest discover -s tests -p 'test_Overture_global_rail_segments_v349.py' -v
+      - name: Original global Overture rail line six predeclared windows source QA
+        run: |
+          python -u scripts/audit_Overture_global_rail_segments_v349.py \
+            --output results/audit/v349_Overture_six_continent_original_rail_lines_aggregate.json
+      - name: Save only city-level rail segment length totals, never original geometries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v349-Overture-global-rail-source-aggregate-only
+          path: results/audit/v349_Overture_six_continent_original_rail_lines_aggregate.json
+          if-no-files-found: warn

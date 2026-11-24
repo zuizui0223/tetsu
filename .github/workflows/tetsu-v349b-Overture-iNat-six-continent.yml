@@ -1,0 +1,38 @@
+name: "v349b self-extracted six-continent Overture railway proximity plants"
+on:
+  push:
+    branches: [research/tetsu-v348-self-extracted-global-rail-flora-20261124]
+    paths:
+      - 'scripts/pilot_Overture_rail_iNat_six_continent_v349b.py'
+      - 'tests/test_Overture_rail_iNat_source_buffer_v349b.py'
+      - '.github/workflows/tetsu-v349b-Overture-iNat-six-continent.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v349b-overture-inat-original-source
+  cancel-in-progress: true
+permissions: {contents: read}
+jobs:
+  source_original_plant_rail_proximity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install official Overture source reader, not data substitutes
+        run: python -m pip install overturemaps shapely
+      - name: Prove six-continent rail search buffer and position quality logic
+        run: |
+          python -m unittest discover -s tests -p 'test_Overture_rail_iNat_source_buffer_v349b.py' -v
+          python -m unittest discover -s tests -p 'test_self_extracted_rail_flora_v348.py' -v
+      - name: TRUE Overture rail network and iNat original 2025 plant observation distance bands
+        run: |
+          python -u scripts/pilot_Overture_rail_iNat_six_continent_v349b.py \
+            --output results/audit/v349b_Overture_iNat_six_continent_original_rail_proximity_aggregate.json
+      - name: Archive only aggregated source city QA and counts, no source raw geometry/observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v349b-overeture-six-continent-rail-plant-proximity-aggregate
+          path: results/audit/v349b_Overture_iNat_six_continent_original_rail_proximity_aggregate.json
+          if-no-files-found: warn
