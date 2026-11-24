@@ -102,11 +102,11 @@ def corrected_physical_graph(source_rows,transformer):
        "source_corrected_graph_edges":graph.number_of_edges(),
        "source_exact_same_original_UUID_nodes":True}
 
-def corrected_source_attachments(corrected_graph,source_segments,source_sites,transformer):
+def corrected_source_attachments(corrected_graph,source_segments,source_sites,transformer,threshold=v358.MAX_DISTANCE_FROM_TRACK_METRES):
     """Keep legacy species-independent nearest rail assignments, fix site->GERS edge lengths."""
     from shapely.geometry import Point
     from pyproj import Geod
-    graph,out=v358.site_attach(corrected_graph,source_segments,source_sites,transformer)
+    graph,out=v358.site_attach(corrected_graph,source_segments,source_sites,transformer,threshold=threshold)
     byid={s["id"]:s for s in source_segments}
     geod=Geod(ellps="WGS84")
     fracdelta=[]
@@ -138,6 +138,7 @@ def corrected_source_attachments(corrected_graph,source_segments,source_sites,tr
         a["source_correct_geodetic_linear_referencing"]=True
     return graph,out,{
         "source_original_site_matches_recalibrated":len(fracdelta),
+        "original_botanical_GPS_to_track_distance_max_threshold_m":threshold,
         "source_site_source_at_fraction_delta_median":statistics.median(fracdelta) if fracdelta else None,
         "source_site_source_at_fraction_delta_max":max(fracdelta) if fracdelta else None,
         "source_corrected_site_connectors_attached_by_true_WGS84_fraction":True}
