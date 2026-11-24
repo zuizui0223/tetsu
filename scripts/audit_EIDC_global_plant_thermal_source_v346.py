@@ -17,11 +17,11 @@ IDENT="ca339c86-3674-4030-b891-35326e71141e"
 REGISTRY="https://ckan.publishing.service.gov.uk/api/3/action/package_show?id=bioclimatic-envelopes-for-global-plant-species"
 EIDC="https://data-package.ceh.ac.uk/data/"+IDENT
 CATALOGUE="https://catalogue.ceh.ac.uk/documents/"+IDENT
-MAX_HEADER=32768
+MAX_HEADER=131072
 AGENT="tetsu-plant-climate-original-source-feasibility/1.0 academic-study"
 
 def probe(url,timeout=32):
-    req=Request(url,headers={"User-Agent":AGENT,"Range":"bytes=0-32767","Accept":"application/json,text/csv,application/zip,*/*"})
+    req=Request(url,headers={"User-Agent":AGENT,"Range":"bytes=0-131071","Accept":"application/json,text/csv,application/zip,*/*"})
     try:
         with urlopen(req,timeout=timeout) as response:
             b=response.read(MAX_HEADER)
