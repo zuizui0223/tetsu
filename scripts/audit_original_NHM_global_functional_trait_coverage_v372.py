@@ -106,7 +106,12 @@ def source_traits():
             try:
                 numeric_id=int(rid)
             except (ValueError,TypeError):
-                raise ValueError("Official NHM _id is nonnumeric") from None
+                # Structural diagnostics only, no original species or trait
+                # values are included in CI output.
+                raise ValueError("Official NHM _id nonnumeric or absent: "+
+                    "has_key="+str("_id" in row)+
+                    ";type="+type(rid).__name__+
+                    ";source_schema_keys="+str(sorted(row)[:6])) from None
             if numeric_id in seen_ids:
                 raise ValueError("Original NHM dataset page repeats row ID")
             if after_id is not None and numeric_id<=after_id:
