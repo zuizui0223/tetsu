@@ -8,7 +8,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 from scan_fullworld_2025_iNat_plant_macro_grid_v369 import (
   OBS_ETAG,TAXA_ETAG,OBS_BYTES,TAXA_BYTES,
   ROOT_PLANT_TAXON,SOURCE_REGION_M,
-  X_START,X_END,Y_START,Y_END,source_coarse_cell,MAX_UNCERT_M
+  X_START,X_END,Y_START,Y_END,source_coarse_cell,MAX_UNCERT_M,source_ancestry_ids
 )
 class V369WholeWorldBioGridTests(unittest.TestCase):
     def test_original_public_world_source_snapshot_is_explicitly_pinned(self):
@@ -31,6 +31,13 @@ class V369WholeWorldBioGridTests(unittest.TestCase):
                 self.assertLess(i,(X_END-X_START)//m)
                 self.assertGreaterEqual(j,0)
                 self.assertLess(j,(Y_END-Y_START)//m)
+
+    def test_genuine_iNaturalist_2026_ancestry_uses_forward_slashes_not_only_backslash(self):
+        self.assertEqual(source_ancestry_ids("48460/47126/211194/47125"),
+                         ["48460","47126","211194","47125"])
+        self.assertEqual(source_ancestry_ids("48460"+chr(92)+"47126"+chr(92)+"47125"),
+                         ["48460","47126","47125"])
+        self.assertEqual(source_ancestry_ids(None),[])
 
     def test_no_raw_observer_identifier_or_species_geoprivacy_claim_in_schema(self):
         self.assertEqual((X_END-X_START)//100000,348)
