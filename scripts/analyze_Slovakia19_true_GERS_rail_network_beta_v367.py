@@ -90,7 +90,13 @@ def station_pairs(sites,coords,network):
     geo=Geod(ellps="WGS84")
     pairs=[]
     for i,j in combinations(range(19),2):
-        n=network.get(i,j)
+        # The original GERS distance map is keyed by a PAIR (i,j).
+        # dict.get(i,j) would quietly return the site index j as a
+        # numerical default, yielding a fraudulent km "network" predictor.
+        n=network.get((i,j))
+        reverse=network.get((j,i))
+        if n is not None and (reverse is None or abs(n-reverse)>1e-8):
+            raise ValueError("Original GERS physical path is not symmetric")
         if n is None or not 0<n<300:
             raise ValueError("Original author Slovakia ALL 171 stations must have real GERS path")
         meters=abs(float(geo.inv(sites[i]["lon"],sites[i]["lat"],
