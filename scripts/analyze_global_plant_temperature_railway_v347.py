@@ -77,8 +77,8 @@ def load_global(path):
             except (ValueError,TypeError,KeyError):
                 qa["source_empty_temperature_or_record_count"]+=1
                 continue
-            if not math.isfinite(t) or not math.isfinite(n) or
-                t<GLOBAL_K_MIN or t>GLOBAL_K_MAX or n<0 or not n.is_integer():
+            if (not math.isfinite(t) or not math.isfinite(n) or
+                t<GLOBAL_K_MIN or t>GLOBAL_K_MAX or n<0 or not n.is_integer()):
                 qa["source_invalid_temperature_or_records"]+=1
                 continue
             temp_min=min(temp_min,t);temp_max=max(temp_max,t)
