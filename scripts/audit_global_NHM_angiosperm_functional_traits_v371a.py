@@ -91,7 +91,8 @@ def source_sample(resource):
      "original_NHM_source_column_count":len(row),
      "original_functional_candidate_source_columns":trait_fields,
      "source_prefix_length_bytes":source_prefix_len,
-     "publisher_official_datastore_total_records_reported":datastore_total,\n     "source_read_method":original_source_type,
+     "publisher_official_datastore_total_records_reported":datastore_total,
+     "source_read_method":original_source_type,
      "source_original_prefix_SHA256":data_sha,
      "source_HTTP":{k:v for k,v in meta.items() if k!="resolved_URL"},
      "original_species_names_and_traits_SAMPLE_values_NOT_republished":True}
