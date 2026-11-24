@@ -15,7 +15,7 @@ class V353LandCellPlantOpportunityTests(unittest.TestCase):
         self.assertEqual(len(self.all),32)
         self.assertEqual(len({r["cell"]["source_original_fixed_grid_index"] for r in self.all}),32)
         self.assertEqual(len({r["continent"] for r in self.all}),6)
-        self.assertEqual(sum(r["source_climate_stratum"]=="warm" for r in self.all),10)
+        self.assertEqual(sum(r["macrotemp_stratum"]=="warm" for r in self.all),10)
 
     def test_API_count_is_only_source_count(self):
         r=self.all[0]
