@@ -1,0 +1,159 @@
+{
+  "version": "v362-original-Slovenia-true-OSM-named-infrastructure-route-floristic-beta",
+  "source_original_biological_DOI": "10.1007/s44473-026-00155-z",
+  "source_original_osm_pbf_sha256": "cce34d7bdfd310238dd302f50b9ad61c3ba9e66bc376856bf2cf56e002dbd9f7",
+  "source_original_osm_monthly_snapshot": "2026-10-01",
+  "source_real_Overture_release": "2026-11-18.0",
+  "source_Overture_rail_network_6612_segments": 6612,
+  "source_railway_route_relations_named": 73,
+  "source_railway_relation_has_many_to_many_way_membership": true,
+  "source_original_site_named_route_status": {
+    "exactly_one_named_route": 43,
+    "multiple_named_routes": 42,
+    "ambiguous_or_unmatched": 3,
+    "zero_named_route": 1
+  },
+  "source_real_route_and_physical_network_matched_panels": {
+    "unique_named_route__all_year_layout": {
+      "source_geometry_only_matched_route_pair_QA": {
+        "original_anchor_lacks_both_named_route_candidates": 23,
+        "source_qualified_true_named_route_anchors": 4,
+        "source_named_route_matches_outside_frozen_geodesic_or_network_caliper": 16,
+        "source_anchor_missing_or_multiple_named_routes": 46,
+        "source_named_route_signature_groups_with_comparison_n": 2
+      },
+      "source_qualifies_12_anchors_4_original_route_signatures": false,
+      "source_named_route_site_triplets_n": 4,
+      "source_line_signature_count": 2,
+      "analysis_is_specific_to_true_OSM_named_infrastructure_routes": true,
+      "biological_outcome": "NOT_IDENTIFIABLE_LOW_GENUINE_ROUTE_SUPPORT",
+      "no_original_botanical_effect_imputed_when_unsupported": true
+    },
+    "unique_named_route__exact_year_and_layout": {
+      "source_geometry_only_matched_route_pair_QA": {
+        "original_anchor_lacks_both_named_route_candidates": 28,
+        "source_anchor_missing_or_multiple_named_routes": 46,
+        "source_named_route_matches_outside_frozen_geodesic_or_network_caliper": 15,
+        "source_named_route_signature_groups_with_comparison_n": 0
+      },
+      "source_qualifies_12_anchors_4_original_route_signatures": false,
+      "source_named_route_site_triplets_n": 0,
+      "source_line_signature_count": 0,
+      "analysis_is_specific_to_true_OSM_named_infrastructure_routes": true,
+      "biological_outcome": "NOT_IDENTIFIABLE_LOW_GENUINE_ROUTE_SUPPORT",
+      "no_original_botanical_effect_imputed_when_unsupported": true
+    },
+    "any_named_route_overlap__all_year_layout": {
+      "source_geometry_only_matched_route_pair_QA": {
+        "source_named_route_matches_outside_frozen_geodesic_or_network_caliper": 52,
+        "source_qualified_true_named_route_anchors": 26,
+        "original_anchor_lacks_both_named_route_candidates": 7,
+        "source_anchor_missing_or_multiple_named_routes": 4,
+        "source_named_route_signature_groups_with_comparison_n": 9
+      },
+      "source_qualifies_12_anchors_4_original_route_signatures": true,
+      "source_named_route_site_triplets_n": 26,
+      "source_line_signature_count": 9,
+      "analysis_is_specific_to_true_OSM_named_infrastructure_routes": true,
+      "original_named_route_floristic_similarity": {
+        "BS_and_BT": {
+          "source_n_independent_route_signatures": 9,
+          "source_line_equal_same_Jaccard": 0.2774024576462647,
+          "source_line_equal_other_Jaccard": 0.2455694302029943,
+          "source_line_equal_same_minus_other_Jaccard": 0.03183302744327039,
+          "source_line_signature_positive_count": 7,
+          "source_line_signature_negative_count": 2
+        },
+        "BS": {
+          "source_n_independent_route_signatures": 9,
+          "source_line_equal_same_Jaccard": 0.21979841654320445,
+          "source_line_equal_other_Jaccard": 0.1731554506291162,
+          "source_line_equal_same_minus_other_Jaccard": 0.04664296591408826,
+          "source_line_signature_positive_count": 5,
+          "source_line_signature_negative_count": 4
+        },
+        "BT": {
+          "source_n_independent_route_signatures": 9,
+          "source_line_equal_same_Jaccard": 0.22342329276248593,
+          "source_line_equal_other_Jaccard": 0.19964316646192076,
+          "source_line_equal_same_minus_other_Jaccard": 0.02378012630056517,
+          "source_line_signature_positive_count": 6,
+          "source_line_signature_negative_count": 3
+        }
+      },
+      "source_matched_geographical_km_same_vs_other": [
+        22.963488769138955,
+        22.466469906268575
+      ],
+      "source_matched_real_rail_network_km_same_vs_other": [
+        29.65491567669364,
+        31.276583058303064
+      ],
+      "original_species_occurrence_fixed_nulls": {
+        "all_original_sites": {
+          "original_null_species_frequency_constraints": "all_original_sites",
+          "observed_original_same_route_Jaccard_advantage": 0.03183302744327039,
+          "original_null_gap_mean": 0.006613099240283259,
+          "observed_minus_source_null_mean": 0.025219928202987133,
+          "original_null_technical_q025": -0.026564834765844467,
+          "original_null_technical_q975": 0.03841970778827221,
+          "technical_upper_rank_NOT_randomized_field_p": 0.05025125628140704,
+          "source_correlated_draws_NOT_independent_botanical_studies": 198,
+          "original_source_plant_incidence_pool_site_n": 89,
+          "source_survey_year_and_track_layout_species_occurrence_preserved_within_strata": false,
+          "source_checkerboard_acceptance": [
+            {
+              "source_chain": 1,
+              "original_checkerboard_swaps_accepted": 37650
+            },
+            {
+              "source_chain": 2,
+              "original_checkerboard_swaps_accepted": 37650
+            }
+          ]
+        },
+        "within_original_survey_year_and_track_layout": {
+          "original_null_species_frequency_constraints": "within_original_survey_year_and_track_layout",
+          "observed_original_same_route_Jaccard_advantage": 0.03183302744327039,
+          "original_null_gap_mean": 0.017226186377793457,
+          "observed_minus_source_null_mean": 0.014606841065476935,
+          "original_null_technical_q025": -0.0137385231977154,
+          "original_null_technical_q975": 0.05033083571647293,
+          "technical_upper_rank_NOT_randomized_field_p": 0.18090452261306533,
+          "source_correlated_draws_NOT_independent_botanical_studies": 198,
+          "original_source_plant_incidence_pool_site_n": 89,
+          "source_survey_year_and_track_layout_species_occurrence_preserved_within_strata": true,
+          "source_checkerboard_acceptance": [
+            {
+              "source_chain": 1,
+              "original_checkerboard_swaps_accepted": 150588
+            },
+            {
+              "source_chain": 2,
+              "original_checkerboard_swaps_accepted": 150592
+            }
+          ]
+        }
+      }
+    },
+    "any_named_route_overlap__exact_year_and_layout": {
+      "source_geometry_only_matched_route_pair_QA": {
+        "original_anchor_lacks_both_named_route_candidates": 32,
+        "source_named_route_matches_outside_frozen_geodesic_or_network_caliper": 46,
+        "source_qualified_true_named_route_anchors": 7,
+        "source_anchor_missing_or_multiple_named_routes": 4,
+        "source_named_route_signature_groups_with_comparison_n": 5
+      },
+      "source_qualifies_12_anchors_4_original_route_signatures": false,
+      "source_named_route_site_triplets_n": 7,
+      "source_line_signature_count": 5,
+      "analysis_is_specific_to_true_OSM_named_infrastructure_routes": true,
+      "biological_outcome": "NOT_IDENTIFIABLE_LOW_GENUINE_ROUTE_SUPPORT",
+      "no_original_botanical_effect_imputed_when_unsupported": true
+    }
+  },
+  "source_study_is_ONE_country_not_global_route_botany": true,
+  "taxon_identity_did_NOT_select_route_or_geodistance_matched_reference_sites": true,
+  "original_actual_railway_train_seed_movement_NOT_observed": true,
+  "original_source_botanical_taxa_site_GPS_route_ID_or_rail_way_not_reexported": true
+}

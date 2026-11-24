@@ -1,0 +1,168 @@
+{
+  "version": "v361-global-physical-connector-components-SOURCE_VERIFIED",
+  "source_workflow": "https://github.com/zuizui0223/tetsu/actions/runs/45354737204",
+  "source_artifact_id": 14902715264,
+  "source_release": "2026-11-18.0",
+  "original_world_rail_source_complete_n": 128,
+  "original_all_rail_segments": 2054855,
+  "original_total_km": 2892198.162,
+  "source_inventory_sha256": "6237da737bb783f23f352638cd5aef287bbb3d7aa8f0fe0bed8c1cc4558f6b34",
+  "graph": "Overture original GERS connector IDs. Physical connector components are NOT named line routes or train services.",
+  "panels": {
+    "all_original_rail_subtypes": {
+      "source_original_segments": 2054855,
+      "original_source_rail_segments_not_in_connector_graph": 0,
+      "physical_connector_nodes_n": 4970641,
+      "physical_connected_components_n": 142792,
+      "components_with_at_least_one_source_rail_segment": 142792,
+      "source_connected_components_with_one_original_rail_segment_n": 114552,
+      "source_rail_segments_placed_on_physical_connector_components_n": 2054855,
+      "source_total_mapped_rail_centerline_length_in_components_km": 2892198.162,
+      "source_top_component_segment_fraction": 0.5882453993104136,
+      "source_top_10_component_segment_fraction": 0.8235330473439731,
+      "source_top_component_centreline_km": 1548769.636,
+      "source_top_10_component_centreline_km": 2421827.42,
+      "top_10_anonymous_component_ranks": [
+        {
+          "rank": 1,
+          "source_rail_segments": 1208759,
+          "source_rail_centerline_km": 1548769.636,
+          "source_segments_with_primary_name": 130275
+        },
+        {
+          "rank": 2,
+          "source_rail_segments": 345343,
+          "source_rail_centerline_km": 584223.258,
+          "source_segments_with_primary_name": 69257
+        },
+        {
+          "rank": 3,
+          "source_rail_segments": 41016,
+          "source_rail_centerline_km": 45398.016,
+          "source_segments_with_primary_name": 16155
+        },
+        {
+          "rank": 4,
+          "source_rail_segments": 33957,
+          "source_rail_centerline_km": 58945.879,
+          "source_segments_with_primary_name": 863
+        },
+        {
+          "rank": 5,
+          "source_rail_segments": 22593,
+          "source_rail_centerline_km": 52716.913,
+          "source_segments_with_primary_name": 6767
+        },
+        {
+          "rank": 6,
+          "source_rail_segments": 20107,
+          "source_rail_centerline_km": 87956.11,
+          "source_segments_with_primary_name": 6161
+        },
+        {
+          "rank": 7,
+          "source_rail_segments": 6521,
+          "source_rail_centerline_km": 16640.436,
+          "source_segments_with_primary_name": 195
+        },
+        {
+          "rank": 8,
+          "source_rail_segments": 5780,
+          "source_rail_centerline_km": 7471.415,
+          "source_segments_with_primary_name": 2335
+        },
+        {
+          "rank": 9,
+          "source_rail_segments": 4239,
+          "source_rail_centerline_km": 8309.028,
+          "source_segments_with_primary_name": 729
+        },
+        {
+          "rank": 10,
+          "source_rail_segments": 3926,
+          "source_rail_centerline_km": 11396.73,
+          "source_segments_with_primary_name": 1645
+        }
+      ],
+      "source_physical_components_NOT_named_railway_infrastructure_lines": true
+    },
+    "conventional_active_candidate_source_rails": {
+      "source_original_segments": 1536226,
+      "original_source_rail_segments_not_in_connector_graph": 0,
+      "physical_connector_nodes_n": 3547570,
+      "physical_connected_components_n": 44710,
+      "components_with_at_least_one_source_rail_segment": 44710,
+      "source_connected_components_with_one_original_rail_segment_n": 35704,
+      "source_rail_segments_placed_on_physical_connector_components_n": 1536226,
+      "source_total_mapped_rail_centerline_length_in_components_km": 2237043.481,
+      "source_top_component_segment_fraction": 0.6574384237735854,
+      "source_top_10_component_segment_fraction": 0.903887188473571,
+      "source_top_component_centreline_km": 1369687.05,
+      "source_top_10_component_centreline_km": 2030263.105,
+      "top_10_anonymous_component_ranks": [
+        {
+          "rank": 1,
+          "source_rail_segments": 1009974,
+          "source_rail_centerline_km": 1369687.05,
+          "source_segments_with_primary_name": 107230
+        },
+        {
+          "rank": 2,
+          "source_rail_segments": 269600,
+          "source_rail_centerline_km": 459410.388,
+          "source_segments_with_primary_name": 56028
+        },
+        {
+          "rank": 3,
+          "source_rail_segments": 37974,
+          "source_rail_centerline_km": 42189.288,
+          "source_segments_with_primary_name": 14944
+        },
+        {
+          "rank": 4,
+          "source_rail_segments": 27808,
+          "source_rail_centerline_km": 51189.737,
+          "source_segments_with_primary_name": 701
+        },
+        {
+          "rank": 5,
+          "source_rail_segments": 15931,
+          "source_rail_centerline_km": 39887.65,
+          "source_segments_with_primary_name": 4970
+        },
+        {
+          "rank": 6,
+          "source_rail_segments": 7292,
+          "source_rail_centerline_km": 10615.897,
+          "source_segments_with_primary_name": 1547
+        },
+        {
+          "rank": 7,
+          "source_rail_segments": 5872,
+          "source_rail_centerline_km": 24708.359,
+          "source_segments_with_primary_name": 1121
+        },
+        {
+          "rank": 8,
+          "source_rail_segments": 5159,
+          "source_rail_centerline_km": 16919.088,
+          "source_segments_with_primary_name": 2459
+        },
+        {
+          "rank": 9,
+          "source_rail_segments": 5027,
+          "source_rail_centerline_km": 5378.412,
+          "source_segments_with_primary_name": 1973
+        },
+        {
+          "rank": 10,
+          "source_rail_segments": 3938,
+          "source_rail_centerline_km": 10277.236,
+          "source_segments_with_primary_name": 130
+        }
+      ],
+      "source_physical_components_NOT_named_railway_infrastructure_lines": true
+    }
+  },
+  "no_plant_beta_diversity_computed": true
+}

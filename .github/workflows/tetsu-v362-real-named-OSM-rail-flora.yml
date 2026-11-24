@@ -1,0 +1,75 @@
+name: "v362 genuine OSM infrastructure named railway routes × original Slovenian botanical similarity"
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/analyze_Slovenia_true_OSM_named_rail_route_floristic_similarity_v362.py'
+      - 'tests/test_true_OSM_named_route_Slovenia_floristic_v362.py'
+      - '.github/workflows/tetsu-v362-real-named-OSM-rail-flora.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: tetsu-v362-authentic-named-OSM-Slovenia-rail-botany
+  cancel-in-progress: true
+jobs:
+  source_true_named_railway_routes_and_field_plants:
+    runs-on: ubuntu-latest
+    timeout-minutes: 39
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install original OSM PBF infrastructure route, Overture physical graph and species null modules
+        run: python -m pip install 'osmium>=4,<5' 'overturemaps==2.1.1' 'networkx>=3.4,<4' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25'
+      - name: Test named route one-to-many/many-to-many source semantics and species-independent geographic matching
+        run: |
+          python -m unittest discover -s tests -p 'test_true_OSM_named_route_Slovenia_floristic_v362.py' -v
+          python -m py_compile scripts/analyze_Slovenia_true_OSM_named_rail_route_floristic_similarity_v362.py
+      - name: Download authentic original 2026 Slovenian 89 plants source and publisher audit
+        uses: actions/download-artifact@v4
+        with:
+          name: genuine-Slovenia-2026-railway-92site-vegetation-supplement-v102
+          run-id: 43538799032
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v362/slovenia
+      - name: Verify genuine original botanical XLSX 401279 bytes and publisher SHA256
+        run: |
+          set -euo pipefail
+          FILE=source/v362/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx
+          test "$(stat -c%s "$FILE")" = 401279
+          printf '%s  %s\n' \
+            '26be7ca9513dd54136d4ec499d8413c1cb288045f87fe3cf8814731f2edac99f' \
+            "$FILE" | sha256sum --check
+      - name: Download immutable original OSM 2026-10-01 Slovenia PBF and official file MD5
+        run: |
+          set -euo pipefail
+          mkdir -p source/v362/osm results/audit
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 30 --max-time 950 \
+            'https://download.geofabrik.de/europe/slovenia-261001.osm.pbf' \
+            -o source/v362/osm/slovenia-261001.osm.pbf
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 30 --max-time 120 \
+            'https://download.geofabrik.de/europe/slovenia-261001.osm.pbf.md5' \
+            -o source/v362/osm/slovenia-261001.osm.pbf.md5
+          test "$(stat -c%s source/v362/osm/slovenia-261001.osm.pbf)" = 313417178
+          EXPECTED="$(awk 'NR==1 {print $1}' source/v362/osm/slovenia-261001.osm.pbf.md5)"
+          test "$EXPECTED" = 703113982dc57e356f08dfccb1ddbf1a
+          printf '%s  %s\n' "$EXPECTED" source/v362/osm/slovenia-261001.osm.pbf | md5sum --check
+          printf '%s  %s\n' \
+            cce34d7bdfd310238dd302f50b9ad61c3ba9e66bc376856bf2cf56e002dbd9f7 \
+            source/v362/osm/slovenia-261001.osm.pbf | sha256sum --check
+      - name: TRUE named OSM route relations membership × physical rail graph × original BS and BT plant taxa
+        run: |
+          python -u scripts/analyze_Slovenia_true_OSM_named_rail_route_floristic_similarity_v362.py \
+            --osm-pbf source/v362/osm/slovenia-261001.osm.pbf \
+            --original-xlsx source/v362/slovenia/source_original/SLO_2026_rail_vegetation_microhabitats_original.xlsx \
+            --source-audit source/v362/slovenia/results/audit/Slovenia_2026_RAIL_92sites_plant_supplement_source_v102.json \
+            --output results/audit/v362_true_OSM_named_railway_route_vs_Slovenia_source_floristic_similarity.json
+      - name: Publish source named route similarity/support summary only, NO original GPS or botanical records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v362-authentic-named-rail-route-botanical-similarity-only
+          path: results/audit/v362_true_OSM_named_railway_route_vs_Slovenia_source_floristic_similarity.json
+          if-no-files-found: warn

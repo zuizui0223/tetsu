@@ -1,0 +1,79 @@
+name: "v357b complete 128-source-file global Overture all-rail extraction"
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/validate_entire_world_Overture_rail_shards_v357.py'
+      - '.github/workflows/tetsu-v357b-entire-world-rail-source.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: tetsu-v357b-genuine-complete-20261118-all-rail-source
+  cancel-in-progress: false
+jobs:
+  source_each_global_Parquet_shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 62
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install public anonymous Overture S3 Arrow, WGS84 geodesic, official source inventory
+        run: python -m pip install 'boto3>=1.35,<2' 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Test fixed 128 source objects and all-rail schema before data read
+        run: |
+          python -m unittest discover -s tests -p 'test_global_Overture_all_rail_scan_v357.py' -v
+      - name: Stream exactly eight original worldwide source files and extract all rail records in shard
+        run: |
+          python -u scripts/extract_entire_world_Overture_rail_parquet_v357.py \
+            --mode full --shard ${{ matrix.shard }} \
+            --output results/audit/v357_shard_${{ matrix.shard }}.json
+      - name: Save full original source-file completion & all-rail class/connector/length aggregate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v357-meta-${{ matrix.shard }}
+          path: results/audit/v357_shard_${{ matrix.shard }}.json
+          if-no-files-found: warn
+      - name: Save this derived complete rail-only ODbL GeoParquet shard for later REAL rail graph construction
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v357-rail-geometry-${{ matrix.shard }}
+          path: results/audit/v357_shard_${{ matrix.shard }}.rail.parquet
+          if-no-files-found: ignore
+          compression-level: 0
+  full_world_source_integrity_aggregation:
+    needs: source_each_global_Parquet_shard
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install original anonymous S3 inventory module
+        run: python -m pip install 'boto3>=1.35,<2'
+      - name: Retrieve all sixteen **metadata-only** original-source rail snapshots
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-meta-*
+          path: original_all_rail_meta
+          merge-multiple: true
+      - name: Verify precisely ALL original 128 source Parquet keys scanned, all source km and 16 rail artifact hashes
+        run: |
+          python -u scripts/validate_entire_world_Overture_rail_shards_v357.py \
+            --source-dir original_all_rail_meta \
+            --output results/audit/v357_complete_original_world_rail_source_CENSUS.json
+      - name: Publish only complete original global rail source audit, not full geometric data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          path: results/audit/v357_complete_original_world_rail_source_CENSUS.json
+          if-no-files-found: warn

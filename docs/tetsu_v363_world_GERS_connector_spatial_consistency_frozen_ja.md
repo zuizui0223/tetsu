@@ -1,0 +1,23 @@
+# v363: worldwide physical rail GERS connector position identity QA (source topology validation)
+
+2026-11-24. Frozen AFTER the v361 global giant-component result and BEFORE v363 positional source QA, so exploratory audit, not biological preregistration.
+
+## Why
+v361 source 2,054,855 rail segments, 4,970,641 connector UUIDs; largest physical component ~1,548,770 km (all original rail) and ~1,369,687 km (conventional active-candidate), with most rail centerline length in top 10 components. A wrongly shared connector UUID far apart could artificially merge unrelated subnetworks.
+
+## Verified source inputs and fixed sampling
+Original global source Overture 2026-11-18.0 in 16 genuine rail-only GeoParquet artifacts from complete all-128-source original Actions run 45342573085; source original all-world rail segment count 2,054,855. Enforce artifact SHA checks against genuine complete original source census before any result. Source license Overture Maps / OpenStreetMap contributors (ODbL).
+
+GERS connectors[].connector_id UUIDs are physical graph nodes; connectors[].at are expected normalized WGS84 LineString positions 0–1. For each original connector UUID select deterministically if SHA256(first 32 bits) modulo **256 == 0** (about 0.39% of all original connector UUIDs), independent of location, plant identity or observed mismatch. For every source occurrence of a selected connector, interpolate original source line geometry at the source normalized fraction; compute WGS84 geodesic separation from FIRST source occurrence of the same connector UUID. Report n sampled UUID, n multi-incidence connector UUID, maximum per-UUID source point discrepancy and bins >5, >25, >100, >1000 metres, including exact same source segment duplicate anomaly counts. Original source missing or invalid normalized positions audited and not silently zero.
+
+Interpretation: a low >25m mismatch rate supports source graph node positional consistency but does not certify an actual active switching path or name of a railway route. Any >100m far-location source connector identities require extra graph component sensitivity excluding those UUIDs before a robust giant-network statement; no retrospective deletion to strengthen source claims. Overture source sample remains all original rail classes; conventional class analysis follows as separate class sensitivity.
+
+Publish only aggregate hashed-source counts and distance bins, no original connector IDs, precise source railway geometries, source rare botanical GPS, plant names or raw source species rows. No botanical species Jaccard or train dispersal causality estimated.
+
+## Methodological erratum after first source QA run, before corrected result
+
+First original source QA SUCCESS [#45355944719](https://github.com/zuizui0223/tetsu/actions/runs/45355944719) physically scanned all 2,054,855 actual rail GERS segments, audited 7,630,212 original connector incidences and deterministic SHA sample 19,375 connector IDs, including 8,807 multi-incidence IDs. **However its original source position calculation used Shapely LineString.interpolate(at,normalized=True) on planar geographic degree coordinates; this is NOT the Overture-defined at-position formula**, and the resulting source within-UUID distance discrepancies (734/8,807 >100m) CANNOT be interpreted as physical map connector errors.
+
+The [official Overture Linear Referencing guide](https://docs.overturemaps.org/guides/transportation/linear-referencing/) explicitly defines at as **accumulated WGS84 geodetic distance in metres divided by total WGS84 geodetic LineString length**, not planar lon/lat coordinate length. The source code has been corrected to interpolate by WGS84 geodesic per original source vertex using pyproj.Geod.inv/fwd, with synthetic tests proving >10km possible false discrepancy under the old planar source method. Original source UUID-selection hash and 128/128 Parquet original source identity remain unchanged, so the scientifically interpretable source-v363b QC must be obtained from new authentic source GitHub Actions success. Until that, **do not report a 734/8807 source graph connector defect**. It is a documented algorithm-instrument mismatch, not a demonstrated source data-quality failure.
+
+This finding does not itself invalidate v361 connectivity-count graph construction, which connects by the same original UUID without using planar positions; it does motivate auditing physical source position consistency and adjusting any previous route-distance computations if they used normalized planar longitude/latitude fractions (Slovenian route source used UTM local projection, so that error should be smaller than global lonlat degrees but should still be checked).

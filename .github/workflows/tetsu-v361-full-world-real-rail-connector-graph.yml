@@ -1,0 +1,57 @@
+name: "v361 authentic full-global original railway connector components"
+# Do not run before v357b's entire 128-source-file Actions run completed
+# SUCCESSFULLY. This workflow is manual-only to avoid treating a still-running
+# or partial source extraction as a full global network.
+on:
+  push:
+    branches: [research/tetsu-v356-global-complete-rail-graph-20261124]
+    paths:
+      - 'scripts/build_global_Overture_physical_connector_components_v361.py'
+      - 'tests/test_global_original_rail_physical_components_v361.py'
+      - '.github/workflows/tetsu-v361-full-world-real-rail-connector-graph.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  actual_global_all_railway_connector_source_graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install genuine original source arrow and geodesic physical network tools
+        run: python -m pip install 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Prove source GERS connector UUID graph not guessed from visual intersections
+        run: |
+          python -m unittest discover -s tests -p 'test_global_original_rail_physical_components_v361.py' -v
+          python -m py_compile scripts/build_global_Overture_physical_connector_components_v361.py
+      - name: Retrieve original v357 complete worldwide 128-source-file audit
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v361/census
+      - name: Retrieve all original 16 rail-only GeoParquet source shards, do not republish repository-wide
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-rail-geometry-*
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v361/rail
+          merge-multiple: true
+      - name: HARD GATE every original 2026-11 Overture release shard SHA and build true global connector components in two classes
+        run: |
+          python -u scripts/build_global_Overture_physical_connector_components_v361.py \
+            --source-dir source/v361/rail \
+            --census source/v361/census/v357_complete_original_world_rail_source_CENSUS.json \
+            --output results/audit/v361_true_physical_global_all_rail_connector_components_aggregate.json
+      - name: Keep only global anonymous component-size/centerline-km source aggregates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v361-original-entire-world-true-rail-physical-connector-components
+          path: results/audit/v361_true_physical_global_all_rail_connector_components_aggregate.json
+          if-no-files-found: warn

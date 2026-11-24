@@ -1,0 +1,38 @@
+{
+  "version": "v363b-true-WGS84-geodesic-global-GERS-connector-UUID-positional-QA",
+  "original_global_rail_source_release": "2026-11-18.0",
+  "original_genuine_full_128_Overture_source_inventory_SHA256": "6237da737bb783f23f352638cd5aef287bbb3d7aa8f0fe0bed8c1cc4558f6b34",
+  "original_global_full_16_rail_only_GeoParquet_SHA_verified": true,
+  "stable_selection": "SHA256(connector_id)[:4] interpreted as 32-bit int mod 256 == 0; not source data outcome or botanist site selection",
+  "correct_original_Overture_at_interpretation": "WGS84 geodetic distance fraction along original line segments, NOT planar lonlat shapely normalized interpolate",
+  "audit": {
+    "original_source_all_rail_segments_audited": 2054855,
+    "source_original_connector_incidence": 7630212,
+    "source_selected_uuid_sha256_modulus": 256,
+    "original_source_connector_uuid_selected": 19375,
+    "original_source_selected_connector_incidence": 29586,
+    "selected_uuid_at_least_two_original_rail_segments": 8807,
+    "selected_uuid_single_original_segment": 10568,
+    "source_selected_invalid_connector_at": 0,
+    "source_selected_duplicate_UUID_within_same_segment": 0,
+    "source_repeated_connector_UUID_maximum_geodesic_separation_m": 0,
+    "source_repeated_connector_geodesic_displacement_median_m": 0,
+    "source_uuid_mismatch_counts_exceeding_original_25_100_and_1000m": {
+      "max_source_UUID_displacement_above_5_m": 0,
+      "max_source_UUID_displacement_above_25_m": 0,
+      "max_source_UUID_displacement_above_100_m": 0,
+      "max_source_UUID_displacement_above_1000_m": 0
+    },
+    "sampled_UUID_incidence_degree_quantiles_NOT_route_degrees": {
+      "1": 10568,
+      "2": 7453,
+      "3": 1307,
+      "4": 45,
+      "5": 1,
+      "6": 1
+    },
+    "source_original_UUIDs_source_segment_names_GPS_not_exported": true,
+    "physical_network_connector_consistency_not_train_route_operation_proof": true
+  },
+  "NO_worldwide_botanical_Jaccard_or_train_traffic_result": true
+}

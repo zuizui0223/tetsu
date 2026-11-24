@@ -1,0 +1,42 @@
+{
+  "version": "v357-original-entire-world-Overture-2026-all-rail-scan-complete",
+  "source_release": "2026-11-18.0",
+  "source_original_rail_features_entire_release_n": 2054855,
+  "source_real_geodesic_all_rail_km": 2892198.162,
+  "source_reported_publisher_rail_subtype_length_km": 2892198,
+  "source_geodesic_vs_publisher_relative_delta": 6e-8,
+  "source_all_segment_source_objects_complete": 128,
+  "source_all_source_transportation_rows_scanned": 354631439,
+  "original_S3_source_Parquet_inventory_sha256": "6237da737bb783f23f352638cd5aef287bbb3d7aa8f0fe0bed8c1cc4558f6b34",
+  "original_rail_class_feature_count": {
+    "funicular": 1390,
+    "light_rail": 17863,
+    "monorail": 3143,
+    "narrow_gauge": 30874,
+    "standard_gauge": 1483865,
+    "subway": 57042,
+    "tram": 58962,
+    "unknown": 401716
+  },
+  "source_all_rail_named_feature_n": 310851,
+  "source_rail_features_with_physical_connector_info": 2054855,
+  "source_total_rail_connector_incidence": 7630212,
+  "original_osm_way_source_ref_incidence": 3718497,
+  "original_osm_non_way_source_ref_incidence": 966,
+  "rail_flag_feature_n": {
+    "is_abandoned": 231134,
+    "is_bridge": 180576,
+    "is_disused": 142612,
+    "is_passenger": 65599,
+    "is_tunnel": 80497,
+    "is_covered": 37318,
+    "is_freight": 87806,
+    "is_under_construction": 10731
+  },
+  "entire_original_rail_subtype_includes_subway_tram": true,
+  "physical_graph_components_NOT_equivalent_to_named_railway_lines": true,
+  "raw_rail_only_Parquet_data_available_as_GitHub_Actions_artifacts_not_committed": true,
+  "no_plant_community_similarity_estimated": true,
+  "no_worldwide_specific_active_train_lines_or_population_effects_proved": true,
+  "source_license": "Overture Maps, OSM contributors; ODbL"
+}
