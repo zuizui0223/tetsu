@@ -1,0 +1,39 @@
+name: "v353 original iNaturalist observation effort in 32 randomized global landcells"
+on:
+  push:
+    branches: [research/tetsu-v351-global-equal-area-climate-frame-20261124]
+    paths:
+      - 'scripts/audit_original_iNat_world_probability_cells_v353.py'
+      - 'tests/test_global_iNat_source_opportunity_v353.py'
+      - '.github/workflows/tetsu-v353-global-iNat-landcell-effort.yml'
+  workflow_dispatch:
+concurrency:
+  group: tetsu-v353-2025-global-source-plants-count
+  cancel-in-progress: true
+permissions: {contents: read}
+jobs:
+  original_world_random_cell_plant_source_count:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install only geometry dependencies for 100km original landcell bounding boxes
+        run: python -m pip install 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Synthetic count-only original source QA invariants
+        run: |
+          python -m unittest discover -s tests -p 'test_global_iNat_source_opportunity_v353.py' -v
+          python -m py_compile scripts/audit_original_iNat_world_probability_cells_v353.py
+      - name: Query actual official iNaturalist 2025 public plant counts for ALL 32 original random land cells
+        run: |
+          python -u scripts/audit_original_iNat_world_probability_cells_v353.py \
+            --frame data/derived/v351_global_land_climate_100km_probabilistic_source_verified.json \
+            --output results/audit/v353_actual_iNat_global_landcell_2025_source_effort_only.json
+      - name: Archive original 32 random landcell source counts only, no record IDs species or GPS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v353-global-original-random-landcell-iNat-source-opportunity
+          path: results/audit/v353_actual_iNat_global_landcell_2025_source_effort_only.json
+          if-no-files-found: warn
