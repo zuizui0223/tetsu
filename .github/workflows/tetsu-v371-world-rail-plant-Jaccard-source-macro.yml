@@ -1,0 +1,113 @@
+# The original 2025 global source v369 run 45375453375 completed SUCCESS
+# and produced full 100km/200km richness and Jaccard artifacts on 2026-11-24.
+# This source-gated workflow checks completion again before real-world models.
+# Source original global 2025 plants v369 SUCCESS run 45375453375 verified 2026-11-24;
+# the source-gated v371 workflow now executes the full original worldwide macro model.
+name: "v371 genuine global rail-km x 2025 plant biodiversity leave-continent-out macro"
+on:
+  push:
+    branches:
+      - research/tetsu-v368-world-rail-pps-biodiversity-20261124
+    paths:
+      - 'scripts/analyze_original_world_railkm_plant_richness_Jaccard_v371.py'
+      - 'tests/test_original_world_railkm_plant_richness_Jaccard_v371.py'
+      - '.github/workflows/tetsu-v371-world-rail-plant-Jaccard-source-macro.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  world-rail-plant-model-and-data-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source-controlled world climate/land and train-only blocked ridge validation dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'shapely>=2,<3' 'rasterio>=1.3,<2' 'pyproj>=3.6,<4'
+      - name: Unit-test actual source integrity and leave-whole-continent-out blocked ridge prediction
+        run: |
+          python -m unittest discover -s tests -p 'test_original_world_railkm_plant_richness_Jaccard_v371.py' -v
+          python -m py_compile scripts/analyze_original_world_railkm_plant_richness_Jaccard_v371.py
+      - name: Check if complete 13.7GB true global source stream has FINISHED source QA
+        id: source
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          status="$(gh api 'repos/zuizui0223/tetsu/actions/runs/45375453375' --jq '.status')"
+          conclusion="$(gh api 'repos/zuizui0223/tetsu/actions/runs/45375453375' --jq '.conclusion // "null"')"
+          echo "Global true-original plant source CI status=$status, conclusion=$conclusion"
+          if [[ "$status" == "completed" && "$conclusion" == "success" ]]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "v371 ORIGINAL GLOBAL BIOLOGICAL RESULTS NOT YET ESTIMABLE: source v369 complete 13.7GB S3 stream not SUCCESS ($status/$conclusion)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Retrieve source-original finished 2025 entire-world iNaturalist 100km/200km cell richness/Jaccard aggregates
+        if: steps.source.outputs.ready == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v371/iNat
+      - name: Retrieve fully computed true entire-world 2026 Overture railway km 100km/200km source-exposure aggregates
+        if: steps.source.outputs.ready == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v371/GERS
+      - name: Source exact genuine Natural Earth 110m continents and WorldClim2.1 global BIO1 climate
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p source/v371/map results/audit
+          curl -LfSs --retry 4 --retry-all-errors --connect-timeout 30 --max-time 240 \
+            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' \
+            -o source/v371/map/ne_110m_admin_0_map_units.geojson
+          printf '%s  %s\n' \
+            '718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b' \
+            source/v371/map/ne_110m_admin_0_map_units.geojson | sha256sum --check
+          curl -LfSs --retry 5 --retry-all-errors --connect-timeout 30 --max-time 600 \
+            'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' \
+            -o source/v371/map/wc2.1_10m_bio.zip
+          printf '%s  %s\n' \
+            '00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf' \
+            source/v371/map/wc2.1_10m_bio.zip | sha256sum --check
+      - name: TRUE GLOBAL source whole-landscape richness and adjacent-Jaccard blocked leave-one-continent-out model
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          python -u scripts/analyze_original_world_railkm_plant_richness_Jaccard_v371.py \
+            --original-v369-global-plants source/v371/iNat/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --original-v370-global-rail source/v371/GERS/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --natural-earth source/v371/map/ne_110m_admin_0_map_units.geojson \
+            --worldclim-zip source/v371/map/wc2.1_10m_bio.zip \
+            --output results/audit/v371_source_true_global_railkm_plant_richness_and_Jaccard_biome_holdout.json
+      - name: Independent PRE-EXISTING global plant richness and adjacent Jaccard macro implementation cross-check
+        if: steps.source.outputs.ready == 'true'
+        run: |
+          python -u scripts/model_global_railkm_plant_landscape_macro_v371.py \
+            --world-plant-source source/v371/iNat/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --world-rail-grid-source source/v371/GERS/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --worldclim-zip source/v371/map/wc2.1_10m_bio.zip \
+            --natural-earth source/v371/map/ne_110m_admin_0_map_units.geojson \
+            --output results/audit/v371_original_independent_global_plant_railkm_model_implementation.json
+      - name: Archive PREEXISTING independent source-matched global macro model results
+        if: steps.source.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v371-global-world-railkm-plant-biodiversity-second-prespecified-implementation
+          path: results/audit/v371_original_independent_global_plant_railkm_model_implementation.json
+          if-no-files-found: error
+      - name: Archive genuine worldwide regional macro outcome only if the original global biological census completed
+        if: steps.source.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v371-real-world-original-plants-railkm-crosscontinent-biodiversity
+          path: results/audit/v371_source_true_global_railkm_plant_richness_and_Jaccard_biome_holdout.json
+          if-no-files-found: error

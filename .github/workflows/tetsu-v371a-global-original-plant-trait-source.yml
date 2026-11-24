@@ -1,0 +1,28 @@
+name: "v371a original NHM 2026 global functional angiosperm trait source QA"
+on:
+  push:
+    branches: [research/tetsu-v368-world-rail-pps-biodiversity-20261124]
+    paths:
+      - 'scripts/audit_global_NHM_angiosperm_functional_traits_v371a.py'
+      - '.github/workflows/tetsu-v371a-global-original-plant-trait-source.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  genuine_original_59k_NHM_world_functional_plant_traits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Audit official original 2026 NHM CKAN package, exact combined.csv and WFO source column names
+        run: |
+          python -u scripts/audit_global_NHM_angiosperm_functional_traits_v371a.py \
+            --output results/audit/v371a_original_NHM_worldwide_plant_functional_traits_schema.json
+      - name: Save only original species/source record metadata and trait CSV columns, not species identity values
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v371a-original-world-NHM-59k-plant-functional-source-schema
+          path: results/audit/v371a_original_NHM_worldwide_plant_functional_traits_schema.json
+          if-no-files-found: warn

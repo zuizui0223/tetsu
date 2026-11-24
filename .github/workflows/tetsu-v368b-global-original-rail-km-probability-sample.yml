@@ -1,0 +1,76 @@
+name: "v368b all-world source 2048 uniform rail-km biological macro-sampling frame"
+on:
+  push:
+    branches: [research/tetsu-v368-world-rail-pps-biodiversity-20261124]
+    paths:
+      - 'scripts/sample_entire_global_GERS_railkm_WGS84_v368b.py'
+      - 'tests/test_true_global_rail_km_sampling_v368.py'
+      - '.github/workflows/tetsu-v368b-global-original-rail-km-probability-sample.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: v368b-world-2048-original-railkm-sample
+  cancel-in-progress: false
+jobs:
+  original_16source_rail_GERS_uniform_WGS84_km_points:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install official source GeoParquet and geodetic WGS84 spatial sampling
+        run: python -m pip install 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - name: Assert random 2048 source rail-km draws come from full original world lines, not favorite countries
+        run: |
+          python -m unittest discover -s tests -p 'test_true_global_rail_km_sampling_v368.py' -v
+          python -m py_compile scripts/sample_entire_global_GERS_railkm_WGS84_v368b.py
+      - name: Download original v357 true all-128 Overture source census with source-geometry hashes
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v368b/census
+      - name: Retrieve all original 16 globally exhaustive real GERS railway-only Parquet files
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-rail-geometry-*
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v368b/rail
+          merge-multiple: true
+      - name: Source pinned original Natural Earth independent geographical-map-unit continent classifier
+        run: |
+          set -euo pipefail
+          mkdir -p source/v368b/land
+          curl -LfsS --retry 3 --retry-all-errors --connect-timeout 25 --max-time 120 \
+            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' \
+            -o source/v368b/land/original_NE_map_units.geojson
+          printf '%s  %s\n' \
+            718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b \
+            source/v368b/land/original_NE_map_units.geojson | sha256sum --check
+      - name: TWO COMPLETE original GERS source passes, census actual all-world normal rail km, extract 2048 WGS84 geodesic random source points
+        run: |
+          python -u scripts/sample_entire_global_GERS_railkm_WGS84_v368b.py \
+            --rail-dir source/v368b/rail \
+            --original-v357-census source/v368b/census/v357_complete_original_world_rail_source_CENSUS.json \
+            --natural-earth source/v368b/land/original_NE_map_units.geojson \
+            --output-points results/original_source/v368b_global_2048_world_GERS_rail_km_random_points.json \
+            --output-summary results/audit/v368b_global_railkm_sample_only_public_aggregate.json
+      - name: Archive ONLY source rail-km sampling frame provenance, classes and continent source counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v368b-original-world-railkm-public-summary-only
+          path: results/audit/v368b_global_railkm_sample_only_public_aggregate.json
+          if-no-files-found: warn
+      - name: Store internal original RANDOM rail-km points for global biodiversity source join; NO botanist observer/rare-species source GPS
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v368b-original-world-railkm-sampled-source-points
+          path: results/original_source/v368b_global_2048_world_GERS_rail_km_random_points.json
+          if-no-files-found: error

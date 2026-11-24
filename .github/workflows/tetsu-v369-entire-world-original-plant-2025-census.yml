@@ -1,0 +1,46 @@
+name: "v369 complete original global 2025 plant observation 100km and 200km macro-grid"
+on:
+  push:
+    branches: [research/tetsu-v368-world-rail-pps-biodiversity-20261124]
+    paths:
+      - 'scripts/scan_fullworld_2025_iNat_plant_macro_grid_v369.py'
+      - 'tests/test_global_iNat_photo_linked_macro_grid_v369.py'
+      - '.github/workflows/tetsu-v369-entire-world-original-plant-2025-census.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+concurrency:
+  group: v369-all-world-original-2026-10-27-photo-linked-plants-2025
+  cancel-in-progress: true
+jobs:
+  actual_entire_original_global_observations_and_taxa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 155
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install official AWS anonymous full-world observation stream and WGS84 equal-area CRS
+        run: python -m pip install 'boto3>=1.35,<2' 'pyproj>=3.6,<4'
+      - name: Validate original source ETag and all-world antimeridian-inclusive 100km/200km grids
+        run: |
+          python -m unittest discover -s tests -p 'test_global_iNat_photo_linked_macro_grid_v369.py' -v
+          python -m py_compile scripts/scan_fullworld_2025_iNat_plant_macro_grid_v369.py
+      - name: Stream ENTIRE ORIGINAL S3 GZIP observation source 13.70GB and taxonomy 40.18MB, globally filter 2025 quality plants and aggregate source observation efforts
+        run: |
+          python -u scripts/scan_fullworld_2025_iNat_plant_macro_grid_v369.py \
+            --output-summary results/audit/v369_original_fullworld_2025_plant_source_quality_and_effort.json \
+            --output-grid results/audit/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json
+      - name: Archive full-original-global-source codebook and counts only, no original observer IDs or plant coordinates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v369-original-world-2025-plant-source-QA-only
+          path: results/audit/v369_original_fullworld_2025_plant_source_quality_and_effort.json
+          if-no-files-found: warn
+      - name: Archive globally complete species/genus/family richness/effort per 100km and 200km grid; NO original species IDs
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          path: results/audit/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json
+          if-no-files-found: error

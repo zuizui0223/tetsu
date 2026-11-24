@@ -1,0 +1,30 @@
+name: "v368a true global plant observation source monthly S3 metadata QA"
+on:
+  push:
+    branches: [research/tetsu-v368-world-rail-pps-biodiversity-20261124]
+    paths:
+      - 'scripts/audit_original_global_iNaturalist_open_metadata_v368a.py'
+      - '.github/workflows/tetsu-v368a-global-open-plant-source-metadata.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  inspect_entire_global_plant_observation_and_taxon_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install anonymous AWS global open botanical source reader
+        run: python -m pip install 'boto3>=1.35,<2'
+      - name: Inspect source compression, monthly version, observation/taxon schema and geoprivacy gap, no raw records
+        run: |
+          python -u scripts/audit_original_global_iNaturalist_open_metadata_v368a.py \
+            --output results/audit/v368a_original_global_iNat_photo_linked_monthly_source_schema.json
+      - name: Archive only original global source size, ETag, LastModified, fields and privacy QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v368a-original-global-iNat-metadata-source-QA
+          path: results/audit/v368a_original_global_iNat_photo_linked_monthly_source_schema.json
+          if-no-files-found: warn

@@ -1,0 +1,30 @@
+name: "v369q actual 100k global plant observation quality grade schema preflight"
+on:
+  push:
+    branches: [research/tetsu-v368-world-rail-pps-biodiversity-20261124]
+    paths:
+      - 'scripts/audit_iNat_actual_quality_grade_sample_v369q.py'
+      - '.github/workflows/tetsu-v369q-original-source-grade-preflight.yml'
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  read_public_original_GZIP_grade_enum_without_downloading_13GB:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned original S3 client
+        run: python -m pip install 'boto3>=1.35,<2'
+      - name: Read genuine first 100k source records grade/date categories, do not export any IDs/GPS/individual source taxa
+        run: |
+          python -u scripts/audit_iNat_actual_quality_grade_sample_v369q.py \
+            --output results/audit/v369q_original_first100k_genuine_iNat_grade_QA.json
+      - name: Preserve original source quality grade category counts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v369q-real-iNat-quality-enum-first100k-source-QA
+          path: results/audit/v369q_original_first100k_genuine_iNat_grade_QA.json
+          if-no-files-found: warn

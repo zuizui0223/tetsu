@@ -1,0 +1,23 @@
+{
+  "version": "v370-original-all-128-world-rail-2026-100km-200km-geodesic-km-exposure",
+  "source_Oveture_release": "2026-11-18.0",
+  "source_original_fullworld_rail_128_files_SHA_verified": true,
+  "source_fullworld_candidate_normal_rail_km": 2237043.481,
+  "original_source_rail_spatially_unassigned_dateline_or_map_border_km": 0,
+  "original_projection_clipping_residual_metres": -6.533,
+  "source_true_global_rail_geographic_grid_QA": {
+    "source_all_original_GERS_rail_segmentation_rows": 2054855,
+    "source_normal_active_candidate_rail_original_source_segments": 1536226,
+    "source_one_tile": 1512482,
+    "source_multitile_clip": 23744
+  },
+  "source_100km_200km_grid_rail_km_total_within_mapped_cells": {
+    "100000": 2237043.488,
+    "200000": 2237043.488
+  },
+  "rail_source_measure_is_2026_geographic_centerline_km_NOT_operated_train_service_or_ballast_plants": true,
+  "taxon_community_not_joined_or_calculated_here": true,
+  "no_original_GERS_source_railway_coordinates_or_GERS_UUIDs_republished": true,
+  "original_source_Github_Actions_run_url": "https://github.com/zuizui0223/tetsu/actions/runs/45373985228",
+  "source_original_full_100km_200km_grid_aggregate_artifact": "tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure"
+}

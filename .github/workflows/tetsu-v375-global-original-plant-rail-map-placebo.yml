@@ -1,0 +1,73 @@
+name: "v375 global 2025 real plant richness/Jaccard versus conditional fake railway-map control"
+on:
+  push:
+    branches:
+      - research/tetsu-v368-world-rail-pps-biodiversity-20261124
+    paths:
+      - 'scripts/validate_world_railkm_original_plant_placebo_v375.py'
+      - 'tests/test_world_railkm_original_plant_placebo_v375.py'
+      - '.github/workflows/tetsu-v375-global-original-plant-rail-map-placebo.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_all_world_2025_plant_2026_rail_source_false_map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original global climate and original-source ridge holdout dependencies
+        run: python -m pip install 'numpy>=1.26,<3' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'rasterio>=1.3,<2'
+      - name: Ten tests of within-continent climate and latitude conditioned railway km map shuffles
+        run: |
+          python -m unittest discover -s tests -p 'test_world_railkm_original_plant_placebo_v375.py' -v
+          python -m py_compile scripts/validate_world_railkm_original_plant_placebo_v375.py
+      - name: Get COMPLETED full-world original iNaturalist source scan 2025 7827936 actual plant observations
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v375/plants
+      - name: Get source verified actual global GERS railway km source per original 100km and 200km equalarea cells
+        uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v375/rail
+      - name: Acquire pinned original WorldClim 2.1 global BIO1 and NaturalEarth source global land
+        run: |
+          set -euo pipefail
+          mkdir -p source/v375/map results/audit
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 600 \
+            'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' \
+            -o source/v375/map/wc2.1_10m_bio.zip
+          printf '%s  %s\n' \
+            '00513224583665ec0f2f955a4ec252730c4deb2004cce9e793492a3f26df4dcf' \
+            source/v375/map/wc2.1_10m_bio.zip | sha256sum --check
+          curl -LfsS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 240 \
+            'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' \
+            -o source/v375/map/ne_110m_admin_0_map_units.geojson
+          printf '%s  %s\n' \
+            '718ac51d68ed2bf5de4f563fff2e2e045db706c1d3222805f3e317140a64213b' \
+            source/v375/map/ne_110m_admin_0_map_units.geojson | sha256sum --check
+      - name: Recreate prior six-continent frozen original macro lift then test 39 fake climate-matched rail maps
+        run: |
+          python -u scripts/validate_world_railkm_original_plant_placebo_v375.py \
+            --original-v369-global-plants source/v375/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --original-v370-global-rail source/v375/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --natural-earth source/v375/map/ne_110m_admin_0_map_units.geojson \
+            --worldclim-zip source/v375/map/wc2.1_10m_bio.zip \
+            --output results/audit/v375_true_global_rail_map_vs_climate_matched_rail_placement_placebo.json
+      - name: Publish original fullworld 2025 whole-landscape species and neighbor Jaccard conditional map placebo aggregates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v375-world-real-rail-map-vs-fake-source-climate-latitude-matched-plant-macro
+          path: results/audit/v375_true_global_rail_map_vs_climate_matched_rail_placement_placebo.json
+          if-no-files-found: warn
