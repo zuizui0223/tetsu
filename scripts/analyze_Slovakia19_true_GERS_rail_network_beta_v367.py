@@ -44,6 +44,46 @@ def source_linear_slope(x,y):
         raise ValueError("Source railway distance range too narrow for original study")
     return float(np.linalg.lstsq(np.stack([np.ones(len(x)),x],axis=1),y,rcond=None)[0][1])
 
+def source_physical_distance_triangle_check(sites,attached,network):
+    """Check source train-network metres cannot shortcut physical point geometry.
+
+    Nearest source station original DMS point may be ~tens of metres off
+    source mapped track. Triangle inequality allows the two source GPS→rail
+    offsets, but no arbitrary km-large path shorter than straight distance.
+    This QC uses NO original taxon identity or Jaccard score.
+    """
+    from pyproj import Geod
+    geod=Geod(ellps="WGS84")
+    geodelta=[];limits=[]
+    rows=Counter()
+    for i,j in combinations(range(len(sites)),2):
+        net=network.get((i,j))
+        if net is None:
+            rows["source_GERS_physical_network_path_unavailable"]+=1
+            continue
+        src=abs(geod.inv(sites[i]["lon"],sites[i]["lat"],
+                         sites[j]["lon"],sites[j]["lat"])[2])/1000
+        short=src-net
+        u=(attached[i].get("original_source_track_offset_m") or 0.) + (
+           attached[j].get("original_source_track_offset_m") or 0.)
+        rows["source_rail_pairs_with_path"]+=1
+        rows["source_path_shorter_than_GPS_chord_above50m"]+=short>.05
+        rows["source_path_shorter_than_GPS_chord_above100m"]+=short>.10
+        rows["source_path_below_GPS_chord_minus_OWN_TRACK_offsets_plus5m"]+=short*1000>u+5.
+        geodelta.append(short*1000)
+        limits.append(u)
+    return {
+       "original_source_CZECH_SLOVAK_network_triangulation_QA_not_botany":True,
+       "original_source_station_pair_QA_counts":dict(rows),
+       "source_max_original_geodesic_distance_minus_GERS_railpath_m":max(geodelta) if geodelta else None,
+       "source_min_original_geodesic_distance_minus_GERS_railpath_m":min(geodelta) if geodelta else None,
+       "source_site_to_rail_GPS_displacement_bound_max_sum_m":max(limits) if limits else None,
+       "source_same_real_171_original_Slovak_pair_support":rows["source_rail_pairs_with_path"]==171,
+       "can_claim_original_network_geodesic_physical_distance_consistency":
+           rows["source_path_below_GPS_chord_minus_OWN_TRACK_offsets_plus5m"]==0
+    }
+
+
 def station_pairs(sites,coords,network):
     from pyproj import Geod
     from analyze_Slovakia2016_19station_original_taxon_incidence_v310 import jaccard
@@ -56,7 +96,9 @@ def station_pairs(sites,coords,network):
         meters=abs(float(geo.inv(sites[i]["lon"],sites[i]["lat"],
                                  sites[j]["lon"],sites[j]["lat"])[2]))
         km=meters/1000.
-        if n+.05<km:raise ValueError("Mapped source true GERS path unexpectedly shorter than geodesic distance")
+        # Geometrically valid source network route may be shorter than the
+        # original station DMS-point chord only by source point-to-rail offsets.
+        # Original per-station offsets were validated before this function.
         common=jaccard(coords[i+1],coords[j+1])
         pairs.append({"i":i,"j":j,"geo":km,"network":n,"jaccard":common})
     if len(pairs)!=EXPECTED_GERS_CONNECTED_PAIRS:
@@ -211,6 +253,11 @@ def run(pdf,rail_factory=None):
         raise ValueError("Original v366 Slovak 19/19 and 171/171 physical mapped rail source network support drift")
     from analyze_Slovakia2016_19station_original_taxon_incidence_v310 import station_sets
     flora=station_sets(taxa)
+    triangle=source_physical_distance_triangle_check(source,source_attachments,network)
+    print(json.dumps({"original_Slovak_GERS_source_path_geometric_QA_BEFORE_BOTANY":triangle},
+                     ensure_ascii=False),flush=True)
+    if not triangle["can_claim_original_network_geodesic_physical_distance_consistency"]:
+        raise ValueError("Original GERS path triangle exceeds observed GPS-to-track original source offset; no source biological network slope fitted")
     pairs=station_pairs(source,flora,network)
     vals=[p["jaccard"] for p in pairs]
     slope_network=source_linear_slope([p["network"] for p in pairs],vals)
@@ -222,7 +269,7 @@ def run(pdf,rail_factory=None):
     detours=[p["network"]/p["geo"] for p in pairs]
     result={"version":"v367-SK-genuine-original-19-station-one-railway-route-GERS-network-beta",
         "source_original_Slovak_author_PDF_SHA256":SK_SHA,
-        "source_original_19_station_DMS_and_318_taxa_1763_incidences":True,
+        "source_original_19_station_DMS_and_318_taxa_1763_incidences":True,\n        "source_GERS_rail_physical_distance_consistency_QA":triangle,
         "source_actual_phyiscal_original_author_railway_routes_n":1,
         "source_overtyre_release":"2026-11-18.0",
         "source_true_19_station_GERS_connected_pairs_n":len(pairs),
