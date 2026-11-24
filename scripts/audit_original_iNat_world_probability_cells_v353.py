@@ -85,7 +85,7 @@ def summarize(rows):
     out=[]
     for cont in CONTINENTS:
         for band in TEMP_BANDS:
-            selected=[r for r in rows if r["continent"]==cont and r["macrotemp_stratum"]==band]
+            selected=[r for r in rows if r["continent"]==cont and r["source_climate_stratum"]==band]
             good=[r["API"]["source_api_2025_public_plants_bbox_count"] for r in selected
                   if r["API"]["source_api_2025_public_plants_bbox_count"] is not None]
             out.append({"continent":cont,"macrotemp_band":band,
