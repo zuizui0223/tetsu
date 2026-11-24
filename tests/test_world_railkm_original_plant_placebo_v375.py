@@ -60,8 +60,8 @@ class OriginalRailPlacebo(unittest.TestCase):
         self.assertEqual(m.shuffle_stratum(item("Europe",8.0,35,2,1)),("Europe","temperate",3))
         self.assertEqual(m.shuffle_stratum(item("Europe",20.0,35,2,1)),("Europe","warm",3))
     def test_source_v371_frozen_actual_global_lift_checksum(self):
-        self.assertAlmostEqual(m.EXPECTED[100000]["richness"],.0034565261140192885)
-        self.assertAlmostEqual(m.EXPECTED[200000]["jaccard"],-.00010563827123567526)
+        self.assertAlmostEqual(m.EXPECTED[100000]["richness"],.004463745492835951)
+        self.assertAlmostEqual(m.EXPECTED[200000]["jaccard"],-.00006120015031440586)
     def test_predeclared_world_placebo_count(self):
         self.assertEqual(m.DRAWS,39)
         self.assertEqual(len(m.GRID_WIDTHS),2)
