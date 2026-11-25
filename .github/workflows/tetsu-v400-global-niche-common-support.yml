@@ -1,0 +1,39 @@
+name: "v400 original common-support climate niche width and competing cold interactions"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/analyze_global_niche_common_support_v400.py'
+      - 'tests/test_global_niche_common_support_v400.py'
+      - '.github/workflows/tetsu-v400-global-niche-common-support.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'geopandas>=1,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - run: python -m unittest discover -s tests -p 'test_global_niche_common_support_v400.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v399-original-niche-coarse-aggregates
+          run-id: 45554651105
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v400
+      - name: Exact v399 replay and common-cell competing interaction sensitivity
+        run: python -u scripts/analyze_global_niche_common_support_v400.py --source source/v400/v399_original_niche_coarse_aggregates.json --out results/audit/v400_original_niche_common_support.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v400-original-niche-common-support
+          path: results/audit/v400_original_niche_common_support.json
+          if-no-files-found: error
