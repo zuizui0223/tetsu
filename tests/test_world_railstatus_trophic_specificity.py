@@ -20,6 +20,12 @@ class TestSpecificity(unittest.TestCase):
         self.assertEqual(r["effects"][t.TERMS[0]]["interval95_approx"],[2.,2.])
         self.assertEqual(r["effects"][t.TERMS[1]]["estimate"],1.)
         self.assertEqual(len(calls),8)
+    def test_nested_replay(self):
+        leaf={"estimate":1.,"interval95_approx":[.1,1.9],"n_blocks":25}
+        x={"status":"estimated","n_cells":101,"effects":{"plant":{"cross":leaf}}}
+        t.compare_replay(x,x)
+        y=dict(x,effects={"plant":{"cross":dict(leaf,estimate=2.)}})
+        with self.assertRaises(ValueError):t.compare_replay(x,y)
     def test_no_support(self):
         self.assertNotEqual(t.matched([])["status"],"estimated")
 if __name__=="__main__":unittest.main()
