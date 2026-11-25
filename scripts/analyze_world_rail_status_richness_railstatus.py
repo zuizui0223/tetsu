@@ -180,7 +180,10 @@ def main():
                 print(json.dumps({"width": width, "minland": minland, "n": len(m),
                                   "dMSE": {k: (round(v["mean_dMSE"], 6) if v["mean_dMSE"] is not None else None, v["n_positive"], v["n_folds"]) for k, v in C.items()},
                                   "placebo": {k: (v["n_null_ge_real"], v["n_null"]) for k, v in placebo.items()},
-                                  "cond": {k: (v["n_null_ge_real"], v["n_null"]) for k, v in cond.items()}}), flush=True)
+                                  "cond": {k: (v["n_null_ge_real"], v["n_null"]) for k, v in cond.items()},
+                                  "describe": panel["describe"],
+                                  "direction": {k: v.get("estimate") for k, v in direction.items()},
+                                  "per_continent_road_plus": {k: C["road_" + k]["per_continent"] for k in CATS}}), flush=True)
     finally:
         raster.close(); mem.close()
     out = {"version": "railstatus-v1-analysis", "source_replay": checks,
