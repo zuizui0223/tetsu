@@ -1,0 +1,114 @@
+name: "railstatus: active vs abandoned/disused vs subway/tram rail km and global plant record richness"
+on:
+  push:
+    branches: [research/tetsu-railstatus-placebo-20261125]
+    paths:
+      - 'scripts/aggregate_world_rail_by_status_railstatus.py'
+      - 'scripts/analyze_world_rail_status_richness_railstatus.py'
+      - 'tests/test_world_rail_status_railstatus.py'
+      - '.github/workflows/tetsu-railstatus-world-rail-status-placebo.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: railstatus-world
+  cancel-in-progress: true
+jobs:
+  rail_status_grid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - run: python -m unittest discover -s tests -p 'test_world_rail_status_railstatus.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/census
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-rail-geometry-*
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/rail
+          merge-multiple: true
+      - name: Clip every Overture rail segment by status/class to 100 km and 200 km cells
+        run: |
+          cd scripts
+          python -u aggregate_world_rail_by_status_railstatus.py \
+            --rail-dir ../source/rs/rail \
+            --census ../source/rs/census/v357_complete_original_world_rail_source_CENSUS.json \
+            --out ../results/railstatus/world_rail_km_by_status_100km_200km.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-railstatus-world-rail-km-by-status
+          path: results/railstatus/world_rail_km_by_status_100km_200km.json
+          if-no-files-found: error
+
+  richness_contrasts:
+    needs: rail_status_grid
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-world-rail-km-by-status
+          path: source/rs/status
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/plants
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/rail
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v376b-JRC-GHSL-2020-global-builtup-100km-200km-real-source
+          run-id: 45382671629
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/built
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v380a-EarthEnv-original-global-tree-consensus-macro-grid
+          run-id: 45394188340
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/tree
+      - name: Roads, land units and climate
+        run: |
+          set -euo pipefail
+          mkdir -p source/rs/land
+          curl -LfS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 180 'https://zenodo.org/records/6420961/files/GRIP4_density_total.zip?download=1' -o source/rs/land/GRIP4_density_total.zip
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 300 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/rs/land/ne.geojson
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 780 'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' -o source/rs/land/wc2.1_10m_bio.zip
+          cd scripts && python -u aggregate_original_GRIP4_road_density_v381a.py --archive ../source/rs/land/GRIP4_density_total.zip --out ../source/rs/land/road.json
+      - name: Continent-heldout contrasts and band-shuffle placebos
+        run: |
+          cd scripts
+          python -u analyze_world_rail_status_richness_railstatus.py \
+            --plant ../source/rs/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --rail ../source/rs/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --status ../source/rs/status/world_rail_km_by_status_100km_200km.json \
+            --built ../source/rs/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
+            --tree ../source/rs/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
+            --road ../source/rs/land/road.json --ne ../source/rs/land/ne.geojson \
+            --climate ../source/rs/land/wc2.1_10m_bio.zip \
+            --out ../results/railstatus/railstatus_richness_contrasts.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-railstatus-richness-contrasts
+          path: results/railstatus/railstatus_richness_contrasts.json
+          if-no-files-found: error
