@@ -45,6 +45,8 @@ def cell_bounds(ix, iy, inv):
     lat1 = 90.0 if not math.isfinite(lat1) else min(90.0, lat1)
     lon0 = -180.0 if not math.isfinite(lon0) else max(-180.0, lon0)
     lon1 = 180.0 if not math.isfinite(lon1) else min(180.0, lon1)
+    if lon1 <= lon0:  # pyproj wraps x beyond the antimeridian to negative longitudes
+        lon1 = 180.0
     return lon0, lon1, lat0, lat1
 
 
