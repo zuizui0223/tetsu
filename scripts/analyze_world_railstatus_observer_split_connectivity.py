@@ -40,8 +40,8 @@ def symmetric_effort(a,b):
     out={}
     for i,k in enumerate(EFF):
         x=[math.log1p(v[i]) for v in a];y=[math.log1p(v[i]) for v in b]
-        out["mean_"+k]=sum(x+y)/4
-        out["diff_"+k]=sum(abs(v-u) for v in x for u in y)/4
+        out["mean_"+k]=math.fsum(x+y)/4
+        out["diff_"+k]=math.fsum(abs(v-u) for v in x for u in y)/4
     return out
 
 def split_pair(base,p):
