@@ -10,6 +10,7 @@ from analyze_world_railstatus_growthform import (
     WORLDCLIM_SHA,EXPECTED_SHA,MD5,sha_file,source_continents,worldclim_tif,
     climate_scale,source_climate_lookup,original_cell_rows,verify_original_sources,
     inject_built,GRID,fit,flexible,EXTRA,SHA,W)
+from analyze_world_railstatus_growthform_missing_bounds import evaluate as joint_bounds
 CLASSES=("F","C","E","P","M","A","H")
 N_DRAW=20
 TARGETS=("support_diversity","free_vs_nonfree","nonfree_within")
@@ -101,7 +102,8 @@ def main():
                    traits[x["key"]]["known_woodiness"]/x["species"]>=coverage]
             panel={"land":land,"coverage":coverage,"base_n":len(m),
                    "support_diversity":evaluate(r),
-                   "common_woodiness_support":evaluate(joint)}
+                   "common_woodiness_support":evaluate(joint),
+                   "joint_richness_and_missingness_bounds":joint_bounds(joint,traits)}
             panels.append(panel);print(json.dumps({"growthform_diversity_panel":panel},allow_nan=False),flush=True)
     out={"version":"railstatus-growthform-support-diversity-v1","source_replay":checks,
          "growthform_source":src["source"],"original_coverage":src["coverage"],
