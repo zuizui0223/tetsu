@@ -36,11 +36,18 @@ jobs:
           run-id: 45584474048
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: source/bird/conditional
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-bird-historical-hwi
+          run-id: 45590411848
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/bird/historical
       - run: |
           python scripts/build_railstatus_bird_evidence_package.py \
             --temporal source/bird/temporal/railstatus_bird_temporal_influence.json \
             --guild source/bird/guild/railstatus_bird_avonet_temporal_audit.json \
             --conditional source/bird/conditional/railstatus_bird_conditional_hwi.json \
+            --historical source/bird/historical/railstatus_bird_historical_hwi.json \
             --out results/railstatus/bird_evidence
       - uses: actions/upload-artifact@v4
         with:

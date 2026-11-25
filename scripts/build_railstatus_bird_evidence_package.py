@@ -4,9 +4,9 @@ No additional model fitting; retain unsupported panels and explicit limits.
 """
 import argparse,csv,hashlib,json,math
 from pathlib import Path
-RUNS={"temporal":45579119530,"guild":45583858584,"conditional":45584474048}
-ARTIFACTS={"temporal":15004679743,"guild":15007417808,"conditional":15008459726}
-VERSIONS={"temporal":"railstatus-bird-temporal-joint-influence-v1","guild":"railstatus-avonet-guild-temporal-audit-v1","conditional":"railstatus-avonet-conditional-hwi-connectivity-v1"}
+RUNS={"temporal":45579119530,"guild":45583858584,"conditional":45584474048,"historical":45590411848}
+ARTIFACTS={"temporal":15004679743,"guild":15007417808,"conditional":15008459726,"historical":15010704848}
+VERSIONS={"temporal":"railstatus-bird-temporal-joint-influence-v1","guild":"railstatus-avonet-guild-temporal-audit-v1","conditional":"railstatus-avonet-conditional-hwi-connectivity-v1","historical":"railstatus-avonet-heldback-2018-22-hwi-connectivity-v1"}
 SHA="a8f0e0c889a05485f306029433cd45068836324e2bc6cf5b1ed8e34417f3d5fe"
 def read(p,key):
     raw=p.read_bytes();z=json.loads(raw)
@@ -57,6 +57,71 @@ def build(t,g,c):
     check(get("Low minus high HWI: Jaccard block_FE",.5,"active"),.02998709167574483)
     check(get("Low minus high HWI: Jaccard block_FE",.8,"active"),.0128861824804614)
     return out
+def historical_row(label,land,model,n,term,sign=-1):
+    q={"source":"historical","label":label,"land":land,"n_pairs":n,"period":"2018-22 pooled","term":term,
+       "status":model["status"],"estimate":None,"lower":None,"upper":None,"n_blocks":model.get("n_blocks")}
+    if model.get("n_pairs")!=n:raise ValueError("Historical support changed: "+label)
+    if model["status"]!="estimated":return q
+    e=model["effects"]["cross_active_normal"] if term=="active" else model["active_minus_inactive"]
+    if e is None:
+        q["status"]="contrast not identifiable";return q
+    b=e["estimate"];l,h=e["interval95_approx"]
+    if not all(math.isfinite(x) for x in (b,l,h)) or not l<=b<=h:raise ValueError("Invalid historical interval")
+    q.update(estimate=sign*b,lower=l if sign==1 else -h,upper=h if sign==1 else -l)
+    return q
+
+def historical_rows(h):
+    out=[]
+    for land in (.5,.8):
+        if h[land]["n_full_historical"]!={.5:811,.8:641}[land]:raise ValueError("Frozen historical support changed")
+        for key,lab,n in (("historical_native","Early native",{.5:693,.8:551}[land]),
+                          ("historical_on_original_hwi_geography","Early discovery-geography",{.5:535,.8:422}[land])):
+            v=h[land][key]
+            if v["n_raw"]!=n:raise ValueError("Historical HWI support changed")
+            for mode,models in v["unadjusted"].items():
+                for target,title,sign in (("g0_jaccard","Low HWI Jaccard",1),("g1_jaccard","High HWI Jaccard",1),("difference_jaccard","Low minus high HWI Jaccard",-1),("difference_simpson","Low minus high HWI Simpson",-1)):
+                    for term in ("active","active_minus_inactive"):
+                        out.append(historical_row(lab+" / "+title+" / "+mode,land,models[target],n,term,sign))
+            for cond,c in v["conditioned"].items():
+                for mode,models in c["models"].items():
+                    for target,title in (("difference_jaccard","Conditional Jaccard"),("difference_simpson","Conditional Simpson"),("raw_difference_jaccard","Same-design raw Jaccard"),("standardized_minus_raw_jaccard","Conditional minus raw Jaccard")):
+                        for term in ("active","active_minus_inactive"):
+                            out.append(historical_row(lab+" / "+cond+" / "+title+" / "+mode,land,models[target],c["n"],term))
+    def get(lab,land,term):
+        v=[r for r in out if (r["label"],r["land"],r["term"])==(lab,land,term)]
+        if len(v)!=1:raise ValueError("Ambiguous historical row")
+        return v[0]
+    check(get("Early native / Low minus high HWI Jaccard / block_FE",.5,"active"),.03170)
+    check(get("Early native / Low minus high HWI Jaccard / endpoint_FE",.5,"active"),-.01841)
+    check(get("Early native / habitat_x_migration / Conditional Jaccard / block_FE",.5,"active"),.00431)
+    check(get("Early native / habitat_x_migration / Same-design raw Jaccard / block_FE",.5,"active"),.01899)
+    check(get("Early discovery-geography / habitat_x_migration / Conditional Jaccard / block_FE",.5,"active"),-.00997)
+    return out
+
+def plot_historical(rows,root):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    wanted=[
+        ("Early native / Low minus high HWI Jaccard / block_FE", "All eligible: block FE"),
+        ("Early native / habitat_x_migration / Same-design raw Jaccard / block_FE", "Common support: unadjusted"),
+        ("Early native / habitat_x_migration / Conditional Jaccard / block_FE", "Common support: standardized"),
+        ("Early native / Low minus high HWI Jaccard / endpoint_FE", "All eligible: endpoint FE"),
+        ("Early discovery-geography / Low minus high HWI Jaccard / block_FE","Discovery geography: block FE"),
+        ("Early discovery-geography / habitat_x_migration / Conditional Jaccard / block_FE","Discovery geography: standardized")]
+    fig,ax=plt.subplots(figsize=(7.4,4.2));labels=[]
+    for i,(key,label) in enumerate(wanted):
+        z=[r for r in rows if r["source"]=="historical" and r["land"]==.5 and r["label"]==key and r["term"]=="active"]
+        if len(z)!=1 or z[0]["estimate"] is None:raise ValueError("Historical figure row unavailable")
+        r=z[0];ax.errorbar(r["estimate"],i,xerr=[[r["estimate"]-r["lower"]],[r["upper"]-r["estimate"]]],fmt="o",capsize=3,color="#245D76" if i==0 else "#748896")
+        labels.append(label+f' (n={r["n_pairs"]})')
+    ax.set_yticks(range(len(labels)),labels);ax.invert_yaxis();ax.axvline(0,color="#777777",linestyle="--")
+    ax.set_xlabel("Low-HWI minus high-HWI crossing coefficient")
+    ax.set_title("Historical retest: association depends on adjustment",loc="left",fontsize=12)
+    ax.spines[["right","top"]].set_visible(False);ax.grid(axis="x",alpha=.15)
+    fig.text(.02,.015,"2018–22 pooled; land ≥50%; approximate 95% intervals. Conditional effect not established.",fontsize=8)
+    fig.tight_layout(rect=(0,.05,1,1));fig.savefig(root/"figure_historical_hwi_falsification.svg",bbox_inches="tight");plt.close(fig)
+
 def write_report(rows,meta,root):
     root.mkdir(parents=True,exist_ok=True)
     with (root/"bird_evidence.csv").open("w",newline="",encoding="utf8") as f:
@@ -68,7 +133,7 @@ def write_report(rows,meta,root):
     for r in rows:
         effect=(f'{r["estimate"]:+.5f} [{r["lower"]:+.5f}, {r["upper"]:+.5f}]' if r["estimate"] is not None else "Not identifiable")
         lines.append(f'| {r["label"]} ({r["period"]}) | {r["land"]:.0%} | {r["n_pairs"]} | {r["term"]} | {effect} |')
-    lines+=["","Historical 2018–22 validation is a separate pending analysis (run 45590411848 at this freeze); no effect has been assumed.","","AVONET: verified public derivative, not authenticated publisher archive. Source SHA and workflow receipts are recorded."]
+    lines+=["","Historical 2018–22 pooled retest: unadjusted block-FE HWI contrast recurs on native support, but the preregistered habitat/migration-standardized contrast is uncertain; endpoint-FE contrast reverses. Common-support attenuation itself is uncertain. No independent mobility mechanism established.","","AVONET: verified public derivative, not authenticated publisher archive. Source SHA and workflow receipts are recorded."]
     (root/"EVIDENCE.md").write_text("\n".join(lines)+"\n",encoding="utf8")
 def plot(rows,root):
     import matplotlib
@@ -93,7 +158,7 @@ def main():
     for k in (*RUNS,"out"):p.add_argument("--"+k,type=Path,required=True)
     a=p.parse_args();d={};meta={}
     for k in RUNS:d[k],meta[k]=read(getattr(a,k),k)
-    rows=build(d["temporal"],d["guild"],d["conditional"])
-    write_report(rows,meta,a.out);plot(rows,a.out)
+    rows=build(d["temporal"],d["guild"],d["conditional"])+historical_rows(d["historical"])
+    write_report(rows,meta,a.out);plot(rows,a.out);plot_historical(rows,a.out)
     print(json.dumps({"evidence_rows":len(rows),"estimated":sum(r["status"]=="estimated" for r in rows),"not_identifiable":sum(r["status"]!="estimated" for r in rows),"source_receipts":meta},allow_nan=False))
 if __name__=="__main__":main()
