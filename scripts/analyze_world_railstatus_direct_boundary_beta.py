@@ -79,7 +79,7 @@ def fit(rows,target,endpoint,fields=PRED):
     inv=np.linalg.inv(Z.T@Z);b=inv@(Z.T@y);e=y-Z@b;coef=b/norm[keep]
     scores=np.array([Z[ix].T@e[ix] for ix in blocks.values()])@inv.T/norm[keep]
     idx=names.index(ACTIVE)
-    residual_blocks=sum(np.linalg.norm(Z[ix,idx])>1e-8 for ix in blocks.values())
+    residual_blocks=int(sum(np.linalg.norm(Z[ix,idx])>1e-8 for ix in blocks.values()))
     qa["n_blocks_residual_active"]=residual_blocks
     if residual_blocks<20:return dict(qa,status="insufficient residual crossing support")
     def effect(terms):
