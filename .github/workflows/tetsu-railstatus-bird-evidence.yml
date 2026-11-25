@@ -1,0 +1,49 @@
+name: "railstatus: assemble frozen bird manuscript evidence"
+on:
+  push:
+    branches: [research/tetsu-railstatus-placebo-20261125]
+    paths:
+      - 'scripts/build_railstatus_bird_evidence_package.py'
+      - '.github/workflows/tetsu-railstatus-bird-evidence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'matplotlib>=3.8,<4'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-bird-temporal-influence
+          run-id: 45579119530
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/bird/temporal
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-bird-avonet-temporal-audit
+          run-id: 45583858584
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/bird/guild
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-bird-conditional-hwi
+          run-id: 45584474048
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/bird/conditional
+      - run: |
+          python scripts/build_railstatus_bird_evidence_package.py \
+            --temporal source/bird/temporal/railstatus_bird_temporal_influence.json \
+            --guild source/bird/guild/railstatus_bird_avonet_temporal_audit.json \
+            --conditional source/bird/conditional/railstatus_bird_conditional_hwi.json \
+            --out results/railstatus/bird_evidence
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-railstatus-bird-frozen-evidence
+          path: results/railstatus/bird_evidence
+          if-no-files-found: error
