@@ -6,7 +6,7 @@ class TestBoundaryJSON(unittest.TestCase):
         rng=np.random.default_rng(11);rows=[]
         for b in range(30):
             for i in range(6):
-                a=float(rng.integers(0,2));z=float(rng.integers(0,2))
+                a=float(i%2);z=float(rng.integers(0,2))
                 rows.append({"continent":"X","block":b,"a":(b,i),"b":(b,i+1),ACTIVE:a,INACTIVE:z,"jaccard":.3+.1*a-.04*z})
         r=fit(rows,"jaccard",False,(ACTIVE,INACTIVE))
         self.assertEqual(r["status"],"estimated")
