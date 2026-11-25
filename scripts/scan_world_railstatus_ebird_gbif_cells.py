@@ -38,15 +38,16 @@ def get(path, params, tries=6):
             time.sleep(5 * 2 ** i)
 
 
+X_AT_180 = 17_367_530.445161376  # EPSG:6933 easting of longitude 180 (cylindrical, linear in longitude)
+
+
 def cell_bounds(ix, iy, inv):
     x0 = X0 + ix * W; x1 = x0 + W; y0 = Y0 + iy * W; y1 = y0 + W
-    lon0, lat0 = inv.transform(x0, y0); lon1, lat1 = inv.transform(x1, y1)
+    lon0 = max(-180.0, min(180.0, x0 / X_AT_180 * 180.0))
+    lon1 = max(-180.0, min(180.0, x1 / X_AT_180 * 180.0))
+    _, lat0 = inv.transform(0.0, y0); _, lat1 = inv.transform(0.0, y1)
     lat0 = -90.0 if not math.isfinite(lat0) else max(-90.0, lat0)
     lat1 = 90.0 if not math.isfinite(lat1) else min(90.0, lat1)
-    lon0 = -180.0 if not math.isfinite(lon0) else max(-180.0, lon0)
-    lon1 = 180.0 if not math.isfinite(lon1) else min(180.0, lon1)
-    if lon1 <= lon0:  # pyproj wraps x beyond the antimeridian to negative longitudes
-        lon1 = 180.0
     return lon0, lon1, lat0, lat1
 
 
