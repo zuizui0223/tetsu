@@ -43,6 +43,8 @@ def cell_bounds(ix, iy, inv):
     lon0, lat0 = inv.transform(x0, y0); lon1, lat1 = inv.transform(x1, y1)
     lat0 = -90.0 if not math.isfinite(lat0) else max(-90.0, lat0)
     lat1 = 90.0 if not math.isfinite(lat1) else min(90.0, lat1)
+    lon0 = -180.0 if not math.isfinite(lon0) else max(-180.0, lon0)
+    lon1 = 180.0 if not math.isfinite(lon1) else min(180.0, lon1)
     return lon0, lon1, lat0, lat1
 
 
