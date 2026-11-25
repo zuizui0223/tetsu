@@ -1,0 +1,49 @@
+name: "railstatus: complete NHM trait retrieval and actual observed plant coverage"
+on:
+  push:
+    branches: [research/tetsu-railstatus-placebo-20261125]
+    paths:
+      - 'scripts/audit_world_NHM_rail_trait_match.py'
+      - 'tests/test_world_NHM_rail_trait_match.py'
+      - '.github/workflows/tetsu-railstatus-NHM-trait-match.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: railstatus-nhm-trait-match
+  cancel-in-progress: true
+jobs:
+  exact_trait_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'boto3>=1.35,<2' 'pyproj>=3.6,<4'
+      - run: PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_world_NHM_rail_trait_match.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rsnhm/plants
+      - name: Full source, unique exact names and conditional original observation coverage
+        run: |
+          python -u scripts/audit_world_NHM_rail_trait_match.py \
+            --plant source/rsnhm/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --audit results/railstatus/nhm_trait_source_match.json \
+            --grid results/railstatus/nhm_observed_trait_coverage.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tetsu-railstatus-NHM-trait-source-match
+          path: results/railstatus/nhm_trait_source_match.json
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tetsu-railstatus-NHM-observed-trait-coverage
+          path: results/railstatus/nhm_observed_trait_coverage.json
+          if-no-files-found: warn
