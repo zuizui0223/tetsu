@@ -15,12 +15,12 @@ class TestObserverSplit(unittest.TestCase):
         for side in (0,1):
             ids=[i for i in range(100) if observer_side(i)==side][:5]
             for i in range(25):
-                add(a,i%12,ids[i%5]);add(b,i%12+2,ids[i%5])
+                add(a,i,ids[i%5]);add(b,i+2,ids[i%5])
         z=pair_rows({(0,0):a,(1,0):b})[0]
-        self.assertEqual(z["species_full"]["shared"],10)
+        self.assertEqual(z["species_full"]["shared"],23)
         self.assertEqual(z["observer_full"]["jaccard"],1)
-        self.assertEqual(z["split_similarity"]["01"]["shared"],10)
-        self.assertEqual(z["split_similarity"]["10"]["shared"],10)
+        self.assertEqual(z["split_similarity"]["01"]["shared"],23)
+        self.assertEqual(z["split_similarity"]["10"]["shared"],23)
         self.assertEqual(len(z["split_similarity"]),4)
     def test_small_support_no_split(self):
         a=bucket();b=bucket()
