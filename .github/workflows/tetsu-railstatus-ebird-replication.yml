@@ -1,0 +1,103 @@
+name: "railstatus eBird replication: bird similarity across active-rail cell boundaries in an independent observation network"
+on:
+  push:
+    branches: [research/tetsu-railstatus-placebo-20261125]
+    paths:
+      - 'scripts/scan_world_railstatus_ebird_gbif_cells.py'
+      - 'scripts/analyze_world_railstatus_ebird_connectivity.py'
+      - '.github/workflows/tetsu-railstatus-ebird-replication.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: railstatus-ebird
+  cancel-in-progress: true
+jobs:
+  ebird:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-direct-boundary-crossings
+          run-id: 45568209801
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/edges
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-world-rail-km-by-status
+          run-id: 45556359068
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/status
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/rail
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v376b-JRC-GHSL-2020-global-builtup-100km-200km-real-source
+          run-id: 45382671629
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/built
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v380a-EarthEnv-original-global-tree-consensus-macro-grid
+          run-id: 45394188340
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/tree
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v381a-original-GRIP4-global-road-density-grid
+          run-id: 45394776556
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/road
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v391-original-JRC-GHS-POP2020-global-coarse-counts
+          run-id: 45425219960
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/pop
+      - name: GBIF eBird facets for every 200 km cell with active rail
+        run: |
+          cd scripts
+          python -u scan_world_railstatus_ebird_gbif_cells.py --status ../source/rs/status/world_rail_km_by_status_100km_200km.json \
+            --out ../results/railstatus/ebird_cells_pairs.json --workers 4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-railstatus-ebird-cells-pairs
+          path: results/railstatus/ebird_cells_pairs.json
+          if-no-files-found: error
+      - name: Land units and climate
+        run: |
+          mkdir -p source/rs/land
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 300 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/rs/land/ne.geojson
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 780 'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' -o source/rs/land/wc2.1_10m_bio.zip
+      - name: Pre-stated eBird pair model
+        run: |
+          cd scripts
+          python -u analyze_world_railstatus_ebird_connectivity.py \
+            --ebird ../results/railstatus/ebird_cells_pairs.json \
+            --edges ../source/rs/edges/direct_boundary_crossings.json \
+            --rail ../source/rs/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --status ../source/rs/status/world_rail_km_by_status_100km_200km.json \
+            --built ../source/rs/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
+            --tree ../source/rs/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
+            --road ../source/rs/road/v381a_original_GRIP4_global_road_density_100km_200km.json \
+            --population ../source/rs/pop/v391_original_global_GHS_POP2020_100km_200km.json \
+            --ne ../source/rs/land/ne.geojson --climate ../source/rs/land/wc2.1_10m_bio.zip \
+            --out ../results/railstatus/ebird_connectivity.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-railstatus-ebird-connectivity
+          path: results/railstatus/ebird_connectivity.json
+          if-no-files-found: error
