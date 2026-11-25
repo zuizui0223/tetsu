@@ -25,18 +25,19 @@ def traits(rows,n):
     if "Trophic.Niche" not in rows[0]:raise ValueError("Published trophic niche column missing")
     counts=Counter(category(r["Trophic.Niche"]) for r in rows)
     print(json.dumps({"AVONET_trophic_categories":dict(counts)}),flush=True)
-    if set(counts)-CATEGORIES-{""}:raise ValueError("Unrecognized trophic niche code; inspect original metadata, do not infer")
-    out={};tot=Counter()
+    if set(counts)-CATEGORIES-{"","na"}:raise ValueError("Unrecognized trophic niche code; inspect original metadata, do not infer")
+    out={};tot=Counter();missing_matched=0
     for r in rows:
         ids=n.get(norm(r["Species1"]),[])
         if len(ids)!=1:continue
         t=ids[0];cat=category(r["Trophic.Niche"])
+        if cat in ("","na"):missing_matched+=1
         if cat in ("frugivore","granivore"):g=("fruit_seed",cat)
         elif cat=="invertivore":g=("invertivore",)
         else:g=()
         out[t]=g;tot.update(g)
     if len(out)!=len(previous) or min(tot[k] for k in GUILDS)<100:raise ValueError("Trophic guild match insufficient")
-    return out,{"source_categories":dict(counts),"matched":len(out),"matched_guild_species":dict(tot),"previous_HWI_match":qa}
+    return out,{"source_categories":dict(counts),"matched":len(out),"matched_guild_species":dict(tot),"missing_trophic_source_rows":counts[""]+counts["na"],"missing_trophic_matched_species":missing_matched,"previous_HWI_match":qa}
 
 def candidates(src,annual):
     out={}

@@ -5,6 +5,8 @@ class TestDiet(unittest.TestCase):
     def test_category(self):
         self.assertEqual(category("Herbivore, terrestrial"),"herbivoreterrestrial")
         self.assertEqual(category("Aquatic predator"),"aquaticpredator")
+        self.assertEqual(category("NA"),"na")
+        self.assertEqual(category(None),"")
     def test_counts(self):
         h=[[30,5,10],[30,5,10]]
         r={"key":(1,2)}
