@@ -74,11 +74,26 @@ jobs:
           done
           curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 300 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/v397/land/ne.geojson
           curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 780 'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' -o source/v397/land/wc2.1_10m_bio.zip
+      - name: Check exact downloaded input paths before expensive replay
+        run: |
+          set -euo pipefail
+          find source/v397 -maxdepth 2 -type f -printf '%P %s bytes\n' | sort
+          for f in \
+            source/v397/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            source/v397/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            source/v397/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
+            source/v397/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
+            source/v397/road/v381a_original_GRIP4_global_road_density_100km_200km.json \
+            source/v397/pop/v391_original_global_GHS_POP2020_100km_200km.json \
+            source/v397/v383/v383_original_coarse_cell_counts.json \
+            source/v397/land/ne.geojson source/v397/land/wc2.1_10m_bio.zip; do
+            test -s "$f"
+          done
       - name: Exact original snapshot scan and annual / cumulative models
         run: |
           python -u scripts/analyze_global_multiyear_naturalized_v397.py \
             --plants source/v397/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
-            --rail source/v397/rail/v370_original_fullworld_normal_rail_100km_200km_grid_counts.json \
+            --rail source/v397/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
             --built source/v397/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
             --ne source/v397/land/ne.geojson --climate source/v397/land/wc2.1_10m_bio.zip \
             --glonaf source/v397/glonaf \
