@@ -42,7 +42,7 @@ def annual_panel(by,epoch=2024,metric="jaccard",endpoint=False,flex=True):
     for y in YEARS:
         result["years"][y],f[y]=annual_fit(rr[y],epoch,metric,endpoint,flex)
     if all(f[y] is not None for y in YEARS[:2]):
-        earlier=combine(f,{y:.5 for y in YEARS[:2]})
+        earlier=combine({y:f[y] for y in YEARS[:2]},{y:.5 for y in YEARS[:2]})
         result["earlier_mean"]=interval(earlier)
         if f["2025"] is not None:
             result["all_year_mean"]=interval(combine(f,{y:1/3 for y in YEARS}))

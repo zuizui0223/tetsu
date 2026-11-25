@@ -12,6 +12,13 @@ class TestAnnual(unittest.TestCase):
             z=t.annual_panel(by)
         self.assertEqual(z["earlier_mean"]["estimate"],2.)
         self.assertEqual(z["2025_minus_earlier"]["interval95_approx"],[2.,2.])
+    def test_earlier_only(self):
+        by={y:[] for y in t.YEARS}
+        f=(1.,{("X",0):.1,("X",1):-.1})
+        with patch.object(t,"annual_fit",side_effect=[({},f),({},f),({},None)]):
+            z=t.annual_panel(by)
+        self.assertEqual(z["earlier_mean"]["estimate"],1.)
+        self.assertNotIn("all_year_mean",z)
     def test_duplicate(self):
         r={"a":(0,0),"b":(0,1),"continent":"X","block":0}
         with self.assertRaises(ValueError):t.matched({"2023":[r,r],"2024":[r],"2025":[r]})
