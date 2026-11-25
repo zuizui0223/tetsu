@@ -1,0 +1,2 @@
+# v397b 実行修正（2026-11-25）
+run 45546878701 は専用テスト・すべての成果物ダウンロード・GloNAF/map/climate取得まで成功したが、本解析開始時に鉄道ファイル名の誤記 v370_original_fullworld_normal_rail_100km_200km_grid_counts.json による FileNotFoundError。正しい原ファイルは成功済みv386等のworkflowと同じ v370_original_fullworld_railkm_100km_200km_grid_counts.json。原個票の走査前に停止、年別結果・累積結果・coarse artifactは未生成。v397b はパスのみ修正し、全入力ファイルの存在・サイズの事前チェックとファイル名一覧を追加する。対象年、地理支持、マッチ条件、統計計算、原資料ID/ETag/SHAは変更なし。新しい結果は原実行成功まで主張しない。

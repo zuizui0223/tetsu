@@ -1,0 +1,77 @@
+name: "v387 original global turnover extra climate and local block retest"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/analyze_global_turnover_climate_block_v387.py'
+      - 'tests/test_global_turnover_climate_block_v387.py'
+      - '.github/workflows/tetsu-v387-turnover-climate-block.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - run: python -m unittest discover -s tests -p 'test_global_turnover_climate_block_v387.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v387/plants
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v387/rail
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v376b-JRC-GHSL-2020-global-builtup-100km-200km-real-source
+          run-id: 45382671629
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v387/built
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v380a-EarthEnv-original-global-tree-consensus-macro-grid
+          run-id: 45394188340
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v387/tree
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v381a-original-GRIP4-global-road-density-grid
+          run-id: 45394776556
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v387/road
+      - name: Pinned original climate and map
+        run: |
+          set -euo pipefail
+          mkdir -p source/v387/land
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 300 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/v387/land/ne.geojson
+          curl -LfS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 780 'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' -o source/v387/land/wc2.1_10m_bio.zip
+      - name: Exact v386 replay, precipitation, seasonality and block fixed effects
+        run: |
+          python -u scripts/analyze_global_turnover_climate_block_v387.py \
+            --plant source/v387/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --rail source/v387/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --built source/v387/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
+            --tree source/v387/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
+            --road source/v387/road/v381a_original_GRIP4_global_road_density_100km_200km.json \
+            --ne source/v387/land/ne.geojson --climate source/v387/land/wc2.1_10m_bio.zip \
+            --out results/audit/v387_original_turnover_climate_block.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v387-original-turnover-climate-block
+          path: results/audit/v387_original_turnover_climate_block.json
+          if-no-files-found: error

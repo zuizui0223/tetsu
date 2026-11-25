@@ -1,0 +1,117 @@
+name: "v397 original 2023-2025 worldwide plant naturalization temporal and matched-support expansion"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/analyze_global_multiyear_naturalized_v397.py'
+      - 'tests/test_global_multiyear_naturalized_v397.py'
+      - '.github/workflows/tetsu-v397-global-multiyear-naturalized.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'boto3>=1.35,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.3,<2' 'geopandas>=1,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25'
+      - run: python -m unittest discover -s tests -p 'test_global_multiyear_naturalized_v397.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v397/plants
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v370-original-fullworld-normal-rail-100km-200km-grid-exposure
+          run-id: 45373985228
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v397/rail
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v376b-JRC-GHSL-2020-global-builtup-100km-200km-real-source
+          run-id: 45382671629
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v397/built
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v380a-EarthEnv-original-global-tree-consensus-macro-grid
+          run-id: 45394188340
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v397/tree
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v381a-original-GRIP4-global-road-density-grid
+          run-id: 45394776556
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v397/road
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v383-coarse-cell-naturalized-counts-only
+          run-id: 45404886620
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v397/v383
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v391-original-JRC-GHS-POP2020-global-coarse-counts
+          run-id: 45425219960
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v397/pop
+      - name: Original GloNAF and frozen map climate source
+        run: |
+          set -euo pipefail
+          mkdir -p source/v397/glonaf source/v397/land
+          for f in glonaf_2024_nol.zip glonaf_flora2.csv glonaf_list.csv glonaf_region.csv glonaf_taxon_wcvp.csv glonaf_TxR.csv; do
+            curl -LfS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 600 "https://zenodo.org/records/17105725/files/$f?download=1" -o "source/v397/glonaf/$f"
+          done
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 300 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/v397/land/ne.geojson
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 780 'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' -o source/v397/land/wc2.1_10m_bio.zip
+      - name: Check exact downloaded input paths before expensive replay
+        run: |
+          set -euo pipefail
+          find source/v397 -maxdepth 2 -type f -printf '%P %s bytes\n' | sort
+          for f in \
+            source/v397/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            source/v397/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            source/v397/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
+            source/v397/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
+            source/v397/road/v381a_original_GRIP4_global_road_density_100km_200km.json \
+            source/v397/pop/v391_original_global_GHS_POP2020_100km_200km.json \
+            source/v397/v383/v383_original_coarse_cell_counts.json \
+            source/v397/land/ne.geojson source/v397/land/wc2.1_10m_bio.zip; do
+            test -s "$f"
+          done
+      - name: Exact original snapshot scan and annual / cumulative models
+        run: |
+          python -u scripts/analyze_global_multiyear_naturalized_v397.py \
+            --plants source/v397/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --rail source/v397/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
+            --built source/v397/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
+            --ne source/v397/land/ne.geojson --climate source/v397/land/wc2.1_10m_bio.zip \
+            --glonaf source/v397/glonaf \
+            --tree source/v397/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
+            --road source/v397/road/v381a_original_GRIP4_global_road_density_100km_200km.json \
+            --population source/v397/pop/v391_original_global_GHS_POP2020_100km_200km.json \
+            --v383 source/v397/v383/v383_original_coarse_cell_counts.json \
+            --out results/audit/v397_original_2023_2025_temporal_support.json \
+            --aggregates results/audit/v397_original_multiyear_coarse_counts.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v397-original-multiyear-naturalized-temporal-results
+          path: results/audit/v397_original_2023_2025_temporal_support.json
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tetsu-v397-original-multiyear-coarse-counts
+          path: results/audit/v397_original_multiyear_coarse_counts.json
+          if-no-files-found: warn

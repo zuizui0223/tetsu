@@ -1,0 +1,80 @@
+name: "v391 original global GHS-POP 2020 source and v392 naturalized population adjustment"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/aggregate_original_GHS_POP2020_v391.py'
+      - 'scripts/analyze_global_naturalized_population_v392.py'
+      - 'tests/test_global_naturalized_population_v392.py'
+      - '.github/workflows/tetsu-v391-v392-GHS-POP-global-naturalized.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_population_and_models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'geopandas>=1,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - run: python -m unittest discover -s tests -p 'test_global_naturalized_population_v392.py' -v
+      - name: Original publisher full global GHS-POP source HEAD and conditional GET
+        run: |
+          set -euo pipefail
+          mkdir -p source/v391
+          url='https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_1000/V1-0/GHS_POP_E2020_GLOBE_R2023A_54009_1000_V1_0.zip'
+          curl -LfSsI --retry 4 --retry-all-errors --connect-timeout 30 --max-time 180 "$url" > source/v391/head.txt
+          cat source/v391/head.txt
+          etag=$(tr -d '\r' < source/v391/head.txt | grep -i '^etag:' | tail -1 | cut -d: -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' || true)
+          if [ -n "$etag" ]; then
+            curl -LfSs --retry 4 --retry-all-errors --connect-timeout 30 --max-time 1800 --header "If-Match: $etag" "$url" -o source/v391/pop.zip
+          else
+            curl -LfSs --retry 4 --retry-all-errors --connect-timeout 30 --max-time 1800 "$url" -o source/v391/pop.zip
+          fi
+          sha256sum source/v391/pop.zip
+      - name: Validate original full raster counts, project sums and support
+        run: |
+          python -u scripts/aggregate_original_GHS_POP2020_v391.py --archive source/v391/pop.zip --head source/v391/head.txt --out results/audit/v391_original_global_GHS_POP2020_100km_200km.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-v391-original-JRC-GHS-POP2020-global-coarse-counts
+          path: results/audit/v391_original_global_GHS_POP2020_100km_200km.json
+          if-no-files-found: error
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v383-coarse-cell-naturalized-counts-only
+          run-id: 45404886620
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v391/cells
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v380a-EarthEnv-original-global-tree-consensus-macro-grid
+          run-id: 45394188340
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v391/tree
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v381a-original-GRIP4-global-road-density-grid
+          run-id: 45394776556
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v391/road
+      - name: Original v389 replay and same-support population adjustment
+        run: |
+          python -u scripts/analyze_global_naturalized_population_v392.py \
+            --cells source/v391/cells/v383_original_coarse_cell_counts.json \
+            --tree source/v391/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
+            --road source/v391/road/v381a_original_GRIP4_global_road_density_100km_200km.json \
+            --population results/audit/v391_original_global_GHS_POP2020_100km_200km.json \
+            --out results/audit/v392_original_naturalized_population_adjustment.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v392-original-global-naturalized-population-adjustment
+          path: results/audit/v392_original_naturalized_population_adjustment.json
+          if-no-files-found: error

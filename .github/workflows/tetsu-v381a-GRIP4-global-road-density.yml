@@ -1,0 +1,33 @@
+name: "v381a independent publisher original GRIP4 global road density to railway macro grids"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/aggregate_original_GRIP4_road_density_v381a.py'
+      - 'tests/test_original_GRIP4_road_density_v381a.py'
+      - '.github/workflows/tetsu-v381a-GRIP4-global-road-density.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'pyproj>=3.6,<4'
+      - run: python -m unittest discover -s tests -p 'test_original_GRIP4_road_density_v381a.py' -v
+      - name: Retrieve publisher original total density ASCII grid
+        run: |
+          mkdir -p source/v381a
+          curl -LfS --retry 4 --retry-all-errors --connect-timeout 30 --max-time 180 'https://zenodo.org/records/6420961/files/GRIP4_density_total.zip?download=1' -o source/v381a/GRIP4_density_total.zip
+          echo '24d3ed5c079f7a898fbc4a5d68be337a  source/v381a/GRIP4_density_total.zip' | md5sum --check
+      - run: python -u scripts/aggregate_original_GRIP4_road_density_v381a.py --archive source/v381a/GRIP4_density_total.zip --out results/audit/v381a_original_GRIP4_global_road_density_100km_200km.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v381a-original-GRIP4-global-road-density-grid
+          path: results/audit/v381a_original_GRIP4_global_road_density_100km_200km.json
+          if-no-files-found: error

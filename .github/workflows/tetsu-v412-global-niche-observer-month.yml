@@ -1,0 +1,73 @@
+name: "v412 original annual plant niche change with month and observer-month balanced records"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/analyze_global_niche_observer_month_v412.py'
+      - 'tests/test_global_niche_observer_month_v412.py'
+      - '.github/workflows/tetsu-v412-global-niche-observer-month.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'boto3>=1.35,<2' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'geopandas>=1,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'pyarrow>=18,<25'
+      - run: python -m unittest discover -s tests -p 'test_global_niche_observer_month_v412.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v369-original-world-plant-2025-coarse-100km-200km-gridded-richness-and-effort
+          run-id: 45375453375
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v412/plants
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v399-original-niche-coarse-aggregates
+          run-id: 45554651105
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v412/niches
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v405-original-niche-temporal-coarse
+          run-id: 45568291544
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v412/annual
+      - name: Frozen original climate and land map
+        run: |
+          set -euo pipefail
+          mkdir -p source/v412/land
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 300 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_map_units.geojson' -o source/v412/land/ne.geojson
+          curl -LfsS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 780 'https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_10m_bio.zip' -o source/v412/land/wc2.1_10m_bio.zip
+          test -s source/v412/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json
+          test -s source/v412/niches/v399_original_niche_coarse_aggregates.json
+          test -s source/v412/annual/v405_original_niche_temporal_coarse.json
+      - name: Original occurrence replay and fixed month/observer-month balancing
+        run: |
+          python -u scripts/analyze_global_niche_observer_month_v412.py \
+            --annual source/v412/annual/v405_original_niche_temporal_coarse.json \
+            --niche source/v412/niches/v399_original_niche_coarse_aggregates.json \
+            --plants source/v412/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
+            --ne source/v412/land/ne.geojson --climate source/v412/land/wc2.1_10m_bio.zip \
+            --out results/audit/v412_original_observer_month_niche.json \
+            --aggregates results/audit/v412_original_balanced_annual_coarse.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v412-original-observer-month-niche
+          path: results/audit/v412_original_observer_month_niche.json
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tetsu-v412-original-balanced-annual-coarse
+          path: results/audit/v412_original_balanced_annual_coarse.json
+          if-no-files-found: warn

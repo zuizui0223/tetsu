@@ -1,0 +1,60 @@
+name: "v411 original NOAA CPC annual precipitation and niche change"
+on:
+  push:
+    branches: [research/tetsu-v378-global-regional-hypotheses-20261124]
+    paths:
+      - 'scripts/analyze_global_niche_precip_change_v411.py'
+      - 'tests/test_global_niche_precip_change_v411.py'
+      - 'data/derived/v411_verified_v410_changes.json'
+      - '.github/workflows/tetsu-v411-niche-precip-change.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original_source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'geopandas>=1,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'boto3>=1.35,<2' 'netCDF4>=1.6,<2'
+      - run: python -m unittest discover -s tests -p 'test_global_niche_precip_change_v411.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v405-original-niche-temporal-coarse
+          run-id: 45568291544
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v411/annual
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v399-original-niche-coarse-aggregates
+          run-id: 45554651105
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/v411/niche
+      - name: Original NOAA PSL CPC daily 2023-2025 NetCDF
+        run: |
+          set -euo pipefail
+          mkdir -p source/v411/cpc
+          for y in 2023 2024 2025; do
+            curl -LfS --retry 5 --retry-all-errors --connect-timeout 30 --max-time 600 "https://psl.noaa.gov/thredds/fileServer/Datasets/cpc_global_precip/precip.$y.nc" -o "source/v411/cpc/precip.$y.nc"
+            sha256sum "source/v411/cpc/precip.$y.nc"
+          done
+      - name: Exact v410 replay and annual rainfall change
+        run: python -u scripts/analyze_global_niche_precip_change_v411.py --source source/v411/annual/v405_original_niche_temporal_coarse.json --niche source/v411/niche/v399_original_niche_coarse_aggregates.json --verified data/derived/v411_verified_v410_changes.json --climate-dir source/v411/cpc --climate-out results/audit/v411_original_CPC_annual_cell_precip.json --out results/audit/v411_original_niche_precip_change.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: tetsu-v411-original-niche-precip-change
+          path: results/audit/v411_original_niche_precip_change.json
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tetsu-v411-original-CPC-annual-cell-precip
+          path: results/audit/v411_original_CPC_annual_cell_precip.json
+          if-no-files-found: warn

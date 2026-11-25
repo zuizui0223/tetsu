@@ -1,0 +1,194 @@
+[
+  {
+    "land": 0.5,
+    "support": "all",
+    "level": "occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 1234,
+    "coef": -0.053382923524754176
+  },
+  {
+    "land": 0.5,
+    "support": "all",
+    "level": "occupancy",
+    "ref": "exclude_continent",
+    "n": 1234,
+    "coef": -0.050481123540547214
+  },
+  {
+    "land": 0.5,
+    "support": "all",
+    "level": "family_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 1234,
+    "coef": 0.010567860825402904
+  },
+  {
+    "land": 0.5,
+    "support": "all",
+    "level": "family_occupancy",
+    "ref": "exclude_continent",
+    "n": 1234,
+    "coef": 0.024550641205545534
+  },
+  {
+    "land": 0.5,
+    "support": "all",
+    "level": "genus_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 731,
+    "coef": 0.0941891256994134
+  },
+  {
+    "land": 0.5,
+    "support": "all",
+    "level": "genus_occupancy",
+    "ref": "exclude_continent",
+    "n": 731,
+    "coef": 0.1932908034387064
+  },
+  {
+    "land": 0.5,
+    "support": "high_effort",
+    "level": "occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 711,
+    "coef": -0.21838604947777013
+  },
+  {
+    "land": 0.5,
+    "support": "high_effort",
+    "level": "occupancy",
+    "ref": "exclude_continent",
+    "n": 711,
+    "coef": -0.16779948444679268
+  },
+  {
+    "land": 0.5,
+    "support": "high_effort",
+    "level": "family_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 711,
+    "coef": -0.03262294223575752
+  },
+  {
+    "land": 0.5,
+    "support": "high_effort",
+    "level": "family_occupancy",
+    "ref": "exclude_continent",
+    "n": 711,
+    "coef": -0.006628857883856948
+  },
+  {
+    "land": 0.5,
+    "support": "high_effort",
+    "level": "genus_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 456,
+    "coef": 0.019961678897984902
+  },
+  {
+    "land": 0.5,
+    "support": "high_effort",
+    "level": "genus_occupancy",
+    "ref": "exclude_continent",
+    "n": 456,
+    "coef": 0.01818493002122218
+  },
+  {
+    "land": 0.8,
+    "support": "all",
+    "level": "occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 1054,
+    "coef": -0.17470798882944955
+  },
+  {
+    "land": 0.8,
+    "support": "all",
+    "level": "occupancy",
+    "ref": "exclude_continent",
+    "n": 1054,
+    "coef": -0.1488974083669399
+  },
+  {
+    "land": 0.8,
+    "support": "all",
+    "level": "family_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 1054,
+    "coef": -0.046819563327732384
+  },
+  {
+    "land": 0.8,
+    "support": "all",
+    "level": "family_occupancy",
+    "ref": "exclude_continent",
+    "n": 1054,
+    "coef": -0.016377831755504196
+  },
+  {
+    "land": 0.8,
+    "support": "all",
+    "level": "genus_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 651,
+    "coef": 0.14053641047893456
+  },
+  {
+    "land": 0.8,
+    "support": "all",
+    "level": "genus_occupancy",
+    "ref": "exclude_continent",
+    "n": 651,
+    "coef": 0.2592796375085543
+  },
+  {
+    "land": 0.8,
+    "support": "high_effort",
+    "level": "occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 596,
+    "coef": -0.31172722579363454
+  },
+  {
+    "land": 0.8,
+    "support": "high_effort",
+    "level": "occupancy",
+    "ref": "exclude_continent",
+    "n": 596,
+    "coef": -0.236194231641609
+  },
+  {
+    "land": 0.8,
+    "support": "high_effort",
+    "level": "family_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 596,
+    "coef": -0.020929474341238583
+  },
+  {
+    "land": 0.8,
+    "support": "high_effort",
+    "level": "family_occupancy",
+    "ref": "exclude_continent",
+    "n": 596,
+    "coef": 0.020456892632314674
+  },
+  {
+    "land": 0.8,
+    "support": "high_effort",
+    "level": "genus_occupancy",
+    "ref": "exclude_3x3_blocks",
+    "n": 403,
+    "coef": 0.1917095943541944
+  },
+  {
+    "land": 0.8,
+    "support": "high_effort",
+    "level": "genus_occupancy",
+    "ref": "exclude_continent",
+    "n": 403,
+    "coef": 0.28154000117710415
+  }
+]
