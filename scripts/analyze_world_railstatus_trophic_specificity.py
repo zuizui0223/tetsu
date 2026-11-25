@@ -50,10 +50,14 @@ def compare_replay(new,old):
     if new["status"]!=old["status"] or new["n_cells"]!=old["n_cells"]:
         raise ValueError("Previous model support changed")
     if new["status"]!="estimated":return
-    for k,v in new["effects"].items():
-        z=old["effects"][k]
-        if abs(v["estimate"]-z["estimate"])>1e-9 or max(abs(a-b) for a,b in zip(v["interval95_approx"],z["interval95_approx"]))>1e-9:
-            raise ValueError("Previous coefficient or interval failed replay")
+    def walk(a,b):
+        if set(a)!=set(b):raise ValueError("Previous effect keys changed")
+        if "estimate" in a:
+            if abs(a["estimate"]-b["estimate"])>1e-9 or max(abs(x-y) for x,y in zip(a["interval95_approx"],b["interval95_approx"]))>1e-9 or a["n_blocks"]!=b["n_blocks"]:
+                raise ValueError("Previous coefficient or interval failed replay")
+        else:
+            for k in a:walk(a[k],b[k])
+    walk(new["effects"],old["effects"])
 
 def main():
     p=argparse.ArgumentParser()
