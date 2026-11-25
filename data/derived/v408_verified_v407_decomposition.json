@@ -1,0 +1,2415 @@
+{
+  "source_run_id": 45570583651,
+  "source_job_id": 139055949696,
+  "artifact_digest": "sha256:7844ba310c6d36106c03b1af7f5dc592edf44d4a22c54f04f8eb9ca98f7e5561",
+  "panels": [
+    {
+      "land": 0.5,
+      "support": "all",
+      "reference": "exclude_3x3_blocks",
+      "n": 1234,
+      "n_blocks": 86,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.10592941835333035,
+        "observed_width_C": -0.0041234866916197085,
+        "observed_warm_offset_C": -0.004499568020016057,
+        "occupancy_expected_T_variance": -0.05254649482857605,
+        "occupancy_expected_width_C": 0.005763090155934406,
+        "occupancy_expected_warm_offset_C": 0.0008393158277835739,
+        "occupancy_excess_T_variance": -0.05338292352475418,
+        "occupancy_excess_width_C": -0.009886576847554122,
+        "occupancy_excess_warm_offset_C": -0.005338883847799585,
+        "family_occupancy_expected_T_variance": -0.1164972791787331,
+        "family_occupancy_expected_width_C": 0.003052422801221146,
+        "family_occupancy_expected_warm_offset_C": 0.004133415215028919,
+        "family_occupancy_excess_T_variance": 0.01056786082540285,
+        "family_occupancy_excess_width_C": -0.007175909492840856,
+        "family_occupancy_excess_warm_offset_C": -0.008632983235044989,
+        "family_occupancy_minus_occupancy_T_variance": -0.06395078435015705,
+        "family_occupancy_minus_occupancy_width_C": -0.0027106673547132583,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.003294099387245403
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.3099541821534224,
+          "high": 0.11980931768415518
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.037147909564162494,
+          "high": 0.039139986844763226
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06380456600262543,
+          "high": 0.04197517830814788
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.1097660496469977,
+          "high": -0.0018622112963808802
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.002722565361667311,
+          "high": 0.016136099736978934
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.009846909954530985,
+          "high": 0.00927373768299871
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.2624087834480581,
+          "high": 0.16892825541031936
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.041682665329066025,
+          "high": 0.029292318066550894
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.05979250073501723,
+          "high": 0.04074817343139379
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.28288212654082784,
+          "high": 0.022472495708849523
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.021542344312533813,
+          "high": 0.025935680709939426
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0324478748140721,
+          "high": 0.038463541437093574
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.0964653016914311,
+          "high": 0.1601347861066306
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.02612797521459782,
+          "high": 0.019965297619636252
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.03761359976282426,
+          "high": 0.014384095368037171
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.20715864083793228,
+          "high": 0.05923476957279563
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.02538780421764237,
+          "high": 0.01578790933636843
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.028406053770392327,
+          "high": 0.03549512772678378
+        }
+      }
+    },
+    {
+      "land": 0.5,
+      "support": "all",
+      "reference": "exclude_3x3_blocks",
+      "n": 731,
+      "n_blocks": 53,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.010451050935381142,
+        "observed_width_C": -0.06974438082531403,
+        "observed_warm_offset_C": 0.06212406052598019,
+        "occupancy_expected_T_variance": 0.08669139117336638,
+        "occupancy_expected_width_C": 0.012981771425863577,
+        "occupancy_expected_warm_offset_C": -0.023917099876581357,
+        "occupancy_excess_T_variance": -0.09714244210874771,
+        "occupancy_excess_width_C": -0.08272615225117756,
+        "occupancy_excess_warm_offset_C": 0.08604116040256149,
+        "family_occupancy_expected_T_variance": 0.09058886822815493,
+        "family_occupancy_expected_width_C": 0.004160333667155938,
+        "family_occupancy_expected_warm_offset_C": 0.02326152473221979,
+        "family_occupancy_excess_T_variance": -0.10103991916353665,
+        "family_occupancy_excess_width_C": -0.07390471449246984,
+        "family_occupancy_excess_warm_offset_C": 0.0388625357937605,
+        "genus_occupancy_expected_T_variance": -0.10464017663479476,
+        "genus_occupancy_expected_width_C": -0.05326343581878821,
+        "genus_occupancy_expected_warm_offset_C": 0.039856891788855056,
+        "genus_occupancy_excess_T_variance": 0.09418912569941348,
+        "genus_occupancy_excess_width_C": -0.01648094500652582,
+        "genus_occupancy_excess_warm_offset_C": 0.02226716873712517,
+        "family_occupancy_minus_occupancy_T_variance": 0.003897477054788543,
+        "family_occupancy_minus_occupancy_width_C": -0.008821437758707727,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.04717862460880098,
+        "genus_occupancy_minus_family_occupancy_T_variance": -0.1952290448629499,
+        "genus_occupancy_minus_family_occupancy_width_C": -0.05742376948594404,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.01659536705663521
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.3954039790875098,
+          "high": 0.8003182393713646
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.2006777573729812,
+          "high": 0.15721398348500848
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.18537374195733158,
+          "high": 0.4342836549885994
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.1720417044723365,
+          "high": 0.4486057966121443
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.004420307527340019,
+          "high": 0.05074917871971618
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.05989166573368874,
+          "high": 0.01427240510406154
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.475311957250004,
+          "high": 0.6837747292540718
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.21076326650902874,
+          "high": 0.1387411041948468
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.1427384903767977,
+          "high": 0.44907342172504205
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.326297056655846,
+          "high": 0.5382559394769841
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.08378846387161339,
+          "high": 0.17107102541021033
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.10008127058721758,
+          "high": 0.19775419672192346
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.29616423371698686,
+          "high": 0.6004906877052415
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.1384393038770241,
+          "high": 0.05694960050083575
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.10131882662991752,
+          "high": 0.2614476249502847
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.48743723194694283,
+          "high": 0.676044359799116
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.180299179856356,
+          "high": 0.15267751618060618
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.15578936340160893,
+          "high": 0.3729642969888668
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.07520159905292187,
+          "high": 0.39542228967034043
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.06389778479528802,
+          "high": 0.030370035175994667
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.037921410703008473,
+          "high": 0.08811257963297658
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.3358258710714798,
+          "high": 0.3342167282866244
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.09293255424170452,
+          "high": 0.13548253613139324
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0710722959223672,
+          "high": 0.21383867455003155
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.3518298564075888,
+          "high": 0.31770152950604913
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.11022524602235641,
+          "high": 0.04205307901112537
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07077677916631185,
+          "high": 0.1873116543453243
+        }
+      }
+    },
+    {
+      "land": 0.5,
+      "support": "all",
+      "reference": "exclude_continent",
+      "n": 1234,
+      "n_blocks": 86,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.10034456418789742,
+        "observed_width_C": -0.002038825798252482,
+        "observed_warm_offset_C": -0.009467302414439792,
+        "occupancy_expected_T_variance": -0.04986344064735024,
+        "occupancy_expected_width_C": 0.008021630737033977,
+        "occupancy_expected_warm_offset_C": -0.0016674149380705285,
+        "occupancy_excess_T_variance": -0.05048112354054716,
+        "occupancy_excess_width_C": -0.010060456535286484,
+        "occupancy_excess_warm_offset_C": -0.0077998874763692445,
+        "family_occupancy_expected_T_variance": -0.12489520539344297,
+        "family_occupancy_expected_width_C": 0.0046999420293153795,
+        "family_occupancy_expected_warm_offset_C": 0.0009193961334213597,
+        "family_occupancy_excess_T_variance": 0.024550641205545603,
+        "family_occupancy_excess_width_C": -0.006738767827567871,
+        "family_occupancy_excess_warm_offset_C": -0.010386698547861135,
+        "family_occupancy_minus_occupancy_T_variance": -0.07503176474609292,
+        "family_occupancy_minus_occupancy_width_C": -0.0033216887077185844,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.002586811071491887
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.3056339519296229,
+          "high": 0.1114535309314277
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.03686496791045934,
+          "high": 0.046345540097236855
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06440886853590659,
+          "high": 0.03251099888319241
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.10552577763914595,
+          "high": -0.0008544432540993285
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.0006798658521322523,
+          "high": 0.02007250605940977
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.013077211960425432,
+          "high": 0.007314018524948179
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.2531156482578381,
+          "high": 0.15965916589462079
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.03999593123145884,
+          "high": 0.033324400792923994
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.05638217238621783,
+          "high": 0.032817390497342475
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.2978374359989959,
+          "high": 0.017662766184915225
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.022615134010331082,
+          "high": 0.03694687836289205
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.030368195710718745,
+          "high": 0.03129991496931541
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.07962226710555698,
+          "high": 0.16164392025760196
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.024354455468335798,
+          "high": 0.02024003142697969
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.037949144709683955,
+          "high": 0.012466228171001962
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.22566418025650356,
+          "high": 0.05458148166828656
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.02489385063804021,
+          "high": 0.019416947208872073
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.026828827478272404,
+          "high": 0.03035354721187194
+        }
+      }
+    },
+    {
+      "land": 0.5,
+      "support": "all",
+      "reference": "exclude_continent",
+      "n": 731,
+      "n_blocks": 53,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": 0.28790995908184513,
+        "observed_width_C": -0.03906548972785205,
+        "observed_warm_offset_C": 0.025416004393851513,
+        "occupancy_expected_T_variance": 0.07166099375805916,
+        "occupancy_expected_width_C": 0.012932275317429576,
+        "occupancy_expected_warm_offset_C": -0.021248750568444556,
+        "occupancy_excess_T_variance": 0.21624896532378585,
+        "occupancy_excess_width_C": -0.05199776504528174,
+        "occupancy_excess_warm_offset_C": 0.04666475496229613,
+        "family_occupancy_expected_T_variance": 0.1945276679397778,
+        "family_occupancy_expected_width_C": 0.010733237144434431,
+        "family_occupancy_expected_warm_offset_C": 0.008307482111761496,
+        "family_occupancy_excess_T_variance": 0.09338229114206736,
+        "family_occupancy_excess_width_C": -0.049798726872286536,
+        "family_occupancy_excess_warm_offset_C": 0.017108522282089974,
+        "genus_occupancy_expected_T_variance": 0.09461915564313875,
+        "genus_occupancy_expected_width_C": -0.027042719331785155,
+        "genus_occupancy_expected_warm_offset_C": 0.016950983187148723,
+        "genus_occupancy_excess_T_variance": 0.19329080343870647,
+        "genus_occupancy_excess_width_C": -0.01202277039606697,
+        "genus_occupancy_excess_warm_offset_C": 0.008465021206702885,
+        "family_occupancy_minus_occupancy_T_variance": 0.12286667418171855,
+        "family_occupancy_minus_occupancy_width_C": -0.00219903817299516,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.02955623268020606,
+        "genus_occupancy_minus_family_occupancy_T_variance": -0.09990851229663918,
+        "genus_occupancy_minus_family_occupancy_width_C": -0.0377759564762195,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.008643501075387187
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.2165885116444847,
+          "high": 1.1269110135423508
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.18976952066367614,
+          "high": 0.1163145036084306
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.21370584208814583,
+          "high": 0.42765880898242314
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.25111307634735225,
+          "high": 0.4110733968931629
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.001965796869604651,
+          "high": 0.05095047068840102
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.05888574963350007,
+          "high": 0.017333114433285134
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.2595548256089657,
+          "high": 1.0173526771410395
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.21540718001874248,
+          "high": 0.08526234418523237
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.17627536743009492,
+          "high": 0.43468460338986703
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.4199440384491608,
+          "high": 0.4993025112603986
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.06539264007710392,
+          "high": 0.1227306181150452
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.11896649721862401,
+          "high": 0.2060096831474701
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.26045677356823593,
+          "high": 1.0128586303921712
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.17596217345989715,
+          "high": 0.05801229447263027
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.12904763736708483,
+          "high": 0.2466507123341553
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.4061896580819896,
+          "high": 0.5930241478395281
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.14561075805389642,
+          "high": 0.11217828440987933
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.17690245411833885,
+          "high": 0.3783760637210936
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.10982129666179903,
+          "high": 0.7214566407186834
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.09708526469729281,
+          "high": 0.027824167297689564
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07492366625985629,
+          "high": 0.07890853813646549
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.32577217661704544,
+          "high": 0.3789540836746042
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.09094266232495982,
+          "high": 0.091631622069222
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.09146204634778449,
+          "high": 0.2171687945357876
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.28138006892511175,
+          "high": 0.3812789831937271
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.11578792443450686,
+          "high": 0.05026686251788395
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07599183750337805,
+          "high": 0.17593247201831025
+        }
+      }
+    },
+    {
+      "land": 0.5,
+      "support": "high_effort",
+      "reference": "exclude_3x3_blocks",
+      "n": 711,
+      "n_blocks": 78,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.29994038564974773,
+        "observed_width_C": -0.04452861687379624,
+        "observed_warm_offset_C": -0.0022762198664767835,
+        "occupancy_expected_T_variance": -0.0815543361719776,
+        "occupancy_expected_width_C": 0.005232351179147498,
+        "occupancy_expected_warm_offset_C": -0.0007906478064796209,
+        "occupancy_excess_T_variance": -0.2183860494777701,
+        "occupancy_excess_width_C": -0.04976096805294376,
+        "occupancy_excess_warm_offset_C": -0.0014855720599972239,
+        "family_occupancy_expected_T_variance": -0.26731744341399,
+        "family_occupancy_expected_width_C": -0.033531868919510786,
+        "family_occupancy_expected_warm_offset_C": 0.007969341424328001,
+        "family_occupancy_excess_T_variance": -0.0326229422357575,
+        "family_occupancy_excess_width_C": -0.010996747954285464,
+        "family_occupancy_excess_warm_offset_C": -0.010245561290804762,
+        "family_occupancy_minus_occupancy_T_variance": -0.1857631072420126,
+        "family_occupancy_minus_occupancy_width_C": -0.038764220098658285,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.008759989230807565
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.6589270579707976,
+          "high": 0.22242877494955146
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.11384036735321867,
+          "high": 0.01938833144108587
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0921978036874843,
+          "high": 0.08316844749144663
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.20958541254960852,
+          "high": 0.019855006407536516
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.006085530705093802,
+          "high": 0.019539558538265365
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.021655352981413866,
+          "high": 0.025146249521656547
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.502484924371051,
+          "high": 0.246227636701319
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.11530096234230924,
+          "high": 0.013721705551830015
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.08064272553766057,
+          "high": 0.07363660622384621
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.6357249046338456,
+          "high": 0.0878133497138574
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.08038701294831407,
+          "high": 0.006618226666942322
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.03578721349928218,
+          "high": 0.06115760244528637
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.1493331844887111,
+          "high": 0.16147421204194987
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.03667752474245518,
+          "high": 0.020109423301775755
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06353813707589445,
+          "high": 0.0325572113928174
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.4380898799514461,
+          "high": 0.11796309240290838
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.0807570629167143,
+          "high": -0.0003656449359248194
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.026377132749194423,
+          "high": 0.04927363621082262
+        }
+      }
+    },
+    {
+      "land": 0.5,
+      "support": "high_effort",
+      "reference": "exclude_3x3_blocks",
+      "n": 456,
+      "n_blocks": 27,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": 0.5854588083679335,
+        "observed_width_C": -0.06308486166137181,
+        "observed_warm_offset_C": 0.4231004711331123,
+        "occupancy_expected_T_variance": 0.04529361387936124,
+        "occupancy_expected_width_C": 0.022194729471210182,
+        "occupancy_expected_warm_offset_C": 0.005175040746452633,
+        "occupancy_excess_T_variance": 0.5401651944885717,
+        "occupancy_excess_width_C": -0.08527959113258178,
+        "occupancy_excess_warm_offset_C": 0.41792543038665947,
+        "family_occupancy_expected_T_variance": 0.27796525368414426,
+        "family_occupancy_expected_width_C": -0.06531220155576403,
+        "family_occupancy_expected_warm_offset_C": 0.17792005180116155,
+        "family_occupancy_excess_T_variance": 0.3074935546837888,
+        "family_occupancy_excess_width_C": 0.0022273398943924707,
+        "family_occupancy_excess_warm_offset_C": 0.24518041933195045,
+        "genus_occupancy_expected_T_variance": 0.5654971294699479,
+        "genus_occupancy_expected_width_C": -0.07530986172036828,
+        "genus_occupancy_expected_warm_offset_C": 0.33510393123533755,
+        "genus_occupancy_excess_T_variance": 0.01996167889798533,
+        "genus_occupancy_excess_width_C": 0.012225000058996854,
+        "genus_occupancy_excess_warm_offset_C": 0.0879965398977748,
+        "family_occupancy_minus_occupancy_T_variance": 0.23267163980478311,
+        "family_occupancy_minus_occupancy_width_C": -0.08750693102697438,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.17274501105470894,
+        "genus_occupancy_minus_family_occupancy_T_variance": 0.2875318757858041,
+        "genus_occupancy_minus_family_occupancy_width_C": -0.009997660164604336,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.1571838794341759
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.33532845002052847,
+          "high": 1.2192195790878493
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.26630905167923286,
+          "high": 0.12398955657216192
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": 0.002927403418322096,
+          "high": 0.6810105590372043
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.9461890415161774,
+          "high": 0.8007464129402445
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.021681255243043856,
+          "high": 0.05441529392606912
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.03504026879407169,
+          "high": 0.08293388257609086
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.4146718238898598,
+          "high": 1.5288053555094654
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.2861764631936551,
+          "high": 0.11832883301518612
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.011866582571644187,
+          "high": 0.6722588665591694
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.8140585788133097,
+          "high": 1.0907004044184478
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.17207110759663521,
+          "high": 0.04530306808512181
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06779839632841805,
+          "high": 0.34850574371265863
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.5055760441367874,
+          "high": 1.3078459640534934
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.1000916010710208,
+          "high": 0.09019287798716047
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": 0.04006622387645545,
+          "high": 0.3880822177321665
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.384219067560687,
+          "high": 1.1892826565953456
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.23394590559022804,
+          "high": 0.06419711383373823
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.004482154009971648,
+          "high": 0.551321893706533
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.34629519340416504,
+          "high": 0.4240070635799303
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.04027660351305492,
+          "high": 0.07969948647454954
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0054905282507481884,
+          "high": 0.1633064262676579
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.11856504555035673,
+          "high": 0.6515283582976592
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.20625231609273273,
+          "high": 0.05816687817508226
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.08900178380395628,
+          "high": 0.33819284348616646
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.22248004413805816,
+          "high": 0.8457578987425071
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.08930420684743118,
+          "high": 0.04334980177520327
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": 0.031682400024941916,
+          "high": 0.25066289792652086
+        }
+      }
+    },
+    {
+      "land": 0.5,
+      "support": "high_effort",
+      "reference": "exclude_continent",
+      "n": 711,
+      "n_blocks": 78,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.24157798802920027,
+        "observed_width_C": -0.05983352197053159,
+        "observed_warm_offset_C": -0.012244956879355146,
+        "occupancy_expected_T_variance": -0.07377850358240748,
+        "occupancy_expected_width_C": 0.0022651150676327256,
+        "occupancy_expected_warm_offset_C": -0.0007969976148586081,
+        "occupancy_excess_T_variance": -0.16779948444679282,
+        "occupancy_excess_width_C": -0.06209863703816434,
+        "occupancy_excess_warm_offset_C": -0.011447959264496516,
+        "family_occupancy_expected_T_variance": -0.2349491301453432,
+        "family_occupancy_expected_width_C": -0.038373764676518186,
+        "family_occupancy_expected_warm_offset_C": 0.004765703881055285,
+        "family_occupancy_excess_T_variance": -0.006628857883856974,
+        "family_occupancy_excess_width_C": -0.02145975729401344,
+        "family_occupancy_excess_warm_offset_C": -0.017010660760410412,
+        "family_occupancy_minus_occupancy_T_variance": -0.16117062656293596,
+        "family_occupancy_minus_occupancy_width_C": -0.04063887974415094,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.00556270149591389
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.5660192656155225,
+          "high": 0.24820843870661108
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.14209004711529366,
+          "high": 0.008120171031493931
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.10374969394962613,
+          "high": 0.07456030127160664
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.21240814650922873,
+          "high": 0.029260840029272515
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.009165469796115202,
+          "high": 0.01621948566983083
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.022221834227677203,
+          "high": 0.02419854439741379
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.4380145710850137,
+          "high": 0.2758968073677753
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.13828726723615326,
+          "high": 0.0002485271861550122
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.09331742888187966,
+          "high": 0.06071780434233026
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.6040299812806633,
+          "high": 0.11153454575709743
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.08953083301024588,
+          "high": 0.007089880675577702
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04544559349433549,
+          "high": 0.05724616247155438
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.145935934340165,
+          "high": 0.19605374760946437
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.049106016264347255,
+          "high": 0.009524761243990749
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06889828150608113,
+          "high": 0.023497929757378994
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.3988850584508595,
+          "high": 0.1310175097310117
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.08667598747283359,
+          "high": -0.0009523398871456074
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.031676764597480624,
+          "high": 0.04482227206127898
+        }
+      }
+    },
+    {
+      "land": 0.5,
+      "support": "high_effort",
+      "reference": "exclude_continent",
+      "n": 456,
+      "n_blocks": 27,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": 0.454963016317046,
+        "observed_width_C": 0.006698895098110847,
+        "observed_warm_offset_C": 0.4112115618432022,
+        "occupancy_expected_T_variance": -0.046681354641188035,
+        "occupancy_expected_width_C": 0.025797130940589413,
+        "occupancy_expected_warm_offset_C": 0.011938555950868193,
+        "occupancy_excess_T_variance": 0.5016443709582336,
+        "occupancy_excess_width_C": -0.019098235842478727,
+        "occupancy_excess_warm_offset_C": 0.39927300589233394,
+        "family_occupancy_expected_T_variance": 0.271455384028875,
+        "family_occupancy_expected_width_C": -0.035656625293412486,
+        "family_occupancy_expected_warm_offset_C": 0.1616159050665945,
+        "family_occupancy_excess_T_variance": 0.18350763228817052,
+        "family_occupancy_excess_width_C": 0.04235552039152305,
+        "family_occupancy_excess_warm_offset_C": 0.2495956567766076,
+        "genus_occupancy_expected_T_variance": 0.4367780862958231,
+        "genus_occupancy_expected_width_C": -0.00545628297353461,
+        "genus_occupancy_expected_warm_offset_C": 0.3156639774253321,
+        "genus_occupancy_excess_T_variance": 0.018184930021222446,
+        "genus_occupancy_excess_width_C": 0.012155178071645437,
+        "genus_occupancy_excess_warm_offset_C": 0.09554758441787035,
+        "family_occupancy_minus_occupancy_T_variance": 0.3181367386700624,
+        "family_occupancy_minus_occupancy_width_C": -0.06145375623400177,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.14967734911572644,
+        "genus_occupancy_minus_family_occupancy_T_variance": 0.16532270226694862,
+        "genus_occupancy_minus_family_occupancy_width_C": 0.030200342319877692,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.15404807235873746
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.8772759756804511,
+          "high": 1.3905771791533006
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.21715236364535304,
+          "high": 0.20069860468773132
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.12222081453752487,
+          "high": 0.7607621567675428
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -1.3767333990775747,
+          "high": 0.9382708313429386
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.014945726913733786,
+          "high": 0.06518484558569505
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04166132875827495,
+          "high": 0.09529284388776098
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -1.1405710806860205,
+          "high": 1.8067297059580298
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.2696550977262326,
+          "high": 0.19759572807694795
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.12299572089070912,
+          "high": 0.6957694115050451
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -1.2687313430389586,
+          "high": 1.2332159809338565
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.18132199784640718,
+          "high": 0.08451768444975614
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.14252772122819127,
+          "high": 0.3822766156443377
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -1.1231149719784064,
+          "high": 1.351591848843133
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.10485002656921844,
+          "high": 0.15255211987629852
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.025265075928714836,
+          "high": 0.43077578083851514
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.7627701772362424,
+          "high": 1.2038772109032365
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.21004417587095026,
+          "high": 0.1447695695890417
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.09884816352357348,
+          "high": 0.6006891097805007
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.5687411289282909,
+          "high": 0.591104863131684
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.053276329985254826,
+          "high": 0.094008436025719
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.03256469357680801,
+          "high": 0.18423034211360095
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.2278645359492608,
+          "high": 0.7510666531856913
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.21145805780799293,
+          "high": 0.08043513194202387
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.14640182625070938,
+          "high": 0.34562825194549496
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.6451684300649193,
+          "high": 0.8087823583711682
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.0875803563260431,
+          "high": 0.11396345730172122
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.001188741473213219,
+          "high": 0.2725703443996843
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "all",
+      "reference": "exclude_3x3_blocks",
+      "n": 1054,
+      "n_blocks": 85,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.24874740203792076,
+        "observed_width_C": -0.029807741017551532,
+        "observed_warm_offset_C": 0.02240682432052005,
+        "occupancy_expected_T_variance": -0.07403941320847107,
+        "occupancy_expected_width_C": 0.002306822299751678,
+        "occupancy_expected_warm_offset_C": 0.0031170348608332227,
+        "occupancy_excess_T_variance": -0.17470798882944957,
+        "occupancy_excess_width_C": -0.03211456331730322,
+        "occupancy_excess_warm_offset_C": 0.019289789459686842,
+        "family_occupancy_expected_T_variance": -0.20192783871018827,
+        "family_occupancy_expected_width_C": -0.014944054164870145,
+        "family_occupancy_expected_warm_offset_C": 0.017829286630673236,
+        "family_occupancy_excess_T_variance": -0.0468195633277325,
+        "family_occupancy_excess_width_C": -0.014863686852681388,
+        "family_occupancy_excess_warm_offset_C": 0.0045775376898467696,
+        "family_occupancy_minus_occupancy_T_variance": -0.12788842550171708,
+        "family_occupancy_minus_occupancy_width_C": -0.017250876464621794,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.014712251769840045
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.5038950660735653,
+          "high": 0.023891371223067226
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.06929373375850494,
+          "high": 0.004377442742587284
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04251460998242246,
+          "high": 0.08988946494419273
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.15041542204227984,
+          "high": -0.02692526005980034
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.00846729597650926,
+          "high": 0.01382189419654916
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.008875383276845355,
+          "high": 0.013670333183567394
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.4312095358629821,
+          "high": 0.10445607643764157
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.07257427452041958,
+          "high": 0.0055569335008592066
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04879491786173666,
+          "high": 0.08952632347567262
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.40934303408648365,
+          "high": -0.03179008387886664
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.04418380151556979,
+          "high": 0.006089406132418626
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.017771700591489695,
+          "high": 0.0634013420639004
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.15988344324885184,
+          "high": 0.10255863955581734
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.038846442180842045,
+          "high": 0.010104900628838962
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.027594754824578894,
+          "high": 0.03442463193158798
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.3039525420634404,
+          "high": 0.04861694076774758
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.043804737891440605,
+          "high": 0.003729113042992736
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.022502790707560394,
+          "high": 0.06336472012543129
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "all",
+      "reference": "exclude_3x3_blocks",
+      "n": 651,
+      "n_blocks": 46,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": 0.10856796612426191,
+        "observed_width_C": -0.0687376193237883,
+        "observed_warm_offset_C": 0.32684036828222995,
+        "occupancy_expected_T_variance": -0.013894746076344765,
+        "occupancy_expected_width_C": 0.03335543697971465,
+        "occupancy_expected_warm_offset_C": -0.009266966765270378,
+        "occupancy_excess_T_variance": 0.12246271220060674,
+        "occupancy_excess_width_C": -0.10209305630350296,
+        "occupancy_excess_warm_offset_C": 0.33610733504750046,
+        "family_occupancy_expected_T_variance": -0.12767690651064337,
+        "family_occupancy_expected_width_C": 0.022058939218788508,
+        "family_occupancy_expected_warm_offset_C": 0.1571077044023246,
+        "family_occupancy_excess_T_variance": 0.23624487263490537,
+        "family_occupancy_excess_width_C": -0.09079655854257687,
+        "family_occupancy_excess_warm_offset_C": 0.16973266387990568,
+        "genus_occupancy_expected_T_variance": -0.03196844435467253,
+        "genus_occupancy_expected_width_C": -0.04756454137394934,
+        "genus_occupancy_expected_warm_offset_C": 0.2791898428676582,
+        "genus_occupancy_excess_T_variance": 0.14053641047893445,
+        "genus_occupancy_excess_width_C": -0.021173077949839067,
+        "genus_occupancy_excess_warm_offset_C": 0.04765052541457211,
+        "family_occupancy_minus_occupancy_T_variance": -0.11378216043429847,
+        "family_occupancy_minus_occupancy_width_C": -0.011296497760926035,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.166374671167595,
+        "genus_occupancy_minus_family_occupancy_T_variance": 0.0957084621559709,
+        "genus_occupancy_minus_family_occupancy_width_C": -0.06962348059273778,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.12208213846533371
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.30637318801681596,
+          "high": 0.6294096811215892
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.29552797611534815,
+          "high": 0.12310839625164906
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0076173606670935125,
+          "high": 0.5671418345106309
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.3343893874259274,
+          "high": 0.28520372425408186
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.0022543002757717426,
+          "high": 0.07483147398351209
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0483011663511241,
+          "high": 0.041084510095760245
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.28666008408353844,
+          "high": 0.671103946675952
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.3305874531761214,
+          "high": 0.08700195312270774
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.010846207197791958,
+          "high": 0.5866500184809502
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.6750650591182097,
+          "high": 0.3040129770138143
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.1092947549825073,
+          "high": 0.15579984412917317
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.030700426483067415,
+          "high": 0.28678761961247745
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.16181133809483575,
+          "high": 0.8415611021372601
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.24685579434052574,
+          "high": 0.041392374112008336
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.011757916138937353,
+          "high": 0.2939702479547133
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.5582534083953075,
+          "high": 0.4509124539646188
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.25413405369876596,
+          "high": 0.11877464509971881
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": 0.0009355909361523849,
+          "high": 0.4740588048853588
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.11613652300366377,
+          "high": 0.5127325308095465
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.07896339796188899,
+          "high": 0.03466424908745873
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.03020570312237437,
+          "high": 0.09959524883028109
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.5505294185975907,
+          "high": 0.21426998183841195
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.15060538416814573,
+          "high": 0.10663364544231807
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.02497957363913128,
+          "high": 0.3086814751833984
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.1632405024897416,
+          "high": 0.44245988752740134
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.20333804270894032,
+          "high": 0.03829058227622147
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": 0.00603421945691139,
+          "high": 0.21176643131005218
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "all",
+      "reference": "exclude_continent",
+      "n": 1054,
+      "n_blocks": 85,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.21835654697760945,
+        "observed_width_C": -0.021742070732637064,
+        "observed_warm_offset_C": 0.016791759060996617,
+        "occupancy_expected_T_variance": -0.06945913861066966,
+        "occupancy_expected_width_C": 0.004722768459345827,
+        "occupancy_expected_warm_offset_C": 0.000207316748160944,
+        "occupancy_excess_T_variance": -0.1488974083669397,
+        "occupancy_excess_width_C": -0.026464839191982927,
+        "occupancy_excess_warm_offset_C": 0.01658444231283572,
+        "family_occupancy_expected_T_variance": -0.20197871522210548,
+        "family_occupancy_expected_width_C": -0.006929535697425477,
+        "family_occupancy_expected_warm_offset_C": 0.014243896738700686,
+        "family_occupancy_excess_T_variance": -0.016377831755504283,
+        "family_occupancy_excess_width_C": -0.014812535035211611,
+        "family_occupancy_excess_warm_offset_C": 0.0025478623222959214,
+        "family_occupancy_minus_occupancy_T_variance": -0.13251957661143562,
+        "family_occupancy_minus_occupancy_width_C": -0.011652304156771294,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.01403657999053979
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.4633036157087367,
+          "high": 0.06657831715677079
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.06809261197668647,
+          "high": 0.022793404352479684
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04577625268855673,
+          "high": 0.07838256581622144
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.14625417184173437,
+          "high": -0.024428578488718492
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.006670084402910437,
+          "high": 0.01505502758048438
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.010663872288451863,
+          "high": 0.01011945036858664
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.3926499456648517,
+          "high": 0.15646276215248192
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.06912375633952257,
+          "high": 0.011760234251241659
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04787029864217698,
+          "high": 0.08278149269264282
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.40656589903900725,
+          "high": -0.020755640376799868
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.03666214217603058,
+          "high": 0.01580905408500742
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.01889228215265761,
+          "high": 0.05601789308606599
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.12075369715872195,
+          "high": 0.1378576393554661
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.037048640649498914,
+          "high": 0.007712457552673218
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.030575938339506094,
+          "high": 0.03271200072590397
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.31416645308766283,
+          "high": 0.05698451595163437
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.042121611934825644,
+          "high": 0.008772872959141635
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.022356243892451017,
+          "high": 0.05734756713949219
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "all",
+      "reference": "exclude_continent",
+      "n": 651,
+      "n_blocks": 46,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": 0.2720968270562584,
+        "observed_width_C": -0.055075571325962226,
+        "observed_warm_offset_C": 0.2953913401605367,
+        "occupancy_expected_T_variance": -0.06497875272917567,
+        "occupancy_expected_width_C": 0.03554382682395267,
+        "occupancy_expected_warm_offset_C": -0.0028507470208665006,
+        "occupancy_excess_T_variance": 0.3370755797854351,
+        "occupancy_excess_width_C": -0.0906193981499147,
+        "occupancy_excess_warm_offset_C": 0.29824208718140294,
+        "family_occupancy_expected_T_variance": -0.030292824548023827,
+        "family_occupancy_expected_width_C": 0.028537225743574843,
+        "family_occupancy_expected_warm_offset_C": 0.13583506930447836,
+        "family_occupancy_excess_T_variance": 0.30238965160428255,
+        "family_occupancy_excess_width_C": -0.08361279706953693,
+        "family_occupancy_excess_warm_offset_C": 0.15955627085605825,
+        "genus_occupancy_expected_T_variance": 0.012817189547704408,
+        "genus_occupancy_expected_width_C": -0.02018686419657574,
+        "genus_occupancy_expected_warm_offset_C": 0.25478854413472674,
+        "genus_occupancy_excess_T_variance": 0.25927963750855415,
+        "genus_occupancy_excess_width_C": -0.034888707129386264,
+        "genus_occupancy_excess_warm_offset_C": 0.040602796025809365,
+        "family_occupancy_minus_occupancy_T_variance": 0.034685928181152084,
+        "family_occupancy_minus_occupancy_width_C": -0.007006601080377802,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.13868581632534482,
+        "genus_occupancy_minus_family_occupancy_T_variance": 0.04311001409572833,
+        "genus_occupancy_minus_family_occupancy_width_C": -0.0487240899401507,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.11895347483024886
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.7255109293478937,
+          "high": 1.1780986153979407
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.2716376849125069,
+          "high": 0.12075466185922766
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07101881259596338,
+          "high": 0.5790258887867228
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.5081035876638242,
+          "high": 0.2853454268747418
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": 0.002752333090796953,
+          "high": 0.07023121523110232
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04585067636466916,
+          "high": 0.04486631991667013
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.738653929624357,
+          "high": 1.28264560241553
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.309855586087383,
+          "high": 0.08911900868309598
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07072975461806863,
+          "high": 0.5782496850109714
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.7529592929476692,
+          "high": 0.4640604966871813
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.10394170773897697,
+          "high": 0.14011959827444628
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.05442279119112593,
+          "high": 0.2921492830558205
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.5358722584876393,
+          "high": 1.2292390325600882
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.23560554516351406,
+          "high": 0.04410033505514157
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06018099774843835,
+          "high": 0.31336931367599463
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.7864905948324863,
+          "high": 0.6993978444900498
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.2050394065819448,
+          "high": 0.13466870908682874
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.03932755708907213,
+          "high": 0.48843440919977443
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.17829416491245176,
+          "high": 0.7840499659248068
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.10696187393684829,
+          "high": 0.012782107514665493
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.05383712317730449,
+          "high": 0.10140536587940664
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.5240775198961926,
+          "high": 0.4280278878450981
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.12145213763189913,
+          "high": 0.0892418820231892
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07526921329654405,
+          "high": 0.31757343443565444
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.3866405343396576,
+          "high": 0.5193943032098314
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.17672700947856423,
+          "high": 0.05540968568538354
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.015620313866446215,
+          "high": 0.220689609675208
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "high_effort",
+      "reference": "exclude_3x3_blocks",
+      "n": 596,
+      "n_blocks": 74,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.39487641524891964,
+        "observed_width_C": -0.05230322618985731,
+        "observed_warm_offset_C": 0.009369937507689075,
+        "occupancy_expected_T_variance": -0.08314918945528531,
+        "occupancy_expected_width_C": 0.010450482526878817,
+        "occupancy_expected_warm_offset_C": -0.010791671008516105,
+        "occupancy_excess_T_variance": -0.3117272257936347,
+        "occupancy_excess_width_C": -0.06275370871673613,
+        "occupancy_excess_warm_offset_C": 0.020161608516205087,
+        "family_occupancy_expected_T_variance": -0.37394694090768144,
+        "family_occupancy_expected_width_C": -0.03640628533395671,
+        "family_occupancy_expected_warm_offset_C": 0.014754907050348088,
+        "family_occupancy_excess_T_variance": -0.020929474341238628,
+        "family_occupancy_excess_width_C": -0.015896940855900613,
+        "family_occupancy_excess_warm_offset_C": -0.005384969542658974,
+        "family_occupancy_minus_occupancy_T_variance": -0.29079775145239584,
+        "family_occupancy_minus_occupancy_width_C": -0.04685676786083557,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.025546578058864112
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.7533498784168171,
+          "high": 0.3246569153702647
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.12084283281271802,
+          "high": 0.03432143779925068
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.1329492074928102,
+          "high": 0.11776069481541765
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.21183079403012767,
+          "high": 0.024458423520172322
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.0032760500525433715,
+          "high": 0.02682196044406859
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.029931433477991588,
+          "high": 0.009876720772966526
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.6288970926028604,
+          "high": 0.3786254838625784
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.1311752665840703,
+          "high": 0.017218067540653942
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.1113199344566541,
+          "high": 0.11284243634877332
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.7312058202667668,
+          "high": 0.08916141476883001
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.08638971249270264,
+          "high": 0.016330378823345246
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.062474444557778536,
+          "high": 0.08162349219997396
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.15843481667759235,
+          "high": 0.3035532006691093
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.04014577498862802,
+          "high": 0.025791348823552503
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.08469902364368342,
+          "high": 0.037205917433169894
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.6113217667142401,
+          "high": 0.13207045443155244
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.0927968353373492,
+          "high": 0.0034882727244083984
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.04078357627226939,
+          "high": 0.08214520440510094
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "high_effort",
+      "reference": "exclude_3x3_blocks",
+      "n": 403,
+      "n_blocks": 25,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": 0.5360038966776168,
+        "observed_width_C": -0.06555403521756724,
+        "observed_warm_offset_C": 0.565677256143388,
+        "occupancy_expected_T_variance": -0.3541636437272321,
+        "occupancy_expected_width_C": 0.03710644749945385,
+        "occupancy_expected_warm_offset_C": -0.003958935369336487,
+        "occupancy_excess_T_variance": 0.8901675404048489,
+        "occupancy_excess_width_C": -0.10266048271702101,
+        "occupancy_excess_warm_offset_C": 0.569636191512724,
+        "family_occupancy_expected_T_variance": -0.17824077180135883,
+        "family_occupancy_expected_width_C": -0.0895696599962573,
+        "family_occupancy_expected_warm_offset_C": 0.22647736173942262,
+        "family_occupancy_excess_T_variance": 0.714244668478976,
+        "family_occupancy_excess_width_C": 0.024015624778690285,
+        "family_occupancy_excess_warm_offset_C": 0.33919989440396514,
+        "genus_occupancy_expected_T_variance": 0.3442943023234224,
+        "genus_occupancy_expected_width_C": -0.0875632308222204,
+        "genus_occupancy_expected_warm_offset_C": 0.42968291728752145,
+        "genus_occupancy_excess_T_variance": 0.1917095943541946,
+        "genus_occupancy_excess_width_C": 0.022009195604653278,
+        "genus_occupancy_excess_warm_offset_C": 0.13599433885586631,
+        "family_occupancy_minus_occupancy_T_variance": 0.17592287192587358,
+        "family_occupancy_minus_occupancy_width_C": -0.1266761074957112,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.23043629710875882,
+        "genus_occupancy_minus_family_occupancy_T_variance": 0.5225350741247812,
+        "genus_occupancy_minus_family_occupancy_width_C": 0.0020064291740369395,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.20320555554809897
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.424663827484303,
+          "high": 1.4608908910752567
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.2334242147562347,
+          "high": 0.22412506720071998
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": 0.050264288631932344,
+          "high": 0.7721055256757523
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -1.2827384520256329,
+          "high": 0.6726751085097514
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.016926382920862418,
+          "high": 0.06737348734151692
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0551941371322642,
+          "high": 0.06772975789588402
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.5131144162077484,
+          "high": 2.053901564048509
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.2696818057318713,
+          "high": 0.1817601815987402
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": 0.03387647825098126,
+          "high": 0.8059504526585657
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -1.2264928076993555,
+          "high": 0.9615642805786724
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.22033623284147594,
+          "high": 0.11038869731479597
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06363243964474674,
+          "high": 0.40373181067504155
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.3542418349478879,
+          "high": 1.5142573978738847
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.03813748350362096,
+          "high": 0.14418542139550827
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": 0.061302439908176874,
+          "high": 0.45157736802212484
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.5779556559494494,
+          "high": 1.2522677209177762
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.23619540978689804,
+          "high": 0.1417537777932288
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.0018026060947729425,
+          "high": 0.6206727738772597
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.260129340091164,
+          "high": 0.5753869597396642
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.022774540352448143,
+          "high": 0.12222695754129759
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": 0.01723210653214913,
+          "high": 0.18460069100962498
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.3884640504956213,
+          "high": 0.8269737131411621
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.24101070995556978,
+          "high": 0.07310304888272204
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.05543489137178803,
+          "high": 0.39556791669320673
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.1459505485365137,
+          "high": 1.0176522297627315
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.06258956031547344,
+          "high": 0.06453929305547419
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": 0.01607175295915098,
+          "high": 0.2977055769242051
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "high_effort",
+      "reference": "exclude_continent",
+      "n": 596,
+      "n_blocks": 74,
+      "levels": [
+        "occupancy",
+        "family_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": -0.31034685301832593,
+        "observed_width_C": -0.061755180960486426,
+        "observed_warm_offset_C": -0.003997691193113248,
+        "occupancy_expected_T_variance": -0.07415262137671694,
+        "occupancy_expected_width_C": 0.006042000096454276,
+        "occupancy_expected_warm_offset_C": -0.01278166716227319,
+        "occupancy_excess_T_variance": -0.236194231641609,
+        "occupancy_excess_width_C": -0.0677971810569407,
+        "occupancy_excess_warm_offset_C": 0.008783975969159983,
+        "family_occupancy_expected_T_variance": -0.3308037456506403,
+        "family_occupancy_expected_width_C": -0.03616866066633741,
+        "family_occupancy_expected_warm_offset_C": 0.009299310538171571,
+        "family_occupancy_excess_T_variance": 0.020456892632314535,
+        "family_occupancy_excess_width_C": -0.025586520294149057,
+        "family_occupancy_excess_warm_offset_C": -0.013297001731284817,
+        "family_occupancy_minus_occupancy_T_variance": -0.25665112427392345,
+        "family_occupancy_minus_occupancy_width_C": -0.04221066076279173,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.022080977700444746
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.6562219436437849,
+          "high": 0.41515234105552384
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.13463913655186638,
+          "high": 0.036123561615562724
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.1494373405279947,
+          "high": 0.09708213525024004
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.2093227458196876,
+          "high": 0.05108833722952214
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.004478884174113705,
+          "high": 0.020757335277431826
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.03517479736273768,
+          "high": 0.00739219525480828
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.5215188837200481,
+          "high": 0.5123595737770431
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.13994395176372118,
+          "high": 0.024674667080048354
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.12418387920741351,
+          "high": 0.10110096965535575
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -0.6977914377048808,
+          "high": 0.11119400658688088
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.09119690386691245,
+          "high": 0.01746132724537105
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.06776272020975575,
+          "high": 0.07743919204005927
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.1547308632596357,
+          "high": 0.3453592692112998
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.04969278098637569,
+          "high": 0.023769225831458008
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.08954090569585631,
+          "high": 0.03018986094862994
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.5285132428920822,
+          "high": 0.17366957081090853
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.09754996780484879,
+          "high": 0.004642617740894979
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.047010548701722665,
+          "high": 0.08058514106259045
+        }
+      }
+    },
+    {
+      "land": 0.8,
+      "support": "high_effort",
+      "reference": "exclude_continent",
+      "n": 403,
+      "n_blocks": 25,
+      "levels": [
+        "occupancy",
+        "family_occupancy",
+        "genus_occupancy"
+      ],
+      "coefficients": {
+        "observed_T_variance": 0.4901315325496152,
+        "observed_width_C": 0.07061172751692187,
+        "observed_warm_offset_C": 0.6169500204488024,
+        "occupancy_expected_T_variance": -0.5857948441591669,
+        "occupancy_expected_width_C": 0.03650092791012387,
+        "occupancy_expected_warm_offset_C": 0.004190747976110301,
+        "occupancy_excess_T_variance": 1.0759263767087826,
+        "occupancy_excess_width_C": 0.03411079960679784,
+        "occupancy_excess_warm_offset_C": 0.6127592724726917,
+        "family_occupancy_expected_T_variance": -0.27662248569732356,
+        "family_occupancy_expected_width_C": -0.028596624201325846,
+        "family_occupancy_expected_warm_offset_C": 0.2359077654558453,
+        "family_occupancy_excess_T_variance": 0.7667540182469361,
+        "family_occupancy_excess_width_C": 0.09920835171824781,
+        "family_occupancy_excess_warm_offset_C": 0.38104225499295674,
+        "genus_occupancy_expected_T_variance": 0.2085915313725104,
+        "genus_occupancy_expected_width_C": 0.04922029465971262,
+        "genus_occupancy_expected_warm_offset_C": 0.46238909953643215,
+        "genus_occupancy_excess_T_variance": 0.28154000117710454,
+        "genus_occupancy_excess_width_C": 0.021391432857209375,
+        "genus_occupancy_excess_warm_offset_C": 0.15456092091236978,
+        "family_occupancy_minus_occupancy_T_variance": 0.30917235846184427,
+        "family_occupancy_minus_occupancy_width_C": -0.06509755211144981,
+        "family_occupancy_minus_occupancy_warm_offset_C": 0.2317170174797354,
+        "genus_occupancy_minus_family_occupancy_T_variance": 0.4852140170698337,
+        "genus_occupancy_minus_family_occupancy_width_C": 0.0778169188610384,
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": 0.2264813340805865
+      },
+      "intervals": {
+        "observed_T_variance": {
+          "valid": 399,
+          "low": -0.9363370330580527,
+          "high": 1.4450491567858064
+        },
+        "observed_width_C": {
+          "valid": 399,
+          "low": -0.1362736125687645,
+          "high": 0.41627598179839803
+        },
+        "observed_warm_offset_C": {
+          "valid": 399,
+          "low": -0.020037918623619467,
+          "high": 0.8516904489786036
+        },
+        "occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -1.7857105977858352,
+          "high": 0.7393152252476558
+        },
+        "occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.0202552587617276,
+          "high": 0.0692372329557385
+        },
+        "occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07836214306718506,
+          "high": 0.06998185492630428
+        },
+        "occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.9364758086455016,
+          "high": 2.0677818914606445
+        },
+        "occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.18592631779264385,
+          "high": 0.38470961666756626
+        },
+        "occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": -0.01639234257376246,
+          "high": 0.8502969293401978
+        },
+        "family_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -1.512603571416607,
+          "high": 1.116003029530317
+        },
+        "family_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.16999287998887938,
+          "high": 0.18121061940331654
+        },
+        "family_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.09980378084667237,
+          "high": 0.43301253510767734
+        },
+        "family_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.9192301173741223,
+          "high": 1.652398399871596
+        },
+        "family_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.034978086554757024,
+          "high": 0.29743153279633655
+        },
+        "family_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": 0.060213329017134685,
+          "high": 0.498583710727974
+        },
+        "genus_occupancy_expected_T_variance": {
+          "valid": 399,
+          "low": -1.1598332821263744,
+          "high": 1.2418100659122608
+        },
+        "genus_occupancy_expected_width_C": {
+          "valid": 399,
+          "low": -0.14290262899139897,
+          "high": 0.3376366477923992
+        },
+        "genus_occupancy_expected_warm_offset_C": {
+          "valid": 399,
+          "low": -0.07357093553329945,
+          "high": 0.6869168134955866
+        },
+        "genus_occupancy_excess_T_variance": {
+          "valid": 399,
+          "low": -0.39983813817273667,
+          "high": 0.8186851473365969
+        },
+        "genus_occupancy_excess_width_C": {
+          "valid": 399,
+          "low": -0.04258095271477794,
+          "high": 0.1415706337834509
+        },
+        "genus_occupancy_excess_warm_offset_C": {
+          "valid": 399,
+          "low": 0.024139037371470697,
+          "high": 0.20610867246502348
+        },
+        "family_occupancy_minus_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.3388497068495454,
+          "high": 0.9520086659069797
+        },
+        "family_occupancy_minus_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.20684277353960215,
+          "high": 0.15892089592243658
+        },
+        "family_occupancy_minus_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": -0.10875973610638144,
+          "high": 0.43601406807332943
+        },
+        "genus_occupancy_minus_family_occupancy_T_variance": {
+          "valid": 399,
+          "low": -0.7219793183803239,
+          "high": 0.9804204219733403
+        },
+        "genus_occupancy_minus_family_occupancy_width_C": {
+          "valid": 399,
+          "low": -0.06103821703134018,
+          "high": 0.2305531707478713
+        },
+        "genus_occupancy_minus_family_occupancy_warm_offset_C": {
+          "valid": 399,
+          "low": 0.00856615889285675,
+          "high": 0.3324657878566929
+        }
+      }
+    }
+  ]
+}
