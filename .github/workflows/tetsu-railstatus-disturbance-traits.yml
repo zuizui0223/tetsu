@@ -120,7 +120,7 @@ jobs:
             --split ../source/rs/split/observer_split_beta.json \
             --agb ../source/rs/agb/ESA_CCI_woody_AGB_2020_2024.json \
             --plant ../source/rs/plants/v369_original_fullworld_2025_plant_100km_200km_grid_counts.json \
-            --rail ../source/rs/rail/v370_original_fullworld_normal_rail_100km_200km_grid_exposure.json \
+            --rail ../source/rs/rail/v370_original_fullworld_railkm_100km_200km_grid_counts.json \
             --status ../source/rs/status/world_rail_km_by_status_100km_200km.json \
             --built ../source/rs/built/v376b_JRC_GHSL2020_real_world_builtup_m2_100km_200km.json \
             --tree ../source/rs/tree/v380a_original_global_EarthEnv_tree_consensus_100km_200km.json \
