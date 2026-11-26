@@ -34,7 +34,7 @@ def figshare_metadata(article):
 def get_figshare(f,cap):
     size=f["size"]
     if not isinstance(size,int) or not 0<size<=cap:raise ValueError("File outside frozen size cap")
-    url=f["downloadUrl"]
+    url=f.get("downloadUrl") or f.get("download_url") or f"https://figshare.com/ndownloader/files/{f['id']}"
     if not url.startswith("https://"):raise ValueError("Unexpected file URL")
     raw=request(url,cap=cap)
     md5=f.get("computed_md5") or f.get("supplied_md5")
@@ -101,8 +101,21 @@ def inspect_size_source():
     # metadata only initially; avoid arbitrary archive extraction.
     q=figshare_metadata(SIZE_ARTICLE)
     files=[{k:f.get(k) for k in ("id","name","size","computed_md5","supplied_md5","downloadUrl")} for f in q["files"]]
+    fs=[f for f in q["files"] if f["id"]==45643398]
+    if len(fs)!=1 or fs[0]["computed_md5"]!="296f1e2cce1e4f8ef1dce325f9e1731d":raise ValueError("Unexpected observed size archive")
+    raw=get_figshare(fs[0],20_000_000)
+    members=[]
+    with zipfile.ZipFile(io.BytesIO(raw)) as z:
+        for m in z.infolist():
+            if m.is_dir():continue
+            r={"name":m.filename,"size":m.file_size,"crc32":f"{m.CRC:08x}"}
+            if m.file_size<30_000_000 and m.filename.lower().endswith((".csv",".tsv",".txt")):
+                with z.open(m) as fh: first=fh.readline(65536).decode("utf-8-sig",errors="replace").rstrip()
+                r["first_line_schema"]=first[:1500]
+            members.append(r)
     return {"article_id":SIZE_ARTICLE,"title":q.get("title"),"doi":q.get("doi"),"version":q.get("version"),"files":files,
-            "interpretation":"Metadata only. Inspect documented observed trait table and units; do not use imputed values."}
+            "archive_receipt":receipt(raw,file_id=45643398),"members":members,
+            "interpretation":"Inspect measured/unimputed versus imputed inputs from schema and accompanying analysis code before using."}
 
 def main():
     p=argparse.ArgumentParser()

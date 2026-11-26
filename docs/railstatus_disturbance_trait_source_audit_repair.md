@@ -1,0 +1,3 @@
+# Trait source audit repair
+
+Run 45779204001 success overall; butterfly and bird source audits completed, life cycle file failed only because the Figshare metadata did not expose camel-case downloadUrl. Use documented download_url or official file-ID download endpoint; retain exact metadata size and MD5. Original butterfly 12,448 records, 9,990 unique exact species matches, 2,320 disturbance, 6,475 canopy, 3,544 edge, 2,477 voltinism. AVONET 9,872 exact matches. Public plant size archive file 45643398 MD5 296f1e2cce1e4f8ef1dce325f9e1731d, inspect ZIP member schemas only, no imputation. No outcome data inspected.
