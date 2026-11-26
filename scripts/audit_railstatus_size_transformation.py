@@ -30,7 +30,7 @@ def main():
                 a["traits"][k]={"n":len(vv),"nonpositive":sum(v<=0 for v in vv),"quantiles":[vv[round((len(vv)-1)*p)] for p in (0,.01,.25,.5,.75,.99,1)] if vv else []}
             a["height_seed_joint"]=sum(number(r.get("ph")) is not None and number(r.get("sm")) is not None for r in rr)
             out["tables"][name]=a
-        rx=re.compile(r"AllTraits|Herb_traits|Woody_traits|Traits_Woodyness|log\\s*\\(|log10\\s*\\(|scale\\s*\\(|transform|imput|standardiz|standardis|read\\.table|write\\.table|height|seed mass|stem specific",re.I)
+        rx=re.compile(r"AllTraits|Herb_traits|Woody_traits|Traits_Woodyness|log[ ]*[(]|log10[ ]*[(]|scale[ ]*[(]|transform|imput|standardiz|standardis|read[.]table|write[.]table|height|seed mass|stem specific|logarithm|normaliz|normalis",re.I)
         for name in sorted(x for x in z.namelist() if x.endswith(".R")):
             lines=z.read(name).decode("utf-8-sig",errors="replace").splitlines()
             ix={j for i,l in enumerate(lines) if rx.search(l) for j in range(max(0,i-1),min(len(lines),i+2))}
