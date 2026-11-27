@@ -1,0 +1,27 @@
+name: "railstatus: Japan dated terminal route geometry audit"
+on:
+  push:
+    branches: [research/tetsu-dated-rail-closure-intake-20261127]
+    paths:
+      - scripts/audit_japan_terminal_rail_geometry.py
+      - .github/workflows/tetsu-japan-terminal-rail-geometry.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  geometry-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install "pyshp==2.3.1" "shapely>=2.0,<3" "pyproj>=3.6,<4"
+      - run: python scripts/audit_japan_terminal_rail_geometry.py --self-test
+      - run: python scripts/audit_japan_terminal_rail_geometry.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-japan-terminal-geometry
+          path: results/railstatus/japan_terminal_geometry_audit.json
+          if-no-files-found: error
