@@ -1,0 +1,27 @@
+name: "railstatus: reconcile Spain V1 railway history source census"
+on:
+  push:
+    branches: [research/tetsu-dated-rail-closure-intake-20261127]
+    paths:
+      - scripts/audit_spain_rail_v1_reconciliation.py
+      - .github/workflows/tetsu-spain-v1-reconciliation.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install 'pyshp==2.3.1' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - run: python -m py_compile scripts/audit_spain_rail_v1_reconciliation.py
+      - run: python -u scripts/audit_spain_rail_v1_reconciliation.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-spain-v1-reconciliation
+          path: results/railstatus/spain_v1_reconciliation.json
+          if-no-files-found: error
