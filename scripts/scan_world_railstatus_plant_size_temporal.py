@@ -47,7 +47,7 @@ def scan(client,canonical,allowed,c):
 
 def compare(new,old):
     for x,y in zip([new["target_full"],*new["target_halves"]],[old["target_full"],*old["target_halves"]]):
-        if x["counts"]!=y["counts"]:raise ValueError("Prior target counts differ")
+        if tuple(x["counts"])!=tuple(y["counts"]):raise ValueError("Prior target counts differ")
         for f in (*OLD,*AXES):
             for k,v in x["traits"][f].items():
                 q=y["traits"][f][k]
