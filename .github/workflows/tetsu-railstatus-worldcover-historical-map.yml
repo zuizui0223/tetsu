@@ -1,0 +1,56 @@
+name: "railstatus: historical OSM status support for 2021 satellite sample"
+on:
+  push:
+    branches: [research/tetsu-railstatus-placebo-20261125]
+    paths:
+      - 'scripts/audit_world_railstatus_worldcover_historical_map.py'
+      - 'tests/test_world_railstatus_worldcover_historical_map.py'
+      - '.github/workflows/tetsu-railstatus-worldcover-historical-map.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: railstatus-worldcover-historical-map
+  cancel-in-progress: true
+jobs:
+  historical_map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'boto3>=1.35,<2' 'openpyxl>=3.1,<4' 'netCDF4>=1.6,<2'
+      - run: PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_world_railstatus_worldcover_historical_map.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/census
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-rail-geometry-*
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/rail
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-world-rail-km-by-status
+          run-id: 45556359068
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/status
+      - name: Historical rail status corroboration, no satellite outcomes
+        run: |
+          python -u scripts/audit_world_railstatus_worldcover_historical_map.py \
+            --rail-dir source/rs/rail \
+            --census source/rs/census/v357_complete_original_world_rail_source_CENSUS.json \
+            --status source/rs/status/world_rail_km_by_status_100km_200km.json \
+            --out results/railstatus/worldcover_historical_map.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-railstatus-worldcover-historical-map
+          path: results/railstatus/worldcover_historical_map.json
+          if-no-files-found: error
