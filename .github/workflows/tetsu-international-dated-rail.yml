@@ -1,0 +1,27 @@
+name: "railstatus: Spain and US independent dated closure source audit"
+on:
+  push:
+    branches: [research/tetsu-dated-rail-closure-intake-20261127]
+    paths:
+      - scripts/audit_international_dated_rail_sources.py
+      - .github/workflows/tetsu-international-dated-rail.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  international-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install 'pyshp==2.3.1' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - run: python scripts/audit_international_dated_rail_sources.py --self-test
+      - run: python -u scripts/audit_international_dated_rail_sources.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-international-dated-rail
+          path: results/railstatus/dated_international_sources.json
+          if-no-files-found: error
