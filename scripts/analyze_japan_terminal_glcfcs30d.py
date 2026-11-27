@@ -47,7 +47,7 @@ def epochs(y):
         return None
     p,q=max(pre),min(post)
     return p-5,p,q,q+5
-def catalog():
+def catalog(region=(120,155,20,50)):
     raw,receipt=get(BASE+"items.parquet",80_000_000)
     table=pq.read_table(io.BytesIO(raw),columns=["id","assets"])
     idx={}
@@ -58,7 +58,7 @@ def catalog():
         yr,ew,lon,ns,lat=m.groups()
         west=int(lon)*(1 if ew=="E" else -1)
         north=int(lat)*(1 if ns=="N" else -1)
-        if not (120<=west<=155 and 20<=north<=50):
+        if not (region[0]<=west<=region[1] and region[2]<=north<=region[3]):
             continue
         assets=r["assets"]
         if isinstance(assets,str):assets=json.loads(assets)
