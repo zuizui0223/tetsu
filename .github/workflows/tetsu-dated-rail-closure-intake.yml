@@ -1,0 +1,27 @@
+name: "railstatus: independent dated closure source intake"
+on:
+  push:
+    branches: [research/tetsu-dated-rail-closure-intake-20261127]
+    paths:
+      - scripts/audit_dated_rail_closure_sources.py
+      - .github/workflows/tetsu-dated-rail-closure-intake.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install "pyshp==2.3.1"
+      - run: python scripts/audit_dated_rail_closure_sources.py --self-test
+      - run: python scripts/audit_dated_rail_closure_sources.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-dated-rail-closure-intake
+          path: results/railstatus/dated_closure_intake.json
+          if-no-files-found: error
