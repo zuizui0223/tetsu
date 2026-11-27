@@ -102,7 +102,7 @@ def parts(g):
         for p in g.geoms:
             yield from parts(p)
 
-def audit_geometry(rows, geoms, candidates):
+def audit_geometry(rows, geoms, candidates, point_sink=None):
     # Japan-centred AEQD approximation, metre units. The 500m gate is intentionally
     # wider than the 300m future background buffer; final exact local audit required.
     crs=CRS.from_proj4("+proj=aeqd +lat_0=36 +lon_0=137 +datum=WGS84 +units=m +no_defs")
@@ -157,6 +157,8 @@ def audit_geometry(rows, geoms, candidates):
                 if not later:
                     clean+=L/m
                     n+=1
+                    if point_sink is not None:
+                        point_sink.append((key,y,p.x,p.y,L/m))
         summaries.append({"year":y,"total_km":total/1000,"screened_km":clean/1000,"screened_points":n})
     def sum_group(s):
         return {"candidate_components":len(s),"terminal_geometry_km":round(sum(r["total_km"] for r in s),3),
@@ -178,14 +180,7 @@ def selftest():
     assert len(c)==1 and c[0][1]==2020 and a["component_classes"]["includes_current_record"]==1
     assert a["component_classes"]["unresolved_relationship"]==1
 
-def main():
-    p=argparse.ArgumentParser()
-    p.add_argument("--self-test",action="store_true")
-    p.add_argument("--out",default="results/railstatus/japan_terminal_geometry_audit.json")
-    args=p.parse_args()
-    selftest()
-    if args.self_test:
-        return
+def read_n05():
     raw,receipt=get(URL,70_000_000)
     if receipt["sha256"]!=SHA:
         raise ValueError("pinned source digest mismatch")
@@ -200,6 +195,17 @@ def main():
         for record in reader.iterShapeRecords():
             rows.append(record.record.as_dict())
             geoms.append(shape(record.shape.__geo_interface__))
+    return rows,geoms,receipt,src
+
+def main():
+    p=argparse.ArgumentParser()
+    p.add_argument("--self-test",action="store_true")
+    p.add_argument("--out",default="results/railstatus/japan_terminal_geometry_audit.json")
+    args=p.parse_args()
+    selftest()
+    if args.self_test:
+        return
+    rows,geoms,receipt,src=read_n05()
     candidates,attrs=classification(rows)
     result={"version":"japan-n05-terminal-route-audit-v1","archive":receipt,
         "source_member_sha256":{e:hashlib.sha256(b).hexdigest() for e,b in src.items()},
