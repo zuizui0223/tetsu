@@ -1,0 +1,41 @@
+name: "railstatus: historical Japan actual landcover change before after"
+on:
+  push:
+    branches: [research/tetsu-dated-rail-closure-intake-20261127]
+    paths:
+      - scripts/analyze_japan_terminal_glcfcs30d.py
+      - .github/workflows/tetsu-japan-terminal-glcfcs30d.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  temporal-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install 'pyshp==2.3.1' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'boto3>=1.35,<2' 'openpyxl>=3.1,<4' 'netCDF4>=1.6,<2'
+      - run: python scripts/analyze_japan_terminal_glcfcs30d.py --self-test
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-v357-entire-128-parquet-world-rail-completeness-aggregate
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/census
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tetsu-v357-rail-geometry-*
+          run-id: 45342573085
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/rail
+          merge-multiple: true
+      - run: python -u scripts/analyze_japan_terminal_glcfcs30d.py --rail-dir source/rs/rail --census source/rs/census/v357_complete_original_world_rail_source_CENSUS.json --out results/railstatus/japan_terminal_glcfcs30d.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-japan-terminal-glcfcs30d
+          path: results/railstatus/japan_terminal_glcfcs30d.json
+          if-no-files-found: error
