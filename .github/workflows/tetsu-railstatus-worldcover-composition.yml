@@ -1,0 +1,51 @@
+name: "railstatus: decompose satellite grass cover into amount versus vegetation mix"
+on:
+  push:
+    branches: [research/tetsu-railstatus-placebo-20261125]
+    paths:
+      - 'scripts/analyze_world_railstatus_worldcover_composition.py'
+      - 'tests/test_world_railstatus_worldcover_composition.py'
+      - '.github/workflows/tetsu-railstatus-worldcover-composition.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: railstatus-worldcover-composition
+  cancel-in-progress: true
+jobs:
+  decomposition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'pyarrow>=18,<25' 'shapely>=2,<3' 'pyproj>=3.6,<4' 'boto3>=1.35,<2' 'openpyxl>=3.1,<4' 'netCDF4>=1.6,<2'
+      - run: PYTHONPATH=scripts python -m unittest discover -s tests -p 'test_world_railstatus_worldcover_composition.py' -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-local-worldcover
+          run-id: 45932057688
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/worldcover
+      - uses: actions/download-artifact@v4
+        with:
+          name: tetsu-railstatus-worldcover-historical-map
+          run-id: 45932615611
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: source/rs/history
+      - name: Exact prior replay and vegetation-amount decomposition
+        run: |
+          python -u scripts/analyze_world_railstatus_worldcover_composition.py \
+            --source source/rs/worldcover/local_worldcover.json \
+            --historical source/rs/history/worldcover_historical_map.json \
+            --out results/railstatus/worldcover_composition.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-railstatus-worldcover-composition
+          path: results/railstatus/worldcover_composition.json
+          if-no-files-found: error
