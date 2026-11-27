@@ -78,12 +78,29 @@ def japan():
     url = extract_japan_link(page.decode("utf-8"))
     data, zip_receipt = get(url, 70_000_000)
     with zipfile.ZipFile(io.BytesIO(data)) as z:
-        names = [n for n in z.namelist() if pathlib.PurePosixPath(n).name.lower() == "railroadsection2.dbf"]
-        if len(names) != 1:
-            raise ValueError("expected one RailroadSection2.dbf")
-        if z.getinfo(names[0]).file_size > 150_000_000:
-            raise ValueError("DBF byte budget exceeded")
-        dbf = z.read(names[0])
+        dbfs = [n for n in z.namelist() if n.lower().endswith(".dbf")]
+        print(json.dumps({"japan_archive_receipt": zip_receipt, "member_basenames": [pathlib.PurePosixPath(n).name for n in z.namelist()][:100]}))
+        # Select by documented route attributes, not exact basename. Station records
+        # lack N05_010 or contain N05_011; verify matching polyline SHP header.
+        required = {"N05_004", "N05_005b", "N05_005e", "N05_006", "N05_010"}
+        candidates = []
+        for n in dbfs:
+            if z.getinfo(n).file_size > 150_000_000:
+                continue
+            raw = z.read(n)
+            probe = shapefile.Reader(dbf=io.BytesIO(raw), encoding="utf-8")
+            f = {x[0] for x in probe.fields[1:]}
+            shp = next((x for x in z.namelist() if x.lower() == n[:-4].lower() + ".shp"), None)
+            if not required.issubset(f) or "N05_011" in f or shp is None:
+                continue
+            with z.open(shp) as stream:
+                header = stream.read(100)
+            if len(header) == 100 and int.from_bytes(header[32:36], "little") in (3, 13, 23):
+                candidates.append((n, raw))
+        if len(candidates) != 1:
+            raise ValueError("expected one documented route DBF with matching polyline SHP; found " + str(len(candidates)))
+        names = [candidates[0][0]]
+        dbf = candidates[0][1]
         # Read attributes only, no locations or names are exported.
         cpg = names[0][:-4] + ".cpg"
         encoding = "cp932"
@@ -160,10 +177,11 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--out", default="results/railstatus/dated_closure_intake.json")
     p.add_argument("--self-test", action="store_true")
+    p.add_argument("--source", choices=["both", "japan"], default="both")
     args = p.parse_args()
     self_test()
     if not args.self_test:
-        result = {"version":"dated-rail-closure-source-intake-v1","japan":safe_source(japan),"ohio":safe_source(ohio),
+        result = {"version":"dated-rail-closure-source-intake-v1","japan":safe_source(japan),"ohio":safe_source(ohio) if args.source == "both" else {"status":"not rerun; see run 45933910342"},
                   "decision":"Source feasibility only. No habitat or species fitting; do not treat blocked or unknown as zero."}
         out = pathlib.Path(args.out)
         out.parent.mkdir(parents=True, exist_ok=True)

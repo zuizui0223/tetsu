@@ -1,0 +1,4 @@
+# Dated rail closure source preflight (run 45933910342)
+
+Verified job 140292572883, artifact 15170311069. Ohio grouped response SHA 4986b850bc84824556beda1d10cae26f14992de5b015ef98459f3466df14998a. Explicit abandoned 2640 features, valid date only 5 (2010s 1; 2020s 4), unknown 2635. Active 1990, inactive 89, out of service 12, railbanked 8, unknown 14, null 8. Feature counts, not unique closure events; date completeness insufficient for chronosequence. No further Ohio requests.
+Japan official page exposed archive URL, ZIP read succeeded, exact anticipated basename not found. One format-only repair: log archive member basenames and source receipt, identify unique DBF with published route schema plus corresponding polyline SHP header, no raw redistribution. This is not a retry after access denial or a new source/analysis threshold. If unsupported stop; no further source request in this workflow. Ohio result retained from first run. No outcome analysis.

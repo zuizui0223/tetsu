@@ -19,7 +19,7 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install "pyshp==2.3.1"
       - run: python scripts/audit_dated_rail_closure_sources.py --self-test
-      - run: python scripts/audit_dated_rail_closure_sources.py
+      - run: python scripts/audit_dated_rail_closure_sources.py --source japan
       - uses: actions/upload-artifact@v4
         with:
           name: tetsu-dated-rail-closure-intake
