@@ -268,7 +268,7 @@ def main():
     z,scanqa,osha=scan(client,canonical)
     if osha!=src["obs_sha256"] or scanqa["2025_bird_records"]!=prior["qa"]["birds"]:
         raise ValueError("exact original occurrence source failed")
-    old={s.key(r):(r["observations"],r["observers"],r["species"]) for r in prior["grids"][str(W)]["birds"]}
+    old={(r["source_equal_area_grid_ix"],r["source_equal_area_grid_iy"]):(r["observations"],r["observers"],r["species"]) for r in prior["grids"][str(W)]["birds"]}
     new={k:p.full_counts(v) for k,v in z["2025"].items()}
     if new!=old:raise ValueError("full global 2025 bird grid counts differ")
     print(json.dumps({"full_2025_grid_replay":len(new),"eligible_baseline_cells":sum(p.supported(v) for v in z["early"].values()),"scan_qa":scanqa}),flush=True)
