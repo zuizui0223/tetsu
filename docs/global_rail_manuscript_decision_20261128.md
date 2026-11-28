@@ -11,3 +11,7 @@ Suggested figures: (1) global map and source-to-analysis support including regio
 
 ## Vector measurement gate passed
 Actual vector run 46105819255 preserves earlier stature contrasts on exact common support (active vs road -.035335 [-.055689,-.014980], active vs inactive -.016040 [-.026820,-.005259]); 2025 uncertain, same-source sensitivity and geographic limitations remain. Updated manuscript and evidence ledger use vector results as main stature evidence. New distinct secondary comparison: butterfly edge affinity versus road length on the original annual butterfly geography; no rescan or HWI subgroup reopening. If the butterfly comparison is uncertain, do not force a shared infrastructure-specific functional response.
+
+
+## Butterfly road test and independent plant validation
+Road comparator 46109618152 did not support a railway-specific butterfly edge effect on the original primary or stricter full-sample support. Retain secondary conditional active/inactive result, not a general active-rail advantage. With the strongest plant contrast now robust to road measurement, the next independent source test uses original sPlotOpen vegetation-plot species lists, a different observational method, and the same frozen species-level height/life-form trait tables and coarse transport geometry. No further same-source HWI or butterfly subgroup searches.
