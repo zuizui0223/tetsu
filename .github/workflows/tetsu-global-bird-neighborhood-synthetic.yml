@@ -1,0 +1,24 @@
+name: "railstatus: synthetic verification of frozen bird source estimator"
+on:
+  push:
+    branches: [research/tetsu-global-functional-context-20261127]
+    paths:
+      - tests/test_global_rail_bird_neighborhood_synthetic.py
+      - .github/workflows/tetsu-global-bird-neighborhood-synthetic.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-estimator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      PYTHONPATH: scripts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'boto3>=1.35,<2' 'openpyxl>=3.1,<4' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'rasterio>=1.4,<2' 'shapely>=2,<3' 'pyproj>=3.6,<4'
+      - run: python -m unittest discover -s tests -p test_global_rail_bird_neighborhood_synthetic.py -v
