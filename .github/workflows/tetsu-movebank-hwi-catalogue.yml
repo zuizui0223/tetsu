@@ -1,0 +1,25 @@
+name: "railstatus: independent bird movement data availability by HWI"
+on:
+  push:
+    branches: [research/tetsu-global-functional-context-20261127]
+    paths:
+      - scripts/audit_movebank_hwi_catalogue.py
+      - .github/workflows/tetsu-movebank-hwi-catalogue.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-catalogue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python scripts/audit_movebank_hwi_catalogue.py --self-test
+      - run: python -u scripts/audit_movebank_hwi_catalogue.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tetsu-movebank-hwi-catalogue
+          path: results/railstatus/movebank_hwi_catalogue.json
+          if-no-files-found: error
