@@ -4,14 +4,14 @@ import argparse,json
 from pathlib import Path
 from analyze_global_hwi_road_crossings import (road_panel,fit,ACTIVE,FIELDS,END,INACTIVE,CATS,W,read,verify_original_sources,verify_replay,EXPECTED_SHA,MD5,POP_SHA,ORIGINAL_NE_SHA,WORLDCLIM_SHA,sha_file,read_source_builtup,source_continents,worldclim_tif,climate_scale,source_climate_lookup,make_lookup,original_cell_rows,inject_built,inject_status,enrich_cells,join_population,cells_from_pairs,adapt_pair,build_pairs,split_pair,pair_key,SOURCE_SHA,MIN_GUILD_HALF)
 from scan_global_grip4_road_crossings import candidates,key_sha,combine
-from scan_xenocanto_hwi_replication import PANELS,DOI
+from scan_xenocanto_hwi_replication import PANELS,DOI,MAPPING
 def main():
     p=argparse.ArgumentParser()
     for n in ("xc","historical","prior","edges","plant","rail","status","built","tree","road","population","ne","climate","road-crossings","out"):
         p.add_argument("--"+n,type=Path,required=True)
     a=p.parse_args();xc,hist,prior,edge,plant,rail,status,tree,road,pop=map(read,(a.xc,a.historical,a.prior,a.edges,a.plant,a.rail,a.status,a.tree,a.road,a.population))
     common=candidates(a.historical)
-    if xc["version"]!="xc-independent-hwi-pairs-v1" or xc["doi"]!=DOI or not xc["trait_match_replayed"] or xc["trait_sha256"]!=SOURCE_SHA or xc["candidate_sha256"]!=key_sha(common) or xc["n_candidates"]!=len(common) or xc["guild_half_gate"]!=list(MIN_GUILD_HALF):raise ValueError("Wrong source/trait/geography")
+    if xc["version"]!="xc-independent-hwi-pairs-v2" or xc["doi"]!=DOI or xc["trait_mapping"]["method"]!=MAPPING or xc["trait_mapping"]["HWI_threshold"]!=21.0 or xc["trait_mapping"]["identical_to_original_iNat_matched_pool"] is not False or xc["trait_sha256"]!=SOURCE_SHA or xc["candidate_sha256"]!=key_sha(common) or xc["n_candidates"]!=len(common) or xc["guild_half_gate"]!=list(MIN_GUILD_HALF):raise ValueError("Wrong source/trait/geography")
     checks=verify_original_sources(plant,rail);verify_replay(prior,plant)
     if any(hist[k]!=prior[k] for k in ("obs_sha256","taxa_sha256")):raise ValueError("Prior source mismatch")
     if edge["version"]!="railstatus-direct-grid-boundary-v1" or not edge["source_verified"] or edge["release"]!=rail["source_Oveture_release"] or any(abs(edge["km"][c]-status["total_km"][c])>.01 for c in CATS):raise ValueError("Invalid geometry")
@@ -39,6 +39,6 @@ def main():
                 rr=[split_pair(r,gg[r["a"],r["b"]]["full"]) for r in pairs]
                 result={"period":period,"land":landgate,"n_full_pairs_after_geographic_controls":len(rr),"results":road_panel(rr,gg,by)}
             panels.append(result);print(json.dumps({"xc_replication_panel":result},allow_nan=False),flush=True)
-    obj={"version":"xc-independent-hwi-road-replication-v1","source_sha256":xc["source_sha256"],"source_audit":xc["audit"],"prior_source_replay":checks,"panels":panels,"primary":"2018-25 pooled broad uncertainty, land50 habitat x migration standardized, low-minus-high HWI Jaccard, block FE, active-minus-highway direct contrast; active and active-minus-inactive companions","limits":["Different recording platform, same geography and trait table, recordists may overlap across platforms","unknown uncertainty is not verified accuracy","recordist names are not guaranteed unique human identities","incidence similarity is not movement or occupancy","retrospective static 2026 map, rail-positive endpoints only","no data from eBird"]}
+    obj={"version":"xc-independent-hwi-road-replication-v2","source_sha256":xc["source_sha256"],"source_audit":xc["audit"],"trait_mapping":xc["trait_mapping"],"prior_source_replay":checks,"panels":panels,"primary":"2018-25 pooled broad uncertainty, land50 habitat x migration standardized, low-minus-high HWI Jaccard, block FE, active-minus-highway direct contrast; active and active-minus-inactive companions","limits":["Different recording platform, same geography and frozen trait table/threshold, expanded AVONET source pool rather than exact prior iNat name intersection; recordists may overlap across platforms","unknown uncertainty is not verified accuracy","recordist names are not guaranteed unique human identities","incidence similarity is not movement or occupancy","retrospective static 2026 map, rail-positive endpoints only","no data from eBird"]}
     a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(obj,allow_nan=False))
 if __name__=="__main__":main()

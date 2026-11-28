@@ -7,10 +7,31 @@ from collections import Counter,defaultdict
 from xml.etree import ElementTree as ET
 from pyproj import Transformer
 from scan_global_grip4_road_crossings import candidates,key_sha
-from scan_world_railstatus_bird_conditional_hwi import (validate,csv_rows,DERIVATIVE,request,names,conditioned_match,W,pair_key,taxonomy,source_client,source_coarse_cell,bucket,add,pair_rows,SOURCE_SHA,AXES,HWI,GUILDS,group_pair,MIN_GUILD_HALF,norm)
+from scan_world_railstatus_bird_conditional_hwi import (validate,csv_rows,DERIVATIVE,request,num,W,pair_key,source_coarse_cell,bucket,add,pair_rows,SOURCE_SHA,AXES,HWI,GUILDS,group_pair,MIN_GUILD_HALF,norm)
 URL="https://api.biodiversitydata.nl/v2/specimen/dwca/getDataSet/wildlife-sounds-birds"
 DOI="10.15468/qv0ksn"
 PANELS=("2018_2025_broad","2018_2025_known_accuracy","2018_2022_broad")
+MAPPING="exact_avonet_species1_fixed21_full_source_pool"
+def full_avonet_match(rows):
+    """Independent source name pool; fixed original HWI cut, never re-estimate it."""
+    out={};counts=Counter()
+    for r in rows:
+        name=norm(r["Species1"])
+        if not name or name in out:raise ValueError("Duplicate AVONET name")
+        h,m,v=map(num,(r["Habitat.Density"],r["Migration"],r["Hand-Wing.Index"]))
+        g=()
+        if v is not None and 0<=v<=100:
+            high=int(v>=21.0)
+            g=(HWI[high],)
+            if h in (1,2,3) and m in (1,2,3):
+                g+=(AXES[f"h{int(h)}_m{int(m)}"][high],)
+        out[name]=g;counts.update(g)
+    audit={"method":MAPPING,"HWI_threshold":21.0,"source_species":len(out),
+           "guild_species_counts":dict(counts),
+           "mapping_SHA256":hashlib.sha256(json.dumps(out,sort_keys=True,separators=(",",":")).encode()).hexdigest(),
+           "identical_to_original_iNat_matched_pool":False}
+    return out,audit
+
 def sha(path):
     h=hashlib.sha256()
     with path.open("rb") as f:
@@ -152,17 +173,17 @@ def scan_archive(path,keys,traits):
 def main():
     p=argparse.ArgumentParser()
     for n in ("historical","archive","out"):p.add_argument("--"+n,type=Path,required=True)
-    a=p.parse_args();keys=candidates(a.historical);hist=json.loads(a.historical.read_text())
+    a=p.parse_args();keys=candidates(a.historical)
     a.archive.parent.mkdir(parents=True,exist_ok=True)
     subprocess.run(["curl","-LfsS","--retry","2","--retry-all-errors","--connect-timeout","30","--max-time","1800","--max-filesize","1500000000",URL,"-o",str(a.archive)],check=True)
     raw=request(DERIVATIVE,cap=10000000)
     if hashlib.sha256(raw).hexdigest()!=SOURCE_SHA:raise ValueError("Trait SHA mismatch")
-    rows=validate(csv_rows(raw));client=source_client();canonical,_,tsha=taxonomy(client)
-    if tsha!=hist["taxa_sha256"]:raise ValueError("Original taxonomy SHA mismatch")
-    n=names(client,canonical,tsha);trait,qa=conditioned_match(rows,n)
-    if qa!=hist["source"]["match"]:raise ValueError("Frozen trait assignment mismatch")
-    traits={k:trait[ids[0]] for k,ids in n.items() if len(ids)==1 and ids[0] in trait}
+    rows=validate(csv_rows(raw))
+    traits,mapping_audit=full_avonet_match(rows)
+    if min(mapping_audit["guild_species_counts"].get(g,0) for g in HWI)<3500:
+        raise ValueError("Incomplete AVONET HWI source pool")
+    print(json.dumps({"xc_source_receipt":{"url":URL,"bytes":a.archive.stat().st_size,"sha256":sha(a.archive),"trait_mapping":mapping_audit,"historical_geography_sha256":key_sha(keys)}}),flush=True)
     pairs,audit=scan_archive(a.archive,keys,traits)
-    obj={"version":"xc-independent-hwi-pairs-v1","url":URL,"doi":DOI,"source_sha256":sha(a.archive),"source_bytes":a.archive.stat().st_size,"trait_sha256":SOURCE_SHA,"trait_match_replayed":True,"candidate_sha256":key_sha(keys),"n_candidates":len(keys),"guild_half_gate":list(MIN_GUILD_HALF),"audit":audit,"pairs":pairs}
+    obj={"version":"xc-independent-hwi-pairs-v2","url":URL,"doi":DOI,"source_sha256":sha(a.archive),"source_bytes":a.archive.stat().st_size,"trait_sha256":SOURCE_SHA,"trait_mapping":mapping_audit,"candidate_sha256":key_sha(keys),"n_candidates":len(keys),"guild_half_gate":list(MIN_GUILD_HALF),"audit":audit,"pairs":pairs}
     a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(obj,allow_nan=False));print(json.dumps({k:v for k,v in obj.items() if k!="pairs"},allow_nan=False),flush=True)
 if __name__=="__main__":main()
